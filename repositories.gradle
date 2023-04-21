@@ -1,0 +1,8 @@
+repositories {
+    maven {
+        name = "mvnpattern"
+        url = "https://mvn.falsepattern.com/releases"
+    }
+
+    mavenLocal()
+}

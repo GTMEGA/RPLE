@@ -1,0 +1,26 @@
+static def curse(curseDep) {
+    return "curse.maven:" + curseDep
+}
+
+def deobfCurse(curseDep) {
+    try {
+        return deobfMaven("https://cursemaven.com/", curse(curseDep))
+    } catch (Exception ignored) {
+        println("Failed to get dep " + curseDep + " from cursemaven. Grabbing from mirror.")
+        return deobfMaven("https://mvn.falsepattern.com/cursemaven/", curse(curseDep))
+    }
+}
+
+dependencies {
+    compileOnly("org.projectlombok:lombok:[1.18.24,1.19)") {
+        transitive = false
+    }
+    annotationProcessor("org.projectlombok:lombok:[1.18.24,1.19)")
+
+    implementation("com.falsepattern:falsepatternlib-mc1.7.10:[0.11,0.12):dev")
+
+    implementation("com.falsepattern:lumina-mc1.7.10:ee7263b:dev")
+
+    compileOnly("org.jetbrains:annotations:[24,25)")
+
+}
