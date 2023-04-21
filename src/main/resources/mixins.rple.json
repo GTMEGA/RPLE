@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "com.falsepattern.rple.internal.mixin.mixins",
+  "plugin": "com.falsepattern.rple.internal.mixin.plugin.MixinPlugin",
+  "refmap": "mixins.rple.refmap.json",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8"
+}
+
