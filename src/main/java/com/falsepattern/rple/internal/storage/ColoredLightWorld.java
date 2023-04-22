@@ -71,7 +71,7 @@ public class ColoredLightWorld implements ILumiWorld {
         if (block < minBlock) {
             block = minBlock;
         }
-        return (sky & 0xF) << 6 | (block & 0xF) << 1;
+        return (sky & 0xF) << 20 | (block & 0xF) << 4;
     }
 
     @SideOnly(Side.CLIENT)

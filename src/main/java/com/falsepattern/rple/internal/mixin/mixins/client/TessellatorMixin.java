@@ -2,6 +2,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.Constants;
 import com.falsepattern.rple.internal.LightMap;
+import com.falsepattern.rple.internal.Utils;
 import org.lwjgl.opengl.GL11;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +18,7 @@ import net.minecraft.client.renderer.Tessellator;
 
 import java.nio.ShortBuffer;
 
-import static com.falsepattern.rple.internal.Utils.MASK;
+import static com.falsepattern.rple.internal.Utils.COOKIE_BIT;
 
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin {
@@ -73,16 +74,11 @@ public abstract class TessellatorMixin {
     private boolean customColor(Tessellator instance) {
         if (this.hasBrightness) {
             int red, green, blue;
-            if ((brightness & MASK) != 0) {
-                //Custom color, unpack
-                //Blue: block: 0, sky: 5
-                //Green: block: 10, sky: 15
-                //Red: block: 20, sky: 25
-                //
-                //Target: block: 3, sky: 19
-                red = ((brightness >>> 6) & 0x00F80000) | ((brightness >>> 17) & 0x000000F8);
-                green = ((brightness << 4) & 0x00F80000) | ((brightness >>> 7) & 0x000000F8);
-                blue = ((brightness << 14) & 0x00F80000) | ((brightness << 3) & 0x000000F8);
+            if ((brightness & COOKIE_BIT) != 0) {
+                long packed = Utils.cookieToPackedLong(brightness);
+                red = Utils.getRedPair(packed);
+                green = Utils.getGreenPair(packed);
+                blue = Utils.getBluePair(packed);
             } else {
                 red = green = blue = brightness;
             }
@@ -101,7 +97,7 @@ public abstract class TessellatorMixin {
     public void setBrightness(int brightness) {
         this.brightness = brightness;
         this.hasBrightness = true;
-        if ((brightness & MASK) == 0 && brightness != 0) {
+        if ((brightness & COOKIE_BIT) == 0 && brightness != 0) {
             new Throwable(Integer.toHexString(brightness)).printStackTrace();
         }
     }

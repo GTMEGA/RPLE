@@ -2,20 +2,14 @@ package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.internal.Utils;
 import com.falsepattern.rple.internal.storage.ColoredBlock;
-import com.falsepattern.rple.internal.storage.ColoredCarrierWorld;
 import com.falsepattern.rple.internal.storage.ColoredLightChannel;
-import com.falsepattern.rple.internal.storage.ColoredLightWorld;
-import com.falsepattern.rple.internal.storage.ColoredWorldProvider;
 import lombok.val;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 @Mixin(Block.class)
 public abstract class BlockMixin implements ColoredBlock {
@@ -55,7 +49,7 @@ public abstract class BlockMixin implements ColoredBlock {
 
     @Override
     public int getLightValuePacked(IBlockAccess world, int x, int y, int z) {
-        return Utils.MASK |
+        return Utils.PACKED_BIT_BLOCK_COLOR |
                getColoredLightValue(world, ColoredLightChannel.RED, x, y, z) << 8 |
                getColoredLightValue(world, ColoredLightChannel.GREEN, x, y, z) << 4 |
                getColoredLightValue(world, ColoredLightChannel.BLUE, x, y, z);

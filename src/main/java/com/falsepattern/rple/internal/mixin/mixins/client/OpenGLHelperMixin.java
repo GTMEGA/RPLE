@@ -2,6 +2,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.LightMap;
 import com.falsepattern.rple.internal.Utils;
+import lombok.val;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 
-import static com.falsepattern.rple.internal.Utils.MASK;
+import static com.falsepattern.rple.internal.Utils.COOKIE_BIT;
 
 @Mixin(OpenGlHelper.class)
 public abstract class OpenGLHelperMixin {
@@ -26,10 +27,14 @@ public abstract class OpenGLHelperMixin {
             require = 1)
     private static void onSet(int texture, float u, float v, CallbackInfo ci) {
         int value = (int)(u) | ((int)(v) << 16);
-        if ((value & MASK) != 0) {
-            setLightmapTextureCoords(LightMap.textureUnitRed, Utils.extractFloat(value, 20), Utils.extractFloat(value, 25));
-            setLightmapTextureCoords(LightMap.textureUnitGreen, Utils.extractFloat(value, 10), Utils.extractFloat(value, 15));
-            setLightmapTextureCoords(LightMap.textureUnitBlue, Utils.extractFloat(value, 0), Utils.extractFloat(value, 5));
+        if ((value & COOKIE_BIT) != 0) {
+            long packed = Utils.cookieToPackedLong(value);
+            val red = Utils.getRedPair(packed);
+            val green = Utils.getGreenPair(packed);
+            val blue = Utils.getBluePair(packed);
+            setLightmapTextureCoords(LightMap.textureUnitRed, red & 0xFFFF, red >>> 16);
+            setLightmapTextureCoords(LightMap.textureUnitGreen, green & 0xFFFF, green >>> 16);
+            setLightmapTextureCoords(LightMap.textureUnitBlue, blue & 0xFFFF, blue >>> 16);
             ci.cancel();
         } else {
             if (texture == lightmapTexUnit) {

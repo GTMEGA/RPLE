@@ -2,14 +2,13 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.Utils;
 import lombok.val;
+import lombok.var;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 import net.minecraft.client.renderer.RenderBlocks;
-
-import static com.falsepattern.rple.internal.Utils.MASK;
 
 @Mixin(RenderBlocks.class)
 public abstract class RenderBlocksMixin {
@@ -18,29 +17,43 @@ public abstract class RenderBlocksMixin {
      * @reason Colorize
      */
     @Overwrite
-    public int getAoBrightness(int a, int b, int c, int def) {
-        int result = MASK;
-        for (int i = 0; i <= 25; i += 5) {
-            result |= getAOBrightnessChannel(a, b, c, def, i) << i;
+    public int getAoBrightness(int a, int b, int c, int d) {
+        long packedA = Utils.cookieToPackedLong(a);
+        long packedB = Utils.cookieToPackedLong(b);
+        long packedC = Utils.cookieToPackedLong(c);
+        long packedD = Utils.cookieToPackedLong(d);
+        long resultPacked = 0;
+        for (int i = 0; i <= 40; i += 8) {
+            resultPacked |= getAOBrightnessChannel(packedA, packedB, packedC, packedD, i);
         }
-        return result;
+        return Utils.packedLongToCookie(resultPacked);
     }
 
-    private static int getAOBrightnessChannel(int a, int b, int c, int d, int channel) {
-        a = unit(a, channel);
-        b = unit(b, channel);
-        c = unit(c, channel);
-        d = unit(d, channel);
-        if (a < d) {
-            a = d;
+    private static long getAOBrightnessChannel(long packedA, long packedB, long packedC, long packedD, int channel) {
+        int count = 0;
+        float light = 0;
+        var a = unit(packedA, channel);
+        var b = unit(packedB, channel);
+        var c = unit(packedC, channel);
+        var d = unit(packedD, channel);
+        if (a != 0) {
+            light += a;
+            count++;
         }
-        if (b < d) {
-            b = d;
+        if (b != 0) {
+            light += b;
+            count++;
         }
-        if (c < d) {
-            c = d;
+        if (c != 0) {
+            light += c;
+            count++;
         }
-        return ((a + b + c + d) >>> 2) & 0x1F;
+        if (d != 0) {
+            light += d;
+            count++;
+        }
+        light /= count;
+        return (long)((int)light & 0xFF) << channel;
     }
 
     /**
@@ -49,11 +62,15 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int mixAoBrightness(int a, int b, int c, int d, double aMul, double bMul, double cMul, double dMul) {
-        int result = MASK;
-        for (int i = 0; i <= 25; i += 5) {
-            result |= mixAoBrightnessChannel(a, b, c, d, aMul, bMul, cMul, dMul, i) << i;
+        long packedA = Utils.cookieToPackedLong(a);
+        long packedB = Utils.cookieToPackedLong(b);
+        long packedC = Utils.cookieToPackedLong(c);
+        long packedD = Utils.cookieToPackedLong(d);
+        long packedResult = 0;
+        for (int i = 0; i <= 40; i += 8) {
+            packedResult |= mixAoBrightnessChannel(packedA, packedB, packedC, packedD, aMul, bMul, cMul, dMul, i);
         }
-        return result;
+        return Utils.packedLongToCookie(packedResult);
     }
 
     @ModifyConstant(method = {"renderStandardBlockWithAmbientOcclusion", "renderStandardBlockWithAmbientOcclusionPartial"},
@@ -63,15 +80,15 @@ public abstract class RenderBlocksMixin {
         return Utils.MIN;
     }
 
-    private static int mixAoBrightnessChannel(int a, int b, int c, int d, double aMul, double bMul, double cMul, double dMul, int channel) {
+    private static long mixAoBrightnessChannel(long a, long b, long c, long d, double aMul, double bMul, double cMul, double dMul, int channel) {
         val fA = unit(a, channel) * aMul;
         val fB = unit(b, channel) * bMul;
         val fC = unit(c, channel) * cMul;
         val fD = unit(d, channel) * dMul;
-        return (int)(fA + fB + fC + fD) & 0x1F;
+        return (long)((int)(fA + fB + fC + fD) & 0xFF) << channel;
     }
 
-    private static int unit(int val, int channel) {
-        return (val >>> channel) & 0x1F;
+    private static int unit(long val, int channel) {
+        return (int) ((val >>> channel) & 0xFF);
     }
 }
