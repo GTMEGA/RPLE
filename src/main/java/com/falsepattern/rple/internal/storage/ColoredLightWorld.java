@@ -45,12 +45,12 @@ public class ColoredLightWorld implements ILumiWorld {
 
     @Override
     public int getLightValueForState(Block state, int x, int y, int z) {
-        return ((ColoredBlock)state).getColoredLightValue(this, x, y, z);
+        return ((ColoredBlock)state).getColoredLightValue(carrier, channel, x, y, z);
     }
 
     @Override
     public int getLightOpacity(Block state, int x, int y, int z) {
-        return ((ColoredBlock)state).getColoredLightOpacity(this, x, y, z);
+        return ((ColoredBlock)state).getColoredLightOpacity(carrier, channel, x, y, z);
     }
 
     @Override
@@ -71,8 +71,7 @@ public class ColoredLightWorld implements ILumiWorld {
         if (block < minBlock) {
             block = minBlock;
         }
-
-        return sky << 20 | block << 4;
+        return (sky & 0xF) << 6 | (block & 0xF) << 1;
     }
 
     @SideOnly(Side.CLIENT)

@@ -20,13 +20,23 @@ import static com.falsepattern.lib.mixin.IMixin.PredicateHelpers.always;
 @RequiredArgsConstructor
 public enum Mixin implements IMixin {
     // @formatter:off
-    BlockMixin(Side.COMMON, always(), "BlockMixin"),
-    LuminaWorldMixin(Side.COMMON, always(), "lumina.WorldMixin"),
-    LuminaChunkMixin(Side.COMMON, always(), "lumina.ChunkMixin"),
-    LuminaEBSMixin(Side.COMMON, always(), "lumina.EBSMixin"),
+    common_BlockMixin(Side.COMMON, always(), "BlockMixin"),
+    common_lumina_WorldMixin(Side.COMMON, always(), "lumina.WorldMixin"),
+    common_lumina_ChunkMixin(Side.COMMON, always(), "lumina.ChunkMixin"),
+    common_lumina_EBSMixin(Side.COMMON, always(), "lumina.EBSMixin"),
 
-    ChunkCacheMixin(Side.CLIENT, always(), "ChunkCacheMixin"),
-    WorldMixin(Side.CLIENT, always(), "WorldMixin")
+    client_BlockFluidMixin(Side.CLIENT, always(), "BlockFluidMixin"),
+    client_BlockLiquidMixin(Side.CLIENT, always(), "BlockLiquidMixin"),
+    client_BlockMixin(Side.CLIENT, always(), "BlockMixin"),
+    client_ChunkCacheMixin(Side.CLIENT, always(), "ChunkCacheMixin"),
+    client_EntityRendererMixin(Side.CLIENT, always(), "EntityRendererMixin"),
+    client_GuiInventoryMixin(Side.CLIENT, always(), "GuiInventoryMixin"),
+    client_OpenGLHelperMixin(Side.CLIENT, always(), "OpenGLHelperMixin"),
+    client_QuadComparatorMixin(Side.CLIENT, always(), "QuadComparatorMixin"),
+    client_RenderBlocksMixin(Side.CLIENT, always(), "RenderBlocksMixin"),
+    client_RendererLivingEntityMixin(Side.CLIENT, always(), "RendererLivingEntityMixin"),
+    client_TessellatorMixin(Side.CLIENT, always(), "TessellatorMixin"),
+    client_WorldMixin(Side.CLIENT, always(), "WorldMixin")
     ;
     // @formatter:on
 
