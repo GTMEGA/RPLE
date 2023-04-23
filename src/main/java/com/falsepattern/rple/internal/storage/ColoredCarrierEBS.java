@@ -1,5 +1,5 @@
 package com.falsepattern.rple.internal.storage;
 
 public interface ColoredCarrierEBS {
-    ColoredLightEBS getColoredEBS(ColoredLightChannel channel);
+    ColoredLightEBS getColoredEBS(int colorChannel);
 }

@@ -1,19 +1,18 @@
 package com.falsepattern.rple.internal.storage;
 
 import com.falsepattern.lumina.api.ILightingEngine;
-import com.falsepattern.lumina.api.ILightingEngineProvider;
 import com.falsepattern.lumina.api.ILumiChunk;
 import com.falsepattern.lumina.api.ILumiChunkRoot;
 import com.falsepattern.lumina.api.ILumiEBS;
 import com.falsepattern.lumina.api.ILumiWorld;
+import com.falsepattern.rple.api.LightConstants;
 import lombok.val;
 
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 public class ColoredLightChunk implements ILumiChunk {
-    private final ColoredLightChannel channel;
+    private final int colorChannel;
     private final ColoredLightWorld world;
     private final Chunk carrier;
 
@@ -25,17 +24,22 @@ public class ColoredLightChunk implements ILumiChunk {
     private boolean isLightInitialized;
 
     public ColoredLightChunk(ColoredLightWorld world, Chunk carrier) {
-        this.channel = world.channel;
+        this.colorChannel = world.colorChannel;
         this.world = world;
         this.carrier = carrier;
-        updateSkylightColumns = new boolean[256];
-        heightMap = new int[256];
+        if (world.colorChannel == LightConstants.COLOR_CHANNEL_RED) {
+            updateSkylightColumns = carrier.updateSkylightColumns;
+            heightMap = carrier.heightMap;
+        } else {
+            updateSkylightColumns = new boolean[256];
+            heightMap = new int[256];
+        }
     }
 
     @Override
     public ILumiEBS lumiEBS(int arrayIndex) {
         val ebs = carrier.getBlockStorageArray()[arrayIndex];
-        return ebs == null ? null : ((ColoredCarrierEBS)ebs).getColoredEBS(channel);
+        return ebs == null ? null : ((ColoredCarrierEBS)ebs).getColoredEBS(colorChannel);
     }
 
     @Override

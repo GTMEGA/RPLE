@@ -28,13 +28,13 @@ public abstract class TessellatorMixin {
 
     @Shadow private int color;
 
-    @Shadow private int brightness;
-
     @Shadow private int[] rawBuffer;
 
     @Shadow private int rawBufferIndex;
 
     @Shadow private int rawBufferSize;
+
+    private long brightness;
 
     @Redirect(method = "draw",
               at = @At(value = "FIELD",
@@ -73,18 +73,9 @@ public abstract class TessellatorMixin {
               require = 1)
     private boolean customColor(Tessellator instance) {
         if (this.hasBrightness) {
-            int red, green, blue;
-            if ((brightness & COOKIE_BIT) != 0) {
-                long packed = Utils.cookieToPackedLong(brightness);
-                red = Utils.getRedPair(packed);
-                green = Utils.getGreenPair(packed);
-                blue = Utils.getBluePair(packed);
-            } else {
-                red = green = blue = brightness;
-            }
-            rawBuffer[rawBufferIndex + 7] = red;
-            rawBuffer[rawBufferIndex + 8] = green;
-            rawBuffer[rawBufferIndex + 9] = blue;
+            rawBuffer[rawBufferIndex + 7] = Utils.getRedPair(brightness);
+            rawBuffer[rawBufferIndex + 8] = Utils.getGreenPair(brightness);
+            rawBuffer[rawBufferIndex + 9] = Utils.getBluePair(brightness);
         }
         return false;
     }
@@ -95,11 +86,8 @@ public abstract class TessellatorMixin {
      */
     @Overwrite
     public void setBrightness(int brightness) {
-        this.brightness = brightness;
         this.hasBrightness = true;
-        if ((brightness & COOKIE_BIT) == 0 && brightness != 0) {
-            new Throwable(Integer.toHexString(brightness)).printStackTrace();
-        }
+        this.brightness = Utils.cookieToPackedLong(brightness);
     }
 
     private static void enableLightMapTexture(int position, int unit) {

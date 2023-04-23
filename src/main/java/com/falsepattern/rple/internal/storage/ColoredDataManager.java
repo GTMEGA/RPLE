@@ -1,35 +1,41 @@
 package com.falsepattern.rple.internal.storage;
 
 import com.falsepattern.chunk.api.ChunkDataManager;
+import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.internal.Tags;
+import com.falsepattern.rple.internal.Utils;
 import lombok.val;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.NibbleArray;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class ColoredDataManager implements ChunkDataManager.SectionNBTDataManager, ChunkDataManager.PacketDataManager, ChunkDataManager.ChunkNBTDataManager {
-    private final ColoredLightChannel channel;
+    private final int colorChannel;
+    private final boolean root;
 
-    public ColoredDataManager(ColoredLightChannel channel) {
-        this.channel = channel;
+    public ColoredDataManager(int colorChannel, boolean root) {
+        this.colorChannel = colorChannel;
+        this.root = root;
     }
 
     @Override
     public int maxPacketSize() {
         return 16 * (
-                16 * 16 * 8
-        );
+                16 * 16 * 8 * 2
+        ) + 256;
     }
 
     @Override
     public void writeToBuffer(Chunk chunk, int ebsMask, boolean forceUpdate, ByteBuffer data) {
         val carrier = (ColoredCarrierChunk) chunk;
         boolean hasSky = !chunk.worldObj.provider.hasNoSky;
-        val cn = carrier.getColoredChunk(channel);
+        val cn = carrier.getColoredChunk(colorChannel);
         for (int i = 0; i < 16; i++) {
             if ((ebsMask & (1 << i)) != 0) {
                 val ebs = cn.lumiEBS(i);
@@ -47,7 +53,7 @@ public class ColoredDataManager implements ChunkDataManager.SectionNBTDataManage
     public void readFromBuffer(Chunk chunk, int ebsMask, boolean forceUpdate, ByteBuffer buffer) {
         val carrier = (ColoredCarrierChunk) chunk;
         boolean hasSky = !chunk.worldObj.provider.hasNoSky;
-        val cn = carrier.getColoredChunk(channel);
+        val cn = carrier.getColoredChunk(colorChannel);
         for (int i = 0; i < 16; i++) {
             if ((ebsMask & (1 << i)) != 0) {
                 val ebs = cn.lumiEBS(i);
@@ -63,27 +69,31 @@ public class ColoredDataManager implements ChunkDataManager.SectionNBTDataManage
 
     @Override
     public void writeSectionToNBT(Chunk chunk, ExtendedBlockStorage ebs, NBTTagCompound section) {
-        val cEbs = ((ColoredCarrierEBS)ebs).getColoredEBS(channel);
+        val cEbs = ((ColoredCarrierEBS)ebs).getColoredEBS(colorChannel);
         section.setByteArray("BlockLight", cEbs.lumiBlocklightArray().data);
         if (!chunk.worldObj.provider.hasNoSky) {
             section.setByteArray("SkyLight", cEbs.lumiSkylightArray().data);
-        } else {
-            section.setByteArray("SkyLight", new byte[0]);
         }
     }
 
     @Override
     public void readSectionFromNBT(Chunk chunk, ExtendedBlockStorage ebs, NBTTagCompound section) {
-        val cEbs = ((ColoredCarrierEBS)ebs).getColoredEBS(channel);
-        System.arraycopy(section.getByteArray("BlockLight"), 0, cEbs.lumiBlocklightArray().data, 0, 2048);
+        val cEbs = ((ColoredCarrierEBS)ebs).getColoredEBS(colorChannel);
+        safeNibbleArray(section, "BlockLight", cEbs.lumiBlocklightArray(), EnumSkyBlock.Block);
         if (!chunk.worldObj.provider.hasNoSky) {
-            val arr = section.getByteArray("SkyLight");
+            safeNibbleArray(section, "SkyLight", cEbs.lumiSkylightArray(), EnumSkyBlock.Sky);
+        }
+    }
+
+    private static void safeNibbleArray(NBTTagCompound compound, String key, NibbleArray array, EnumSkyBlock esb) {
+        if (compound.hasKey(key, 7)) {
+            val arr = compound.getByteArray(key);
             if (arr.length == 2048) {
-                System.arraycopy(arr, 0, cEbs.lumiSkylightArray().data, 0, 2048);
-            } else {
-                Arrays.fill(cEbs.lumiSkylightArray().data, (byte)0);
+                System.arraycopy(arr, 0, array.data, 0, 2048);
+                return;
             }
         }
+        Arrays.fill(array.data, (byte)esb.defaultLightValue);
     }
 
     @Override
@@ -93,22 +103,30 @@ public class ColoredDataManager implements ChunkDataManager.SectionNBTDataManage
 
     @Override
     public String id() {
-        return channel.name();
+        return Utils.IDs[colorChannel];
     }
 
     @Override
     public void writeChunkToNBT(Chunk chunk, NBTTagCompound nbt) {
-        nbt.setIntArray("HeightMap", ((ColoredCarrierChunk)chunk).getColoredChunk(channel).lumiHeightMap());
+        if (!root)
+            nbt.setIntArray("HeightMap", ((ColoredCarrierChunk)chunk).getColoredChunk(colorChannel).lumiHeightMap());
     }
 
     @Override
     public void readChunkFromNBT(Chunk chunk, NBTTagCompound nbt) {
-        val heightMap = nbt.getIntArray("HeightMap");
-        val lhm = ((ColoredCarrierChunk)chunk).getColoredChunk(channel).lumiHeightMap();
-        if (heightMap != null && heightMap.length == 256) {
-            System.arraycopy(heightMap, 0, lhm, 0, 256);
-        } else {
-            System.arraycopy(chunk.heightMap, 0, lhm, 0, 256);
+        if (!root) {
+            val heightMap = nbt.getIntArray("HeightMap");
+            val lhm = ((ColoredCarrierChunk) chunk).getColoredChunk(colorChannel).lumiHeightMap();
+            if (heightMap != null && heightMap.length == 256) {
+                System.arraycopy(heightMap, 0, lhm, 0, 256);
+            } else {
+                System.arraycopy(chunk.heightMap, 0, lhm, 0, 256);
+            }
         }
+    }
+
+    @Override
+    public boolean chunkPrivilegedAccess() {
+        return root;
     }
 }

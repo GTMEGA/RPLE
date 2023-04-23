@@ -1,6 +1,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.storage.ColoredBlock;
+import com.falsepattern.rple.api.ColoredBlock;
+import com.falsepattern.rple.internal.Utils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -20,12 +21,14 @@ public abstract class BlockMixin {
     @Overwrite
     public int getMixedBrightnessForBlock(IBlockAccess world, int x, int y, int z) {
         Block block = world.getBlock(x, y, z);
-        int l = world.getLightBrightnessForSkyBlocks(x, y, z, ((ColoredBlock)block).getLightValuePacked(world, x, y, z));
+        int meta = world.getBlockMetadata(x, y, z);
+        int l = world.getLightBrightnessForSkyBlocks(x, y, z, Utils.getLightValuePacked(world, (ColoredBlock) block, meta, x, y, z));
 
         if (l == 0 && block instanceof BlockSlab) {
             --y;
             block = world.getBlock(x, y, z);
-            return world.getLightBrightnessForSkyBlocks(x, y, z, ((ColoredBlock)block).getLightValuePacked(world, x, y, z));
+            meta = world.getBlockMetadata(x, y, z);
+            return world.getLightBrightnessForSkyBlocks(x, y, z, Utils.getLightValuePacked(world, (ColoredBlock) block, meta, x, y, z));
         } else {
             return l;
         }
