@@ -8,8 +8,9 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.Constants;
+import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.rple.internal.LightMap;
+import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Utils;
 import org.lwjgl.opengl.GL11;
 import org.objectweb.asm.Opcodes;
@@ -17,16 +18,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 
 import java.nio.ShortBuffer;
-
-import static com.falsepattern.rple.internal.Utils.COOKIE_BIT;
 
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin {
@@ -50,11 +47,11 @@ public abstract class TessellatorMixin {
                      opcode = Opcodes.GETFIELD,
                      ordinal = 0),
               require = 1)
-    private boolean enable(Tessellator instance) {
+    private boolean enable(Tessellator tess) {
         if (this.hasBrightness) {
-            enableLightMapTexture(14, LightMap.textureUnitRed);
-            enableLightMapTexture(16, LightMap.textureUnitGreen);
-            enableLightMapTexture(18, LightMap.textureUnitBlue);
+            enableLightMapTexture(tess, RPLE.getRedIndexNoShader() * 2, LightMap.textureUnitRed);
+            enableLightMapTexture(tess, RPLE.getGreenIndexNoShader() * 2, LightMap.textureUnitGreen);
+            enableLightMapTexture(tess, RPLE.getBlueIndexNoShader() * 2, LightMap.textureUnitBlue);
         }
         return false;
     }
@@ -81,9 +78,9 @@ public abstract class TessellatorMixin {
               require = 1)
     private boolean customColor(Tessellator instance) {
         if (this.hasBrightness) {
-            rawBuffer[rawBufferIndex + 7] = Utils.getRedPair(brightness);
-            rawBuffer[rawBufferIndex + 8] = Utils.getGreenPair(brightness);
-            rawBuffer[rawBufferIndex + 9] = Utils.getBluePair(brightness);
+            rawBuffer[rawBufferIndex + RPLE.getRedIndexNoShader()] = Utils.getRedPair(brightness);
+            rawBuffer[rawBufferIndex + RPLE.getGreenIndexNoShader()] = Utils.getGreenPair(brightness);
+            rawBuffer[rawBufferIndex + RPLE.getBlueIndexNoShader()] = Utils.getBluePair(brightness);
         }
         return false;
     }
@@ -98,10 +95,10 @@ public abstract class TessellatorMixin {
         this.brightness = Utils.cookieToPackedLong(brightness);
     }
 
-    private static void enableLightMapTexture(int position, int unit) {
+    private static void enableLightMapTexture(Tessellator tess, int position, int unit) {
         OpenGlHelper.setClientActiveTexture(unit);
         shortBuffer.position(position);
-        GL11.glTexCoordPointer(2, Constants.BYTES_PER_VERTEX_COLOR * 4, shortBuffer);
+        GL11.glTexCoordPointer(2, VertexAPI.recomputeVertexInfo(8, 4), shortBuffer);
         GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
         OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
     }
@@ -110,27 +107,5 @@ public abstract class TessellatorMixin {
         OpenGlHelper.setClientActiveTexture(unit);
         GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
         OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
-    }
-
-    @ModifyConstant(method = "addVertex",
-                    constant = {@Constant(intValue = Constants.BYTES_PER_VERTEX_VANILLA), @Constant(intValue = 4 * Constants.BYTES_PER_VERTEX_VANILLA)},
-                    require = 2)
-    private int extendBytesAddVertex(int constant) {
-        return Constants.extendBytesPerVertex(constant);
-    }
-
-    @ModifyConstant(method = "getVertexState",
-                    constant = @Constant(intValue = Constants.BYTES_PER_VERTEX_VANILLA * 4),
-                    require = 1)
-    private int extendBytesGVS(int constant) {
-        return Constants.extendBytesPerVertex(constant);
-    }
-
-    @ModifyConstant(method = "draw",
-                    constant = {@Constant(intValue = Constants.BYTES_PER_VERTEX_VANILLA * 4),
-                                @Constant(intValue = Constants.BYTES_PER_VERTEX_VANILLA)},
-                    require = 8)
-    private int extendBytesDraw(int constant) {
-        return Constants.extendBytesPerVertex(constant);
     }
 }

@@ -33,7 +33,6 @@ public enum Mixin implements IMixin {
     client_EntityRendererMixin(Side.CLIENT, always(), "EntityRendererMixin"),
     client_GuiInventoryMixin(Side.CLIENT, always(), "GuiInventoryMixin"),
     client_OpenGLHelperMixin(Side.CLIENT, always(), "OpenGLHelperMixin"),
-    client_QuadComparatorMixin(Side.CLIENT, always(), "QuadComparatorMixin"),
     client_RenderBlocksMixin(Side.CLIENT, always(), "RenderBlocksMixin"),
     client_RendererLivingEntityMixin(Side.CLIENT, always(), "RendererLivingEntityMixin"),
     client_TessellatorMixin(Side.CLIENT, always(), "TessellatorMixin"),

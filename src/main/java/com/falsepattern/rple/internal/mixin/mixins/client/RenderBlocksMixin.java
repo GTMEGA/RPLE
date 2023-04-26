@@ -18,7 +18,8 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 import net.minecraft.client.renderer.RenderBlocks;
 
-@Mixin(RenderBlocks.class)
+@Mixin(value = RenderBlocks.class,
+       priority = 1001) //overwriting FalseTweaks mixAOBrightness
 public abstract class RenderBlocksMixin {
     /**
      * @author FalsePattern
@@ -79,13 +80,6 @@ public abstract class RenderBlocksMixin {
             packedResult |= mixAoBrightnessChannel(packedA, packedB, packedC, packedD, aMul, bMul, cMul, dMul, i);
         }
         return Utils.packedLongToCookie(packedResult);
-    }
-
-    @ModifyConstant(method = {"renderStandardBlockWithAmbientOcclusion", "renderStandardBlockWithAmbientOcclusionPartial"},
-                    constant = @Constant(intValue = 0xf000f),
-                    require = 2)
-    private int replaceSetBrightness(int constant) {
-        return Utils.MIN;
     }
 
     private static long mixAoBrightnessChannel(long a, long b, long c, long d, double aMul, double bMul, double cMul, double dMul, int channel) {
