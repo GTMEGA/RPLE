@@ -30,7 +30,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ColoredLightWorld implements ILumiWorld {
     @Getter
-    @Setter
     private ILightingEngine lightingEngine;
     private final World carrier;
     public final int colorChannel;
@@ -43,17 +42,22 @@ public class ColoredLightWorld implements ILumiWorld {
     }
 
     @Override
-    public ColoredLightChunk wrap(Chunk chunk) {
+    public ColoredLightChunk lumiWrap(Chunk chunk) {
         return ((ColoredCarrierChunk)chunk).getColoredChunk(colorChannel);
     }
 
     @Override
-    public ColoredLightEBS wrap(ExtendedBlockStorage ebs) {
+    public ColoredLightEBS lumiWrap(ExtendedBlockStorage ebs) {
         return ((ColoredCarrierEBS)ebs).getColoredEBS(colorChannel);
     }
 
     @Override
-    public int getLightValue(Block block, int meta, int x, int y, int z) {
+    public void lumiSetLightingEngine(ILightingEngine engine) {
+        lightingEngine = engine;
+    }
+
+    @Override
+    public int lumiGetLightValue(Block block, int meta, int x, int y, int z) {
         return getLightValue(carrier, block, meta, x, y, z);
     }
 
@@ -62,7 +66,7 @@ public class ColoredLightWorld implements ILumiWorld {
     }
 
     @Override
-    public int getLightOpacity(Block block, int meta, int x, int y, int z) {
+    public int lumiGetLightOpacity(Block block, int meta, int x, int y, int z) {
         return getLightOpacity(carrier, block, meta, x, y, z);
     }
 
@@ -71,7 +75,7 @@ public class ColoredLightWorld implements ILumiWorld {
     }
 
     @Override
-    public String id() {
+    public String lumiId() {
         return id;
     }
 
@@ -146,7 +150,7 @@ public class ColoredLightWorld implements ILumiWorld {
                     } else {
                         return skyBlock.defaultLightValue;
                     }
-                    val chunk = wrap(vanillaChunk);
+                    val chunk = lumiWrap(vanillaChunk);
                     if (skyBlock == EnumSkyBlock.Block)
                         return getIntrinsicOrSavedBlockLightValue(access, chunk, x & 15, y, z & 15);
                     else
@@ -188,7 +192,7 @@ public class ColoredLightWorld implements ILumiWorld {
                 } else {
                     return skyBlock.defaultLightValue;
                 }
-                ColoredLightChunk chunk = wrap(vanillaChunk);
+                ColoredLightChunk chunk = lumiWrap(vanillaChunk);
 
                 if(skyBlock == EnumSkyBlock.Block)
                     return getIntrinsicOrSavedBlockLightValue(access, chunk, x & 15, y, z & 15);
@@ -204,8 +208,8 @@ public class ColoredLightWorld implements ILumiWorld {
         int savedLightValue = chunk.getSavedLightValue(EnumSkyBlock.Block, x, y, z);
         int bx = x + (chunk.x() * 16);
         int bz = z + (chunk.z() * 16);
-        Block block = chunk.root().getBlock(x, y, z);
-        int meta = chunk.root().getBlockMetadata(x, y, z);
+        Block block = chunk.root().rootGetBlock(x, y, z);
+        int meta = chunk.root().rootGetBlockMetadata(x, y, z);
         int lightValue = getLightValue(access, block, meta, bx, y, bz);
         return Math.max(savedLightValue, lightValue);
     }
