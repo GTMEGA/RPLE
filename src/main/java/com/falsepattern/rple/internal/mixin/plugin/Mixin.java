@@ -30,6 +30,7 @@ public enum Mixin implements IMixin {
     client_BlockLiquidMixin(Side.CLIENT, always(), "BlockLiquidMixin"),
     client_BlockMixin(Side.CLIENT, always(), "BlockMixin"),
     client_ChunkCacheMixin(Side.CLIENT, always(), "ChunkCacheMixin"),
+    client_EntityMixin(Side.CLIENT, always(), "EntityMixin"),
     client_EntityRendererMixin(Side.CLIENT, always(), "EntityRendererMixin"),
     client_GuiInventoryMixin(Side.CLIENT, always(), "GuiInventoryMixin"),
     client_OpenGLHelperMixin(Side.CLIENT, always(), "OpenGLHelperMixin"),

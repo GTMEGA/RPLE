@@ -135,6 +135,14 @@ public class Utils {
         return unpackPair((int)((packed >>> BLUE_PAIR_OFFSET) & 0xFFFFL));
     }
 
+    public static int getBrightestPair(long packed) {
+        int red = (int) ((packed >>> RED_PAIR_OFFSET) & 0xFFFFL);
+        int green = (int) ((packed >>> GREEN_PAIR_OFFSET) & 0xFFFFL);
+        int blue = (int) ((packed >>> BLUE_PAIR_OFFSET) & 0xFFFFL);
+        return (Math.max(Math.max(red & 0xFF, green & 0xFF), blue & 0xFF)) |
+               (Math.max(Math.max(red & 0xFF00, green & 0xFF00), blue & 0xFF00) << 8);
+    }
+
 
     public static int packedMax(int cookieA, int cookieB) {
         return Utils.packedLongToCookie(packedMax(Utils.cookieToPackedLong(cookieA), Utils.cookieToPackedLong(cookieB)));

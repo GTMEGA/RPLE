@@ -30,6 +30,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ColoredLightWorld implements ILumiWorld {
     @Getter
+    @Setter
     private ILightingEngine lightingEngine;
     private final World carrier;
     public final int colorChannel;
@@ -49,11 +50,6 @@ public class ColoredLightWorld implements ILumiWorld {
     @Override
     public ColoredLightEBS lumiWrap(ExtendedBlockStorage ebs) {
         return ((ColoredCarrierEBS)ebs).getColoredEBS(colorChannel);
-    }
-
-    @Override
-    public void lumiSetLightingEngine(ILightingEngine engine) {
-        lightingEngine = engine;
     }
 
     @Override
