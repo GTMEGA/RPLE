@@ -11,11 +11,12 @@ package com.falsepattern.rple.internal;
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.internal.storage.ColoredCarrierWorld;
-import lombok.val;
-
+import cpw.mods.fml.client.FMLClientHandler;
+import lombok.*;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import shadersmod.client.Shaders;
 
 public class Utils {
     // Cookie format (bits):
@@ -24,7 +25,7 @@ public class Utils {
     public static final int PARITY_BIT = 0x1;
     public static final int INDEX_MASK = 0xFFFF << INDEX_SHIFT;
     public static final int COOKIE_BIT = 0x40000000;
-    public static final int ZERO_MASK  = ~(PARITY_BIT | INDEX_MASK | COOKIE_BIT);
+    public static final int ZERO_MASK = ~(PARITY_BIT | INDEX_MASK | COOKIE_BIT);
 
     public static final int TYPE_COOKIE = 0;
     public static final int TYPE_VANILLA = 1;
@@ -34,7 +35,7 @@ public class Utils {
     public static final int PACKED_BIT_BLOCK_COLOR = 0x20000000;
     public static final int MIN;
 
-    //Long format (hex):
+    // Long format (hex):
     // 0000 RRrr GGgg BBbb
     public static final int RED_PAIR_OFFSET = 32;
     public static final int GREEN_PAIR_OFFSET = 16;
@@ -45,6 +46,7 @@ public class Utils {
 
     private static final long[] lightValues = new long[65536];
     private static int counter = 1;
+
     static {
         long res = 0;
         for (int i = 4; i <= 40; i += 8) {
@@ -91,7 +93,7 @@ public class Utils {
                 return lightValues[(cookie & INDEX_MASK) >>> INDEX_SHIFT];
             }
             case TYPE_VANILLA: {
-                //Vanilla fake-pack
+                // Vanilla fake-pack
                 val packed = packPair(cookie);
                 return ((long) packed << RED_PAIR_OFFSET) | ((long) packed << GREEN_PAIR_OFFSET) | (packed << BLUE_PAIR_OFFSET);
             }
@@ -128,11 +130,11 @@ public class Utils {
     }
 
     public static int getGreenPair(long packed) {
-        return unpackPair((int)((packed >>> GREEN_PAIR_OFFSET) & 0xFFFFL));
+        return unpackPair((int) ((packed >>> GREEN_PAIR_OFFSET) & 0xFFFFL));
     }
 
     public static int getBluePair(long packed) {
-        return unpackPair((int)((packed >>> BLUE_PAIR_OFFSET) & 0xFFFFL));
+        return unpackPair((int) ((packed >>> BLUE_PAIR_OFFSET) & 0xFFFFL));
     }
 
     public static int getBrightestPair(long packed) {
@@ -142,7 +144,6 @@ public class Utils {
         return (Math.max(Math.max(red & 0xFF, green & 0xFF), blue & 0xFF)) |
                (Math.max(Math.max(red & 0xFF00, green & 0xFF00), blue & 0xFF00) << 8);
     }
-
 
     public static int packedMax(int cookieA, int cookieB) {
         return Utils.packedLongToCookie(packedMax(Utils.cookieToPackedLong(cookieA), Utils.cookieToPackedLong(cookieB)));
@@ -167,7 +168,7 @@ public class Utils {
         } else {
             minRed = minGreen = minBlue = minBlockLight;
         }
-        val carrier = access instanceof World ? ((ColoredCarrierWorld) access) : (ColoredCarrierWorld)(((ChunkCache)access).worldObj);
+        val carrier = access instanceof World ? ((ColoredCarrierWorld) access) : (ColoredCarrierWorld) (((ChunkCache) access).worldObj);
         val red = carrier.getColoredWorld(LightConstants.COLOR_CHANNEL_RED).getLightBrightnessForSkyBlocksWorld(access, x, y, z, minRed);
         val green = carrier.getColoredWorld(LightConstants.COLOR_CHANNEL_GREEN).getLightBrightnessForSkyBlocksWorld(access, x, y, z, minGreen);
         val blue = carrier.getColoredWorld(LightConstants.COLOR_CHANNEL_BLUE).getLightBrightnessForSkyBlocksWorld(access, x, y, z, minBlue);
@@ -175,11 +176,13 @@ public class Utils {
     }
 
     public static int getLightValuePacked(IBlockAccess world, ColoredBlock block, int meta, int x, int y, int z) {
-        return Utils.PACKED_BIT_BLOCK_COLOR |
+        return PACKED_BIT_BLOCK_COLOR |
                block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_RED, x, y, z) << 8 |
                block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_GREEN, x, y, z) << 4 |
                block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_BLUE, x, y, z);
     }
 
-
+    public static boolean shadersEnabled() {
+        return FMLClientHandler.instance().hasOptifine() && Shaders.shaderPackLoaded;
+    }
 }

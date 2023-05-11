@@ -15,13 +15,11 @@ import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.internal.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.storage.ColoredWorldProvider;
-import lombok.Getter;
-import lombok.val;
-
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import lombok.*;
 
 @Mod(modid = Tags.MODID,
      version = Tags.VERSION,

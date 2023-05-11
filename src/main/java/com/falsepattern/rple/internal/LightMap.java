@@ -26,10 +26,6 @@ public class LightMap {
     private static final float TEXTURE_SCALE = 1F / 256F;
     private static final float TEXTURE_TRANSLATION = 8F;
 
-    public static final int RED_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE1;
-    public static final int GREEN_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE2;
-    public static final int BLUE_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE3;
-
     public static LightMap RED_LIGHT_MAP;
     public static LightMap GREEN_LIGHT_MAP;
     public static LightMap BLUE_LIGHT_MAP;
@@ -55,8 +51,8 @@ public class LightMap {
 
     public static void init(LightMap vanilla) {
         RED_LIGHT_MAP = vanilla;
-        GREEN_LIGHT_MAP = new LightMap(GREEN_LIGHT_MAP_TEXTURE_UNIT);
-        BLUE_LIGHT_MAP = new LightMap(BLUE_LIGHT_MAP_TEXTURE_UNIT);
+        GREEN_LIGHT_MAP = new LightMap(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
+        BLUE_LIGHT_MAP = new LightMap(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
     }
 
     public static void enableReconfigureAll() {

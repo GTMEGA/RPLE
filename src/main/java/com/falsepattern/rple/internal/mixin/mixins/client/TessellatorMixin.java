@@ -9,7 +9,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.rple.internal.LightMap;
+import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Utils;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -45,9 +45,9 @@ public abstract class TessellatorMixin {
               require = 1)
     private boolean enable(Tessellator tess) {
         if (hasBrightness) {
-            enableLightMapTexture(tess, RPLE.getRedIndexNoShader() * 2, LightMap.RED_LIGHT_MAP_TEXTURE_UNIT);
-            enableLightMapTexture(tess, RPLE.getGreenIndexNoShader() * 2, LightMap.GREEN_LIGHT_MAP_TEXTURE_UNIT);
-            enableLightMapTexture(tess, RPLE.getBlueIndexNoShader() * 2, LightMap.BLUE_LIGHT_MAP_TEXTURE_UNIT);
+            enableLightMapTexture(tess, RPLE.getRedIndexNoShader() * 2, Common.RED_LIGHT_MAP_TEXTURE_UNIT);
+            enableLightMapTexture(tess, RPLE.getGreenIndexNoShader() * 2, Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
+            enableLightMapTexture(tess, RPLE.getBlueIndexNoShader() * 2, Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
         }
         return false;
     }
@@ -60,9 +60,9 @@ public abstract class TessellatorMixin {
             require = 1)
     private boolean disable(Tessellator instance) {
         if (hasBrightness) {
-            disableLightMapTexture(LightMap.RED_LIGHT_MAP_TEXTURE_UNIT);
-            disableLightMapTexture(LightMap.GREEN_LIGHT_MAP_TEXTURE_UNIT);
-            disableLightMapTexture(LightMap.BLUE_LIGHT_MAP_TEXTURE_UNIT);
+            disableLightMapTexture(Common.RED_LIGHT_MAP_TEXTURE_UNIT);
+            disableLightMapTexture(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
+            disableLightMapTexture(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
         }
         return false;
     }

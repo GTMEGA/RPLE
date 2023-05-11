@@ -8,7 +8,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.LightMap;
+import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.Utils;
 import lombok.*;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -37,17 +37,17 @@ public abstract class OpenGLHelperMixin {
             val red = Utils.getRedPair(packed);
             val green = Utils.getGreenPair(packed);
             val blue = Utils.getBluePair(packed);
-            setLightmapTextureCoords(LightMap.RED_LIGHT_MAP_TEXTURE_UNIT, red & 0xFFFF, red >>> 16);
-            setLightmapTextureCoords(LightMap.GREEN_LIGHT_MAP_TEXTURE_UNIT, green & 0xFFFF, green >>> 16);
-            setLightmapTextureCoords(LightMap.BLUE_LIGHT_MAP_TEXTURE_UNIT, blue & 0xFFFF, blue >>> 16);
+            setLightmapTextureCoords(Common.RED_LIGHT_MAP_TEXTURE_UNIT, red & 0xFFFF, red >>> 16);
+            setLightmapTextureCoords(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, green & 0xFFFF, green >>> 16);
+            setLightmapTextureCoords(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, blue & 0xFFFF, blue >>> 16);
             ci.cancel();
         } else {
             if (texture == lightmapTexUnit) {
-                if (lightmapTexUnit != LightMap.RED_LIGHT_MAP_TEXTURE_UNIT) {
-                    setLightmapTextureCoords(LightMap.RED_LIGHT_MAP_TEXTURE_UNIT, u, v);
+                if (lightmapTexUnit != Common.RED_LIGHT_MAP_TEXTURE_UNIT) {
+                    setLightmapTextureCoords(Common.RED_LIGHT_MAP_TEXTURE_UNIT, u, v);
                 }
-                setLightmapTextureCoords(LightMap.GREEN_LIGHT_MAP_TEXTURE_UNIT, u, v);
-                setLightmapTextureCoords(LightMap.BLUE_LIGHT_MAP_TEXTURE_UNIT, u, v);
+                setLightmapTextureCoords(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, u, v);
+                setLightmapTextureCoords(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, u, v);
             }
         }
     }
