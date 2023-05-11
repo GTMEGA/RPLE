@@ -22,9 +22,13 @@ import static net.minecraft.client.Minecraft.getMinecraft;
 
 @SideOnly(Side.CLIENT)
 public class LightMap {
+    private static final int TEXTURE_SIZE = 16;
+    private static final float TEXTURE_SCALE = 1F / 256F;
+    private static final float TEXTURE_TRANSLATION = 8F;
+
     public static final int RED_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE1;
-    public static final int GREEN_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE3;
-    public static final int BLUE_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE4;
+    public static final int GREEN_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE2;
+    public static final int BLUE_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE3;
 
     public static LightMap RED_LIGHT_MAP;
     public static LightMap GREEN_LIGHT_MAP;
@@ -36,7 +40,7 @@ public class LightMap {
     public final int textureUnit;
 
     public LightMap(int textureUnit) {
-        this.texture = new DynamicTexture(16, 16);
+        this.texture = new DynamicTexture(TEXTURE_SIZE, TEXTURE_SIZE);
         this.location = getTextureManager().getDynamicTextureLocation("lightMap", texture);
         this.colors = texture.getTextureData();
         this.textureUnit = textureUnit;
@@ -73,27 +77,28 @@ public class LightMap {
         BLUE_LIGHT_MAP.disable();
     }
 
-    static float LIGHT_MAP_SCALE = 1F / 256F;
-    static float LIGHT_TRANSLATION = 8;
-
     public void enableReconfigure() {
         OpenGlHelper.setActiveTexture(textureUnit);
 
-        GL11.glMatrixMode(GL11.GL_TEXTURE);
-        GL11.glLoadIdentity();
-        GL11.glScalef(LIGHT_MAP_SCALE, LIGHT_MAP_SCALE, LIGHT_MAP_SCALE);
-        GL11.glTranslatef(LIGHT_TRANSLATION, LIGHT_TRANSLATION, 0F);
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-
         getTextureManager().bindTexture(location);
 
+        // Set because the texture coordinates are supplied as shorts (?)
+        // Technically only needs to be set once, but Vanilla does this every time the light map is enabled.
+        GL11.glMatrixMode(GL11.GL_TEXTURE);
+        GL11.glLoadIdentity();
+        GL11.glScalef(TEXTURE_SCALE, TEXTURE_SCALE, 0F);
+        GL11.glTranslatef(TEXTURE_TRANSLATION, TEXTURE_TRANSLATION, 0F);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
+        // The Dynamic texture will default these to nearest neighbour/repeat.
+        // Removing this would require not using dynamic textures.
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
 
-        GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
+
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
