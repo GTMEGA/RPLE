@@ -12,30 +12,32 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.*;
 
+import static net.minecraft.client.Minecraft.getMinecraft;
+
 @SideOnly(Side.CLIENT)
 public class LightMap {
-    public static int textureUnitRed;
-    public static int textureUnitGreen;
-    public static int textureUnitBlue;
-    public static LightMap redMap;
-    public static LightMap greenMap;
-    public static LightMap blueMap;
-    private static Minecraft mc;
+    public static final int RED_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE1;
+    public static final int GREEN_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE3;
+    public static final int BLUE_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE4;
+
+    public static LightMap RED_LIGHT_MAP;
+    public static LightMap GREEN_LIGHT_MAP;
+    public static LightMap BLUE_LIGHT_MAP;
 
     public final DynamicTexture texture;
     public final ResourceLocation location;
     public final int[] colors;
     public final int textureUnit;
 
-    public LightMap(Minecraft minecraft, int textureUnit) {
+    public LightMap(int textureUnit) {
         this.texture = new DynamicTexture(16, 16);
-        this.location = minecraft.getTextureManager().getDynamicTextureLocation("lightMap", texture);
+        this.location = getTextureManager().getDynamicTextureLocation("lightMap", texture);
         this.colors = texture.getTextureData();
         this.textureUnit = textureUnit;
     }
@@ -47,43 +49,43 @@ public class LightMap {
         this.textureUnit = textureUnit;
     }
 
-    public static void init(Minecraft mc, LightMap vanilla) {
-        redMap = vanilla;
-        textureUnitRed = redMap.textureUnit;
-        greenMap = new LightMap(mc, textureUnitGreen = GL13.GL_TEXTURE3);
-        blueMap = new LightMap(mc, textureUnitBlue = GL13.GL_TEXTURE4);
-        LightMap.mc = mc;
+    public static void init(LightMap vanilla) {
+        RED_LIGHT_MAP = vanilla;
+        GREEN_LIGHT_MAP = new LightMap(GREEN_LIGHT_MAP_TEXTURE_UNIT);
+        BLUE_LIGHT_MAP = new LightMap(BLUE_LIGHT_MAP_TEXTURE_UNIT);
     }
 
     public static void enableReconfigureAll() {
-        redMap.enableReconfigure();
-        greenMap.enableReconfigure();
-        blueMap.enableReconfigure();
+        RED_LIGHT_MAP.enableReconfigure();
+        GREEN_LIGHT_MAP.enableReconfigure();
+        BLUE_LIGHT_MAP.enableReconfigure();
     }
 
     public static void enableAll() {
-        redMap.enable();
-        greenMap.enable();
-        blueMap.enable();
+        RED_LIGHT_MAP.enable();
+        GREEN_LIGHT_MAP.enable();
+        BLUE_LIGHT_MAP.enable();
     }
 
     public static void disableAll() {
-        redMap.disable();
-        greenMap.disable();
-        blueMap.disable();
+        RED_LIGHT_MAP.disable();
+        GREEN_LIGHT_MAP.disable();
+        BLUE_LIGHT_MAP.disable();
     }
+
+    static float LIGHT_MAP_SCALE = 1F / 256F;
+    static float LIGHT_TRANSLATION = 8;
 
     public void enableReconfigure() {
         OpenGlHelper.setActiveTexture(textureUnit);
 
         GL11.glMatrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
-        val scale = 1F / 256F;
-        GL11.glScalef(scale, scale, scale);
-        GL11.glTranslatef(8F, 8F, 8F);
+        GL11.glScalef(LIGHT_MAP_SCALE, LIGHT_MAP_SCALE, LIGHT_MAP_SCALE);
+        GL11.glTranslatef(LIGHT_TRANSLATION, LIGHT_TRANSLATION, 0F);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
-        mc.getTextureManager().bindTexture(location);
+        getTextureManager().bindTexture(location);
 
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
@@ -108,30 +110,30 @@ public class LightMap {
     }
 
     public static void updateLightMap(Minecraft mc, float torchFlickerX, float time) {
-        WorldClient worldclient = mc.theWorld;
+        val world = mc.theWorld;
 
-        if (worldclient != null) {
+        if (world != null) {
             for (int i = 0; i < 256; ++i) {
-                float rawSunBrightness = worldclient.getSunBrightness(1.0F) * 0.95F + 0.05F;
-                float skyBlue = worldclient.provider.lightBrightnessTable[i / 16] * rawSunBrightness;
-                float blockRed = worldclient.provider.lightBrightnessTable[i % 16] * (torchFlickerX * 0.1F + 1.5F);
+                val rawSunBrightness = world.getSunBrightness(1F) * 0.95F + 0.05F;
+                var skyBlue = world.provider.lightBrightnessTable[i / 16] * rawSunBrightness;
+                val blockRed = world.provider.lightBrightnessTable[i % 16] * (torchFlickerX * 0.1F + 1.5F);
 
-                if (worldclient.lastLightningBolt > 0) {
-                    skyBlue = worldclient.provider.lightBrightnessTable[i / 16];
-                }
+                if (world.lastLightningBolt > 0)
+                    skyBlue = world.provider.lightBrightnessTable[i / 16];
 
-                float skyRed = skyBlue * (worldclient.getSunBrightness(1.0F) * 0.65F + 0.35F);
-                float skyGreen = skyBlue * (worldclient.getSunBrightness(1.0F) * 0.65F + 0.35F);
-                float blockGreen = blockRed * ((blockRed * 0.6F + 0.4F) * 0.6F + 0.4F);
-                float blockBlue = blockRed * (blockRed * blockRed * 0.6F + 0.4F);
-                float red = skyRed + blockRed;
-                float green = skyGreen + blockGreen;
-                float blue = skyBlue + blockBlue;
+                val skyRed = skyBlue * (world.getSunBrightness(1F) * 0.65F + 0.35F);
+                val skyGreen = skyBlue * (world.getSunBrightness(1F) * 0.65F + 0.35F);
+                val blockGreen = blockRed * ((blockRed * 0.6F + 0.4F) * 0.6F + 0.4F);
+                val blockBlue = blockRed * (blockRed * blockRed * 0.6F + 0.4F);
+
+                var red = skyRed + blockRed;
+                var green = skyGreen + blockGreen;
+                var blue = skyBlue + blockBlue;
                 red = red * 0.96F + 0.03F;
                 green = green * 0.96F + 0.03F;
                 blue = blue * 0.96F + 0.03F;
 
-                if (worldclient.provider.dimensionId == 1) {
+                if (world.provider.dimensionId == 1) {
                     red = 0.22F + blockRed * 0.75F;
                     green = 0.28F + blockGreen * 0.75F;
                     blue = 0.25F + blockGreen * 0.75F;
@@ -141,7 +143,7 @@ public class LightMap {
                 green = clamp(green);
                 blue = clamp(blue);
 
-                float gamma = mc.gameSettings.gammaSetting;
+                val gamma = mc.gameSettings.gammaSetting;
                 red = gammaCorrect(red, gamma);
                 green = gammaCorrect(green, gamma);
                 blue = gammaCorrect(blue, gamma);
@@ -150,29 +152,33 @@ public class LightMap {
                 green = clamp(green);
                 blue = clamp(blue);
 
-                int iRed = (int) (red * 255.0F);
-                int iGreen = (int) (green * 255.0F);
-                int iBlue = (int) (blue * 255.0F);
+                val iRed = (int) (red * 255F);
+                val iGreen = (int) (green * 255F);
+                val iBlue = (int) (blue * 250F);
 
-                redMap.colors[i] = 0xFF00FFFF | (iRed << 16);
-                greenMap.colors[i] = 0xFFFF00FF | (iGreen << 8);
-                blueMap.colors[i] = 0xFFFFFF00 | iBlue;
+                RED_LIGHT_MAP.colors[i] = 0xFF00FFFF | (iRed << 16);
+                GREEN_LIGHT_MAP.colors[i] = 0xFFFF00FF | (iGreen << 8);
+                BLUE_LIGHT_MAP.colors[i] = 0xFFFFFF00 | iBlue;
             }
 
-            redMap.texture.updateDynamicTexture();
-            greenMap.texture.updateDynamicTexture();
-            blueMap.texture.updateDynamicTexture();
+            RED_LIGHT_MAP.texture.updateDynamicTexture();
+            GREEN_LIGHT_MAP.texture.updateDynamicTexture();
+            BLUE_LIGHT_MAP.texture.updateDynamicTexture();
         }
     }
 
+    private static TextureManager getTextureManager() {
+        return getMinecraft().getTextureManager();
+    }
+
     private static float clamp(float value) {
-        return value < 0 ? 0 : value > 1 ? 1 : value;
+        return Math.max(Math.min(value, 1F), 0F);
     }
 
     private static float gammaCorrect(float color, float gammaSetting) {
-        float colorPreGamma = 1 - color;
-        colorPreGamma = 1 - colorPreGamma * colorPreGamma * colorPreGamma * colorPreGamma;
-        color = color * (1 - gammaSetting) + colorPreGamma * gammaSetting;
+        var colorPreGamma = 1F - color;
+        colorPreGamma = 1F - colorPreGamma * colorPreGamma * colorPreGamma * colorPreGamma;
+        color = color * (1F - gammaSetting) + colorPreGamma * gammaSetting;
         color = color * 0.96F + 0.03F;
         return color;
     }

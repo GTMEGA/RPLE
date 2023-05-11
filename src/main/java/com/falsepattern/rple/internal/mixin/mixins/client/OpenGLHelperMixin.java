@@ -10,14 +10,11 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.LightMap;
 import com.falsepattern.rple.internal.Utils;
-import lombok.val;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
+import lombok.*;
 import net.minecraft.client.renderer.OpenGlHelper;
+import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.*;
 
 import static com.falsepattern.rple.internal.Utils.COOKIE_BIT;
 
@@ -40,17 +37,17 @@ public abstract class OpenGLHelperMixin {
             val red = Utils.getRedPair(packed);
             val green = Utils.getGreenPair(packed);
             val blue = Utils.getBluePair(packed);
-            setLightmapTextureCoords(LightMap.textureUnitRed, red & 0xFFFF, red >>> 16);
-            setLightmapTextureCoords(LightMap.textureUnitGreen, green & 0xFFFF, green >>> 16);
-            setLightmapTextureCoords(LightMap.textureUnitBlue, blue & 0xFFFF, blue >>> 16);
+            setLightmapTextureCoords(LightMap.RED_LIGHT_MAP_TEXTURE_UNIT, red & 0xFFFF, red >>> 16);
+            setLightmapTextureCoords(LightMap.GREEN_LIGHT_MAP_TEXTURE_UNIT, green & 0xFFFF, green >>> 16);
+            setLightmapTextureCoords(LightMap.BLUE_LIGHT_MAP_TEXTURE_UNIT, blue & 0xFFFF, blue >>> 16);
             ci.cancel();
         } else {
             if (texture == lightmapTexUnit) {
-                if (lightmapTexUnit != LightMap.textureUnitRed) {
-                    setLightmapTextureCoords(LightMap.textureUnitRed, u, v);
+                if (lightmapTexUnit != LightMap.RED_LIGHT_MAP_TEXTURE_UNIT) {
+                    setLightmapTextureCoords(LightMap.RED_LIGHT_MAP_TEXTURE_UNIT, u, v);
                 }
-                setLightmapTextureCoords(LightMap.textureUnitGreen, u, v);
-                setLightmapTextureCoords(LightMap.textureUnitBlue, u, v);
+                setLightmapTextureCoords(LightMap.GREEN_LIGHT_MAP_TEXTURE_UNIT, u, v);
+                setLightmapTextureCoords(LightMap.BLUE_LIGHT_MAP_TEXTURE_UNIT, u, v);
             }
         }
     }

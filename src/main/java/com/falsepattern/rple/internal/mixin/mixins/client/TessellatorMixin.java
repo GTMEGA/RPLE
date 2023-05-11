@@ -12,16 +12,12 @@ import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.rple.internal.LightMap;
 import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Utils;
-import org.lwjgl.opengl.GL11;
-import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import org.lwjgl.opengl.*;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.*;
 
 import java.nio.ShortBuffer;
 
@@ -48,10 +44,10 @@ public abstract class TessellatorMixin {
                      ordinal = 0),
               require = 1)
     private boolean enable(Tessellator tess) {
-        if (this.hasBrightness) {
-            enableLightMapTexture(tess, RPLE.getRedIndexNoShader() * 2, LightMap.textureUnitRed);
-            enableLightMapTexture(tess, RPLE.getGreenIndexNoShader() * 2, LightMap.textureUnitGreen);
-            enableLightMapTexture(tess, RPLE.getBlueIndexNoShader() * 2, LightMap.textureUnitBlue);
+        if (hasBrightness) {
+            enableLightMapTexture(tess, RPLE.getRedIndexNoShader() * 2, LightMap.RED_LIGHT_MAP_TEXTURE_UNIT);
+            enableLightMapTexture(tess, RPLE.getGreenIndexNoShader() * 2, LightMap.GREEN_LIGHT_MAP_TEXTURE_UNIT);
+            enableLightMapTexture(tess, RPLE.getBlueIndexNoShader() * 2, LightMap.BLUE_LIGHT_MAP_TEXTURE_UNIT);
         }
         return false;
     }
@@ -63,10 +59,10 @@ public abstract class TessellatorMixin {
                      ordinal = 1),
             require = 1)
     private boolean disable(Tessellator instance) {
-        if (this.hasBrightness) {
-            disableLightMapTexture(LightMap.textureUnitRed);
-            disableLightMapTexture(LightMap.textureUnitGreen);
-            disableLightMapTexture(LightMap.textureUnitBlue);
+        if (hasBrightness) {
+            disableLightMapTexture(LightMap.RED_LIGHT_MAP_TEXTURE_UNIT);
+            disableLightMapTexture(LightMap.GREEN_LIGHT_MAP_TEXTURE_UNIT);
+            disableLightMapTexture(LightMap.BLUE_LIGHT_MAP_TEXTURE_UNIT);
         }
         return false;
     }
@@ -77,7 +73,7 @@ public abstract class TessellatorMixin {
                        opcode = Opcodes.GETFIELD),
               require = 1)
     private boolean customColor(Tessellator instance) {
-        if (this.hasBrightness) {
+        if (hasBrightness) {
             rawBuffer[rawBufferIndex + RPLE.getRedIndexNoShader()] = Utils.getRedPair(brightness);
             rawBuffer[rawBufferIndex + RPLE.getGreenIndexNoShader()] = Utils.getGreenPair(brightness);
             rawBuffer[rawBufferIndex + RPLE.getBlueIndexNoShader()] = Utils.getBluePair(brightness);
