@@ -8,16 +8,15 @@
 
 package com.falsepattern.rple.internal;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import lombok.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.*;
 
 @SideOnly(Side.CLIENT)
 public class LightMap {
@@ -33,10 +32,11 @@ public class LightMap {
     public final ResourceLocation location;
     public final int[] colors;
     public final int textureUnit;
+
     public LightMap(Minecraft minecraft, int textureUnit) {
         this.texture = new DynamicTexture(16, 16);
-        this.location = minecraft.getTextureManager().getDynamicTextureLocation("lightMap", this.texture);
-        this.colors = this.texture.getTextureData();
+        this.location = minecraft.getTextureManager().getDynamicTextureLocation("lightMap", texture);
+        this.colors = texture.getTextureData();
         this.textureUnit = textureUnit;
     }
 
@@ -75,20 +75,22 @@ public class LightMap {
 
     public void enableReconfigure() {
         OpenGlHelper.setActiveTexture(textureUnit);
+
         GL11.glMatrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
-        float scale = 1 / 256F;
+        val scale = 1F / 256F;
         GL11.glScalef(scale, scale, scale);
-        GL11.glTranslatef(8.0F, 8.0F, 8.0F);
+        GL11.glTranslatef(8F, 8F, 8F);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
         mc.getTextureManager().bindTexture(location);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        GL11.glColor4f(1F, 1F, 1F, 1F);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
@@ -105,8 +107,7 @@ public class LightMap {
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
-    public static void updateLightMap(Minecraft mc, float torchFlickerX, float time)
-    {
+    public static void updateLightMap(Minecraft mc, float torchFlickerX, float time) {
         WorldClient worldclient = mc.theWorld;
 
         if (worldclient != null) {
@@ -149,9 +150,9 @@ public class LightMap {
                 green = clamp(green);
                 blue = clamp(blue);
 
-                int iRed = (int)(red * 255.0F);
-                int iGreen = (int)(green * 255.0F);
-                int iBlue = (int)(blue * 255.0F);
+                int iRed = (int) (red * 255.0F);
+                int iGreen = (int) (green * 255.0F);
+                int iBlue = (int) (blue * 255.0F);
 
                 redMap.colors[i] = 0xFF00FFFF | (iRed << 16);
                 greenMap.colors[i] = 0xFFFF00FF | (iGreen << 8);
@@ -175,5 +176,4 @@ public class LightMap {
         color = color * 0.96F + 0.03F;
         return color;
     }
-
 }
