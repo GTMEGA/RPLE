@@ -43,7 +43,7 @@ public abstract class EntityRendererMixin {
                                    locationLightMap,
                                    lightmapColors,
                                    Common.RED_LIGHT_MAP_TEXTURE_UNIT,
-                                   Common.RED_LIGHT_MAP_TEXTURE_SAMPLER));
+                                   Common.RED_LIGHT_MAP_SHADER_TEXTURE_UNIT));
     }
 
     @Inject(method = "enableLightmap",

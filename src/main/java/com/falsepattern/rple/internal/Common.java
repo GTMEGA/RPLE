@@ -18,13 +18,17 @@ import org.lwjgl.opengl.*;
 public class Common {
     public static final Logger LOG = LogManager.getLogger(Tags.MODID);
 
+    public static final int RED_LIGHT_MAP_SHADER_TEXTURE_SAMPLER = 1;
+    public static final int GREEN_LIGHT_MAP_SHADER_TEXTURE_SAMPLER = 32;
+    public static final int BLUE_LIGHT_MAP_SHADER_TEXTURE_SAMPLER = 33;
+
     public static int RED_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE1;
     public static final int GREEN_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE6;
     public static final int BLUE_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE7;
 
-    public static final int RED_LIGHT_MAP_TEXTURE_SAMPLER = GL13.GL_TEXTURE1;
-    public static final int GREEN_LIGHT_MAP_TEXTURE_SAMPLER = GL13.GL_TEXTURE31 + 1;
-    public static final int BLUE_LIGHT_MAP_TEXTURE_SAMPLER = GL13.GL_TEXTURE31 + 2;
+    public static final int RED_LIGHT_MAP_SHADER_TEXTURE_UNIT = GL13.GL_TEXTURE0 + RED_LIGHT_MAP_SHADER_TEXTURE_SAMPLER;
+    public static final int GREEN_LIGHT_MAP_SHADER_TEXTURE_UNIT = GL13.GL_TEXTURE0 + GREEN_LIGHT_MAP_SHADER_TEXTURE_SAMPLER;
+    public static final int BLUE_LIGHT_MAP_SHADER_TEXTURE_UNIT = GL13.GL_TEXTURE0 + BLUE_LIGHT_MAP_SHADER_TEXTURE_SAMPLER;
 
     public static final String RED_LIGHT_MAP_UNIFORM_NAME = "redLightMap";
     public static final String GREEN_LIGHT_MAP_UNIFORM_NAME = "greenLightMap";

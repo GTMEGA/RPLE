@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.*;
+import shadersmod.client.Shaders;
 
 import static net.minecraft.client.Minecraft.getMinecraft;
 
@@ -34,32 +35,32 @@ public class LightMap {
     public final ResourceLocation location;
     public final int[] colors;
     public final int textureUnit;
-    public final int textureSampler;
+    public final int shaderTextureUnit;
 
-    public LightMap(int textureUnit, int textureSampler) {
+    public LightMap(int textureUnit, int shaderTextureUnit) {
         this.texture = new DynamicTexture(TEXTURE_SIZE, TEXTURE_SIZE);
         this.location = getTextureManager().getDynamicTextureLocation("lightMap", texture);
         this.colors = texture.getTextureData();
         this.textureUnit = textureUnit;
-        this.textureSampler = textureSampler;
+        this.shaderTextureUnit = shaderTextureUnit;
     }
 
     public LightMap(DynamicTexture texture,
                     ResourceLocation location,
                     int[] colors,
                     int textureUnit,
-                    int textureSampler) {
+                    int shaderTextureUnit) {
         this.texture = texture;
         this.location = location;
         this.colors = colors;
         this.textureUnit = textureUnit;
-        this.textureSampler = textureSampler;
+        this.shaderTextureUnit = shaderTextureUnit;
     }
 
     public static void init(LightMap vanilla) {
         RED_LIGHT_MAP = vanilla;
-        GREEN_LIGHT_MAP = new LightMap(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, Common.GREEN_LIGHT_MAP_TEXTURE_SAMPLER);
-        BLUE_LIGHT_MAP = new LightMap(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, Common.BLUE_LIGHT_MAP_TEXTURE_SAMPLER);
+        GREEN_LIGHT_MAP = new LightMap(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, Common.GREEN_LIGHT_MAP_SHADER_TEXTURE_UNIT);
+        BLUE_LIGHT_MAP = new LightMap(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, Common.BLUE_LIGHT_MAP_SHADER_TEXTURE_UNIT);
     }
 
     public static void enableReconfigureAll() {
@@ -92,7 +93,7 @@ public class LightMap {
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
         if (Utils.shadersEnabled())
-            OpenGlHelper.setActiveTexture(textureSampler);
+            OpenGlHelper.setActiveTexture(shaderTextureUnit);
 
         getTextureManager().bindTexture(location);
 
@@ -103,7 +104,11 @@ public class LightMap {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
 
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        if (Utils.shadersEnabled()) {
+            Shaders.enableLightmap();
+        } else {
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+        }
 
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
