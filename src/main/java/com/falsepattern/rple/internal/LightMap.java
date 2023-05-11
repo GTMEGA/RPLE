@@ -106,9 +106,11 @@ public class LightMap {
 
         if (Utils.shadersEnabled()) {
             Shaders.enableLightmap();
-        } else {
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
+
+        // TODO: Test this, because something here causes horrible error spam.
+        if (!GL11.glGetBoolean(GL11.GL_TEXTURE_2D))
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
