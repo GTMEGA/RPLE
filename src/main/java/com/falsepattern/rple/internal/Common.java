@@ -8,11 +8,9 @@
 
 package com.falsepattern.rple.internal;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.*;
-import shadersmod.client.Shaders;
 
 /**
  * Non-minecraft stuff to avoid accidental classloading in spaghetti code
@@ -20,7 +18,7 @@ import shadersmod.client.Shaders;
 public class Common {
     public static final Logger LOG = LogManager.getLogger(Tags.MODID);
 
-    public static final int RED_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE1;
+    public static int RED_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE1;
     public static final int GREEN_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE6;
     public static final int BLUE_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE7;
 
@@ -31,8 +29,4 @@ public class Common {
     public static final String RED_LIGHT_MAP_UNIFORM_NAME = "redLightMap";
     public static final String GREEN_LIGHT_MAP_UNIFORM_NAME = "greenLightMap";
     public static final String BLUE_LIGHT_MAP_UNIFORM_NAME = "blueLightMap";
-
-    static {
-        System.out.println("OptiFine Shaders: " + (FMLClientHandler.instance().hasOptifine() && Shaders.shaderPackLoaded));
-    }
 }

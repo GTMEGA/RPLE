@@ -1,9 +1,11 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
+import com.falsepattern.rple.internal.LightMap;
+import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Utils;
+import com.falsepattern.rple.internal.mixin.extension.ShaderVertex;
 import com.falsepattern.rple.internal.mixin.interfaces.IOptiFineTessellatorMixin;
-import com.falsepattern.rple.internal.optifine.ShaderVertex;
 import lombok.*;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -17,7 +19,7 @@ import shadersmod.common.SMCLog;
 
 import java.util.Arrays;
 
-import static com.falsepattern.rple.internal.optifine.ShaderVertex.VERTEX_STRIDE_INTS;
+import static com.falsepattern.rple.internal.mixin.extension.ShaderVertex.VERTEX_STRIDE_INTS;
 
 @SuppressWarnings("unused")
 @Mixin(ShadersTess.class)
@@ -70,10 +72,9 @@ public abstract class ShaderTessMixin {
         val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).hasBrightness();
 
         if (hasBrightness) {
-            // LightMap.shaderModeAll();
-            // enableLightMapTexture(tessellator, RPLE.getRedIndexShader() * 2, LightMap.redMap.textureCoord);
-            // enableLightMapTexture(tessellator, RPLE.getGreenIndexShader() * 2, LightMap.greenMap.textureCoord);
-            // enableLightMapTexture(tessellator, RPLE.getBlueIndexShader() * 2, LightMap.blueMap.textureCoord);
+            enableLightMapTexture(tessellator, RPLE.getRedIndexShader() * 2, LightMap.RED_LIGHT_MAP.textureUnit);
+            enableLightMapTexture(tessellator, RPLE.getGreenIndexShader() * 2, LightMap.GREEN_LIGHT_MAP.textureUnit);
+            enableLightMapTexture(tessellator, RPLE.getBlueIndexShader() * 2, LightMap.BLUE_LIGHT_MAP.textureUnit);
         }
 
         return false;
@@ -90,9 +91,9 @@ public abstract class ShaderTessMixin {
         val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).hasBrightness();
 
         if (hasBrightness) {
-            // disableLightMapTexture(LightMap.redMap.textureCoord);
-            // disableLightMapTexture(LightMap.greenMap.textureCoord);
-            // disableLightMapTexture(LightMap.blueMap.textureCoord);
+            disableLightMapTexture(LightMap.RED_LIGHT_MAP.textureUnit);
+            disableLightMapTexture(LightMap.GREEN_LIGHT_MAP.textureUnit);
+            disableLightMapTexture(LightMap.BLUE_LIGHT_MAP.textureUnit);
         }
 
         return false;

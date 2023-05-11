@@ -1,4 +1,4 @@
-package com.falsepattern.rple.internal.optifine;
+package com.falsepattern.rple.internal.mixin.extension;
 
 import lombok.*;
 import lombok.experimental.*;

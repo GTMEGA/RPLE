@@ -10,13 +10,13 @@ package com.falsepattern.rple.internal.mixin.plugin;
 
 import com.falsepattern.lib.mixin.IMixin;
 import com.falsepattern.lib.mixin.ITargetedMod;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.falsepattern.lib.mixin.IMixin.PredicateHelpers.always;
+import static com.falsepattern.lib.mixin.IMixin.PredicateHelpers.*;
+import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.OPTIFINE;
 
 @RequiredArgsConstructor
 public enum Mixin implements IMixin {
@@ -36,8 +36,13 @@ public enum Mixin implements IMixin {
     client_OpenGLHelperMixin(Side.CLIENT, always(), "OpenGLHelperMixin"),
     client_RenderBlocksMixin(Side.CLIENT, always(), "RenderBlocksMixin"),
     client_RendererLivingEntityMixin(Side.CLIENT, always(), "RendererLivingEntityMixin"),
-    client_TessellatorMixin(Side.CLIENT, always(), "TessellatorMixin"),
-    client_WorldMixin(Side.CLIENT, always(), "WorldMixin")
+    client_TessellatorMixin(Side.CLIENT, avoid(OPTIFINE), "TessellatorMixin"),
+    client_WorldMixin(Side.CLIENT, always(), "WorldMixin"),
+
+    client_ShadersMixin(Side.CLIENT, require(OPTIFINE), "optifine.ShadersMixin"),
+    client_ShaderTessMixin(Side.CLIENT, require(OPTIFINE), "optifine.ShaderTessMixin"),
+    client_OptiFineTessellatorMixin(Side.CLIENT, require(OPTIFINE), "optifine.OptiFineTessellatorMixin"),
+
     ;
     // @formatter:on
 

@@ -8,6 +8,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
+import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.LightMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -37,7 +38,12 @@ public abstract class EntityRendererMixin {
             at = @At(value = "RETURN"),
             require = 1)
     private void setupColorLightMaps(Minecraft minecraft, IResourceManager p_i45076_2_, CallbackInfo ci) {
-        LightMap.init(new LightMap(lightmapTexture, locationLightMap, lightmapColors, OpenGlHelper.lightmapTexUnit));
+        Common.RED_LIGHT_MAP_TEXTURE_UNIT = OpenGlHelper.lightmapTexUnit;
+        LightMap.init(new LightMap(lightmapTexture,
+                                   locationLightMap,
+                                   lightmapColors,
+                                   Common.RED_LIGHT_MAP_TEXTURE_UNIT,
+                                   Common.RED_LIGHT_MAP_TEXTURE_SAMPLER));
     }
 
     @Inject(method = "enableLightmap",

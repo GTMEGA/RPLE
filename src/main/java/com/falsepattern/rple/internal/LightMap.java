@@ -34,25 +34,32 @@ public class LightMap {
     public final ResourceLocation location;
     public final int[] colors;
     public final int textureUnit;
+    public final int textureSampler;
 
-    public LightMap(int textureUnit) {
+    public LightMap(int textureUnit, int textureSampler) {
         this.texture = new DynamicTexture(TEXTURE_SIZE, TEXTURE_SIZE);
         this.location = getTextureManager().getDynamicTextureLocation("lightMap", texture);
         this.colors = texture.getTextureData();
         this.textureUnit = textureUnit;
+        this.textureSampler = textureSampler;
     }
 
-    public LightMap(DynamicTexture texture, ResourceLocation location, int[] colors, int textureUnit) {
+    public LightMap(DynamicTexture texture,
+                    ResourceLocation location,
+                    int[] colors,
+                    int textureUnit,
+                    int textureSampler) {
         this.texture = texture;
         this.location = location;
         this.colors = colors;
         this.textureUnit = textureUnit;
+        this.textureSampler = textureSampler;
     }
 
     public static void init(LightMap vanilla) {
         RED_LIGHT_MAP = vanilla;
-        GREEN_LIGHT_MAP = new LightMap(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
-        BLUE_LIGHT_MAP = new LightMap(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
+        GREEN_LIGHT_MAP = new LightMap(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, Common.GREEN_LIGHT_MAP_TEXTURE_SAMPLER);
+        BLUE_LIGHT_MAP = new LightMap(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, Common.BLUE_LIGHT_MAP_TEXTURE_SAMPLER);
     }
 
     public static void enableReconfigureAll() {
@@ -76,8 +83,6 @@ public class LightMap {
     public void enableReconfigure() {
         OpenGlHelper.setActiveTexture(textureUnit);
 
-        getTextureManager().bindTexture(location);
-
         // Set because the texture coordinates are supplied as shorts (?)
         // Technically only needs to be set once, but Vanilla does this every time the light map is enabled.
         GL11.glMatrixMode(GL11.GL_TEXTURE);
@@ -85,6 +90,11 @@ public class LightMap {
         GL11.glScalef(TEXTURE_SCALE, TEXTURE_SCALE, 0F);
         GL11.glTranslatef(TEXTURE_TRANSLATION, TEXTURE_TRANSLATION, 0F);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
+        if (Utils.shadersEnabled())
+            OpenGlHelper.setActiveTexture(textureSampler);
+
+        getTextureManager().bindTexture(location);
 
         // The Dynamic texture will default these to nearest neighbour/repeat.
         // Removing this would require not using dynamic textures.
