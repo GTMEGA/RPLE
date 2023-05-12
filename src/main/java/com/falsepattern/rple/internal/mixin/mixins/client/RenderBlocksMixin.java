@@ -8,15 +8,18 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
+import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.Utils;
 import lombok.val;
 import lombok.var;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.world.IBlockAccess;
 
 @Mixin(value = RenderBlocks.class,
        priority = 1001) //overwriting FalseTweaks mixAOBrightness
@@ -36,6 +39,32 @@ public abstract class RenderBlocksMixin {
             resultPacked |= getAOBrightnessChannel(packedA, packedB, packedC, packedD, i);
         }
         return Utils.packedLongToCookie(resultPacked);
+    }
+
+    //Ugly evil mixin-mixin hack
+    private int meta;
+    private static final String GMBFBO = "getMixedBrightnessForBlockOffset(IIILorg/joml/Vector3ic;ZLcom/falsepattern/falsetweaks/modules/triangulator/renderblocks/Facing$Direction;)I";
+    @SuppressWarnings({"MixinAnnotationTarget", "UnresolvedMixinReference"})
+    @Redirect(method = GMBFBO,
+              at = @At(value = "INVOKE",
+                       target = "Lnet/minecraft/world/IBlockAccess;getBlock(III)Lnet/minecraft/block/Block;",
+                       ordinal = 0,
+                       remap = true),
+              remap = false,
+              require = 1)
+    private Block grabDefaultLightMeta(IBlockAccess instance, int x, int y, int z) {
+        meta = instance.getBlockMetadata(x, y, z);
+        return instance.getBlock(x, y, z);
+    }
+    @SuppressWarnings({"MixinAnnotationTarget", "UnresolvedMixinReference"})
+    @Redirect(method = GMBFBO,
+              at = @At(value = "INVOKE",
+                       target = "Lnet/minecraft/block/Block;getLightValue(Lnet/minecraft/world/IBlockAccess;III)I",
+                       remap = true),
+              remap = false,
+              require = 3)
+    private int grabDefaultLight(Block instance, IBlockAccess access, int x, int y, int z) {
+        return Utils.getLightValuePacked(access, (ColoredBlock) instance, meta, x, y, z);
     }
 
     private static long getAOBrightnessChannel(long packedA, long packedB, long packedC, long packedD, int channel) {
