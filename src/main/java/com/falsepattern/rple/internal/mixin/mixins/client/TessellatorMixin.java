@@ -14,6 +14,9 @@ import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Utils;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+
+import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorJunction;
+import lombok.val;
 import org.lwjgl.opengl.*;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
@@ -22,18 +25,12 @@ import org.spongepowered.asm.mixin.injection.*;
 import java.nio.ShortBuffer;
 
 @Mixin(Tessellator.class)
-public abstract class TessellatorMixin {
+public abstract class TessellatorMixin implements ITessellatorJunction {
     @Shadow private boolean hasBrightness;
-
-    @Shadow private static ShortBuffer shortBuffer;
-
-    @Shadow private int color;
 
     @Shadow private int[] rawBuffer;
 
     @Shadow private int rawBufferIndex;
-
-    @Shadow private int rawBufferSize;
 
     private long brightness;
 
@@ -92,6 +89,7 @@ public abstract class TessellatorMixin {
     }
 
     private static void enableLightMapTexture(Tessellator tess, int position, int unit) {
+        val shortBuffer = ((ITessellatorJunction)tess).RPLEgetShortBuffer();
         OpenGlHelper.setClientActiveTexture(unit);
         shortBuffer.position(position);
         GL11.glTexCoordPointer(2, VertexAPI.recomputeVertexInfo(8, 4), shortBuffer);
@@ -103,5 +101,10 @@ public abstract class TessellatorMixin {
         OpenGlHelper.setClientActiveTexture(unit);
         GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
         OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
+    }
+
+    @Override
+    public long brightness() {
+        return brightness;
     }
 }

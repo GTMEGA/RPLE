@@ -36,7 +36,8 @@ public enum Mixin implements IMixin {
     client_OpenGLHelperMixin(Side.CLIENT, always(), "OpenGLHelperMixin"),
     client_RenderBlocksMixin(Side.CLIENT, always(), "RenderBlocksMixin"),
     client_RendererLivingEntityMixin(Side.CLIENT, always(), "RendererLivingEntityMixin"),
-    client_TessellatorMixin(Side.CLIENT, avoid(OPTIFINE), "TessellatorMixin"),
+    client_TessellatorMixin(Side.CLIENT, always(), "TessellatorMixin"),
+    client_Tessellator_NonOptiFineMixin(Side.CLIENT, avoid(OPTIFINE), "Tessellator_NonOptiFineMixin"),
     client_WorldMixin(Side.CLIENT, always(), "WorldMixin"),
 
     client_ShadersMixin(Side.CLIENT, require(OPTIFINE), "optifine.ShadersMixin"),

@@ -3,6 +3,8 @@ package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 import com.falsepattern.rple.internal.Utils;
 import com.falsepattern.rple.internal.mixin.interfaces.IOptiFineTessellatorMixin;
 import net.minecraft.client.renderer.Tessellator;
+
+import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorJunction;
 import org.spongepowered.asm.mixin.*;
 import shadersmod.client.ShadersTess;
 
@@ -12,7 +14,7 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 @Mixin(Tessellator.class)
-public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMixin {
+public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMixin, ITessellatorJunction {
     /**
      * NOTE: OptiFine changes the buffer fields in the {@link Tessellator} from static to class fields.
      */
@@ -29,6 +31,7 @@ public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMi
     private int[] rawBuffer;
     @Shadow(aliases = "field_78388_E")
     private int bufferSize;
+    @SuppressWarnings("MixinAnnotationTarget")
     @Shadow(remap = false)
     private ShadersTess shadersTess;
     @Shadow
@@ -57,7 +60,6 @@ public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMi
     private boolean hasBrightness;
     @Shadow
     private boolean hasNormals;
-    private long brightness;
 
     // region Accessors
     @Override
@@ -194,11 +196,6 @@ public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMi
     }
 
     @Override
-    public long brightness() {
-        return brightness;
-    }
-
-    @Override
     public void hasNormals(boolean hasNormals) {
         this.hasNormals = hasNormals;
     }
@@ -215,15 +212,9 @@ public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMi
 
     // endregion
 
-    // TODO: Unify
 
-    /**
-     * @author Ven
-     * @reason Colorize
-     */
-    @Overwrite
-    public void setBrightness(int brightness) {
-        this.hasBrightness = true;
-        this.brightness = Utils.cookieToPackedLong(brightness);
+    @Override
+    public ShortBuffer RPLEgetShortBuffer() {
+        return shortBuffer;
     }
 }
