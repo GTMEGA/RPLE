@@ -25,7 +25,10 @@ import lombok.*;
      version = Tags.VERSION,
      name = Tags.MODNAME,
      acceptedMinecraftVersions = "[1.7.10]",
-     dependencies = "required-after:falsepatternlib@[0.11,);required-after:lumina;required-after:falsetweaks@[2.3,)")
+     dependencies = "required-after:falsepatternlib@[0.11,);" +
+                    "required-after:chunkapi@(0.2,);" +
+                    "required-after:lumina;" +
+                    "required-after:falsetweaks@[2.4,)")
 public class RPLE {
     private static final int[] COLOR_CHANNELS = new int[]{LightConstants.COLOR_CHANNEL_RED,
                                                           LightConstants.COLOR_CHANNEL_GREEN,

@@ -12,20 +12,20 @@ def deobfCurse(curseDep) {
 }
 
 dependencies {
-    compileOnly("org.projectlombok:lombok:[1.18.24,1.19)") {
+    compileOnly("org.projectlombok:lombok:1.18.26") {
         transitive = false
     }
-    annotationProcessor("org.projectlombok:lombok:[1.18.24,1.19)")
+    annotationProcessor("org.projectlombok:lombok:1.18.26")
 
-    implementation("com.falsepattern:falsepatternlib-mc1.7.10:[0.11,0.12):dev")
+    implementation("com.falsepattern:falsepatternlib-mc1.7.10:0.11.3:dev")
 
     implementation("com.falsepattern:lumina-mc1.7.10:d5d3dac:dev")
 
-    implementation("com.falsepattern:falsetweaks-mc1.7.10:2.4.0:dev")
+    implementation("com.falsepattern:falsetweaks-mc1.7.10:2.4.2:dev")
 
     implementation("com.falsepattern:chunkapi-mc1.7.10:0.2.0:dev")
 
-    compileOnly("org.jetbrains:annotations:[24,25)")
+    compileOnly("org.jetbrains:annotations:24.0.1")
 
     compileOnly(deobfMaven("https://mvn.falsepattern.com/stripped/", "optifine:shadersmod-stripped:1.7.10-hd_u7"))
 
