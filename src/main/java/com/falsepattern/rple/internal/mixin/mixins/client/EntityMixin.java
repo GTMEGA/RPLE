@@ -8,56 +8,31 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
+import com.falsepattern.rple.internal.EntityHelper;
 import com.falsepattern.rple.internal.Utils;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
-
-    @Shadow public double posX;
-
-    @Shadow public double posZ;
-
-    @Shadow public World worldObj;
-
-    @Shadow @Final public AxisAlignedBB boundingBox;
-
-    @Shadow public double posY;
-
-    @Shadow public float yOffset;
 
     /**
      * @author FalsePattern
      * @reason Fix with colors
      */
-    @Overwrite
-    @SideOnly(Side.CLIENT)
-    public int getBrightnessForRender(float p_70070_1_)
-    {
-        int i = MathHelper.floor_double(this.posX);
-        int j = MathHelper.floor_double(this.posZ);
-
-        if (this.worldObj.blockExists(i, 0, j))
-        {
-            double d0 = (this.boundingBox.maxY - this.boundingBox.minY) * 0.66D;
-            int k = MathHelper.floor_double(this.posY - (double)this.yOffset + d0);
-            int cookie = this.worldObj.getLightBrightnessForSkyBlocks(i, k, j, 0);
-            long packed = Utils.cookieToPackedLong(cookie);
-            return Utils.getBrightestPair(packed);
+    @Redirect(method = "getBrightnessForRender",
+              at = @At(value = "INVOKE",
+                       target = "Lnet/minecraft/world/World;getLightBrightnessForSkyBlocks(IIII)I"),
+              require = 1)
+    private int getBrightnessForRender(World instance, int x, int y, int z, int min) {
+        int result = instance.getLightBrightnessForSkyBlocks(x, y, z, 0);
+        if (EntityHelper.isOnBlockList(getClass())) {
+            result = Utils.getBrightestPair(Utils.cookieToPackedLong(result));
         }
-        else
-        {
-            return 0;
-        }
+        return result;
     }
 }
