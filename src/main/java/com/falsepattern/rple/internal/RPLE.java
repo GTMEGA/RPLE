@@ -145,7 +145,7 @@ public class RPLE {
                     Common.LOG.error("Config line {} malformed (invalid metadata): {}", currentLine, metaToken);
                 }
             }
-            val block = GameData.getBlockRegistry().getObject(id);
+            val block = GameData.getBlockRegistry().get(id);
             if (block == null || block == Blocks.air) {
                 Common.LOG.error("Config line {} malformed (unknown block id): {}", currentLine, id);
                 continue;
