@@ -12,6 +12,7 @@ import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.internal.block.ColoredBlockInternal;
 import lombok.val;
+import net.minecraft.init.Blocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -139,6 +140,12 @@ public abstract class BlockMixin implements ColoredBlockInternal {
 
     @Override
     public int getColoredLightOpacity(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
+        // TODO: Remove this back once the opacity configs are done, again very helpful for debugging right now!
+        val thiz = (Block)(Object)this;
+        if (thiz instanceof BlockStainedGlass) {
+            val c = LightConstants.colors[colorChannel][(~meta) & 0xF];
+            return 15 - c;
+        }
         return getColoredLightOpacityRaw(meta, colorChannel);
     }
 
