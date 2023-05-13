@@ -10,7 +10,6 @@ package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.internal.block.ColoredBlockInternal;
 import lombok.val;
 import net.minecraft.init.Blocks;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +21,7 @@ import net.minecraft.block.BlockStainedGlass;
 import net.minecraft.world.IBlockAccess;
 
 @Mixin(Block.class)
-public abstract class BlockMixin implements ColoredBlockInternal {
+public abstract class BlockMixin implements ColoredBlock {
     @Shadow public abstract int getLightValue();
 
     @Shadow public abstract int getLightOpacity();
@@ -33,12 +32,12 @@ public abstract class BlockMixin implements ColoredBlockInternal {
     private int[][] colorOpacity;
 
     @Override
-    public void setDefaultColor(int meta, int r, int g, int b) {
+    public void setColoredLightValue(int meta, int r, int g, int b) {
         colorLightValue = add(colorLightValue, meta, r, g, b);
     }
 
     @Override
-    public void setDefaultOpacity(int meta, int r, int g, int b) {
+    public void setColoredLightOpacity(int meta, int r, int g, int b) {
         colorOpacity = add(colorOpacity, meta, r, g, b);
     }
 

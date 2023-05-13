@@ -13,26 +13,32 @@ import com.falsepattern.chunk.api.ChunkDataRegistry;
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.lib.util.ResourceUtil;
 import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
+import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.api.lightmap.LightMapBase;
 import com.falsepattern.rple.api.lightmap.LightMapMask;
 import com.falsepattern.rple.api.lightmap.LightMapMaskType;
 import com.falsepattern.rple.api.lightmap.LightMapPipelineRegistry;
-import com.falsepattern.rple.internal.block.ColoredBlockInternal;
+import com.falsepattern.rple.internal.blocks.Lamp;
+import com.falsepattern.rple.internal.client.render.LampRenderingHandler;
 import com.falsepattern.rple.internal.lightmap.builtin.base.BossColorModifier;
 import com.falsepattern.rple.internal.lightmap.builtin.base.NightVisionMask;
 import com.falsepattern.rple.internal.lightmap.builtin.base.VanillaLightMapBase;
 import com.falsepattern.rple.internal.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.storage.ColoredWorldProvider;
+
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameData;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 import lombok.*;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -77,6 +83,13 @@ public class RPLE {
         blueIndexNoShader = noShaderBuf[1];
         greenIndexShader = shaderBuf[0];
         blueIndexShader = shaderBuf[1];
+        val blueLamp = (Lamp) new Lamp(false).setBlockName("lamp_blue").setBlockTextureName(Tags.MODID + ":lamp_blue_off");
+        val blueLampPowered = (Lamp) new Lamp(true).setBlockName("lamp_blue_on").setBlockTextureName(Tags.MODID + ":lamp_blue_on");
+        blueLampPowered.setColoredLightValue(0, 0, 0, 15);
+        blueLamp.setOpposite(blueLampPowered);
+        blueLampPowered.setOpposite(blueLamp);
+        GameRegistry.registerBlock(blueLamp, "lamp_blue");
+        GameRegistry.registerBlock(blueLampPowered, "lamp_blue_on");
     }
 
     @Mod.EventHandler
@@ -85,6 +98,7 @@ public class RPLE {
             ChunkDataRegistry.registerDataManager(new ColoredDataManager(colorChannel, colorChannel == LightConstants.COLOR_CHANNEL_RED));
             LumiWorldProviderRegistry.registerWorldProvider(new ColoredWorldProvider(colorChannel));
         }
+        RenderingRegistry.registerBlockHandler(new LampRenderingHandler());
     }
 
     private static LightMapBase lightMapBase = new VanillaLightMapBase();
@@ -150,8 +164,8 @@ public class RPLE {
                 Common.LOG.error("Config line {} malformed (unknown block id): {}", currentLine, id);
                 continue;
             }
-            val cBlock = ((ColoredBlockInternal)block);
-            cBlock.setDefaultColor(meta, value.r, value.g, value.b);
+            val cBlock = ((ColoredBlock)block);
+            cBlock.setColoredLightValue(meta, value.r, value.g, value.b);
             valueCache.put(assignee, value);
         }
     }

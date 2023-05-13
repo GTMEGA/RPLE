@@ -21,12 +21,10 @@ public class VanillaLightMapBase implements LightMapBase {
     public void generateBaseBlock(LightMapChannel lightMap, float partialTickTime) {
         val world = Minecraft.getMinecraft().theWorld;
         for (int i = 0; i < LightMapChannel.LIGHT_MAP_SIZE; i++) {
-            val blockRed = world.provider.lightBrightnessTable[i % 16];
-            val blockGreen = blockRed * ((blockRed * 0.6F + 0.4F) * 0.6F + 0.4F);
-            val blockBlue = blockRed * (blockRed * blockRed * 0.6F + 0.4F);
-            lightMap.R[i] = blockRed;
-            lightMap.G[i] = blockGreen;
-            lightMap.B[i] = blockBlue;
+            val light = world.provider.lightBrightnessTable[i];
+            lightMap.R[i] = light;
+            lightMap.G[i] = light;
+            lightMap.B[i] = light;
         }
     }
 
