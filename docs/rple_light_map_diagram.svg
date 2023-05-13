@@ -1,0 +1,590 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1285.2857142857147px" width="1683.8571428571433px"
+     viewBox="-10 -10 1703.8571428571433 1305.2857142857147"
+     content="&lt;mxGraphModel dx=&quot;4581&quot; dy=&quot;1996&quot; grid=&quot;1&quot; gridSize=&quot;10&quot; guides=&quot;1&quot; tooltips=&quot;1&quot; connect=&quot;1&quot; arrows=&quot;1&quot; fold=&quot;1&quot; page=&quot;0&quot; pageScale=&quot;1&quot; pageWidth=&quot;850&quot; pageHeight=&quot;1100&quot; math=&quot;0&quot; shadow=&quot;0&quot;&gt;&lt;root&gt;&lt;mxCell id=&quot;0&quot;/&gt;&lt;mxCell id=&quot;1&quot; parent=&quot;0&quot;/&gt;&lt;mxCell id=&quot;94&quot; value=&quot;&quot; style=&quot;rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#1F1F1F;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;shadow=1;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1720&quot; y=&quot;-240&quot; width=&quot;1680&quot; height=&quot;1280&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;11&quot; value=&quot;&amp;lt;span style=&amp;quot;font-size: 14px&amp;quot;&amp;gt;Red Light Map 2D&amp;lt;/span&amp;gt;&quot; style=&quot;whiteSpace=wrap;html=1;fontSize=14;strokeColor=#FF0000;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-960&quot; y=&quot;800&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;12&quot; value=&quot;&amp;lt;span style=&amp;quot;font-size: 14px&amp;quot;&amp;gt;Green Light Map 2D&amp;lt;/span&amp;gt;&quot; style=&quot;whiteSpace=wrap;html=1;fontSize=14;strokeColor=#00FF00;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-960&quot; y=&quot;880&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;13&quot; value=&quot;&amp;lt;span style=&amp;quot;font-size: 14px&amp;quot;&amp;gt;Blue Light Map 2D&amp;lt;/span&amp;gt;&quot; style=&quot;whiteSpace=wrap;html=1;fontSize=14;strokeColor=#0000FF;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-960&quot; y=&quot;960&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;88&quot; style=&quot;edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#FFC640;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;14&quot; target=&quot;17&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;14&quot; value=&quot;&amp;lt;span style=&amp;quot;font-size: 14px&amp;quot;&amp;gt;Mixed Light Map 2D&amp;lt;/span&amp;gt;&quot; style=&quot;whiteSpace=wrap;html=1;fontSize=14;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;strokeColor=#FFC640;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-240&quot; y=&quot;240&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;44&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;16&quot; target=&quot;38&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;16&quot; value=&quot;Block Light Map 1D&quot; style=&quot;whiteSpace=wrap;html=1;fontSize=14;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;strokeColor=#F0DAB4;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1200&quot; y=&quot;360&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;19&quot; style=&quot;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#0000FF;fillColor=#2a2a2a;entryX=0;entryY=0.25;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;13&quot; target=&quot;93&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-1068.8899999999999&quot; y=&quot;970&quot; as=&quot;targetPoint&quot;/&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;-1040&quot; y=&quot;980&quot;/&gt;&lt;mxPoint x=&quot;-1040&quot; y=&quot;926&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;20&quot; style=&quot;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#00FF00;fillColor=#2a2a2a;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;12&quot; target=&quot;93&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-1048.8899999999999&quot; y=&quot;880&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;21&quot; style=&quot;html=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#FF0000;fillColor=#2a2a2a;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;11&quot; target=&quot;93&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-1048.8899999999999&quot; y=&quot;810&quot; as=&quot;targetPoint&quot;/&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;-1040&quot; y=&quot;820&quot;/&gt;&lt;mxPoint x=&quot;-1040&quot; y=&quot;874&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;17&quot; value=&quot;Split Colour Channels&quot; style=&quot;shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#B9E0A5;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-240&quot; y=&quot;840&quot; width=&quot;160&quot; height=&quot;120&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;24&quot; style=&quot;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#0000FF;fillColor=#2a2a2a;edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.75;exitDx=0;exitDy=0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;17&quot; target=&quot;13&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-720&quot; y=&quot;900&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;-1034.3445454545454&quot; y=&quot;882.7272727272727&quot; as=&quot;targetPoint&quot;/&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;-720&quot; y=&quot;928&quot;/&gt;&lt;mxPoint x=&quot;-720&quot; y=&quot;980&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;25&quot; style=&quot;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#00FF00;fillColor=#2a2a2a;edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;17&quot; target=&quot;12&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-720&quot; y=&quot;900&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;-728.89&quot; y=&quot;1060&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;26&quot; style=&quot;html=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#FF0000;fillColor=#2a2a2a;entryX=1;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.25;exitDx=0;exitDy=0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;17&quot; target=&quot;11&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-350&quot; y=&quot;880&quot; as=&quot;sourcePoint&quot;/&gt;&lt;mxPoint x=&quot;-828.8861538461535&quot; y=&quot;1089.996923076923&quot; as=&quot;targetPoint&quot;/&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;-350&quot; y=&quot;875&quot;/&gt;&lt;mxPoint x=&quot;-720&quot; y=&quot;875&quot;/&gt;&lt;mxPoint x=&quot;-720&quot; y=&quot;820&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;28&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#FFC640;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;27&quot; target=&quot;14&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;27&quot; value=&quot;Mix Sky and Block&amp;amp;nbsp;&amp;lt;br&amp;gt;Light Maps into 2D&quot; style=&quot;shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#B9E0A5;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-480&quot; y=&quot;200&quot; width=&quot;160&quot; height=&quot;120&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;29&quot; value=&quot;Sky Light Map 1D&quot; style=&quot;whiteSpace=wrap;html=1;fontSize=14;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;strokeColor=#95CCF0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1200&quot; y=&quot;120&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;43&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;30&quot; target=&quot;16&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;30&quot; value=&quot;Init Block Light&amp;lt;br&amp;gt;as Light Map in 1D&quot; style=&quot;shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#B9E0A5;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1440&quot; y=&quot;320&quot; width=&quot;160&quot; height=&quot;120&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;49&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;32&quot; target=&quot;30&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;32&quot; value=&quot;Block Light Map Base&quot; style=&quot;shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1440&quot; y=&quot;520&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;47&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;33&quot; target=&quot;37&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;33&quot; value=&quot;Sky Light Map Base&quot; style=&quot;shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1440&quot; y=&quot;-40&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;50&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;34&quot; target=&quot;38&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;34&quot; value=&quot;Block Light Map Masks&quot; style=&quot;shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-960&quot; y=&quot;520&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;48&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;35&quot; target=&quot;36&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;35&quot; value=&quot;Sky Light Map Masks&quot; style=&quot;shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-960&quot; y=&quot;-40&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;52&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;36&quot; target=&quot;39&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;95&quot; style=&quot;edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;fillColor=#2a2a2a;entryX=0;entryY=0.5;entryDx=0;entryDy=0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; target=&quot;36&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-1040&quot; y=&quot;140&quot; as=&quot;sourcePoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;36&quot; value=&quot;Apply Masks&amp;lt;br&amp;gt;to Sky Light Map&quot; style=&quot;shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#B9E0A5;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-960&quot; y=&quot;80&quot; width=&quot;160&quot; height=&quot;120&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;46&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;37&quot; target=&quot;29&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;37&quot; value=&quot;Init Sky Light&amp;lt;br&amp;gt;as Light Map in 1D&quot; style=&quot;shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#B9E0A5;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1440&quot; y=&quot;80&quot; width=&quot;160&quot; height=&quot;120&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;51&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;38&quot; target=&quot;40&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;38&quot; value=&quot;Apply Masks&amp;lt;br&amp;gt;to Block Light Map&quot; style=&quot;shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#B9E0A5;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-960&quot; y=&quot;320&quot; width=&quot;160&quot; height=&quot;120&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;41&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;39&quot; target=&quot;27&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;-400&quot; y=&quot;140&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;39&quot; value=&quot;Sky Light Map 1D&quot; style=&quot;whiteSpace=wrap;html=1;fontSize=14;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;strokeColor=#95CCF0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-720&quot; y=&quot;120&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;42&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;fillColor=#2a2a2a;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;40&quot; target=&quot;27&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;-400&quot; y=&quot;380&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;40&quot; value=&quot;Block Light Map 1D&quot; style=&quot;whiteSpace=wrap;html=1;fontSize=14;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;strokeColor=#F0DAB4;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-720&quot; y=&quot;360&quot; width=&quot;160&quot; height=&quot;40&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;61&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;fillColor=#2a2a2a;dashed=1;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;55&quot; target=&quot;33&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;55&quot; value=&quot;Vanilla&quot; style=&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1500&quot; y=&quot;-200&quot; width=&quot;120&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;65&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;fillColor=#2a2a2a;dashed=1;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;56&quot; target=&quot;32&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;56&quot; value=&quot;Vanilla&quot; style=&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1500&quot; y=&quot;640&quot; width=&quot;120&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;62&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;fillColor=#2a2a2a;dashed=1;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;57&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-1359.9999999999998&quot; y=&quot;-40&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;57&quot; value=&quot;Mod Provided&quot; style=&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1340&quot; y=&quot;-200&quot; width=&quot;120&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;63&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;fillColor=#2a2a2a;dashed=1;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;58&quot; target=&quot;35&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;58&quot; value=&quot;Vanilla&quot; style=&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1020&quot; y=&quot;-200&quot; width=&quot;120&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;64&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;fillColor=#2a2a2a;dashed=1;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;59&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-880&quot; y=&quot;-40&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;59&quot; value=&quot;Mod Provided&quot; style=&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#95CCF0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-860&quot; y=&quot;-200&quot; width=&quot;120&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;66&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;fillColor=#2a2a2a;dashed=1;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;60&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-1360&quot; y=&quot;560&quot; as=&quot;targetPoint&quot;/&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;-1280&quot; y=&quot;600&quot;/&gt;&lt;mxPoint x=&quot;-1360&quot; y=&quot;600&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;60&quot; value=&quot;Mod Provided&quot; style=&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1340&quot; y=&quot;640&quot; width=&quot;120&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;67&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#F0DAB4;fillColor=#2a2a2a;dashed=1;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;68&quot; target=&quot;34&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-890&quot; y=&quot;580&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;68&quot; value=&quot;Vanilla&quot; style=&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1020&quot; y=&quot;640&quot; width=&quot;120&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;69&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;fillColor=#2a2a2a;dashed=1;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; source=&quot;70&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-880&quot; y=&quot;560&quot; as=&quot;targetPoint&quot;/&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;-800&quot; y=&quot;600&quot;/&gt;&lt;mxPoint x=&quot;-880&quot; y=&quot;600&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;70&quot; value=&quot;Mod Provided&quot; style=&quot;shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#F0DAB4;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-860&quot; y=&quot;640&quot; width=&quot;120&quot; height=&quot;80&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;71&quot; value=&quot;Multiple&quot; style=&quot;text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=10;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-880&quot; y=&quot;570&quot; width=&quot;40&quot; height=&quot;20&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;72&quot; value=&quot;Multiple&quot; style=&quot;text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=10;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-880&quot; y=&quot;-70&quot; width=&quot;40&quot; height=&quot;20&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;73&quot; value=&quot;Single&quot; style=&quot;text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=10;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1360&quot; y=&quot;-70&quot; width=&quot;40&quot; height=&quot;20&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;74&quot; value=&quot;Single&quot; style=&quot;text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=10;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fontColor=#F0F0F0;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1360&quot; y=&quot;570&quot; width=&quot;40&quot; height=&quot;20&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;81&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#9933FF;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; target=&quot;37&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-1520&quot; y=&quot;260&quot; as=&quot;sourcePoint&quot;/&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;-1480&quot; y=&quot;260&quot;/&gt;&lt;mxPoint x=&quot;-1480&quot; y=&quot;140&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;82&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#9933FF;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; target=&quot;30&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;-1520&quot; y=&quot;260&quot; as=&quot;sourcePoint&quot;/&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;-1480&quot; y=&quot;260&quot;/&gt;&lt;mxPoint x=&quot;-1480&quot; y=&quot;380&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;84&quot; value=&quot;Update Light Map&quot; style=&quot;shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#9933FF;direction=east;spacing=23;align=right;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1680&quot; y=&quot;200&quot; width=&quot;160&quot; height=&quot;120&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;93&quot; value=&quot;Uploaded as Textures&quot; style=&quot;shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#9933FF;direction=west;align=left;spacing=10;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1680&quot; y=&quot;840&quot; width=&quot;160&quot; height=&quot;120&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;97&quot; value=&quot;Uploaded as Textures&quot; style=&quot;shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#9933FF;direction=west;align=left;spacing=10;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1680&quot; y=&quot;840&quot; width=&quot;160&quot; height=&quot;120&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;98&quot; value=&quot;Update Light Map&quot; style=&quot;shape=step;perimeter=stepPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#9933FF;direction=east;spacing=23;align=right;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1680&quot; y=&quot;200&quot; width=&quot;160&quot; height=&quot;120&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;99&quot; value=&quot;Init Sky Light&amp;lt;br&amp;gt;as Light Map in 1D&quot; style=&quot;shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fontFamily=EXO2;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DEXO2;fontSize=14;strokeColor=#B9E0A5;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;fillColor=#2A2A2A;fontColor=#F0F0F0;&quot; vertex=&quot;1&quot; parent=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-1440&quot; y=&quot;80&quot; width=&quot;160&quot; height=&quot;120&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;">
+    <style type="text/css"></style>
+    <rect x="0.5" y="0.5" width="1680" height="1280" fill="#000000" stroke="none" pointer-events="none"
+          transform="translate(2,3)" opacity="0.25"/>
+    <rect x="0.5" y="0.5" width="1680" height="1280" fill="#1f1f1f" stroke="none" pointer-events="none"/>
+    <rect x="760.5" y="1040.5" width="160" height="40" fill="#2a2a2a" stroke="#ff0000" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 1061px; margin-left: 762px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        <span style="font-size: 14px">Red Light Map 2D</span>
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <rect x="760.5" y="1120.5" width="160" height="40" fill="#2a2a2a" stroke="#00ff00" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 1141px; margin-left: 762px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        <span style="font-size: 14px">Green Light Map 2D</span>
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <rect x="760.5" y="1200.5" width="160" height="40" fill="#2a2a2a" stroke="#0000ff" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 1221px; margin-left: 762px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        <span style="font-size: 14px">Blue Light Map 2D</span>
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 1560.5 520.5 L 1560.5 1074.13" fill="none" stroke="#ffc640" stroke-miterlimit="10"
+          pointer-events="none"/>
+    <path d="M 1560.5 1079.38 L 1557 1072.38 L 1560.5 1074.13 L 1564 1072.38 Z" fill="#ffc640" stroke="#ffc640"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <rect x="1480.5" y="480.5" width="160" height="40" fill="#2a2a2a" stroke="#ffc640" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 501px; margin-left: 1482px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        <span style="font-size: 14px">Mixed Light Map 2D</span>
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 680.5 620.5 L 764.13 620.5" fill="none" stroke="#f0dab4" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 769.38 620.5 L 762.38 624 L 764.13 620.5 L 762.38 617 Z" fill="#f0dab4" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <rect x="520.5" y="600.5" width="160" height="40" fill="#2a2a2a" stroke="#f0dab4" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 621px; margin-left: 522px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Block Light Map 1D
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 760.5 1220.5 L 690.5 1220.5 Q 680.5 1220.5 680.5 1210.5 L 680.5 1176.21 Q 680.5 1166.21 670.5 1166.21 L 195.44 1166.21"
+          fill="none" stroke="#0000ff" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 190.19 1166.21 L 197.19 1162.71 L 195.44 1166.21 L 197.19 1169.71 Z" fill="#0000ff" stroke="#0000ff"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 760.5 1140.5 L 186.87 1140.5" fill="none" stroke="#00ff00" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 181.62 1140.5 L 188.62 1137 L 186.87 1140.5 L 188.62 1144 Z" fill="#00ff00" stroke="#00ff00"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 760.5 1060.5 L 690.5 1060.5 Q 680.5 1060.5 680.5 1070.5 L 680.5 1104.79 Q 680.5 1114.79 670.5 1114.79 L 195.44 1114.79"
+          fill="none" stroke="#ff0000" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 190.19 1114.79 L 197.19 1111.29 L 195.44 1114.79 L 197.19 1118.29 Z" fill="#ff0000" stroke="#ff0000"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 1480.5 1200.5 L 1500.5 1080.5 L 1640.5 1080.5 L 1620.5 1200.5 Z" fill="#2a2a2a" stroke="#b9e0a5"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 1141px; margin-left: 1482px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Split Colour Channels
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 1485.83 1168.5 L 1010.5 1168.5 Q 1000.5 1168.5 1000.5 1178.5 L 1000.5 1210.5 Q 1000.5 1220.5 990.5 1220.5 L 926.87 1220.5"
+          fill="none" stroke="#0000ff" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 921.62 1220.5 L 928.62 1217 L 926.87 1220.5 L 928.62 1224 Z" fill="#0000ff" stroke="#0000ff"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 1490.5 1140.5 L 926.87 1140.5" fill="none" stroke="#00ff00" stroke-miterlimit="10"
+          pointer-events="none"/>
+    <path d="M 921.62 1140.5 L 928.62 1137 L 926.87 1140.5 L 928.62 1144 Z" fill="#00ff00" stroke="#00ff00"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 1494.62 1115.79 L 1380.5 1115.79 Q 1370.5 1115.79 1360.5 1115.78 L 1010.5 1115.51 Q 1000.5 1115.5 1000.5 1105.5 L 1000.5 1070.5 Q 1000.5 1060.5 990.5 1060.5 L 926.87 1060.5"
+          fill="none" stroke="#ff0000" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 921.62 1060.5 L 928.62 1057 L 926.87 1060.5 L 928.62 1064 Z" fill="#ff0000" stroke="#ff0000"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 1390.5 500.5 L 1474.13 500.5" fill="none" stroke="#ffc640" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 1479.38 500.5 L 1472.38 504 L 1474.13 500.5 L 1472.38 497 Z" fill="#ffc640" stroke="#ffc640"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 1240.5 560.5 L 1260.5 440.5 L 1400.5 440.5 L 1380.5 560.5 Z" fill="#2a2a2a" stroke="#b9e0a5"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 501px; margin-left: 1242px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Mix Sky and Block <br/>Light Maps into 2D
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <rect x="520.5" y="360.5" width="160" height="40" fill="#2a2a2a" stroke="#95ccf0" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 381px; margin-left: 522px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Sky Light Map 1D
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 430.5 620.5 L 514.13 620.5" fill="none" stroke="#f0dab4" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 519.38 620.5 L 512.38 624 L 514.13 620.5 L 512.38 617 Z" fill="#f0dab4" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 280.5 680.5 L 300.5 560.5 L 440.5 560.5 L 420.5 680.5 Z" fill="#2a2a2a" stroke="#b9e0a5"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 621px; margin-left: 282px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Init Block Light<br/>as Light Map in 1D
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 360.5 760.5 L 360.5 686.87" fill="none" stroke="#f0dab4" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 360.5 681.62 L 364 688.62 L 360.5 686.87 L 357 688.62 Z" fill="#f0dab4" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 280.5 800.5 L 300.5 760.5 L 420.5 760.5 L 440.5 800.5 Z" fill="#2a2a2a" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 781px; margin-left: 282px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Block Light Map Base
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 360.5 240.5 L 360.5 314.13" fill="none" stroke="#95ccf0" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 360.5 319.38 L 357 312.38 L 360.5 314.13 L 364 312.38 Z" fill="#95ccf0" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 280.5 240.5 L 300.5 200.5 L 420.5 200.5 L 440.5 240.5 Z" fill="#2a2a2a" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 220px; margin-left: 282px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Sky Light Map Base
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 840.5 760.5 L 840.5 686.87" fill="none" stroke="#f0dab4" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 840.5 681.62 L 844 688.62 L 840.5 686.87 L 837 688.62 Z" fill="#f0dab4" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 760.5 800.5 L 780.5 760.5 L 900.5 760.5 L 920.5 800.5 Z" fill="#2a2a2a" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 781px; margin-left: 762px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Block Light Map Masks
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 840.5 240.5 L 840.5 314.13" fill="none" stroke="#95ccf0" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 840.5 319.38 L 837 312.38 L 840.5 314.13 L 844 312.38 Z" fill="#95ccf0" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 760.5 240.5 L 780.5 200.5 L 900.5 200.5 L 920.5 240.5 Z" fill="#2a2a2a" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 220px; margin-left: 762px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Sky Light Map Masks
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 910.5 380.5 L 994.13 380.5" fill="none" stroke="#95ccf0" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 999.38 380.5 L 992.38 384 L 994.13 380.5 L 992.38 377 Z" fill="#95ccf0" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 680.5 380.5 L 764.13 380.5" fill="none" stroke="#95ccf0" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 769.38 380.5 L 762.38 384 L 764.13 380.5 L 762.38 377 Z" fill="#95ccf0" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 760.5 440.5 L 780.5 320.5 L 920.5 320.5 L 900.5 440.5 Z" fill="#2a2a2a" stroke="#b9e0a5"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 381px; margin-left: 762px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Apply Masks<br/>to Sky Light Map
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 430.5 380.5 L 514.13 380.5" fill="none" stroke="#95ccf0" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 519.38 380.5 L 512.38 384 L 514.13 380.5 L 512.38 377 Z" fill="#95ccf0" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 280.5 440.5 L 300.5 320.5 L 440.5 320.5 L 420.5 440.5 Z" fill="#2a2a2a" stroke="#b9e0a5"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 381px; margin-left: 282px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #f0f0f0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Init Sky Light<br/>as Light Map in 1D
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 910.5 620.5 L 994.13 620.5" fill="none" stroke="#f0dab4" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 999.38 620.5 L 992.38 624 L 994.13 620.5 L 992.38 617 Z" fill="#f0dab4" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 760.5 680.5 L 780.5 560.5 L 920.5 560.5 L 900.5 680.5 Z" fill="#2a2a2a" stroke="#b9e0a5"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 621px; margin-left: 762px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Apply Masks<br/>to Block Light Map
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 1160.5 380.5 L 1310.5 380.5 Q 1320.5 380.5 1320.5 390.5 L 1320.5 434.13" fill="none" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 1320.5 439.38 L 1317 432.38 L 1320.5 434.13 L 1324 432.38 Z" fill="#95ccf0" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <rect x="1000.5" y="360.5" width="160" height="40" fill="#2a2a2a" stroke="#95ccf0" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 381px; margin-left: 1002px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Sky Light Map 1D
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 1160.5 620.5 L 1310.5 620.5 Q 1320.5 620.5 1320.5 610.5 L 1320.5 566.87" fill="none" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 1320.5 561.62 L 1324 568.62 L 1320.5 566.87 L 1317 568.62 Z" fill="#f0dab4" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <rect x="1000.5" y="600.5" width="160" height="40" fill="#2a2a2a" stroke="#f0dab4" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 621px; margin-left: 1002px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Block Light Map 1D
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 280.5 120.5 L 280.5 150.5 Q 280.5 160.5 290.5 160.5 L 350.5 160.5 Q 360.5 160.5 360.5 170.5 L 360.5 194.13"
+          fill="none" stroke="#95ccf0" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="none"/>
+    <path d="M 360.5 199.38 L 357 192.38 L 360.5 194.13 L 364 192.38 Z" fill="#95ccf0" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 240.5 40.5 L 320.5 40.5 L 340.5 80.5 L 320.5 120.5 L 240.5 120.5 L 220.5 80.5 Z" fill="#2a2a2a"
+          stroke="#95ccf0" stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 80px; margin-left: 222px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Vanilla
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 280.5 880.5 L 280.5 850.5 Q 280.5 840.5 290.5 840.5 L 350.5 840.5 Q 360.5 840.5 360.5 830.5 L 360.5 806.87"
+          fill="none" stroke="#f0dab4" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="none"/>
+    <path d="M 360.5 801.62 L 364 808.62 L 360.5 806.87 L 357 808.62 Z" fill="#f0dab4" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 240.5 880.5 L 320.5 880.5 L 340.5 920.5 L 320.5 960.5 L 240.5 960.5 L 220.5 920.5 Z" fill="#2a2a2a"
+          stroke="#f0dab4" stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 921px; margin-left: 222px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Vanilla
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 440.5 120.5 L 440.5 150.5 Q 440.5 160.5 430.5 160.5 L 370.5 160.5 Q 360.5 160.5 360.5 170.5 L 360.5 194.13"
+          fill="none" stroke="#95ccf0" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="none"/>
+    <path d="M 360.5 199.38 L 357 192.38 L 360.5 194.13 L 364 192.38 Z" fill="#95ccf0" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 400.5 40.5 L 480.5 40.5 L 500.5 80.5 L 480.5 120.5 L 400.5 120.5 L 380.5 80.5 Z" fill="#2a2a2a"
+          stroke="#95ccf0" stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 80px; margin-left: 382px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Mod Provided
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 760.5 120.5 L 760.5 150.5 Q 760.5 160.5 770.5 160.5 L 830.5 160.5 Q 840.5 160.5 840.5 170.5 L 840.5 194.13"
+          fill="none" stroke="#95ccf0" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="none"/>
+    <path d="M 840.5 199.38 L 837 192.38 L 840.5 194.13 L 844 192.38 Z" fill="#95ccf0" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 720.5 40.5 L 800.5 40.5 L 820.5 80.5 L 800.5 120.5 L 720.5 120.5 L 700.5 80.5 Z" fill="#2a2a2a"
+          stroke="#95ccf0" stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 80px; margin-left: 702px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Vanilla
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 920.5 120.5 L 920.5 150.5 Q 920.5 160.5 910.5 160.5 L 850.5 160.5 Q 840.5 160.5 840.5 170.5 L 840.5 194.13"
+          fill="none" stroke="#95ccf0" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="none"/>
+    <path d="M 840.5 199.38 L 837 192.38 L 840.5 194.13 L 844 192.38 Z" fill="#95ccf0" stroke="#95ccf0"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 880.5 40.5 L 960.5 40.5 L 980.5 80.5 L 960.5 120.5 L 880.5 120.5 L 860.5 80.5 Z" fill="#2a2a2a"
+          stroke="#95ccf0" stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 80px; margin-left: 862px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Mod Provided
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 440.5 880.5 L 440.5 850.5 Q 440.5 840.5 430.5 840.5 L 370.5 840.5 Q 360.5 840.5 360.5 830.5 L 360.5 806.87"
+          fill="none" stroke="#f0dab4" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="none"/>
+    <path d="M 360.5 801.62 L 364 808.62 L 360.5 806.87 L 357 808.62 Z" fill="#f0dab4" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 400.5 880.5 L 480.5 880.5 L 500.5 920.5 L 480.5 960.5 L 400.5 960.5 L 380.5 920.5 Z" fill="#2a2a2a"
+          stroke="#f0dab4" stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 921px; margin-left: 382px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Mod Provided
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 760.5 880.5 L 760.5 850.5 Q 760.5 840.5 770.5 840.5 L 830.5 840.5 Q 840.5 840.5 840.5 830.5 L 840.5 806.87"
+          fill="none" stroke="#f0dab4" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="none"/>
+    <path d="M 840.5 801.62 L 844 808.62 L 840.5 806.87 L 837 808.62 Z" fill="#f0dab4" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 720.5 880.5 L 800.5 880.5 L 820.5 920.5 L 800.5 960.5 L 720.5 960.5 L 700.5 920.5 Z" fill="#2a2a2a"
+          stroke="#f0dab4" stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 921px; margin-left: 702px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Vanilla
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 920.5 880.5 L 920.5 850.5 Q 920.5 840.5 910.5 840.5 L 850.5 840.5 Q 840.5 840.5 840.5 830.5 L 840.5 806.87"
+          fill="none" stroke="#f0dab4" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="none"/>
+    <path d="M 840.5 801.62 L 844 808.62 L 840.5 806.87 L 837 808.62 Z" fill="#f0dab4" stroke="#f0dab4"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 880.5 880.5 L 960.5 880.5 L 980.5 920.5 L 960.5 960.5 L 880.5 960.5 L 860.5 920.5 Z" fill="#2a2a2a"
+          stroke="#f0dab4" stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 921px; margin-left: 862px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Mod Provided
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 38px; height: 1px; padding-top: 821px; margin-left: 843px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: left; ">
+                    <div style="display: inline-block; font-size: 10px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Multiple
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 38px; height: 1px; padding-top: 180px; margin-left: 843px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: left; ">
+                    <div style="display: inline-block; font-size: 10px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Multiple
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 38px; height: 1px; padding-top: 180px; margin-left: 363px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: left; ">
+                    <div style="display: inline-block; font-size: 10px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Single
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 38px; height: 1px; padding-top: 821px; margin-left: 363px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: left; ">
+                    <div style="display: inline-block; font-size: 10px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Single
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 200.5 500.5 L 230.5 500.5 Q 240.5 500.5 240.5 490.5 L 240.5 390.5 Q 240.5 380.5 250.5 380.5 L 284.13 380.5"
+          fill="none" stroke="#9933ff" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 289.38 380.5 L 282.38 384 L 284.13 380.5 L 282.38 377 Z" fill="#9933ff" stroke="#9933ff"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 200.5 500.5 L 230.5 500.5 Q 240.5 500.5 240.5 510.5 L 240.5 610.5 Q 240.5 620.5 250.5 620.5 L 284.13 620.5"
+          fill="none" stroke="#9933ff" stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 289.38 620.5 L 282.38 624 L 284.13 620.5 L 282.38 617 Z" fill="#9933ff" stroke="#9933ff"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <path d="M 40.5 440.5 L 180.5 440.5 L 200.5 500.5 L 180.5 560.5 L 40.5 560.5 L 60.5 500.5 Z" fill="#2a2a2a"
+          stroke="#9933ff" stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe flex-end; width: 116px; height: 1px; padding-top: 501px; margin-left: 61px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: right; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #f0f0f0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Update Light Map
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 40.5 1080.5 L 180.5 1080.5 L 200.5 1140.5 L 180.5 1200.5 L 40.5 1200.5 L 60.5 1140.5 Z" fill="#2a2a2a"
+          stroke="#9933ff" stroke-miterlimit="10" transform="rotate(180,120.5,1140.5)" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 142px; height: 1px; padding-top: 1141px; margin-left: 51px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: left; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #f0f0f0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Uploaded as Textures
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 40.5 1080.5 L 180.5 1080.5 L 200.5 1140.5 L 180.5 1200.5 L 40.5 1200.5 L 60.5 1140.5 Z" fill="#2a2a2a"
+          stroke="#9933ff" stroke-miterlimit="10" transform="rotate(180,120.5,1140.5)" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 142px; height: 1px; padding-top: 1141px; margin-left: 51px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: left; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Uploaded as Textures
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 40.5 440.5 L 180.5 440.5 L 200.5 500.5 L 180.5 560.5 L 40.5 560.5 L 60.5 500.5 Z" fill="#2a2a2a"
+          stroke="#9933ff" stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe flex-end; width: 116px; height: 1px; padding-top: 501px; margin-left: 61px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: right; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Update Light Map
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+    <path d="M 280.5 440.5 L 300.5 320.5 L 440.5 320.5 L 420.5 440.5 Z" fill="#2a2a2a" stroke="#b9e0a5"
+          stroke-miterlimit="10" pointer-events="none"/>
+    <g>
+        <foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 158px; height: 1px; padding-top: 381px; margin-left: 282px;">
+                <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
+                    <div style="display: inline-block; font-size: 14px; font-family: EXO2; color: #F0F0F0; line-height: 1.2; pointer-events: none; white-space: normal; word-wrap: normal; ">
+                        Init Sky Light<br/>as Light Map in 1D
+                    </div>
+                </div>
+            </div>
+        </foreignObject>
+    </g>
+</svg>

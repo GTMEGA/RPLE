@@ -48,6 +48,7 @@ public abstract class EntityRendererMixin {
             require = 1)
     private void enableLightMaps(double p_78463_1_, CallbackInfo ci) {
         LightMapHook.enableReconfigureAll();
+
         ci.cancel();
     }
 
@@ -57,6 +58,7 @@ public abstract class EntityRendererMixin {
             require = 1)
     private void disableLightMaps(double p_78483_1_, CallbackInfo ci) {
         LightMapHook.disableAll();
+
         ci.cancel();
     }
 
@@ -67,6 +69,7 @@ public abstract class EntityRendererMixin {
     private void updateLightMap(float partialTickTime, CallbackInfo ci) {
         LightMapHook.updateLightMap(partialTickTime);
         lightmapUpdateNeeded = false;
+        // TODO: This is not compatible with the OptiFine `CustomColorizer`
         ci.cancel();
     }
 }

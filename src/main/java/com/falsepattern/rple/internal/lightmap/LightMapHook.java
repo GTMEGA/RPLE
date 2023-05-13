@@ -71,18 +71,27 @@ public class LightMapHook {
         RED_LIGHT_MAP.enableReconfigure();
         GREEN_LIGHT_MAP.enableReconfigure();
         BLUE_LIGHT_MAP.enableReconfigure();
+
+        if (Utils.shadersEnabled())
+            Shaders.enableLightmap();
     }
 
     public static void enableAll() {
         RED_LIGHT_MAP.enable();
         GREEN_LIGHT_MAP.enable();
         BLUE_LIGHT_MAP.enable();
+
+        if (Utils.shadersEnabled())
+            Shaders.enableLightmap();
     }
 
     public static void disableAll() {
         RED_LIGHT_MAP.disable();
         GREEN_LIGHT_MAP.disable();
         BLUE_LIGHT_MAP.disable();
+
+        if (Utils.shadersEnabled())
+            Shaders.disableLightmap();
     }
 
     public void enableReconfigure() {
@@ -92,12 +101,27 @@ public class LightMapHook {
         // Technically only needs to be set once, but Vanilla does this every time the light map is enabled.
         GL11.glMatrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
-        GL11.glScalef(TEXTURE_SCALE, TEXTURE_SCALE, 0F);
-        GL11.glTranslatef(TEXTURE_TRANSLATION, TEXTURE_TRANSLATION, 0F);
+        GL11.glScalef(TEXTURE_SCALE, TEXTURE_SCALE, TEXTURE_SCALE);
+        GL11.glTranslatef(TEXTURE_TRANSLATION, TEXTURE_TRANSLATION, TEXTURE_TRANSLATION);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
-        if (Utils.shadersEnabled())
-            OpenGlHelper.setActiveTexture(shaderTextureUnit);
+        // I don't know why, I don't know how. I don't even want to know why.
+        // But this works. It fixes the GL Error spam when using shaders??
+        // If I enable GL_TEXTURE_2D, (WHICH, BTW, HAPPENS IN STOCK OPTIFINE!!)
+        // Then all of a sudden, I get a spam of `GL_INVALID_OPERATION` in the log!
+        // HOWEVER!! The only documentation about `glEnable()` throwing this error,
+        // is if it is called between `glBegin()` and `glEnd()`.
+        // Minecraft may be an ancient block game, but it's not stone age enough to use the fucking
+        // "Immediate Mode" fixed render pipeline anymore.
+        // Only 2 people know why this works: God and Nobody
+        // If we want to know why it works, we need to find who asked!
+        // Because nobody asked how this works, nobody will ever ask.
+        // I think that OpenGL was made by people who asked.
+        if (Utils.shadersEnabled()) {
+            GL13.glActiveTexture(shaderTextureUnit);
+        } else {
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+        }
 
         getTextureManager().bindTexture(location);
 
@@ -108,13 +132,7 @@ public class LightMapHook {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
 
-        if (Utils.shadersEnabled()) {
-            Shaders.enableLightmap();
-        }
-
-        // TODO: Test this, because something here causes horrible error spam.
-        if (!GL11.glGetBoolean(GL11.GL_TEXTURE_2D))
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
