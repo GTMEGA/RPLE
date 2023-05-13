@@ -1,7 +1,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.rple.internal.LightMap;
+import com.falsepattern.rple.internal.lightmap.LightMapHook;
 import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Utils;
 import com.falsepattern.rple.internal.mixin.extension.ShaderVertex;
@@ -72,9 +72,9 @@ public abstract class ShaderTessMixin {
         val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).hasBrightness();
 
         if (hasBrightness) {
-            enableLightMapTexture(tessellator, RPLE.getRedIndexShader() * 2, LightMap.RED_LIGHT_MAP.textureUnit);
-            enableLightMapTexture(tessellator, RPLE.getGreenIndexShader() * 2, LightMap.GREEN_LIGHT_MAP.textureUnit);
-            enableLightMapTexture(tessellator, RPLE.getBlueIndexShader() * 2, LightMap.BLUE_LIGHT_MAP.textureUnit);
+            enableLightMapTexture(tessellator, RPLE.getRedIndexShader() * 2, LightMapHook.RED_LIGHT_MAP.textureUnit);
+            enableLightMapTexture(tessellator, RPLE.getGreenIndexShader() * 2, LightMapHook.GREEN_LIGHT_MAP.textureUnit);
+            enableLightMapTexture(tessellator, RPLE.getBlueIndexShader() * 2, LightMapHook.BLUE_LIGHT_MAP.textureUnit);
         }
 
         return false;
@@ -91,9 +91,9 @@ public abstract class ShaderTessMixin {
         val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).hasBrightness();
 
         if (hasBrightness) {
-            disableLightMapTexture(LightMap.RED_LIGHT_MAP.textureUnit);
-            disableLightMapTexture(LightMap.GREEN_LIGHT_MAP.textureUnit);
-            disableLightMapTexture(LightMap.BLUE_LIGHT_MAP.textureUnit);
+            disableLightMapTexture(LightMapHook.RED_LIGHT_MAP.textureUnit);
+            disableLightMapTexture(LightMapHook.GREEN_LIGHT_MAP.textureUnit);
+            disableLightMapTexture(LightMapHook.BLUE_LIGHT_MAP.textureUnit);
         }
 
         return false;

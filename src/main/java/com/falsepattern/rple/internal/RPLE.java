@@ -14,7 +14,14 @@ import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.lib.util.ResourceUtil;
 import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
 import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.api.lightmap.LightMapBase;
+import com.falsepattern.rple.api.lightmap.LightMapMask;
+import com.falsepattern.rple.api.lightmap.LightMapMaskType;
+import com.falsepattern.rple.api.lightmap.LightMapPipelineRegistry;
 import com.falsepattern.rple.internal.block.ColoredBlockInternal;
+import com.falsepattern.rple.internal.lightmap.builtin.base.BossColorModifier;
+import com.falsepattern.rple.internal.lightmap.builtin.base.NightVisionMask;
+import com.falsepattern.rple.internal.lightmap.builtin.base.VanillaLightMapBase;
 import com.falsepattern.rple.internal.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.storage.ColoredWorldProvider;
 import cpw.mods.fml.common.Mod;
@@ -80,6 +87,10 @@ public class RPLE {
         }
     }
 
+    private static LightMapBase lightMapBase = new VanillaLightMapBase();
+    private static LightMapMask nightVisionMask = new NightVisionMask();
+    private static LightMapMask bossColorMask = new BossColorModifier();
+
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         ChunkDataRegistry.disableDataManager("minecraft", "blocklight");
@@ -89,6 +100,12 @@ public class RPLE {
         } catch (IOException e) {
             Common.LOG.error("Could not set up light values", e);
         }
+        val lightMapRegistry = LightMapPipelineRegistry.getInstance();
+        lightMapRegistry.registerBase(lightMapBase, 1000);
+        lightMapRegistry.registerMask(nightVisionMask, LightMapMaskType.BLOCK);
+        lightMapRegistry.registerMask(nightVisionMask, LightMapMaskType.SKY);
+        lightMapRegistry.registerMask(bossColorMask, LightMapMaskType.BLOCK);
+        lightMapRegistry.registerMask(bossColorMask, LightMapMaskType.SKY);
     }
 
     private static final Map<String, RGB> valueCache = new HashMap<>();

@@ -8,7 +8,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.LightMap;
+import com.falsepattern.rple.internal.lightmap.LightMapHook;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -26,6 +26,6 @@ public abstract class GuiInventoryMixin {
                                         target = "Lnet/minecraft/client/renderer/OpenGlHelper;lightmapTexUnit:I")),
               require = 1)
     private static void disableLightMap(int cap) {
-        LightMap.disableAll();
+        LightMapHook.disableAll();
     }
 }

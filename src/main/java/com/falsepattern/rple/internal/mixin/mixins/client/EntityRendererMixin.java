@@ -9,7 +9,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.Common;
-import com.falsepattern.rple.internal.LightMap;
+import com.falsepattern.rple.internal.lightmap.LightMapHook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -22,10 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.*;
 
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
-    @Shadow private Minecraft mc;
-
-    @Shadow private float torchFlickerX;
-
     @Shadow private boolean lightmapUpdateNeeded;
 
     @Shadow @Final private DynamicTexture lightmapTexture;
@@ -39,11 +35,11 @@ public abstract class EntityRendererMixin {
             require = 1)
     private void setupColorLightMaps(Minecraft minecraft, IResourceManager p_i45076_2_, CallbackInfo ci) {
         Common.RED_LIGHT_MAP_TEXTURE_UNIT = OpenGlHelper.lightmapTexUnit;
-        LightMap.init(new LightMap(lightmapTexture,
-                                   locationLightMap,
-                                   lightmapColors,
-                                   Common.RED_LIGHT_MAP_TEXTURE_UNIT,
-                                   Common.RED_LIGHT_MAP_SHADER_TEXTURE_UNIT));
+        LightMapHook.init(new LightMapHook(lightmapTexture,
+                                           locationLightMap,
+                                           lightmapColors,
+                                           Common.RED_LIGHT_MAP_TEXTURE_UNIT,
+                                           Common.RED_LIGHT_MAP_SHADER_TEXTURE_UNIT));
     }
 
     @Inject(method = "enableLightmap",
@@ -51,7 +47,7 @@ public abstract class EntityRendererMixin {
             cancellable = true,
             require = 1)
     private void enableLightMaps(double p_78463_1_, CallbackInfo ci) {
-        LightMap.enableReconfigureAll();
+        LightMapHook.enableReconfigureAll();
         ci.cancel();
     }
 
@@ -60,7 +56,7 @@ public abstract class EntityRendererMixin {
             cancellable = true,
             require = 1)
     private void disableLightMaps(double p_78483_1_, CallbackInfo ci) {
-        LightMap.disableAll();
+        LightMapHook.disableAll();
         ci.cancel();
     }
 
@@ -68,8 +64,8 @@ public abstract class EntityRendererMixin {
             at = @At(value = "HEAD"),
             cancellable = true,
             require = 1)
-    private void updateLightMap(float p_78472_1_, CallbackInfo ci) {
-        LightMap.updateLightMap(mc, torchFlickerX, p_78472_1_);
+    private void updateLightMap(float partialTickTime, CallbackInfo ci) {
+        LightMapHook.updateLightMap(partialTickTime);
         lightmapUpdateNeeded = false;
         ci.cancel();
     }
