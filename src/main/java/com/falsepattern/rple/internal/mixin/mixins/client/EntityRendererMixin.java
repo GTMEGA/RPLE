@@ -10,6 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.LightMap;
+import com.falsepattern.rple.internal.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -19,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.*;
+import shadersmod.client.Shaders;
 
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin {
@@ -52,6 +54,10 @@ public abstract class EntityRendererMixin {
             require = 1)
     private void enableLightMaps(double p_78463_1_, CallbackInfo ci) {
         LightMap.enableReconfigureAll();
+
+        if (Utils.shadersEnabled())
+            Shaders.enableLightmap();
+
         ci.cancel();
     }
 
@@ -61,6 +67,10 @@ public abstract class EntityRendererMixin {
             require = 1)
     private void disableLightMaps(double p_78483_1_, CallbackInfo ci) {
         LightMap.disableAll();
+
+        if (Utils.shadersEnabled())
+            Shaders.disableLightmap();
+
         ci.cancel();
     }
 
@@ -71,6 +81,7 @@ public abstract class EntityRendererMixin {
     private void updateLightMap(float p_78472_1_, CallbackInfo ci) {
         LightMap.updateLightMap(mc, torchFlickerX, p_78472_1_);
         lightmapUpdateNeeded = false;
+        // TODO: This is not compatible with the OptiFine `CustomColorizer`
         ci.cancel();
     }
 }

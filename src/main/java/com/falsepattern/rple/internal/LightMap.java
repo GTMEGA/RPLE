@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.*;
-import shadersmod.client.Shaders;
 
 import static net.minecraft.client.Minecraft.getMinecraft;
 
@@ -103,10 +102,6 @@ public class LightMap {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
-
-        if (Utils.shadersEnabled()) {
-            Shaders.enableLightmap();
-        }
 
         // TODO: Test this, because something here causes horrible error spam.
         if (!GL11.glGetBoolean(GL11.GL_TEXTURE_2D))
