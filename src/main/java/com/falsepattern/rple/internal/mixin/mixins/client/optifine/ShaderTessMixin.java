@@ -1,9 +1,9 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.rple.internal.lightmap.LightMapHook;
 import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Utils;
+import com.falsepattern.rple.internal.lightmap.LightMapHook;
 import com.falsepattern.rple.internal.mixin.extension.ShaderVertex;
 import com.falsepattern.rple.internal.mixin.interfaces.IOptiFineTessellatorMixin;
 import lombok.*;
@@ -379,33 +379,33 @@ public abstract class ShaderTessMixin {
         if (tessellator.drawMode() == GL11.GL_TRIANGLES) {
             vertexA.tangentX(tan1x)
                    .tangentY(tan1y)
-                   .tangentY(tan1z)
-                   .tangentY(tan1w);
+                   .tangentZ(tan1z)
+                   .tangentW(tan1w);
             vertexB.tangentX(tan1x)
                    .tangentY(tan1y)
-                   .tangentY(tan1z)
-                   .tangentY(tan1w);
+                   .tangentZ(tan1z)
+                   .tangentW(tan1w);
             vertexC.tangentX(tan1x)
                    .tangentY(tan1y)
-                   .tangentY(tan1z)
-                   .tangentY(tan1w);
+                   .tangentZ(tan1z)
+                   .tangentW(tan1w);
         } else if (tessellator.drawMode() == GL11.GL_QUADS) {
             vertexA.tangentX(tan1x)
                    .tangentY(tan1y)
-                   .tangentY(tan1z)
-                   .tangentY(tan1w);
+                   .tangentZ(tan1z)
+                   .tangentW(tan1w);
             vertexB.tangentX(tan1x)
                    .tangentY(tan1y)
-                   .tangentY(tan1z)
-                   .tangentY(tan1w);
+                   .tangentZ(tan1z)
+                   .tangentW(tan1w);
             vertexC.tangentX(tan1x)
                    .tangentY(tan1y)
-                   .tangentY(tan1z)
-                   .tangentY(tan1w);
+                   .tangentZ(tan1z)
+                   .tangentW(tan1w);
             vertexD.tangentX(tan1x)
                    .tangentY(tan1y)
-                   .tangentY(tan1z)
-                   .tangentY(tan1w);
+                   .tangentZ(tan1z)
+                   .tangentW(tan1w);
         }
     }
 
