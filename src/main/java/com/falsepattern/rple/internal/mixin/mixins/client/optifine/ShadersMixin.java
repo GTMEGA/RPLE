@@ -1,6 +1,9 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.rple.internal.Common;
+import com.falsepattern.rple.internal.Utils;
+import lombok.*;
+import net.minecraft.entity.EntityLivingBase;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.*;
@@ -22,5 +25,15 @@ public abstract class ShadersMixin {
 
     @Shadow
     public static void setProgramUniform1i(String name, int value) {
+    }
+
+    @Redirect(method = "beginRender",
+              at = @At(value = "INVOKE",
+                       target = "Lnet/minecraft/entity/EntityLivingBase;getBrightnessForRender(F)I"),
+              require = 1,
+              remap = true)
+    private static int getEyeBrightness(EntityLivingBase instance, float partialTick) {
+        val result = instance.getBrightnessForRender(partialTick);
+        return Utils.getBrightestPair(Utils.cookieToPackedLong(result));
     }
 }
