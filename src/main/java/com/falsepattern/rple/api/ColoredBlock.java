@@ -8,10 +8,19 @@
 
 package com.falsepattern.rple.api;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
+/**
+ * This class is implicitly implemented on {@link Block} using a mixin. You can safely cast any class that extends Block
+ * to this interface.
+ * @apiNote Only override these methods if you know what you are doing! The default implementation is good enough for
+ * 99% of cases.
+ */
 public interface ColoredBlock {
     int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z);
     int getColoredLightOpacity(IBlockAccess world, int meta, int colorChannel, int x, int y, int z);
+
+    void setColoredLightValue(int meta, int r, int g, int b);
+    void setColoredLightOpacity(int meta, int r, int g, int b);
 }

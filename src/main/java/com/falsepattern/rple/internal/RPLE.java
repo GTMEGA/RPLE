@@ -13,12 +13,12 @@ import com.falsepattern.chunk.api.ChunkDataRegistry;
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.lib.util.ResourceUtil;
 import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
+import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.api.lightmap.LightMapBase;
 import com.falsepattern.rple.api.lightmap.LightMapMask;
 import com.falsepattern.rple.api.lightmap.LightMapMaskType;
 import com.falsepattern.rple.api.lightmap.LightMapPipelineRegistry;
-import com.falsepattern.rple.internal.block.ColoredBlockInternal;
 import com.falsepattern.rple.internal.lightmap.builtin.base.BossColorModifier;
 import com.falsepattern.rple.internal.lightmap.builtin.base.NightVisionMask;
 import com.falsepattern.rple.internal.lightmap.builtin.base.VanillaLightMapBase;
@@ -150,8 +150,8 @@ public class RPLE {
                 Common.LOG.error("Config line {} malformed (unknown block id): {}", currentLine, id);
                 continue;
             }
-            val cBlock = ((ColoredBlockInternal)block);
-            cBlock.setDefaultColor(meta, value.r, value.g, value.b);
+            val cBlock = ((ColoredBlock)block);
+            cBlock.setColoredLightValue(meta, value.r, value.g, value.b);
             valueCache.put(assignee, value);
         }
     }
