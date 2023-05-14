@@ -37,38 +37,27 @@ public abstract class ShaderTessMixin {
 
     private IOptiFineTessellatorMixin tessellator = null;
 
-    // TODO: Cleanup
-    @ModifyConstant(method = "draw",
-                    remap = false,
-                    constant = @Constant(intValue = 72))
-    private static int foo(int constant) {
-        return VertexAPI.recomputeVertexInfo(18, Float.BYTES);
-    }
-
-    // TODO: Cleanup
     @ModifyConstant(method = "draw",
                     remap = false,
                     constant = @Constant(intValue = 18))
-    private static int bar(int constant) {
+    private static int strideSizeInts(int constant) {
         return VertexAPI.recomputeVertexInfo(18, 1);
     }
 
-    // TODO: Cleanup
-    @ModifyConstant(method = {"preDrawArray"},
+    @ModifyConstant(method = {"preDrawArray", "draw"},
                     remap = false,
                     constant = @Constant(intValue = 72))
-    private static int baz(int constant) {
+    private static int strideSizeBytes(int constant) {
         return VertexAPI.recomputeVertexInfo(18, Float.BYTES);
     }
 
-    // TODO: Unify
     @Redirect(method = "draw",
               at = @At(value = "FIELD",
                        target = "Lnet/minecraft/client/renderer/Tessellator;hasBrightness:Z",
                        opcode = Opcodes.GETFIELD,
                        ordinal = 0),
               require = 1)
-    private static boolean enable(Tessellator tessellator) {
+    private static boolean enableLightMaps(Tessellator tessellator) {
         val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).hasBrightness();
 
         if (hasBrightness) {
@@ -80,14 +69,13 @@ public abstract class ShaderTessMixin {
         return false;
     }
 
-    // TODO: Unify
     @Redirect(method = "draw",
               at = @At(value = "FIELD",
                        target = "Lnet/minecraft/client/renderer/Tessellator;hasBrightness:Z",
                        opcode = Opcodes.GETFIELD,
                        ordinal = 1),
               require = 1)
-    private static boolean disable(Tessellator tessellator) {
+    private static boolean disableLightMaps(Tessellator tessellator) {
         val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).hasBrightness();
 
         if (hasBrightness) {
@@ -99,7 +87,6 @@ public abstract class ShaderTessMixin {
         return false;
     }
 
-    // TODO: Unify
     private static void enableLightMapTexture(Tessellator tessellator, int position, int unit) {
         val shortBuffer = ((IOptiFineTessellatorMixin) tessellator).shortBuffer();
 
@@ -110,7 +97,6 @@ public abstract class ShaderTessMixin {
         OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
-    // TODO: Unify
     private static void disableLightMapTexture(int unit) {
         OpenGlHelper.setClientActiveTexture(unit);
         GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
@@ -119,7 +105,7 @@ public abstract class ShaderTessMixin {
 
     /**
      * @author Ven
-     * @reason trolling.
+     * @reason Colorize
      */
     @Overwrite
     public static void addVertex(Tessellator tessellator, double posX, double posY, double posZ) {
