@@ -353,75 +353,119 @@ public abstract class ShaderTessMixin {
     }
 
     private void calculateTangent() {
-        val x1 = vertexB.positionX() - vertexA.positionX();
-        val y1 = vertexB.positionY() - vertexA.positionY();
-        val z1 = vertexB.positionZ() - vertexA.positionZ();
-        val u1 = vertexB.textureU() - vertexA.textureU();
-        val v1 = vertexB.textureV() - vertexA.textureV();
+        val aPositionX = vertexA.positionX();
+        val aPositionY = vertexA.positionY();
+        val aPositionZ = vertexA.positionZ();
 
-        val x2 = vertexC.positionX() - vertexA.positionX();
-        val y2 = vertexC.positionY() - vertexA.positionY();
-        val z2 = vertexC.positionZ() - vertexA.positionZ();
-        val u2 = vertexC.textureU() - vertexA.textureU();
-        val v2 = vertexC.textureV() - vertexA.textureV();
+        val bPositionX = vertexB.positionX();
+        val bPositionY = vertexB.positionY();
+        val bPositionZ = vertexB.positionZ();
 
-        val d = u1 * v2 - u2 * v1;
-        val r = d != 0F ? 1F / d : 1F;
+        val cPositionX = vertexC.positionX();
+        val cPositionY = vertexC.positionY();
+        val cPositionZ = vertexC.positionZ();
 
-        var tan1x = (v2 * x1 - v1 * x2) * r;
-        var tan1y = (v2 * y1 - v1 * y2) * r;
-        var tan1z = (v2 * z1 - v1 * z2) * r;
-        var lensq = tan1x * tan1x + tan1y * tan1y + tan1z * tan1z;
-        var mult = lensq != 0F ? (float) (1F / Math.sqrt(lensq)) : 1F;
-        tan1x *= mult;
-        tan1y *= mult;
-        tan1z *= mult;
+        val normalX = vertexA.normalX();
+        val normalY = vertexA.normalY();
+        val normalZ = vertexA.normalZ();
 
-        var tan2x = (u1 * x2 - u2 * x1) * r;
-        var tan2y = (u1 * y2 - u2 * y1) * r;
-        var tan2z = (u1 * z2 - u2 * z1) * r;
-        lensq = tan2x * tan2x + tan2y * tan2y + tan2z * tan2z;
-        mult = lensq != 0F ? (float) (1F / Math.sqrt(lensq)) : 10F;
-        tan2x *= mult;
-        tan2y *= mult;
-        tan2z *= mult;
+        val aTextureU = vertexA.textureU();
+        val aTextureV = vertexA.textureV();
 
-        val tan3x = vertexA.normalX() * tan1y - vertexA.normalX() * tan1z;
-        val tan3y = vertexA.normalY() * tan1z - vertexA.normalY() * tan1x;
-        val tan3z = vertexA.normalZ() * tan1x - vertexA.normalZ() * tan1y;
-        val tan1w = tan2x * tan3x + tan2y * tan3y + tan2z * tan3z < 0F ? -1F : 1F;
+        val bTextureU = vertexB.textureU();
+        val bTextureV = vertexB.textureV();
+
+        val cTextureU = vertexC.textureU();
+        val cTextureV = vertexC.textureV();
+
+        val abDeltaX = bPositionX - aPositionX;
+        val abDeltaY = bPositionY - aPositionY;
+        val abDeltaZ = bPositionZ - aPositionZ;
+
+        val acDeltaX = cPositionX - aPositionX;
+        val acDeltaY = cPositionY - aPositionY;
+        val acDeltaZ = cPositionZ - aPositionZ;
+
+        val abDeltaU = bTextureU - aTextureU;
+        val abDeltaV = bTextureV - aTextureV;
+        val acDeltaU = cTextureU - aTextureU;
+        val acDeltaV = cTextureV - aTextureV;
+
+        val deltaLengthSquared = abDeltaU * acDeltaV - acDeltaU * abDeltaV;
+
+        final float deltaFactor;
+        if (deltaLengthSquared == 0.0) {
+            deltaFactor = 1.0f;
+        } else {
+            deltaFactor = 1.0f / deltaLengthSquared;
+        }
+
+        var tangentX = deltaFactor * (acDeltaV * abDeltaX - abDeltaV * acDeltaX);
+        var tangentY = deltaFactor * (acDeltaV * abDeltaY - abDeltaV * acDeltaY);
+        var tangentZ = deltaFactor * (acDeltaV * abDeltaZ - abDeltaV * acDeltaZ);
+
+        val tangentLength = safeSqrt(tangentX * tangentX + tangentY * tangentY + tangentZ * tangentZ);
+        tangentX /= tangentLength;
+        tangentY /= tangentLength;
+        tangentZ /= tangentLength;
+
+        var biTangentX = deltaFactor * (-acDeltaU * abDeltaX + abDeltaU * acDeltaX);
+        var biTangentY = deltaFactor * (-acDeltaU * abDeltaY + abDeltaU * acDeltaY);
+        var biTangentZ = deltaFactor * (-acDeltaU * abDeltaZ + abDeltaU * acDeltaZ);
+
+        val biTangentLength = safeSqrt(biTangentX * biTangentX + biTangentY * biTangentY + biTangentZ * biTangentZ);
+        biTangentX /= biTangentLength;
+        biTangentY /= biTangentLength;
+        biTangentZ /= biTangentLength;
+
+        val otherBiTangentX = tangentY * normalZ - tangentZ * normalY;
+        val otherBiTangentY = tangentZ * normalX - tangentX * normalZ;
+        val otherBiTangentZ = tangentX * normalY - tangentY * normalX;
+
+        val tangentDotProduct = (biTangentX * otherBiTangentX) + (biTangentY * otherBiTangentY) + (biTangentZ * otherBiTangentZ);
+
+        final float tangentW;
+        if (tangentDotProduct < 0) {
+            tangentW = -1.0F;
+        } else {
+            tangentW = 1.0F;
+        }
 
         if (tessellator.drawMode() == GL11.GL_TRIANGLES) {
-            vertexA.tangentX(tan1x)
-                   .tangentY(tan1y)
-                   .tangentZ(tan1z)
-                   .tangentW(tan1w);
-            vertexB.tangentX(tan1x)
-                   .tangentY(tan1y)
-                   .tangentZ(tan1z)
-                   .tangentW(tan1w);
-            vertexC.tangentX(tan1x)
-                   .tangentY(tan1y)
-                   .tangentZ(tan1z)
-                   .tangentW(tan1w);
+            vertexA.tangentX(tangentX)
+                   .tangentY(tangentY)
+                   .tangentZ(tangentZ)
+                   .tangentW(tangentW);
+            vertexB.tangentX(tangentX)
+                   .tangentY(tangentY)
+                   .tangentZ(tangentZ)
+                   .tangentW(tangentW);
+            vertexC.tangentX(tangentX)
+                   .tangentY(tangentY)
+                   .tangentZ(tangentZ)
+                   .tangentW(tangentW);
         } else if (tessellator.drawMode() == GL11.GL_QUADS) {
-            vertexA.tangentX(tan1x)
-                   .tangentY(tan1y)
-                   .tangentZ(tan1z)
-                   .tangentW(tan1w);
-            vertexB.tangentX(tan1x)
-                   .tangentY(tan1y)
-                   .tangentZ(tan1z)
-                   .tangentW(tan1w);
-            vertexC.tangentX(tan1x)
-                   .tangentY(tan1y)
-                   .tangentZ(tan1z)
-                   .tangentW(tan1w);
-            vertexD.tangentX(tan1x)
-                   .tangentY(tan1y)
-                   .tangentZ(tan1z)
-                   .tangentW(tan1w);
+            vertexA.tangentX(tangentX)
+                   .tangentY(tangentY)
+                   .tangentZ(tangentZ)
+                   .tangentW(tangentW);
+            vertexB.tangentX(tangentX)
+                   .tangentY(tangentY)
+                   .tangentZ(tangentZ)
+                   .tangentW(tangentW);
+            vertexC.tangentX(tangentX)
+                   .tangentY(tangentY)
+                   .tangentZ(tangentZ)
+                   .tangentW(tangentW);
+            vertexD.tangentX(tangentX)
+                   .tangentY(tangentY)
+                   .tangentZ(tangentZ)
+                   .tangentW(tangentW);
         }
+    }
+
+    private static float safeSqrt(float value) {
+        return value != 0F ? (float) Math.sqrt(value) : 1F;
     }
 
     private void calculateTriangleMidTextureUV() {
