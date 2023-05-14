@@ -101,8 +101,8 @@ public final class ShaderVertex {
         output[COLOR_STRIDE_OFFSET + index] = colorARGB;
         output[LIGHT_MAP_STRIDE_OFFSET + index] = lightMapUV;
 
-        output[ENTITY_DATA_0_STRIDE_OFFSET + index] = Float.floatToRawIntBits(entityData);
-        output[ENTITY_DATA_1_STRIDE_OFFSET + index] = Float.floatToRawIntBits(entityData2);
+        output[ENTITY_DATA_0_STRIDE_OFFSET + index] = entityData;
+        output[ENTITY_DATA_1_STRIDE_OFFSET + index] = entityData2;
 
         output[NORMAL_X_STRIDE_OFFSET + index] = Float.floatToRawIntBits(normalX);
         output[NORMAL_Y_STRIDE_OFFSET + index] = Float.floatToRawIntBits(normalY);
