@@ -10,26 +10,25 @@ package com.falsepattern.rple.internal.client.render;
 
 import com.falsepattern.falsetweaks.Compat;
 import com.falsepattern.falsetweaks.api.triangulator.ToggleableTessellator;
-import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.internal.blocks.Lamp;
-import lombok.val;
-import org.lwjgl.opengl.GL11;
-
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import lombok.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.*;
 
 @SideOnly(Side.CLIENT)
 public class LampRenderingHandler implements ISimpleBlockRenderingHandler {
     public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
     public static final float OFFSET = 0.05F;
+
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
         block.setBlockBoundsForItemRender();
@@ -46,14 +45,14 @@ public class LampRenderingHandler implements ISimpleBlockRenderingHandler {
 
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-        val lamp = (Lamp)block;
+        val lamp = (Lamp) block;
         val tessellator = Compat.tessellator();
-        switch (((ToggleableTessellator)tessellator).pass()) {
+        switch (((ToggleableTessellator) tessellator).pass()) {
             case 0:
                 return renderer.renderStandardBlock(lamp, x, y, z);
             case 1:
-                val meta = world.getBlockMetadata(x, y, z);
                 if (lamp.powered) {
+                    val meta = world.getBlockMetadata(x, y, z);
                     val r = lamp.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_RED, x, y, z) * 17;
                     val g = lamp.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_GREEN, x, y, z) * 17;
                     val b = lamp.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_BLUE, x, y, z) * 17;
@@ -61,8 +60,8 @@ public class LampRenderingHandler implements ISimpleBlockRenderingHandler {
                     tessellator.setColorRGBA(r, g, b, 128);
                     renderer.setRenderBounds(1F + OFFSET, -OFFSET, 1F + OFFSET, -OFFSET, 1F + OFFSET, -OFFSET);
                     drawCube(tessellator, renderer, block, x, y, z, lamp.getGlowIcon());
+                    return true;
                 }
-                return false;
             default:
                 return false;
         }

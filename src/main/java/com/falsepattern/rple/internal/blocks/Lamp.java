@@ -12,12 +12,9 @@ import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.client.render.IIconWrapper;
 import com.falsepattern.rple.internal.client.render.LampRenderingHandler;
-import lombok.val;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.Random;
-
+import lombok.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -26,6 +23,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class Lamp extends Block implements ColoredBlock {
     private static final String GLOW_RESOURCE = Tags.MODID + ":glow";
@@ -105,7 +104,7 @@ public class Lamp extends Block implements ColoredBlock {
 
     @Override
     public int getRenderBlockPass() {
-        return 0;
+        return 1;
     }
 
     @Override
