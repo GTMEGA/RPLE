@@ -21,7 +21,7 @@ dependencies {
 
     implementation("com.falsepattern:lumina-mc1.7.10:c747d05:dev")
 
-    implementation("com.falsepattern:falsetweaks-mc1.7.10:2.5.0:dev")
+    implementation("com.falsepattern:falsetweaks-mc1.7.10:2.5.1:dev")
 
     implementation("com.falsepattern:chunkapi-mc1.7.10:0.2.0:dev")
 
