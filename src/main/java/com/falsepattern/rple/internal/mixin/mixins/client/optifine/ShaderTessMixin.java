@@ -260,65 +260,94 @@ public abstract class ShaderTessMixin {
     }
 
     private void calculateTriangleNormal() {
-        val x1 = vertexB.positionX() - vertexA.positionX();
-        val y1 = vertexB.positionY() - vertexA.positionY();
-        val z1 = vertexB.positionZ() - vertexA.positionZ();
-        val x2 = vertexC.positionX() - vertexB.positionX();
-        val y2 = vertexC.positionY() - vertexB.positionY();
-        val z2 = vertexC.positionZ() - vertexB.positionZ();
+        val aPositionX = vertexA.positionX();
+        val aPositionY = vertexA.positionY();
+        val aPositionZ = vertexA.positionZ();
 
-        var vnx = y1 * z2 - y2 * z1;
-        var vny = z1 * x2 - z2 * x1;
-        var vnz = x1 * y2 - x2 * y1;
+        val bPositionX = vertexB.positionX();
+        val bPositionY = vertexB.positionY();
+        val bPositionZ = vertexB.positionZ();
 
-        var lensq = vnx * vnx + vny * vny + vnz * vnz;
-        var mult = lensq != 0.0 ? (float) (1F / Math.sqrt(lensq)) : 1.0F;
-        vnx *= mult;
-        vny *= mult;
-        vnz *= mult;
+        val cPositionX = vertexC.positionX();
+        val cPositionY = vertexC.positionY();
+        val cPositionZ = vertexC.positionZ();
 
-        vertexA.normalX(vnx)
-               .normalY(vny)
-               .normalZ(vnz);
-        vertexB.normalX(vnx)
-               .normalY(vny)
-               .normalZ(vnz);
-        vertexC.normalX(vnx)
-               .normalY(vny)
-               .normalZ(vnz);
+        val acDeltaX = cPositionX - aPositionX;
+        val acDeltaY = cPositionY - aPositionY;
+        val acDeltaZ = cPositionZ - aPositionZ;
+
+        val abDeltaX = aPositionX - bPositionX;
+        val abDeltaY = aPositionY - bPositionY;
+        val abDeltaZ = aPositionZ - bPositionZ;
+
+        var normalX = acDeltaY * abDeltaZ - acDeltaZ * abDeltaY;
+        var normalY = acDeltaZ * abDeltaX - acDeltaX * abDeltaZ;
+        var normalZ = acDeltaX * abDeltaY - acDeltaY * abDeltaX;
+
+        val length = safeSqrt(normalX * normalX + normalY * normalY + normalZ * normalZ);
+        normalX /= length;
+        normalY /= length;
+        normalZ /= length;
+
+        vertexA.normalX(normalX)
+               .normalY(normalY)
+               .normalZ(normalZ);
+        vertexB.normalX(normalX)
+               .normalY(normalY)
+               .normalZ(normalZ);
+        vertexC.normalX(normalX)
+               .normalY(normalY)
+               .normalZ(normalZ);
 
         tessellator.hasNormals(true);
     }
 
     private void calculateQuadNormal() {
-        val x1 = vertexC.positionX() - vertexA.positionX();
-        val y1 = vertexC.positionY() - vertexA.positionY();
-        val z1 = vertexC.positionZ() - vertexA.positionZ();
-        val x2 = vertexD.positionX() - vertexB.positionX();
-        val y2 = vertexD.positionY() - vertexB.positionY();
-        val z2 = vertexD.positionZ() - vertexB.positionZ();
+        val aPositionX = vertexA.positionX();
+        val aPositionY = vertexA.positionY();
+        val aPositionZ = vertexA.positionZ();
 
-        var vnx = y1 * z2 - y2 * z1;
-        var vny = z1 * x2 - z2 * x1;
-        var vnz = x1 * y2 - x2 * y1;
-        var lensq = vnx * vnx + vny * vny + vnz * vnz;
-        var mult = (double) lensq != 0F ? (float) (1F / Math.sqrt(lensq)) : 1F;
-        vnx *= mult;
-        vny *= mult;
-        vnz *= mult;
+        val bPositionX = vertexB.positionX();
+        val bPositionY = vertexB.positionY();
+        val bPositionZ = vertexB.positionZ();
 
-        vertexA.normalX(vnx)
-               .normalY(vny)
-               .normalZ(vnz);
-        vertexB.normalX(vnx)
-               .normalY(vny)
-               .normalZ(vnz);
-        vertexC.normalX(vnx)
-               .normalY(vny)
-               .normalZ(vnz);
-        vertexD.normalX(vnx)
-               .normalY(vny)
-               .normalZ(vnz);
+        val cPositionX = vertexC.positionX();
+        val cPositionY = vertexC.positionY();
+        val cPositionZ = vertexC.positionZ();
+
+        val dPositionX = vertexD.positionX();
+        val dPositionY = vertexD.positionY();
+        val dPositionZ = vertexD.positionZ();
+
+        val acDeltaX = cPositionX - aPositionX;
+        val acDeltaY = cPositionY - aPositionY;
+        val acDeltaZ = cPositionZ - aPositionZ;
+
+        val dbDeltaX = dPositionX - bPositionX;
+        val dbDeltaY = dPositionY - bPositionY;
+        val dbDeltaZ = dPositionZ - bPositionZ;
+
+        var normalX = acDeltaY * dbDeltaZ - acDeltaZ * dbDeltaY;
+        var normalY = acDeltaZ * dbDeltaX - acDeltaX * dbDeltaZ;
+        var normalZ = acDeltaX * dbDeltaY - acDeltaY * dbDeltaX;
+
+        val length = safeSqrt(normalX * normalX + normalY * normalY + normalZ * normalZ);
+        normalX /= length;
+        normalY /= length;
+        normalZ /= length;
+
+        vertexA.normalX(normalX)
+               .normalY(normalY)
+               .normalZ(normalZ);
+        vertexB.normalX(normalX)
+               .normalY(normalY)
+               .normalZ(normalZ);
+        vertexC.normalX(normalX)
+               .normalY(normalY)
+               .normalZ(normalZ);
+        vertexD.normalX(normalX)
+               .normalY(normalY)
+               .normalZ(normalZ);
 
         tessellator.hasNormals(true);
     }
