@@ -11,18 +11,18 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.RPLE;
-import com.falsepattern.rple.internal.Utils;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 
+import com.falsepattern.rple.internal.color.BrightnessUtil;
+import com.falsepattern.rple.internal.color.CookieManager;
 import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorJunction;
 import lombok.val;
 import org.lwjgl.opengl.*;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
-
-import java.nio.ShortBuffer;
 
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin implements ITessellatorJunction {
@@ -71,9 +71,9 @@ public abstract class TessellatorMixin implements ITessellatorJunction {
               require = 1)
     private boolean customColor(Tessellator instance) {
         if (hasBrightness) {
-            rawBuffer[rawBufferIndex + RPLE.getRedIndexNoShader()] = Utils.getRedPair(brightness);
-            rawBuffer[rawBufferIndex + RPLE.getGreenIndexNoShader()] = Utils.getGreenPair(brightness);
-            rawBuffer[rawBufferIndex + RPLE.getBlueIndexNoShader()] = Utils.getBluePair(brightness);
+            rawBuffer[rawBufferIndex + RPLE.getRedIndexNoShader()] = BrightnessUtil.getBrightnessRed(brightness);
+            rawBuffer[rawBufferIndex + RPLE.getGreenIndexNoShader()] = BrightnessUtil.getBrightnessGreen(brightness);
+            rawBuffer[rawBufferIndex + RPLE.getBlueIndexNoShader()] = BrightnessUtil.getBrightnessBlue(brightness);
         }
         return false;
     }
@@ -85,7 +85,7 @@ public abstract class TessellatorMixin implements ITessellatorJunction {
     @Overwrite
     public void setBrightness(int brightness) {
         this.hasBrightness = true;
-        this.brightness = Utils.cookieToPackedLong(brightness);
+        this.brightness = CookieManager.cookieToPackedLong(brightness);
     }
 
     private static void enableLightMapTexture(Tessellator tess, int position, int unit) {

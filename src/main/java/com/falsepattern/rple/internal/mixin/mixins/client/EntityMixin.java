@@ -9,7 +9,8 @@
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.EntityHelper;
-import com.falsepattern.rple.internal.Utils;
+import com.falsepattern.rple.internal.color.BrightnessUtil;
+import com.falsepattern.rple.internal.color.CookieManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -31,7 +32,7 @@ public abstract class EntityMixin {
     private int getBrightnessForRender(World instance, int x, int y, int z, int min) {
         int result = instance.getLightBrightnessForSkyBlocks(x, y, z, 0);
         if (EntityHelper.isOnBlockList(getClass())) {
-            result = Utils.getBrightestPair(Utils.cookieToPackedLong(result));
+            result = BrightnessUtil.getBrightestChannelFromPacked(CookieManager.cookieToPackedLong(result));
         }
         return result;
     }

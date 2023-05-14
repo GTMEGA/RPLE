@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import com.falsepattern.rple.api.lightmap.LightMapChannel;
 import com.falsepattern.rple.internal.Common;
-import com.falsepattern.rple.internal.Utils;
+import com.falsepattern.rple.internal.Compat;
 import lombok.*;
 
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -72,7 +72,7 @@ public class LightMapHook {
         GREEN_LIGHT_MAP.enableReconfigure();
         BLUE_LIGHT_MAP.enableReconfigure();
 
-        if (Utils.shadersEnabled())
+        if (Compat.shadersEnabled())
             Shaders.enableLightmap();
     }
 
@@ -81,7 +81,7 @@ public class LightMapHook {
         GREEN_LIGHT_MAP.enable();
         BLUE_LIGHT_MAP.enable();
 
-        if (Utils.shadersEnabled())
+        if (Compat.shadersEnabled())
             Shaders.enableLightmap();
     }
 
@@ -90,7 +90,7 @@ public class LightMapHook {
         GREEN_LIGHT_MAP.disable();
         BLUE_LIGHT_MAP.disable();
 
-        if (Utils.shadersEnabled())
+        if (Compat.shadersEnabled())
             Shaders.disableLightmap();
     }
 
@@ -117,7 +117,7 @@ public class LightMapHook {
         // If we want to know why it works, we need to find who asked!
         // Because nobody asked how this works, nobody will ever ask.
         // I think that OpenGL was made by people who asked.
-        if (Utils.shadersEnabled()) {
+        if (Compat.shadersEnabled()) {
             GL13.glActiveTexture(shaderTextureUnit);
         } else {
             GL11.glEnable(GL11.GL_TEXTURE_2D);

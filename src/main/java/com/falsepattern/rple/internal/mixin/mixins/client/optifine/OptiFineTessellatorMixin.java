@@ -1,6 +1,5 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
-import com.falsepattern.rple.internal.Utils;
 import com.falsepattern.rple.internal.mixin.interfaces.IOptiFineTessellatorMixin;
 import net.minecraft.client.renderer.Tessellator;
 

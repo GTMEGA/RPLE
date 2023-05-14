@@ -54,6 +54,8 @@ import java.util.StringTokenizer;
                     "required-after:lumina;" +
                     "required-after:falsetweaks@[2.4,)")
 public class RPLE {
+    public static final String[] IDs = new String[]{"RED", "GREEN", "BLUE"};
+
     private static final int[] COLOR_CHANNELS = new int[]{LightConstants.COLOR_CHANNEL_RED,
                                                           LightConstants.COLOR_CHANNEL_GREEN,
                                                           LightConstants.COLOR_CHANNEL_BLUE};

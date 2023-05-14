@@ -9,9 +9,8 @@
 package com.falsepattern.rple.internal.storage;
 
 import com.falsepattern.chunk.api.ChunkDataManager;
-import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.Utils;
 import lombok.val;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -111,7 +110,7 @@ public class ColoredDataManager implements ChunkDataManager.SectionNBTDataManage
 
     @Override
     public String id() {
-        return Utils.IDs[colorChannel];
+        return RPLE.IDs[colorChannel];
     }
 
     @Override

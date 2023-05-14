@@ -12,8 +12,9 @@ import com.falsepattern.lumina.api.ILightingEngine;
 import com.falsepattern.lumina.api.ILumiWorld;
 import com.falsepattern.lumina.api.ILumiWorldRoot;
 import com.falsepattern.rple.api.ColoredBlock;
+import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.Utils;
+import com.falsepattern.rple.internal.color.BrightnessUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
@@ -39,7 +40,7 @@ public class ColoredLightWorld implements ILumiWorld {
     public ColoredLightWorld(World world, int colorChannel) {
         this.carrier = world;
         this.colorChannel = colorChannel;
-        id = Tags.MODID + "_" + Utils.IDs[colorChannel];
+        id = Tags.MODID + "_" + RPLE.IDs[colorChannel];
     }
 
     @Override
@@ -88,7 +89,7 @@ public class ColoredLightWorld implements ILumiWorld {
         if (block < minBlock) {
             block = minBlock;
         }
-        return Utils.createPair(block, sky);
+        return BrightnessUtil.lightLevelsToBrightness(block, sky);
     }
 
     @SideOnly(Side.CLIENT)

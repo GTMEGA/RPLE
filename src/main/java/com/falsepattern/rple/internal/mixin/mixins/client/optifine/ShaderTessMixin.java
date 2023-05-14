@@ -1,9 +1,9 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.rple.internal.RPLE;
-import com.falsepattern.rple.internal.Utils;
+import com.falsepattern.rple.internal.color.BrightnessUtil;
 import com.falsepattern.rple.internal.lightmap.LightMapHook;
+import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.mixin.extension.ShaderVertex;
 import com.falsepattern.rple.internal.mixin.interfaces.IOptiFineTessellatorMixin;
 import lombok.*;
@@ -228,9 +228,9 @@ public abstract class ShaderTessMixin {
               .textureU(tessellator.textureU())
               .textureV(tessellator.textureV())
               .colorARGB(tessellator.color())
-              .redLightMapUV(Utils.getRedPair(brightness))
-              .greenLightMapUV(Utils.getGreenPair(brightness))
-              .blueLightMapUV(Utils.getBluePair(brightness))
+              .redLightMapUV(BrightnessUtil.getBrightnessRed(brightness))
+              .greenLightMapUV(BrightnessUtil.getBrightnessGreen(brightness))
+              .blueLightMapUV(BrightnessUtil.getBrightnessBlue(brightness))
               .entityData(Shaders.getEntityData())
               .entityData2(Shaders.getEntityData2());
 

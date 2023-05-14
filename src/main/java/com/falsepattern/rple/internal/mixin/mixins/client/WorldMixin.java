@@ -8,7 +8,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.Utils;
+import com.falsepattern.rple.internal.color.BlockLightUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -27,6 +27,6 @@ public abstract class WorldMixin {
     @SideOnly(Side.CLIENT)
     @Overwrite
     public int getLightBrightnessForSkyBlocks(int x, int y, int z, int minBlockLight) {
-        return Utils.getLightBrightnessForSkyBlocksAccess((IBlockAccess) this, x, y, z, minBlockLight);
+        return BlockLightUtil.getRGBBrightnessAt((IBlockAccess) this, x, y, z, minBlockLight);
     }
 }
