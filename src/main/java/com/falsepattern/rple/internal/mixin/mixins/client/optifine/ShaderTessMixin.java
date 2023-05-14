@@ -469,43 +469,51 @@ public abstract class ShaderTessMixin {
     }
 
     private void calculateTriangleMidTextureUV() {
-        val midTextureU = vertexA.textureU() +
-                          vertexB.textureU() +
-                          vertexC.textureU() /
-                          TRIANGLE_VERTEX_COUNT;
+        val midTextureU = average(vertexA.textureU(),
+                                  vertexB.textureU(),
+                                  vertexC.textureU());
+
+        val midTextureV = average(vertexA.textureV(),
+                                  vertexB.textureV(),
+                                  vertexC.textureV());
+
         vertexA.midTextureU(midTextureU);
         vertexB.midTextureU(midTextureU);
         vertexC.midTextureU(midTextureU);
 
-        val midTextureV = vertexA.textureV() +
-                          vertexB.textureV() +
-                          vertexC.textureV() /
-                          TRIANGLE_VERTEX_COUNT;
         vertexA.midTextureV(midTextureV);
         vertexB.midTextureV(midTextureV);
         vertexC.midTextureV(midTextureV);
     }
 
+    private static float average(float a, float b, float c) {
+        return (a + b + c) / 3F;
+    }
+
     private void calculateQuadMidTextureUV() {
-        val midTextureU = vertexA.textureU() +
-                          vertexB.textureU() +
-                          vertexC.textureU() +
-                          vertexD.textureU() /
-                          QUAD_VERTEX_COUNT;
+        val midTextureU = average(vertexA.textureU(),
+                                  vertexB.textureU(),
+                                  vertexC.textureU(),
+                                  vertexD.textureU());
+
+        val midTextureV = average(vertexA.textureV(),
+                                  vertexB.textureV(),
+                                  vertexC.textureV(),
+                                  vertexD.textureV());
+
         vertexA.midTextureU(midTextureU);
         vertexB.midTextureU(midTextureU);
         vertexC.midTextureU(midTextureU);
         vertexD.midTextureU(midTextureU);
 
-        val midTextureV = vertexA.textureV() +
-                          vertexB.textureV() +
-                          vertexC.textureV() +
-                          vertexD.textureV() /
-                          QUAD_VERTEX_COUNT;
         vertexA.midTextureV(midTextureV);
         vertexB.midTextureV(midTextureV);
         vertexC.midTextureV(midTextureV);
         vertexD.midTextureV(midTextureV);
+    }
+
+    private static float average(float a, float b, float c, float d) {
+        return (a + b + c + d) / 4F;
     }
 
     private void addVertex(ShaderVertex vertex) {
