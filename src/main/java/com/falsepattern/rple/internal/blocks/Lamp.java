@@ -77,18 +77,10 @@ public class Lamp extends Block implements ColoredBlock {
             val meta = world.getBlockMetadata(x, y, z);
             val powered = (meta & POWERED_BIT) != 0;
             if (powered && !indirectlyPowered) {
-                world.scheduleBlockUpdate(x, y, z, this, 4);
+                world.setBlockMetadataWithNotify(x, y, z, meta & ~POWERED_BIT, 3);
             } else if (!powered && indirectlyPowered) {
                 world.setBlockMetadataWithNotify(x, y, z, meta | POWERED_BIT, 3);
             }
-        }
-    }
-
-    public void updateTick(World world, int x, int y, int z, Random rng) {
-        val meta = world.getBlockMetadata(x, y, z);
-        val powered = (meta & POWERED_BIT) != 0;
-        if (!world.isRemote && powered && !world.isBlockIndirectlyGettingPowered(x, y, z)) {
-            world.setBlockMetadataWithNotify(x, y, z, meta & ~POWERED_BIT, 3);
         }
     }
 
