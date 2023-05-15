@@ -1,12 +1,14 @@
-id,name,red,green,blue
-red,Red,15,0,0
-green,Green,0,15,0
-blue,Blue,0,0,15
-cyan,Cyan,0,15,15
-magenta,Magenta,15,0,15
-yellow,Yellow,15,15,0
-lightblue,Light Blue,7,7,15
-lime,Lime,7,15,7
-orange,Orange,15,7,0
-pink,Pink,15,7,15
-white,White,15,15,15
+id,red,green,blue
+red,15,0,0
+magenta,15,0,15
+purple,7,0,15
+blue,0,0,15
+azure,7,7,15
+cyan,0,15,15
+green,0,15,0
+lime,7,15,7
+yellow,15,15,0
+orange,15,7,0
+pink,15,7,15
+white,15,15,15
+

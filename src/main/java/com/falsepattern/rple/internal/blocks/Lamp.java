@@ -46,8 +46,8 @@ public class Lamp extends Block implements ColoredBlock {
 
     @Override
     public void registerBlockIcons(@NotNull IIconRegister register) {
-        blockIcon = register.registerIcon(getTextureName() + "_off");
-        poweredIcon = register.registerIcon(getTextureName() + "_on");
+        blockIcon = register.registerIcon(Tags.MODID + ":lamp/off/" + getTextureName());
+        poweredIcon = register.registerIcon(Tags.MODID + ":lamp/on/" + getTextureName());
         glowIcon = new IIconWrapper(register.registerIcon(GLOW_RESOURCE));
     }
 

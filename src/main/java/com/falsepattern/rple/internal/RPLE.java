@@ -77,7 +77,7 @@ public class RPLE {
     private static int blueIndexShader;
 
     @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit(FMLPreInitializationEvent event) throws IOException {
         LumiWorldProviderRegistry.hijack();
         int[] noShaderBuf = new int[2];
         int[] shaderBuf = new int[2];
@@ -86,13 +86,30 @@ public class RPLE {
         blueIndexNoShader = noShaderBuf[1];
         greenIndexShader = shaderBuf[0];
         blueIndexShader = shaderBuf[1];
-        val blueLamp = new Lamp();
-        blueLamp.setBlockName("lamp_blue").setBlockTextureName(Tags.MODID + ":lamp_blue");
-        blueLamp.setColoredLightValue(0, 0, 0, 0);
-        blueLamp.setColoredLightValue(Lamp.INVERTED_BIT, 0, 0, 15);
-        blueLamp.setColoredLightValue(Lamp.POWERED_BIT, 0, 0, 15);
-        blueLamp.setColoredLightValue(Lamp.INVERTED_BIT | Lamp.POWERED_BIT, 0, 0, 0);
-        GameRegistry.registerBlock(blueLamp, ItemLamp.class, "lamp_blue");
+        val csv = ResourceUtil.getResourceStringFromJar("/lamps.csv", RPLE.class);
+        val lines = new StringTokenizer(csv, "\r\n");
+        lines.nextToken();
+        while (lines.hasMoreTokens()) {
+            val line = lines.nextToken();
+            val parts = new StringTokenizer(line, ",");
+            val name = parts.nextToken();
+            int r,g,b;
+            try {
+                r = Integer.parseInt(parts.nextToken());
+                g = Integer.parseInt(parts.nextToken());
+                b = Integer.parseInt(parts.nextToken());
+            } catch (NumberFormatException err) {
+                err.printStackTrace();
+                continue;
+            }
+            val lamp = new Lamp();
+            lamp.setBlockName(Tags.MODID + ".lamp." + name).setBlockTextureName(name);
+            lamp.setColoredLightValue(0, 0, 0, 0);
+            lamp.setColoredLightValue(Lamp.INVERTED_BIT, r, g, b);
+            lamp.setColoredLightValue(Lamp.POWERED_BIT, r, g, b);
+            lamp.setColoredLightValue(Lamp.INVERTED_BIT | Lamp.POWERED_BIT, 0, 0, 0);
+            GameRegistry.registerBlock(lamp, ItemLamp.class, "lamp." + name);
+        }
     }
 
     @Mod.EventHandler
