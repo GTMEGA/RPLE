@@ -20,19 +20,22 @@ import cpw.mods.fml.relauncher.SideOnly;
 import com.falsepattern.rple.internal.color.BrightnessUtil;
 import lombok.*;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+
 import org.lwjgl.opengl.*;
 
 @SideOnly(Side.CLIENT)
 public class LampRenderingHandler implements ISimpleBlockRenderingHandler {
     public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
     public static final float OFFSET = 0.05F;
+    private static final boolean[][][] NULL = new boolean[3][3][3];
 
     @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+    public void renderInventoryBlock(Block block, int meta, int modelId, RenderBlocks renderer) {
         block.setBlockBoundsForItemRender();
         renderer.setRenderBoundsFromBlock(block);
         GL11.glPushMatrix();
@@ -40,7 +43,24 @@ public class LampRenderingHandler implements ISimpleBlockRenderingHandler {
         GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
         val tessellator = Compat.tessellator();
         tessellator.startDrawingQuads();
-        drawCubeInventory(tessellator, renderer, block, 0, 0, 0, block.getIcon(0, 0));
+        tessellator.setColorRGBA(255, 255, 255, 255);
+        val icon = block.getIcon(0, meta);
+        val glowing = Lamp.isGlowing(meta);
+        if (glowing) {
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+        }
+        drawCubeInventory(tessellator, renderer, block, 0, 0, 0, icon);
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        if (glowing) {
+            val lamp = (Lamp)block;
+            val r = lamp.getColoredLightValue(null, meta, LightConstants.COLOR_CHANNEL_RED, 0, 0, 0) * 17;
+            val g = lamp.getColoredLightValue(null, meta, LightConstants.COLOR_CHANNEL_GREEN, 0, 0, 0) * 17;
+            val b = lamp.getColoredLightValue(null, meta, LightConstants.COLOR_CHANNEL_BLUE, 0, 0, 0) * 17;
+            tessellator.setBrightness(BrightnessUtil.lightLevelsToBrightness(15, 15));
+            tessellator.setColorRGBA(r, g, b, 128);
+            drawGlowCube(tessellator, 0, 0, 0, NULL, lamp.getGlowIcon());
+        }
         tessellator.draw();
         GL11.glPopMatrix();
     }
@@ -53,7 +73,10 @@ public class LampRenderingHandler implements ISimpleBlockRenderingHandler {
             case 0:
                 return renderer.renderStandardBlock(lamp, x, y, z);
             case 1:
-                if (lamp.powered) {
+                val meta = world.getBlockMetadata(x, y, z);
+                val powered = (meta & Lamp.POWERED_BIT) != 0;
+                val inverted = (meta & Lamp.INVERTED_BIT) != 0;
+                if (powered != inverted) {
                     val neighbors = new boolean[3][3][3];
                     for (int Z = 0; Z <= 2; Z++) {
                         for (int Y = 0; Y <= 2; Y++) {
@@ -61,17 +84,16 @@ public class LampRenderingHandler implements ISimpleBlockRenderingHandler {
                                 if (X == 1 && Y == 1 && Z == 1) {
                                     continue;
                                 }
-                                neighbors[X][Y][Z] = (Y - 1 + y) >= 255 || (Y - 1 + y) <= 0 || renderSide(world.getBlock(X - 1 + x, Y - 1 + y, Z - 1 + z));
+                                neighbors[X][Y][Z] = (Y - 1 + y) < 256 && (Y - 1 + y) > 0 && isBlockGlowingLamp(world, X - 1 + x, Y - 1 + y, Z - 1 + z);
                             }
                         }
                     }
-                    val meta = world.getBlockMetadata(x, y, z);
                     val r = lamp.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_RED, x, y, z) * 17;
                     val g = lamp.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_GREEN, x, y, z) * 17;
                     val b = lamp.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_BLUE, x, y, z) * 17;
                     tessellator.setBrightness(BrightnessUtil.lightLevelsToBrightness(15, 15));
                     tessellator.setColorRGBA(r, g, b, 128);
-                    drawCube(tessellator, x, y, z, neighbors, lamp.getGlowIcon());
+                    drawGlowCube(tessellator, x, y, z, neighbors, lamp.getGlowIcon());
                     return true;
                 }
             default:
@@ -89,8 +111,15 @@ public class LampRenderingHandler implements ISimpleBlockRenderingHandler {
         return RENDER_ID;
     }
 
-    private static boolean renderSide(Block block) {
-        return block instanceof Lamp && ((Lamp)block).powered;
+    private static boolean isBlockGlowingLamp(IBlockAccess world, int x, int y, int z) {
+        val block = world.getBlock(x, y, z);
+        if (block instanceof Lamp) {
+            val meta = world.getBlockMetadata(x, y, z);
+            val powered = (meta & Lamp.POWERED_BIT) != 0;
+            val inverted = (meta & Lamp.INVERTED_BIT) != 0;
+            return powered != inverted;
+        }
+        return false;
     }
 
     private static void drawCubeInventory(Tessellator tessellator, RenderBlocks renderer, Block block, double x, double y, double z, IIcon texture) {
@@ -108,7 +137,7 @@ public class LampRenderingHandler implements ISimpleBlockRenderingHandler {
         renderer.renderFaceXPos(block, x, y, z, texture);
     }
 
-    private static void drawCube(Tessellator tessellator, double x, double y, double z, boolean[][][] neighbors, IIcon icon) {
+    private static void drawGlowCube(Tessellator tessellator, double x, double y, double z, boolean[][][] neighbors, IIcon icon) {
         if (!neighbors[2][1][1])
             drawXPos(tessellator, x, y, z, neighbors, icon);
         if (!neighbors[0][1][1])

@@ -118,18 +118,19 @@ public abstract class BlockMixin implements ColoredBlock {
 
     @Override
     public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-        val block = world.getBlock(x, y, z);
-        val thiz = (Block)(Object)this;
+        val thiz = (Block) (Object) this;
+        if (world != null) {
+            val block = world.getBlock(x, y, z);
+            if (block != thiz) {
+                return ((ColoredBlock)block).getColoredLightValue(world, meta, colorChannel, x, y, z);
+            }
+        }
 
         // TODO: Remove this later, it is wonderful for testing as it adds debug coloured light blocks!
         if (thiz == Blocks.redstone_block) {
             return new int[]{15,4,3}[colorChannel];
         } else if (thiz == Blocks.lapis_block) {
             return new int[]{3,4,15}[colorChannel];
-        }
-
-        if (block != thiz) {
-            return ((ColoredBlock)block).getColoredLightValue(world, meta, colorChannel, x, y, z);
         }
         return getColoredLightValueRaw(meta, colorChannel);
     }

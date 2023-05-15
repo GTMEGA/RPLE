@@ -12,9 +12,9 @@ import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.client.render.IIconWrapper;
 import com.falsepattern.rple.internal.client.render.LampRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import lombok.*;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -24,31 +24,36 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.Random;
 
 public class Lamp extends Block implements ColoredBlock {
     private static final String GLOW_RESOURCE = Tags.MODID + ":glow";
-    public final boolean powered;
-    private Block opposite;
+    public static final int POWERED_BIT = 0b0010;
+    public static final int INVERTED_BIT = 0b0001;
     private IIcon glowIcon;
-    public Lamp(boolean powered) {
+    private IIcon poweredIcon;
+    public Lamp() {
         super(Material.redstoneLight);
-        this.powered = powered;
         setHardness(0.3F);
         setStepSound(soundTypeGlass);
-        if (!powered) {
-            setCreativeTab(CreativeTabs.tabDecorations);
-        }
+        setCreativeTab(CreativeTabs.tabDecorations);
     }
 
-    public void setOpposite(Block block) {
-        this.opposite = block;
+    public static boolean isGlowing(int meta) {
+        return ((meta ^ (meta >>> 1)) & 1) == 1;
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister register) {
-        super.registerBlockIcons(register);
+    public void registerBlockIcons(@NotNull IIconRegister register) {
+        blockIcon = register.registerIcon(getTextureName() + "_off");
+        poweredIcon = register.registerIcon(getTextureName() + "_on");
         glowIcon = new IIconWrapper(register.registerIcon(GLOW_RESOURCE));
+    }
+
+    @Override
+    public IIcon getIcon(int side, int meta) {
+        return isGlowing(meta) ? poweredIcon : blockIcon;
     }
 
     public IIcon getGlowIcon() {
@@ -69,32 +74,38 @@ public class Lamp extends Block implements ColoredBlock {
     private void onBlockUpdate(World world, int x, int y, int z) {
         if (!world.isRemote) {
             val indirectlyPowered = world.isBlockIndirectlyGettingPowered(x, y, z);
+            val meta = world.getBlockMetadata(x, y, z);
+            val powered = (meta & POWERED_BIT) != 0;
             if (powered && !indirectlyPowered) {
                 world.scheduleBlockUpdate(x, y, z, this, 4);
             } else if (!powered && indirectlyPowered) {
-                world.setBlock(x, y, z, opposite, 0, 3);
+                world.setBlockMetadataWithNotify(x, y, z, meta | POWERED_BIT, 3);
             }
         }
     }
 
     public void updateTick(World world, int x, int y, int z, Random rng) {
+        val meta = world.getBlockMetadata(x, y, z);
+        val powered = (meta & POWERED_BIT) != 0;
         if (!world.isRemote && powered && !world.isBlockIndirectlyGettingPowered(x, y, z)) {
-            world.setBlock(x, y, z, opposite, 0, 3);
+            world.setBlockMetadataWithNotify(x, y, z, meta & ~POWERED_BIT, 3);
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public Item getItem(World world, int x, int y, int z) {
-        return Item.getItemFromBlock(powered ? opposite : this);
-    }
-
     protected ItemStack createStackedBlock(int meta) {
-        return new ItemStack(powered ? opposite : this, 1, 0);
+        meta &= ~POWERED_BIT;
+        return new ItemStack(this, 1, meta);
     }
 
     @Override
-    public Item getItemDropped(int meta, Random rng, int fortune) {
-        return Item.getItemFromBlock(powered ? opposite : this);
+    public int damageDropped(int meta) {
+        return meta & ~POWERED_BIT;
+    }
+
+    @Override
+    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+        list.add(new ItemStack(item, 1, 0));
+        list.add(new ItemStack(item, 1, INVERTED_BIT));
     }
 
     @Override
@@ -109,6 +120,6 @@ public class Lamp extends Block implements ColoredBlock {
 
     @Override
     public boolean canRenderInPass(int pass) {
-        return pass == 0 || (powered && pass == 1);
+        return pass == 0 || pass == 1;
     }
 }

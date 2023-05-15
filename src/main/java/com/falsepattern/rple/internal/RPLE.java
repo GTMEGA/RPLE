@@ -19,6 +19,7 @@ import com.falsepattern.rple.api.lightmap.LightMapBase;
 import com.falsepattern.rple.api.lightmap.LightMapMask;
 import com.falsepattern.rple.api.lightmap.LightMapMaskType;
 import com.falsepattern.rple.api.lightmap.LightMapPipelineRegistry;
+import com.falsepattern.rple.internal.blocks.ItemLamp;
 import com.falsepattern.rple.internal.blocks.Lamp;
 import com.falsepattern.rple.internal.client.render.LampRenderingHandler;
 import com.falsepattern.rple.internal.lightmap.builtin.base.BossColorModifier;
@@ -85,13 +86,13 @@ public class RPLE {
         blueIndexNoShader = noShaderBuf[1];
         greenIndexShader = shaderBuf[0];
         blueIndexShader = shaderBuf[1];
-        val blueLamp = (Lamp) new Lamp(false).setBlockName("lamp_blue").setBlockTextureName(Tags.MODID + ":lamp_blue_off");
-        val blueLampPowered = (Lamp) new Lamp(true).setBlockName("lamp_blue_on").setBlockTextureName(Tags.MODID + ":lamp_blue_on");
-        blueLampPowered.setColoredLightValue(0, 0, 0, 15);
-        blueLamp.setOpposite(blueLampPowered);
-        blueLampPowered.setOpposite(blueLamp);
-        GameRegistry.registerBlock(blueLamp, "lamp_blue");
-        GameRegistry.registerBlock(blueLampPowered, "lamp_blue_on");
+        val blueLamp = new Lamp();
+        blueLamp.setBlockName("lamp_blue").setBlockTextureName(Tags.MODID + ":lamp_blue");
+        blueLamp.setColoredLightValue(0, 0, 0, 0);
+        blueLamp.setColoredLightValue(Lamp.INVERTED_BIT, 0, 0, 15);
+        blueLamp.setColoredLightValue(Lamp.POWERED_BIT, 0, 0, 15);
+        blueLamp.setColoredLightValue(Lamp.INVERTED_BIT | Lamp.POWERED_BIT, 0, 0, 0);
+        GameRegistry.registerBlock(blueLamp, ItemLamp.class, "lamp_blue");
     }
 
     @Mod.EventHandler
