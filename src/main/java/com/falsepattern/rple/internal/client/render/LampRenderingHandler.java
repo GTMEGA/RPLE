@@ -126,123 +126,44 @@ public class LampRenderingHandler implements ISimpleBlockRenderingHandler {
     //Face drawing
 
     private static void drawXPos(Tessellator tessellator, double x, double y, double z, boolean[][][] neighbors, IIcon icon) {
-        val faces = genFaceMap(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[1 + forward][y1][x1]);
-
-        for (int Y = 0; Y < 5; Y++) {
-            for (int Z = 0; Z < 5; Z++) {
-                if (faces[Y][Z]) {
-                    double minY = remapMin(Y, y);
-                    double maxY = remapMax(Y, y);
-                    double minZ = remapMin(Z, z);
-                    double maxZ = remapMax(Z, z);
-                    drawXPos(tessellator, minY, maxY, minZ, maxZ, x + 1 + OFFSET, icon);
-                }
-            }
+        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[1 + forward][y1][x1]);
+        for (val segment: segments) {
+            drawXPos(tessellator, y + segment[1], y + segment[3], z + segment[0], z + segment[2], x + 1 + OFFSET, icon);
         }
     }
 
     private static void drawXNeg(Tessellator tessellator, double x, double y, double z, boolean[][][] neighbors, IIcon icon) {
-        val faces = genFaceMap(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[1 - forward][y1][x1]);
-        for (int Y = 0; Y < 5; Y++) {
-            for (int Z = 0; Z < 5; Z++) {
-                if (faces[Y][Z]) {
-                    double minY = remapMin(Y, y);
-                    double maxY = remapMax(Y, y);
-                    double minZ = remapMin(Z, z);
-                    double maxZ = remapMax(Z, z);
-                    drawXNeg(tessellator, minY, maxY, minZ, maxZ, x - OFFSET, icon);
-                }
-            }
+        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[1 - forward][y1][x1]);
+        for (val segment: segments) {
+            drawXNeg(tessellator, y + segment[1], y + segment[3], z + segment[0], z + segment[2], x - OFFSET, icon);
         }
     }
 
     private static void drawYPos(Tessellator tessellator, double x, double y, double z, boolean[][][] neighbors, IIcon icon) {
-        val faces = genFaceMap(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][forward + 1][x1]);
-        for (int X = 0; X < 5; X++) {
-            for (int Z = 0; Z < 5; Z++) {
-                if (faces[X][Z]) {
-                    double minX = remapMin(X, x);
-                    double maxX = remapMax(X, x);
-                    double minZ = remapMin(Z, z);
-                    double maxZ = remapMax(Z, z);
-                    drawYPos(tessellator, minX, maxX, minZ, maxZ, y + 1 + OFFSET, icon);
-                }
-            }
+        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][1 + forward][x1]);
+        for (val segment: segments) {
+            drawYPos(tessellator, x + segment[1], x + segment[3], z + segment[0], z + segment[2], y + 1 + OFFSET, icon);
         }
     }
 
     private static void drawYNeg(Tessellator tessellator, double x, double y, double z, boolean[][][] neighbors, IIcon icon) {
-        val faces = genFaceMap(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][1 - forward][x1]);
-        for (int X = 0; X < 5; X++) {
-            for (int Z = 0; Z < 5; Z++) {
-                if (faces[X][Z]) {
-                    double minX = remapMin(X, x);
-                    double maxX = remapMax(X, x);
-                    double minZ = remapMin(Z, z);
-                    double maxZ = remapMax(Z, z);
-                    drawYNeg(tessellator, minX, maxX, minZ, maxZ, y - OFFSET, icon);
-                }
-            }
+        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][1 - forward][x1]);
+        for (val segment: segments) {
+            drawYNeg(tessellator, x + segment[1], x + segment[3], z + segment[0], z + segment[2], y - OFFSET, icon);
         }
     }
 
     private static void drawZPos(Tessellator tessellator, double x, double y, double z, boolean[][][] neighbors, IIcon icon) {
-        val faces = genFaceMap(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][x1][1 + forward]);
-        for (int X = 0; X < 5; X++) {
-            for (int Y = 0; Y < 5; Y++) {
-                if (faces[X][Y]) {
-                    double minX = remapMin(X, x);
-                    double maxX = remapMax(X, x);
-                    double minY = remapMin(Y, y);
-                    double maxY = remapMax(Y, y);
-                    drawZPos(tessellator, minX, maxX, minY, maxY, z + 1 + OFFSET, icon);
-                }
-            }
+        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][x1][1 + forward]);
+        for (val segment: segments) {
+            drawZPos(tessellator, x + segment[1], x + segment[3], y + segment[0], y + segment[2], z + 1 + OFFSET, icon);
         }
     }
 
     private static void drawZNeg(Tessellator tessellator, double x, double y, double z, boolean[][][] neighbors, IIcon icon) {
-        val faces = genFaceMap(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][x1][1 - forward]);
-        for (int X = 0; X < 5; X++) {
-            for (int Y = 0; Y < 5; Y++) {
-                if (faces[X][Y]) {
-                    double minX = remapMin(X, x);
-                    double maxX = remapMax(X, x);
-                    double minY = remapMin(Y, y);
-                    double maxY = remapMax(Y, y);
-                    drawZNeg(tessellator, minX, maxX, minY, maxY, z - OFFSET, icon);
-                }
-            }
-        }
-    }
-
-    private static double remapMin(int index, double core) {
-        switch (index) {
-            case 0:
-                return core - OFFSET;
-            case 1:
-                return core;
-            case 2:
-                return core + OFFSET;
-            case 3:
-                return core + 1 - OFFSET;
-            default:
-                return core + 1;
-        }
-    }
-
-    private static double remapMax(int index, double core) {
-        switch (index) {
-            case 0:
-                return core;
-            case 1:
-                return core + OFFSET;
-            case 2:
-                return core + 1 - OFFSET;
-            case 3:
-                return core + 1;
-            default:
-                return core + 1 + OFFSET;
+        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][x1][1 - forward]);
+        for (val segment: segments) {
+            drawZNeg(tessellator, x + segment[1], x + segment[3], y + segment[0], y + segment[2], z - OFFSET, icon);
         }
     }
 
@@ -251,69 +172,94 @@ public class LampRenderingHandler implements ISimpleBlockRenderingHandler {
     private interface Sampler {
         boolean sample(boolean[][][] neighbors, int x, int y, int forward);
     }
-
-    private static boolean[][] genFaceMap(boolean[][][] neighbors, Sampler sampler) {
-        val faces = newArr();
-
+    private static float[][] genSegments(boolean[][][] neighbors, Sampler sampler) {
+        var xMin = new float[]{-OFFSET, -OFFSET, OFFSET, 1 + OFFSET};
+        var center = new float[]{OFFSET, -OFFSET, 1 - OFFSET, 1 + OFFSET};
+        var xMax = new float[]{1 - OFFSET, -OFFSET, 1 + OFFSET, 1 + OFFSET};
         //planar edges
-        if (sampler.sample(neighbors, 1, 2, 0))
-            turnOffRegion(faces, 0, 4, 5, 1);
-        if (sampler.sample(neighbors, 1, 0, 0))
-            turnOffRegion(faces, 0, 0, 5, 1);
-        if (sampler.sample(neighbors, 2, 1, 0))
-            turnOffRegion(faces, 4, 0, 1, 5);
-        if (sampler.sample(neighbors, 0, 1, 0))
-            turnOffRegion(faces, 0, 0, 1, 5);
+        if (sampler.sample(neighbors, 1, 2, 0)) {
+            xMin[3] = 1;
+            center[3] = 1;
+            xMax[3] = 1;
+        }
+        if (sampler.sample(neighbors, 1, 0, 0)) {
+            xMin[1] = 0;
+            center[1] = 0;
+            xMax[1] = 0;
+        }
+        if (sampler.sample(neighbors, 2, 1, 0)) {
+            xMax[2] = 1;
+        }
+        if (sampler.sample(neighbors, 0, 1, 0)) {
+            xMin[0] = 0;
+        }
 
         //planar corners
-        if (sampler.sample(neighbors, 0, 0, 0))
-            turnOffRegion(faces, 0, 0, 2, 1);
-        if (sampler.sample(neighbors, 2, 0, 0))
-            turnOffRegion(faces, 3, 0, 2, 1);
-        if (sampler.sample(neighbors, 0, 2, 0))
-            turnOffRegion(faces, 0, 4, 2, 1);
-        if (sampler.sample(neighbors, 2, 2, 0))
-            turnOffRegion(faces, 3, 4, 2, 1);
-
-        //front edges
-        if (sampler.sample(neighbors, 1, 0, 1))
-            turnOffRegion(faces, 0, 0, 5, 2);
-        if (sampler.sample(neighbors, 1, 2, 1))
-            turnOffRegion(faces, 0, 3, 5, 2);
-        if (sampler.sample(neighbors, 0, 1, 1))
-            turnOffRegion(faces, 0, 0, 2, 5);
-        if (sampler.sample(neighbors, 2, 1, 1))
-            turnOffRegion(faces, 3, 0, 2, 5);
+        if (sampler.sample(neighbors, 0, 0, 0)) {
+            xMin[1] = 0;
+        }
+        if (sampler.sample(neighbors, 2, 0, 0)) {
+            xMax[1] = 0;
+        }
+        if (sampler.sample(neighbors, 0, 2, 0)) {
+            xMin[3] = 1;
+        }
+        if (sampler.sample(neighbors, 2, 2, 0)) {
+            xMax[3] = 1;
+        }
 
         //front corners
-        if (sampler.sample(neighbors, 0, 0, 1))
-            turnOffRegion(faces, 0, 0, 2, 2);
-        if (sampler.sample(neighbors, 2, 0, 1))
-            turnOffRegion(faces, 3, 0, 2, 2);
-        if (sampler.sample(neighbors, 0, 2, 1))
-            turnOffRegion(faces, 0, 3, 2, 2);
-        if (sampler.sample(neighbors, 2, 2, 1))
-            turnOffRegion(faces, 3, 3, 2, 2);
+        if (sampler.sample(neighbors, 0, 0, 1)) {
+            xMin[1] = OFFSET;
+        }
+        if (sampler.sample(neighbors, 2, 0, 1)) {
+            xMax[1] = OFFSET;
+        }
+        if (sampler.sample(neighbors, 0, 2, 1)) {
+            xMin[3] = 1 - OFFSET;
+        }
+        if (sampler.sample(neighbors, 2, 2, 1)) {
+            xMax[3] = 1 - OFFSET;
+        }
 
-        return faces;
+        //front edges
+        if (sampler.sample(neighbors, 1, 0, 1)) {
+            xMin[1] = OFFSET;
+            center[1] = OFFSET;
+            xMax[1] = OFFSET;
+        }
+        if (sampler.sample(neighbors, 1, 2, 1)) {
+            xMin[3] = 1 - OFFSET;
+            center[3] = 1 - OFFSET;
+            xMax[3] = 1 - OFFSET;
+        }
+        if (sampler.sample(neighbors, 0, 1, 1)) {
+            xMin = null;
+        }
+        if (sampler.sample(neighbors, 2, 1, 1)) {
+            xMax = null;
+        }
+
+        return merge(xMin, center, xMax);
     }
 
-    private static boolean[][] newArr() {
-        val ret = new boolean[5][5];
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                ret[i][j] = true;
-            }
+    private static float[][] merge(float[] xMin, float[] center, float[] xMax) {
+        if (xMin != null && xMin[1] == center[1] && xMin[3] == center[3]) {
+            center[0] = xMin[0];
+            xMin = null;
         }
-        return ret;
-    }
-
-    private static void turnOffRegion(boolean[][] faces, int X, int Y, int width, int height) {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                faces[Y + y][X + x] = false;
-            }
+        if (xMax != null && center[1] == xMax[1] && center[3] == xMax[3]) {
+            center[2] = xMax[2];
+            xMax = null;
         }
+        val result = new float[1 + (xMin == null ? 0 : 1) + (xMax == null ? 0 : 1)][];
+        int i = 0;
+        if (xMin != null)
+            result[i++] = xMin;
+        result[i++] = center;
+        if (xMax != null)
+            result[i] = xMax;
+        return result;
     }
 
     //Quad drawing
