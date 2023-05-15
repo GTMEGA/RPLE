@@ -128,9 +128,13 @@ public abstract class BlockMixin implements ColoredBlock {
 
         // TODO: Remove this later, it is wonderful for testing as it adds debug coloured light blocks!
         if (thiz == Blocks.redstone_block) {
-            return new int[]{15,4,3}[colorChannel];
+            return new int[]{15, 0, 0}[colorChannel];
+        } else if (thiz == Blocks.emerald_block) {
+            return new int[]{0, 15, 0}[colorChannel];
         } else if (thiz == Blocks.lapis_block) {
-            return new int[]{3,4,15}[colorChannel];
+            return new int[]{0, 0, 15}[colorChannel];
+        } else if (thiz == Blocks.iron_block) {
+            return new int[]{15, 15, 15}[colorChannel];
         }
         return getColoredLightValueRaw(meta, colorChannel);
     }
