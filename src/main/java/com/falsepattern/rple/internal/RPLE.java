@@ -13,6 +13,7 @@ import com.falsepattern.chunk.api.ChunkDataRegistry;
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.lib.util.ResourceUtil;
 import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
+import com.falsepattern.rple.Lamps;
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.api.lightmap.LightMapBase;
@@ -60,6 +61,21 @@ public class RPLE {
     private static final int[] COLOR_CHANNELS = new int[]{LightConstants.COLOR_CHANNEL_RED,
                                                           LightConstants.COLOR_CHANNEL_GREEN,
                                                           LightConstants.COLOR_CHANNEL_BLUE};
+    Object[][] lamps = new Object[][] {
+            {"red", 15, 0, 0},
+            {"magenta", 15, 0, 15},
+            {"purple", 7, 0, 15},
+            {"blue", 0, 0, 15},
+            {"azure", 7, 7, 15},
+            {"cyan", 0, 15, 15},
+            {"green", 0, 15, 0},
+            {"lime", 7, 15, 7},
+            {"yellow", 15, 15, 0},
+            {"orange", 15, 7, 0},
+            {"pink", 15, 7, 15},
+            {"white", 15, 15, 15}
+    };
+
     @Getter
     private static int redIndexNoShader = 7; //Overrides vanilla value
     //These two grabbed from ftweaks
@@ -86,22 +102,11 @@ public class RPLE {
         blueIndexNoShader = noShaderBuf[1];
         greenIndexShader = shaderBuf[0];
         blueIndexShader = shaderBuf[1];
-        val csv = ResourceUtil.getResourceStringFromJar("/lamps.csv", RPLE.class);
-        val lines = new StringTokenizer(csv, "\r\n");
-        lines.nextToken();
-        while (lines.hasMoreTokens()) {
-            val line = lines.nextToken();
-            val parts = new StringTokenizer(line, ",");
-            val name = parts.nextToken();
-            int r,g,b;
-            try {
-                r = Integer.parseInt(parts.nextToken());
-                g = Integer.parseInt(parts.nextToken());
-                b = Integer.parseInt(parts.nextToken());
-            } catch (NumberFormatException err) {
-                err.printStackTrace();
-                continue;
-            }
+        for (val lampData: Lamps.values()) {
+            val name = lampData.name().toLowerCase();
+            val r = lampData.r;
+            val g = lampData.g;
+            val b = lampData.b;
             val lamp = new Lamp();
             lamp.setBlockName(Tags.MODID + ".lamp." + name).setBlockTextureName(name);
             lamp.setColoredLightValue(0, 0, 0, 0);
