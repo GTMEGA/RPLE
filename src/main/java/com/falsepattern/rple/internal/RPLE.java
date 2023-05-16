@@ -157,13 +157,23 @@ public class RPLE {
             currentLine++;
             val unSanitized = lines.nextToken();
             //Remove comments
-            val sanitized = new StringTokenizer(unSanitized, "#").nextToken().trim();
+            val comment = unSanitized.indexOf('#');
+            final String sanitized;
+            if (comment >= 0) {
+                sanitized = unSanitized.substring(0, comment).trim();
+            } else {
+                sanitized = unSanitized.trim();
+            }
             if (sanitized.length() == 0) {
                 continue;
             }
             val splitter = new StringTokenizer(sanitized, "=");
-            if (splitter.countTokens() != 2) {
+            if (splitter.countTokens() > 2) {
                 Common.LOG.error("Config line {} is malformed (multiple equal signs): {}", currentLine, unSanitized);
+                continue;
+            }
+            if (splitter.countTokens() < 2) {
+                Common.LOG.error("Config line {} is malformed (missing equal sign): {}", currentLine, unSanitized);
                 continue;
             }
             val assignee = splitter.nextToken().trim();
@@ -184,13 +194,13 @@ public class RPLE {
                     Common.LOG.error("Config line {} malformed (invalid metadata): {}", currentLine, metaToken);
                 }
             }
-            val block = GameData.getBlockRegistry().get(id);
-            if (block == null || block == Blocks.air) {
-                Common.LOG.error("Config line {} malformed (unknown block id): {}", currentLine, id);
-                continue;
+            if (!id.startsWith("__")) {
+                val block = GameData.getBlockRegistry().get(id);
+                if (block != null && block != Blocks.air) {
+                    val cBlock = ((ColoredBlock)block);
+                    cBlock.setColoredLightValue(meta, value.r, value.g, value.b);
+                }
             }
-            val cBlock = ((ColoredBlock)block);
-            cBlock.setColoredLightValue(meta, value.r, value.g, value.b);
             valueCache.put(assignee, value);
         }
     }
