@@ -10,6 +10,7 @@ package com.falsepattern.rple.internal;
 
 
 import com.falsepattern.chunk.api.ChunkDataRegistry;
+import com.falsepattern.falsetweaks.api.triangulator.ToggleableTessellator;
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.lib.util.ResourceUtil;
 import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
@@ -39,6 +40,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import lombok.*;
 
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 
@@ -145,6 +147,10 @@ public class RPLE {
         lightMapRegistry.registerMask(nightVisionMask, LightMapMaskType.SKY);
         lightMapRegistry.registerMask(bossColorMask, LightMapMaskType.BLOCK);
         lightMapRegistry.registerMask(bossColorMask, LightMapMaskType.SKY);
+
+        //FIXME Random broken polygons show up with shaders on some systems with triangulation enabled.
+        //      Might be a FalseTweaks bug, gotta look into it later.
+        ((ToggleableTessellator) Tessellator.instance).disableTriangulator();
     }
 
     private static final Map<String, RGB> valueCache = new HashMap<>();
