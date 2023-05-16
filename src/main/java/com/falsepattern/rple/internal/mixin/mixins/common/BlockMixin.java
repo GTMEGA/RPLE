@@ -89,14 +89,15 @@ public abstract class BlockMixin implements ColoredBlock {
         return r > g ? Math.max(r, b) : Math.max(g, b);
     }
 
-    /**
-     * @author FalsePattern
-     * @reason TODO
-     */
-    @Overwrite
-    public boolean getUseNeighborBrightness() {
-        return ((Object)this) instanceof BlockStainedGlass ? false : useNeighborBrightness;
-    }
+    //TODO Implement this. Cut feature due to lack of time.
+//    /**
+//     * @author FalsePattern
+//     * @reason TODO
+//     */
+//    @Overwrite
+//    public boolean getUseNeighborBrightness() {
+//        return ((Object)this) instanceof BlockStainedGlass ? false : useNeighborBrightness;
+//    }
 
     /**
      * @author FalsePattern
