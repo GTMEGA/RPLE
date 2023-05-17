@@ -12,7 +12,9 @@ import com.falsepattern.lumina.api.ILumiEBSRoot;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.internal.storage.ColoredCarrierEBS;
 import com.falsepattern.rple.internal.storage.ColoredLightEBS;
+import lombok.val;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import net.minecraft.world.chunk.NibbleArray;
@@ -44,5 +46,38 @@ public abstract class EBSMixin implements ColoredCarrierEBS {
         cRed = new ColoredLightEBS(LightConstants.COLOR_CHANNEL_RED, (ILumiEBSRoot) this, hasSky);
         cGreen = new ColoredLightEBS(LightConstants.COLOR_CHANNEL_GREEN, (ILumiEBSRoot) this, hasSky);
         cBlue = new ColoredLightEBS(LightConstants.COLOR_CHANNEL_BLUE, (ILumiEBSRoot) this, hasSky);
+    }
+
+    /**
+     * @author FalsePattern
+     * @reason Logic compat
+     */
+    @Overwrite
+    public int getExtSkylightValue(int x, int y, int z) {
+        val carr = (ColoredCarrierEBS) this;
+        return max3(carr.getColoredEBS(LightConstants.COLOR_CHANNEL_RED).lumiSkylightArray(),
+                    carr.getColoredEBS(LightConstants.COLOR_CHANNEL_GREEN).lumiSkylightArray(),
+                    carr.getColoredEBS(LightConstants.COLOR_CHANNEL_BLUE).lumiSkylightArray(),
+                    x, y, z);
+    }
+
+    /**
+     * @author FalsePattern
+     * @reason Logic compat
+     */
+    @Overwrite
+    public int getExtBlocklightValue(int x, int y, int z) {
+        val carr = (ColoredCarrierEBS) this;
+        return max3(carr.getColoredEBS(LightConstants.COLOR_CHANNEL_RED).lumiBlocklightArray(),
+                    carr.getColoredEBS(LightConstants.COLOR_CHANNEL_GREEN).lumiBlocklightArray(),
+                    carr.getColoredEBS(LightConstants.COLOR_CHANNEL_BLUE).lumiBlocklightArray(),
+                    x, y, z);
+    }
+
+    private static int max3(NibbleArray a, NibbleArray b, NibbleArray c, int x, int y, int z) {
+        val A = a.get(x, y, z);
+        val B = b.get(x, y, z);
+        val C = c.get(x, y, z);
+        return Math.max(A, Math.max(B, C));
     }
 }
