@@ -10,7 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.color.BrightnessUtil;
-import com.falsepattern.rple.internal.color.CookieManager;
+import com.falsepattern.rple.internal.color.CookieMonster;
 import lombok.*;
 import net.minecraft.client.renderer.OpenGlHelper;
 import org.spongepowered.asm.mixin.*;
@@ -31,8 +31,8 @@ public abstract class OpenGLHelperMixin {
             require = 1)
     private static void onSet(int texture, float u, float v, CallbackInfo ci) {
         int value = (int)(u) | ((int)(v) << 16);
-        if (CookieManager.inspectValue(value) == CookieManager.IntType.COOKIE) {
-            long packed = CookieManager.cookieToPackedLong(value);
+        if (CookieMonster.inspectValue(value) == CookieMonster.IntType.COOKIE) {
+            long packed = CookieMonster.cookieToPackedLong(value);
             val red = BrightnessUtil.getBrightnessRed(packed);
             val green = BrightnessUtil.getBrightnessGreen(packed);
             val blue = BrightnessUtil.getBrightnessBlue(packed);

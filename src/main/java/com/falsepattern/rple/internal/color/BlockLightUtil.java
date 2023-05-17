@@ -27,7 +27,7 @@ public class BlockLightUtil {
     public static int getRGBBrightnessAt(IBlockAccess access, int x, int y, int z, int minBlockLight) {
         //Unpack the minimum brightness
         int minRed, minGreen, minBlue;
-        val packed = CookieManager.cookieToPackedLong(minBlockLight);
+        val packed = CookieMonster.cookieToPackedLong(minBlockLight);
         minRed = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessRed(packed));
         minGreen = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessGreen(packed));
         minBlue = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessBlue(packed));
@@ -41,14 +41,14 @@ public class BlockLightUtil {
         val blue = carrier.getColoredWorld(LightConstants.COLOR_CHANNEL_BLUE).getLightBrightnessForSkyBlocksWorld(access, x, y, z, minBlue);
 
         //Pack it
-        return CookieManager.packedLongToCookie(BrightnessUtil.brightnessesToPackedLong(red, green, blue));
+        return CookieMonster.packedLongToCookie(BrightnessUtil.brightnessesToPackedLong(red, green, blue));
     }
 
     public static int getCompactRGBLightValue(IBlockAccess world, ColoredBlock block, int meta, int x, int y, int z) {
         val red = block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_RED, x, y, z);
         val green = block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_GREEN, x, y, z);
         val blue = block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_BLUE, x, y, z);
-        return CookieManager.packedLongToCookie(
+        return CookieMonster.packedLongToCookie(
                 BrightnessUtil.brightnessesToPackedLong(
                         BrightnessUtil.lightLevelsToBrightness(red, 0),
                         BrightnessUtil.lightLevelsToBrightness(green, 0),

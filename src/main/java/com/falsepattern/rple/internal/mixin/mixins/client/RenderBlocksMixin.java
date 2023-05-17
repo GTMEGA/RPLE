@@ -10,7 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.color.BlockLightUtil;
-import com.falsepattern.rple.internal.color.CookieManager;
+import com.falsepattern.rple.internal.color.CookieMonster;
 import lombok.val;
 import lombok.var;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,15 +31,15 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int getAoBrightness(int a, int b, int c, int d) {
-        long packedA = CookieManager.cookieToPackedLong(a);
-        long packedB = CookieManager.cookieToPackedLong(b);
-        long packedC = CookieManager.cookieToPackedLong(c);
-        long packedD = CookieManager.cookieToPackedLong(d);
+        long packedA = CookieMonster.cookieToPackedLong(a);
+        long packedB = CookieMonster.cookieToPackedLong(b);
+        long packedC = CookieMonster.cookieToPackedLong(c);
+        long packedD = CookieMonster.cookieToPackedLong(d);
         long resultPacked = 0;
         for (int i = 0; i <= 40; i += 8) {
             resultPacked |= getAOBrightnessChannel(packedA, packedB, packedC, packedD, i);
         }
-        return CookieManager.packedLongToCookie(resultPacked);
+        return CookieMonster.packedLongToCookie(resultPacked);
     }
 
     //Ugly evil mixin-mixin hack
@@ -101,15 +101,15 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int mixAoBrightness(int a, int b, int c, int d, double aMul, double bMul, double cMul, double dMul) {
-        long packedA = CookieManager.cookieToPackedLong(a);
-        long packedB = CookieManager.cookieToPackedLong(b);
-        long packedC = CookieManager.cookieToPackedLong(c);
-        long packedD = CookieManager.cookieToPackedLong(d);
+        long packedA = CookieMonster.cookieToPackedLong(a);
+        long packedB = CookieMonster.cookieToPackedLong(b);
+        long packedC = CookieMonster.cookieToPackedLong(c);
+        long packedD = CookieMonster.cookieToPackedLong(d);
         long packedResult = 0;
         for (int i = 0; i <= 40; i += 8) {
             packedResult |= mixAoBrightnessChannel(packedA, packedB, packedC, packedD, aMul, bMul, cMul, dMul, i);
         }
-        return CookieManager.packedLongToCookie(packedResult);
+        return CookieMonster.packedLongToCookie(packedResult);
     }
 
     private static long mixAoBrightnessChannel(long a, long b, long c, long d, double aMul, double bMul, double cMul, double dMul, int channel) {

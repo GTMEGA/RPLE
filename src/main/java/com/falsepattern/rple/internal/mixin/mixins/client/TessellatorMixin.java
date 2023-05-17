@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 
 import com.falsepattern.rple.internal.color.BrightnessUtil;
-import com.falsepattern.rple.internal.color.CookieManager;
+import com.falsepattern.rple.internal.color.CookieMonster;
 import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorJunction;
 import lombok.val;
 import org.lwjgl.opengl.*;
@@ -85,7 +85,7 @@ public abstract class TessellatorMixin implements ITessellatorJunction {
     @Overwrite
     public void setBrightness(int brightness) {
         this.hasBrightness = true;
-        this.brightness = CookieManager.cookieToPackedLong(brightness);
+        this.brightness = CookieMonster.cookieToPackedLong(brightness);
     }
 
     private static void enableLightMapTexture(Tessellator tess, int position, int unit) {

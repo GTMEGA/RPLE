@@ -2,7 +2,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.color.BrightnessUtil;
-import com.falsepattern.rple.internal.color.CookieManager;
+import com.falsepattern.rple.internal.color.CookieMonster;
 import lombok.*;
 import net.minecraft.entity.EntityLivingBase;
 import org.spongepowered.asm.mixin.*;
@@ -35,6 +35,6 @@ public abstract class ShadersMixin {
               remap = true)
     private static int getEyeBrightness(EntityLivingBase instance, float partialTick) {
         val result = instance.getBrightnessForRender(partialTick);
-        return BrightnessUtil.getBrightestChannelFromPacked(CookieManager.cookieToPackedLong(result));
+        return BrightnessUtil.getBrightestChannelFromPacked(CookieMonster.cookieToPackedLong(result));
     }
 }

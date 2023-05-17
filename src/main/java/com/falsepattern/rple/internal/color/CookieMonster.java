@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Note: Cookies should be treated as opaque blobs. Do not try to unpack them manually, always go through the cookie
  * manager! Additionally, they should not be saved anywhere, as they expire very quickly.
  */
-public class CookieManager {
+public class CookieMonster {
 
     // Cookie format (bits):
     // 0100 0000 IIII IIII IIII IIII 0000 000P
@@ -55,13 +55,13 @@ public class CookieManager {
     }
 
     /**
-     * @param cookie A cookie returned by {@link CookieManager#packedLongToCookie(long)}, or a vanilla minecraft brightness.
+     * @param cookie A cookie returned by {@link CookieMonster#packedLongToCookie(long)}, or a vanilla minecraft brightness.
      * @return The long value represented by the cookie, or the vanilla minecraft brightness turned into a greyscale
      * packed long. If it's neither, then we assume that it's a corrupted cookie, and return a bright red warning color,
      * and log an error (first time only).
      */
     public static long cookieToPackedLong(int cookie) {
-        switch (CookieManager.inspectValue(cookie)) {
+        switch (CookieMonster.inspectValue(cookie)) {
             case COOKIE: {
                 return lightValues.get((cookie & INDEX_MASK) >>> INDEX_SHIFT);
             }
@@ -121,7 +121,7 @@ public class CookieManager {
     }
 
     /**
-     * See {@link CookieManager#inspectValue(int)}.
+     * See {@link CookieMonster#inspectValue(int)}.
      */
     public enum IntType {
         COOKIE,

@@ -16,7 +16,7 @@ import lombok.val;
 public class BrightnessUtil {
     private static final int BLOCKLIGHT_MASK = 0x000000FF;
     private static final int SKYLIGHT_MASK = 0x00FF0000;
-    //Shared with CookieManager.
+    //Shared with CookieMonster.
     static final int BRIGHTNESS_MASK = BLOCKLIGHT_MASK | SKYLIGHT_MASK;
 
     private static final int BLOCKLIGHT_BRIGHTNESS_OFFSET = 4;
