@@ -10,6 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.color.BlockLightUtil;
+import com.falsepattern.rple.internal.color.BrightnessUtil;
 import com.falsepattern.rple.internal.color.CookieMonster;
 import lombok.val;
 import lombok.var;
@@ -31,15 +32,12 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int getAoBrightness(int a, int b, int c, int d) {
-        long packedA = CookieMonster.cookieToPackedLong(a);
-        long packedB = CookieMonster.cookieToPackedLong(b);
-        long packedC = CookieMonster.cookieToPackedLong(c);
-        long packedD = CookieMonster.cookieToPackedLong(d);
-        long resultPacked = 0;
-        for (int i = 0; i <= 40; i += 8) {
-            resultPacked |= getAOBrightnessChannel(packedA, packedB, packedC, packedD, i);
-        }
-        return CookieMonster.packedLongToCookie(resultPacked);
+        val avgBuffer = new long[4];
+        avgBuffer[0] = CookieMonster.cookieToPackedLong(a);
+        avgBuffer[1] = CookieMonster.cookieToPackedLong(b);
+        avgBuffer[2] = CookieMonster.cookieToPackedLong(c);
+        avgBuffer[3] = CookieMonster.cookieToPackedLong(d);
+        return CookieMonster.packedLongToCookie(BrightnessUtil.packedAverage(avgBuffer, 4, true));
     }
 
     //Ugly evil mixin-mixin hack
@@ -66,33 +64,6 @@ public abstract class RenderBlocksMixin {
               require = 3)
     private int grabDefaultLight(Block instance, IBlockAccess access, int x, int y, int z) {
         return BlockLightUtil.getCompactRGBLightValue(access, (ColoredBlock) instance, meta, x, y, z);
-    }
-
-    private static long getAOBrightnessChannel(long packedA, long packedB, long packedC, long packedD, int channel) {
-        int count = 0;
-        float light = 0;
-        var a = unit(packedA, channel);
-        var b = unit(packedB, channel);
-        var c = unit(packedC, channel);
-        var d = unit(packedD, channel);
-        if (a != 0) {
-            light += a;
-            count++;
-        }
-        if (b != 0) {
-            light += b;
-            count++;
-        }
-        if (c != 0) {
-            light += c;
-            count++;
-        }
-        if (d != 0) {
-            light += d;
-            count++;
-        }
-        light /= count;
-        return (long)((int)light & 0xFF) << channel;
     }
 
     /**

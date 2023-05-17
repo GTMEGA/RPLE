@@ -2,6 +2,9 @@ package com.falsepattern.rple.internal.mixin.mixins.client.chisel;
 
 import com.falsepattern.rple.internal.color.BrightnessUtil;
 import net.minecraft.client.renderer.RenderBlocks;
+
+import com.falsepattern.rple.internal.color.CookieMonster;
+import lombok.val;
 import org.spongepowered.asm.mixin.*;
 import team.chisel.ctmlib.RenderBlocksCTM;
 
@@ -13,7 +16,11 @@ public abstract class RenderBlocksCTMMixin extends RenderBlocks {
      */
     @Overwrite(remap = false)
     private int avg(int... lightVals) {
-        // TODO: This just makes all chisel things full-bright. Needs proper colour mixing fix.
-        return BrightnessUtil.lightLevelsToBrightness(15,15);
+        val len = lightVals.length;
+        long[] buffer = new long[len];
+        for (int i = 0; i < len; i++) {
+            buffer[i] = CookieMonster.cookieToPackedLong(lightVals[i]);
+        }
+        return CookieMonster.packedLongToCookie(BrightnessUtil.packedAverage(buffer, len, false));
     }
 }

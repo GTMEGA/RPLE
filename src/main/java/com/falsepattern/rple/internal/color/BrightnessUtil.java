@@ -22,6 +22,9 @@ public class BrightnessUtil {
     private static final int BLOCKLIGHT_BRIGHTNESS_OFFSET = 4;
     private static final int SKYLIGHT_BRIGHTNESS_OFFSET = 20;
 
+    private static final int BLOCKLIGHT_BRIGHTNESS_OFFSET_RENDER = 0;
+    private static final int SKYLIGHT_BRIGHTNESS_OFFSET_RENDER = 16;
+
     private static final int COMPRESSED_BLOCKLIGHT_MASK = 0x000000FF;
     private static final int COMPRESSED_SKYLIGHT_MASK = 0x0000FF00;
     private static final int COMPRESSED_BRIGHTNESS_MASK = COMPRESSED_BLOCKLIGHT_MASK | COMPRESSED_SKYLIGHT_MASK;
@@ -32,16 +35,46 @@ public class BrightnessUtil {
     private static final int PACKED_GREEN_OFFSET = 16;
     private static final int PACKED_BLUE_OFFSET = 0;
 
+    /**
+     * Packs two 0-15 values into a vanilla-style brightness value.
+     */
     public static int lightLevelsToBrightness(int block, int sky) {
         return (sky & 0xF) << SKYLIGHT_BRIGHTNESS_OFFSET | (block & 0xF) << BLOCKLIGHT_BRIGHTNESS_OFFSET;
     }
 
+    /**
+     * The 0-15 light level inside the packed brightness.
+     */
     public static int getBlocklightFromBrightness(int brightness) {
         return (brightness & BLOCKLIGHT_MASK) >>> BLOCKLIGHT_BRIGHTNESS_OFFSET;
     }
 
+    /**
+     * The 0-15 light level inside the packed brightness.
+     */
     public static int getSkylightFromBrightness(int brightness) {
         return (brightness & SKYLIGHT_MASK) >>> SKYLIGHT_BRIGHTNESS_OFFSET;
+    }
+
+    /**
+     * Packs two 0-240 values into a vanilla-style brightness value. Only relevant when messing with render logic.
+     */
+    public static int channelsToBrightnessRender(int block, int sky) {
+        return (sky & 0xFF) << SKYLIGHT_BRIGHTNESS_OFFSET_RENDER | (block & 0xFF) << BLOCKLIGHT_BRIGHTNESS_OFFSET_RENDER;
+    }
+
+    /**
+     * The raw render-specific brightness value inside the packed brightness.
+     */
+    public static int getBlocklightChannelFromBrightnessRender(int brightness) {
+        return (brightness & BLOCKLIGHT_MASK) >>> BLOCKLIGHT_BRIGHTNESS_OFFSET_RENDER;
+    }
+
+    /**
+     * The raw render-specific brightness value inside the packed brightness.
+     */
+    public static int getSkylightChannelFromBrightnessRender(int brightness) {
+        return (brightness & SKYLIGHT_MASK) >>> SKYLIGHT_BRIGHTNESS_OFFSET_RENDER;
     }
 
     public static long brightnessesToPackedLong(int red, int green, int blue) {
@@ -87,6 +120,39 @@ public class BrightnessUtil {
             result |= Math.max(a, b);
         }
         return result;
+    }
+
+    /**
+     * Takes the average of the passed in brightnesses. Faster than doing it by hand through the API.
+     */
+    public static long packedAverage(long[] values, int n, boolean ignoreZero) {
+        long resultPacked = 0;
+        for (int i = 0; i <= 40; i += 8) {
+            resultPacked |= getAverageChannel(values, n, i, ignoreZero);
+        }
+        return resultPacked;
+    }
+
+    private static long getAverageChannel(long[] packedValues, int n, int shift, boolean ignoreZero) {
+        int count = 0;
+        float light = 0;
+        for (int i = 0; i < n; i++) {
+            val packed = packedValues[i];
+            val value = unit(packed, shift);
+            if (ignoreZero && value == 0) {
+                continue;
+            }
+            count++;
+            light += value;
+        }
+        if (count != 0) {
+            light /= count;
+        }
+        return (long)((int)light & 0xFF) << shift;
+    }
+
+    private static int unit(long val, int channel) {
+        return (int) ((val >>> channel) & 0xFF);
     }
 
     private static int max3(int red, int green, int blue, int mask) {
