@@ -119,6 +119,9 @@ public abstract class BlockMixin implements ColoredBlock {
 
     @Override
     public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
+        if (colorLightValue == null) {
+            return getLightValue(world, x, y, z);
+        }
         val thiz = (Block) (Object) this;
         if (world != null) {
             val block = world.getBlock(x, y, z);
