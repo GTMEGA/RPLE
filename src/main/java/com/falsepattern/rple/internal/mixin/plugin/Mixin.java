@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.falsepattern.lib.mixin.IMixin.PredicateHelpers.*;
+import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.CHISEL;
 import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.OPTIFINE;
 
 @RequiredArgsConstructor
@@ -43,6 +44,8 @@ public enum Mixin implements IMixin {
     client_ShadersMixin(Side.CLIENT, require(OPTIFINE), "optifine.ShadersMixin"),
     client_ShaderTessMixin(Side.CLIENT, require(OPTIFINE), "optifine.ShaderTessMixin"),
     client_OptiFineTessellatorMixin(Side.CLIENT, require(OPTIFINE), "optifine.OptiFineTessellatorMixin"),
+
+    client_RenderBlocksCTMMixin(Side.CLIENT, require(CHISEL), "chisel.RenderBlocksCTMMixin"),
 
     ;
     // @formatter:on

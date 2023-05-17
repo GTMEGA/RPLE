@@ -3,6 +3,10 @@ repositories {
         name = "mvnpattern"
         url = "https://mvn.falsepattern.com/releases"
     }
+    maven {
+        name = "FalsePattern GTMEGA Maven"
+        url = "https://mvn.falsepattern.com/gtmega_releases/"
+    }
 
     mavenLocal()
 }
