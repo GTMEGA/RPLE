@@ -18,7 +18,7 @@ import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.startsWit
 @RequiredArgsConstructor
 public enum TargetedMod implements ITargetedMod {
     OPTIFINE("OptiFine", false, startsWith("optifine")),
-    CHISEL("Chisel", false, startsWith("chisel")),
+    CHISEL("Chisel", true, startsWith("chisel")),
 
     ;
 
