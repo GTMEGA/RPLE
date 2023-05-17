@@ -122,7 +122,7 @@ public class RPLE {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         for (val colorChannel: COLOR_CHANNELS) {
-            ChunkDataRegistry.registerDataManager(new ColoredDataManager(colorChannel, colorChannel == LightConstants.COLOR_CHANNEL_RED));
+            ChunkDataRegistry.registerDataManager(new ColoredDataManager(colorChannel));
             LumiWorldProviderRegistry.registerWorldProvider(new ColoredWorldProvider(colorChannel));
         }
         RenderingRegistry.registerBlockHandler(new LampRenderingHandler());

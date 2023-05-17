@@ -40,7 +40,7 @@ public class ColoredLightWorld implements ILumiWorld {
     public ColoredLightWorld(World world, int colorChannel) {
         this.carrier = world;
         this.colorChannel = colorChannel;
-        id = Tags.MODID + "_" + RPLE.IDs[colorChannel];
+        id = Tags.MODID +  "_" + Tags.VERSION + "_" + RPLE.IDs[colorChannel];
     }
 
     @Override

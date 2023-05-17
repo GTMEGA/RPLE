@@ -22,13 +22,11 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public class ColoredDataManager implements ChunkDataManager.SectionNBTDataManager, ChunkDataManager.PacketDataManager, ChunkDataManager.ChunkNBTDataManager {
+public class ColoredDataManager implements ChunkDataManager.SectionNBTDataManager, ChunkDataManager.PacketDataManager {
     private final int colorChannel;
-    private final boolean root;
 
-    public ColoredDataManager(int colorChannel, boolean root) {
+    public ColoredDataManager(int colorChannel) {
         this.colorChannel = colorChannel;
-        this.root = root;
     }
 
     @Override
@@ -105,35 +103,11 @@ public class ColoredDataManager implements ChunkDataManager.SectionNBTDataManage
 
     @Override
     public String domain() {
-        return Tags.MODID;
+        return Tags.MODID + "_" + Tags.VERSION;
     }
 
     @Override
     public String id() {
         return RPLE.IDs[colorChannel];
-    }
-
-    @Override
-    public void writeChunkToNBT(Chunk chunk, NBTTagCompound nbt) {
-        if (!root)
-            nbt.setIntArray("HeightMap", ((ColoredCarrierChunk)chunk).getColoredChunk(colorChannel).lumiHeightMap());
-    }
-
-    @Override
-    public void readChunkFromNBT(Chunk chunk, NBTTagCompound nbt) {
-        if (!root) {
-            val heightMap = nbt.getIntArray("HeightMap");
-            val lhm = ((ColoredCarrierChunk) chunk).getColoredChunk(colorChannel).lumiHeightMap();
-            if (heightMap != null && heightMap.length == 256) {
-                System.arraycopy(heightMap, 0, lhm, 0, 256);
-            } else {
-                System.arraycopy(chunk.heightMap, 0, lhm, 0, 256);
-            }
-        }
-    }
-
-    @Override
-    public boolean chunkPrivilegedAccess() {
-        return root;
     }
 }
