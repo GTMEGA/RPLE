@@ -124,9 +124,6 @@ public abstract class ShaderTessMixin {
 
         val drawMode = tessellator.drawMode();
 
-        if (drawMode != GL11.GL_TRIANGLES && drawMode != GL11.GL_QUADS)
-            return;
-
         prepareBuffer();
 
         if (drawMode == GL11.GL_TRIANGLES) {
@@ -146,7 +143,7 @@ public abstract class ShaderTessMixin {
             }
 
             this.tessellator = null;
-        } else {
+        } else if (drawMode == GL11.GL_QUADS) {
             val vertexIndex = tessellator.addedVertices() % QUAD_VERTEX_COUNT;
 
             switch (vertexIndex) {
@@ -166,6 +163,9 @@ public abstract class ShaderTessMixin {
             }
 
             this.tessellator = null;
+        } else {
+            prepareVertex(vertexA, posX, posY, posZ);
+            addVertex(vertexA);
         }
     }
 
@@ -193,9 +193,9 @@ public abstract class ShaderTessMixin {
             return TRIANGLE_VERTEX_COUNT * VERTEX_STRIDE_INTS;
         } else if (tessellator.drawMode() == GL11.GL_QUADS) {
             return QUAD_VERTEX_COUNT * VERTEX_STRIDE_INTS;
+        } else {
+            return VERTEX_STRIDE_INTS;
         }
-
-        throw new IllegalStateException("Invalid draw mode: " + tessellator.drawMode());
     }
 
     private void initBuffer() {
