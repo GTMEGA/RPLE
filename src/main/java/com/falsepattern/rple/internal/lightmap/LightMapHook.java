@@ -76,24 +76,6 @@ public class LightMapHook {
             Shaders.enableLightmap();
     }
 
-    public static void enableAll() {
-        RED_LIGHT_MAP.enable();
-        GREEN_LIGHT_MAP.enable();
-        BLUE_LIGHT_MAP.enable();
-
-        if (Compat.shadersEnabled())
-            Shaders.enableLightmap();
-    }
-
-    public static void disableAll() {
-        RED_LIGHT_MAP.disable();
-        GREEN_LIGHT_MAP.disable();
-        BLUE_LIGHT_MAP.disable();
-
-        if (Compat.shadersEnabled())
-            Shaders.disableLightmap();
-    }
-
     public void enableReconfigure() {
         OpenGlHelper.setActiveTexture(textureUnit);
 

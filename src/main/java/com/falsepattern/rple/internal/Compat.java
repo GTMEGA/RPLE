@@ -22,6 +22,10 @@ public class Compat {
         return FMLClientHandler.instance().hasOptifine() && Shaders.shaderPackLoaded;
     }
 
+    public static void toggleLightMapShaders(boolean state) {
+        ShadersCompat.toggleLightMap(state);
+    }
+
     public static boolean isMultipart(Block block) {
         if (multipartPresent == null) {
             multipartPresent = Loader.isModLoaded("ForgeMultipart");
@@ -42,6 +46,15 @@ public class Compat {
     private static class MultipartCompat {
         public static boolean isMultipart(Block block) {
             return block instanceof BlockMultipart;
+        }
+    }
+
+    private static class ShadersCompat {
+        public static void toggleLightMap(boolean state) {
+            if (state)
+                Shaders.enableLightmap();
+            else
+                Shaders.disableLightmap();
         }
     }
 }

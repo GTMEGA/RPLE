@@ -52,16 +52,6 @@ public abstract class EntityRendererMixin {
         ci.cancel();
     }
 
-    @Inject(method = "disableLightmap",
-            at = @At(value = "HEAD"),
-            cancellable = true,
-            require = 1)
-    private void disableLightMaps(double p_78483_1_, CallbackInfo ci) {
-        LightMapHook.disableAll();
-
-        ci.cancel();
-    }
-
     @Inject(method = "updateLightmap",
             at = @At(value = "HEAD"),
             cancellable = true,
