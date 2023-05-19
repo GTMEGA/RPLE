@@ -10,7 +10,10 @@ package com.falsepattern.rple.internal.mixin.helpers;
 
 import codechicken.multipart.BlockMultipart;
 import codechicken.multipart.TileMultipart;
+import codechicken.multipart.minecraft.McBlockPart;
+import codechicken.multipart.minecraft.RedstoneTorchPart;
 import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.internal.mixin.interfaces.ColoredBlockInternal;
 import lombok.val;
 import mrtjp.projectred.illumination.BaseLightPart;
 import mrtjp.projectred.illumination.ILight;
@@ -32,6 +35,14 @@ public class MultipartColorHelper {
                     if (lightElement.isOn()) {
                         sum += LightConstants.colors[colorChannel][~lightElement.getColor() & 15];
                     }
+                } else if (element instanceof RedstoneTorchPart) {
+                    val torch = ((RedstoneTorchPart)element);
+                    if (torch.active()) {
+                        sum += ((ColoredBlockInternal)torch.getBlock()).getColoredLightValueRaw(0, colorChannel);
+                    }
+                } else if (element instanceof McBlockPart) {
+                    val block = (ColoredBlockInternal)((McBlockPart) element).getBlock();
+                    sum += block.getColoredLightValueRaw(0, colorChannel);
                 }
             }
             return Math.min(sum, 15);
