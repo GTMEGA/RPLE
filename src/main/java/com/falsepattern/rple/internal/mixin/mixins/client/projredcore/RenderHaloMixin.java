@@ -10,6 +10,8 @@ package com.falsepattern.rple.internal.mixin.mixins.client.projredcore;
 
 import codechicken.lib.render.CCRenderState;
 import com.falsepattern.rple.internal.Tags;
+import com.falsepattern.rple.internal.color.BrightnessUtil;
+import com.falsepattern.rple.internal.mixin.helpers.OpenGlHelperPacked;
 import mrtjp.projectred.core.RenderHalo$;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,6 +32,7 @@ public abstract class RenderHaloMixin {
     private void prepareFixColor(CallbackInfo ci) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glColor4f(1, 1, 1, 1);
+        OpenGlHelperPacked.setLightMapTextureCoordsPacked(BrightnessUtil.monochromeBrightnessToPackedLong(BrightnessUtil.lightLevelsToBrightness(15, 15)));
         oldTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         CCRenderState.changeTexture(glowTex == null ? glowTex = new ResourceLocation(Tags.MODID, "textures/blocks/glow_solid.png") : glowTex);
     }

@@ -10,8 +10,6 @@ package com.falsepattern.rple.internal.color;
 
 import lombok.val;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 /**
  * Utility class for managing minecraft brightness values, and packed long RGB versions of these brightness values.
  */
@@ -83,6 +81,13 @@ public class BrightnessUtil {
         return (long) compressBrightness(red) << PACKED_RED_OFFSET |
                (long) compressBrightness(green) << PACKED_GREEN_OFFSET |
                (long) compressBrightness(blue) << PACKED_BLUE_OFFSET;
+    }
+
+    public static long monochromeBrightnessToPackedLong(int brightness) {
+        val compressed = (long) compressBrightness(brightness);
+        return compressed << PACKED_RED_OFFSET |
+               compressed << PACKED_GREEN_OFFSET |
+               compressed << PACKED_BLUE_OFFSET;
     }
 
     public static int getBrightnessRed(long packed) {
