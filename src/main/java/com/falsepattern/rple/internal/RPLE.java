@@ -104,18 +104,20 @@ public class RPLE {
         blueIndexNoShader = noShaderBuf[1];
         greenIndexShader = shaderBuf[0];
         blueIndexShader = shaderBuf[1];
-        for (val lampData: Lamps.values()) {
-            val name = lampData.name().toLowerCase();
-            val r = lampData.r;
-            val g = lampData.g;
-            val b = lampData.b;
-            val lamp = new Lamp();
-            lamp.setBlockName(Tags.MODID + ".lamp." + name).setBlockTextureName(name);
-            lamp.setColoredLightValue(0, 0, 0, 0);
-            lamp.setColoredLightValue(Lamp.INVERTED_BIT, r, g, b);
-            lamp.setColoredLightValue(Lamp.POWERED_BIT, r, g, b);
-            lamp.setColoredLightValue(Lamp.INVERTED_BIT | Lamp.POWERED_BIT, 0, 0, 0);
-            GameRegistry.registerBlock(lamp, ItemLamp.class, "lamp." + name);
+        if (ColorConfig.ENABLE_LAMPS) {
+            for (val lampData : Lamps.values()) {
+                val name = lampData.name().toLowerCase();
+                val r = lampData.r;
+                val g = lampData.g;
+                val b = lampData.b;
+                val lamp = new Lamp();
+                lamp.setBlockName(Tags.MODID + ".lamp." + name).setBlockTextureName(name);
+                lamp.setColoredLightValue(0, 0, 0, 0);
+                lamp.setColoredLightValue(Lamp.INVERTED_BIT, r, g, b);
+                lamp.setColoredLightValue(Lamp.POWERED_BIT, r, g, b);
+                lamp.setColoredLightValue(Lamp.INVERTED_BIT | Lamp.POWERED_BIT, 0, 0, 0);
+                GameRegistry.registerBlock(lamp, ItemLamp.class, "lamp." + name);
+            }
         }
     }
 
@@ -175,11 +177,11 @@ public class RPLE {
             }
             val splitter = new StringTokenizer(sanitized, "=");
             if (splitter.countTokens() > 2) {
-                Common.LOG.error("Config line {} is malformed (multiple equal signs): {}", currentLine, unSanitized);
+                Common.LOG.error("ColorConfig line {} is malformed (multiple equal signs): {}", currentLine, unSanitized);
                 continue;
             }
             if (splitter.countTokens() < 2) {
-                Common.LOG.error("Config line {} is malformed (missing equal sign): {}", currentLine, unSanitized);
+                Common.LOG.error("ColorConfig line {} is malformed (missing equal sign): {}", currentLine, unSanitized);
                 continue;
             }
             val assignee = splitter.nextToken().trim();
@@ -187,7 +189,7 @@ public class RPLE {
             val targetSplitter = new StringTokenizer(assignee, "/");
             val count = targetSplitter.countTokens();
             if (count < 1 || count > 2) {
-                Common.LOG.error("Config line {} is malformed (invalid assignee): {}", currentLine, assignee);
+                Common.LOG.error("ColorConfig line {} is malformed (invalid assignee): {}", currentLine, assignee);
                 continue;
             }
             val id = targetSplitter.nextToken();
@@ -197,7 +199,7 @@ public class RPLE {
                 try {
                     meta = Integer.parseInt(metaToken);
                 } catch (NumberFormatException e) {
-                    Common.LOG.error("Config line {} malformed (invalid metadata): {}", currentLine, metaToken);
+                    Common.LOG.error("ColorConfig line {} malformed (invalid metadata): {}", currentLine, metaToken);
                 }
             }
             if (!id.startsWith("__")) {
@@ -217,20 +219,20 @@ public class RPLE {
         if (value.charAt(0) == '@') {
             val key = value.substring(1);
             if (!valueCache.containsKey(key)) {
-                Common.LOG.error("Config line {} malformed (nonexistent backref): {}", currentLine, key);
+                Common.LOG.error("ColorConfig line {} malformed (nonexistent backref): {}", currentLine, key);
                 return EMPTY;
             }
             return valueCache.get(key);
         }
         if (value.length() != 3) {
-            Common.LOG.error("Config line {} malformed (invalid light value): {}", currentLine, value);
+            Common.LOG.error("ColorConfig line {} malformed (invalid light value): {}", currentLine, value);
             return EMPTY;
         }
         final int packed;
         try {
             packed = Integer.parseInt(value, 16);
         } catch (NumberFormatException e) {
-            Common.LOG.error("Config line {} malformed (unparseable hex number): {}", currentLine, value);
+            Common.LOG.error("ColorConfig line {} malformed (unparseable hex number): {}", currentLine, value);
             return EMPTY;
         }
         return new RGB((packed & 0xF00) >>> 8, (packed & 0x0F0) >>> 4, (packed & 0x00F));
