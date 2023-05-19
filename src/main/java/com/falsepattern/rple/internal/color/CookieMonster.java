@@ -83,14 +83,6 @@ public class CookieMonster {
     }
 
     /**
-     * Convenience method, identical to {@link BrightnessUtil#packedMax(long, long)}, but automatically decodes and
-     * encodes the input/output into cookies.
-     */
-    public static int packedMax(int cookieA, int cookieB) {
-        return packedLongToCookie(BrightnessUtil.packedMax(cookieToPackedLong(cookieA), cookieToPackedLong(cookieB)));
-    }
-
-    /**
      * Analyzes a potential cookie, and returns the detected type.
      * @param potentialCookie The cookie to analyze.
      * @return {@link IntType#COOKIE} if it was a correct cookie, {@link IntType#VANILLA} if it was a vanilla minecraft

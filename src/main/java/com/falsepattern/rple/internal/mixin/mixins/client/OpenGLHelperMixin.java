@@ -9,9 +9,9 @@
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.Common;
-import com.falsepattern.rple.internal.color.BrightnessUtil;
 import com.falsepattern.rple.internal.color.CookieMonster;
-import lombok.*;
+import com.falsepattern.rple.internal.mixin.helpers.OpenGlHelperPacked;
+
 import net.minecraft.client.renderer.OpenGlHelper;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
@@ -33,12 +33,7 @@ public abstract class OpenGLHelperMixin {
         int value = (int)(u) | ((int)(v) << 16);
         if (CookieMonster.inspectValue(value) == CookieMonster.IntType.COOKIE) {
             long packed = CookieMonster.cookieToPackedLong(value);
-            val red = BrightnessUtil.getBrightnessRed(packed);
-            val green = BrightnessUtil.getBrightnessGreen(packed);
-            val blue = BrightnessUtil.getBrightnessBlue(packed);
-            setLightmapTextureCoords(Common.RED_LIGHT_MAP_TEXTURE_UNIT, red & 0xFFFF, red >>> 16);
-            setLightmapTextureCoords(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, green & 0xFFFF, green >>> 16);
-            setLightmapTextureCoords(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, blue & 0xFFFF, blue >>> 16);
+            OpenGlHelperPacked.setLightMapTextureCoordsPacked(packed);
             ci.cancel();
         } else {
             if (texture == lightmapTexUnit) {

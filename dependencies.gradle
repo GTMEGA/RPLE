@@ -41,4 +41,7 @@ dependencies {
 
     //ProjectRed Illumination 4.7.0pre12.95
     compileOnly(deobfCurse("projectred-illum-229046:2280733"))
+
+    //ForgeMultipart 1.2.0.345
+    compileOnly(deobfCurse("multipart-229323:2242993"))
 }

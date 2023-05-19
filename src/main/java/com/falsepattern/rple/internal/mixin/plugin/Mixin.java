@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.falsepattern.lib.mixin.IMixin.PredicateHelpers.*;
+import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.CCLIB;
 import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.CHISEL;
 import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.MRTJPCORE;
 import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.OPTIFINE;
+import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.PROJECTRED_COMBINEDJAR;
 import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.PROJECTRED_CORE;
 import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.PROJECTRED_ILLUMINATION;
 
@@ -31,7 +33,7 @@ public enum Mixin implements IMixin {
     common_lumina_EBSMixin(Side.COMMON, always(), "lumina.EBSMixin"),
 
     common_mrtjpcore_InstancedBlockMixin(Side.COMMON, require(MRTJPCORE), "mrtjpcore.InstancedBlockMixin"),
-    common_projredillum_TileLampMixin(Side.COMMON, require(PROJECTRED_ILLUMINATION), "projredillum.TileLampMixin"),
+    common_projredillum_TileLampMixin(Side.COMMON, require(PROJECTRED_ILLUMINATION).or(require(PROJECTRED_COMBINEDJAR)), "projredillum.TileLampMixin"),
 
     client_BlockFluidMixin(Side.CLIENT, always(), "BlockFluidMixin"),
     client_BlockLiquidMixin(Side.CLIENT, always(), "BlockLiquidMixin"),
@@ -53,7 +55,10 @@ public enum Mixin implements IMixin {
 
     client_RenderBlocksCTMMixin(Side.CLIENT, require(CHISEL), "chisel.RenderBlocksCTMMixin"),
 
-    client_projredcore_RenderHaloMixin(Side.CLIENT, require(PROJECTRED_CORE), "projredcore.RenderHaloMixin"),
+    client_projredcore_RenderHaloMixin(Side.CLIENT, require(PROJECTRED_CORE).or(require(PROJECTRED_COMBINEDJAR)), "projredcore.RenderHaloMixin"),
+
+    client_cclib_CCRenderStateMixin(Side.CLIENT, require(CCLIB), "cclib.CCRenderStateMixin"),
+    client_cclib_LightMatrixMixin(Side.CLIENT, require(CCLIB), "cclib.LightMatrixMixin"),
 
     ;
     // @formatter:on

@@ -8,12 +8,40 @@
 
 package com.falsepattern.rple.internal;
 
+import codechicken.multipart.BlockMultipart;
 import shadersmod.client.Shaders;
 
+import net.minecraft.block.Block;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.Loader;
 
 public class Compat {
+    private static Boolean multipartPresent;
+    private static Boolean projRedLightsPresent;
     public static boolean shadersEnabled() {
         return FMLClientHandler.instance().hasOptifine() && Shaders.shaderPackLoaded;
+    }
+
+    public static boolean isMultipart(Block block) {
+        if (multipartPresent == null) {
+            multipartPresent = Loader.isModLoaded("ForgeMultipart");
+        }
+        if (multipartPresent) {
+            return MultipartCompat.isMultipart(block);
+        }
+        return false;
+    }
+
+    public static boolean projRedLightsPresent() {
+        if (projRedLightsPresent == null) {
+            projRedLightsPresent = Loader.isModLoaded("ProjRed|Illumination");
+        }
+        return projRedLightsPresent;
+    }
+
+    private static class MultipartCompat {
+        public static boolean isMultipart(Block block) {
+            return block instanceof BlockMultipart;
+        }
     }
 }

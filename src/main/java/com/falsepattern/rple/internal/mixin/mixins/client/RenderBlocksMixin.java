@@ -12,8 +12,8 @@ import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.color.BlockLightUtil;
 import com.falsepattern.rple.internal.color.BrightnessUtil;
 import com.falsepattern.rple.internal.color.CookieMonster;
+import com.falsepattern.rple.internal.color.CookieWrappers;
 import lombok.val;
-import lombok.var;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,12 +32,7 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int getAoBrightness(int a, int b, int c, int d) {
-        val avgBuffer = new long[4];
-        avgBuffer[0] = CookieMonster.cookieToPackedLong(a);
-        avgBuffer[1] = CookieMonster.cookieToPackedLong(b);
-        avgBuffer[2] = CookieMonster.cookieToPackedLong(c);
-        avgBuffer[3] = CookieMonster.cookieToPackedLong(d);
-        return CookieMonster.packedLongToCookie(BrightnessUtil.packedAverage(avgBuffer, 4, true));
+        return CookieWrappers.average(true, a, b, c, d);
     }
 
     //Ugly evil mixin-mixin hack
@@ -72,26 +67,7 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int mixAoBrightness(int a, int b, int c, int d, double aMul, double bMul, double cMul, double dMul) {
-        long packedA = CookieMonster.cookieToPackedLong(a);
-        long packedB = CookieMonster.cookieToPackedLong(b);
-        long packedC = CookieMonster.cookieToPackedLong(c);
-        long packedD = CookieMonster.cookieToPackedLong(d);
-        long packedResult = 0;
-        for (int i = 0; i <= 40; i += 8) {
-            packedResult |= mixAoBrightnessChannel(packedA, packedB, packedC, packedD, aMul, bMul, cMul, dMul, i);
-        }
-        return CookieMonster.packedLongToCookie(packedResult);
+        return CookieWrappers.mixAOBrightness(a, b, c, d, aMul, bMul, cMul, dMul);
     }
 
-    private static long mixAoBrightnessChannel(long a, long b, long c, long d, double aMul, double bMul, double cMul, double dMul, int channel) {
-        val fA = unit(a, channel) * aMul;
-        val fB = unit(b, channel) * bMul;
-        val fC = unit(c, channel) * cMul;
-        val fD = unit(d, channel) * dMul;
-        return (long)((int)(fA + fB + fC + fD) & 0xFF) << channel;
-    }
-
-    private static int unit(long val, int channel) {
-        return (int) ((val >>> channel) & 0xFF);
-    }
 }

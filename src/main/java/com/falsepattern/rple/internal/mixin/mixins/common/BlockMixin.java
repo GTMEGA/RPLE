@@ -10,8 +10,9 @@ package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.internal.Compat;
+import com.falsepattern.rple.internal.mixin.helpers.MultipartColorHelper;
 import lombok.val;
-import net.minecraft.init.Blocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -119,14 +120,23 @@ public abstract class BlockMixin implements ColoredBlock {
 
     @Override
     public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-        if (colorLightValue == null) {
-            return getLightValue(world, x, y, z);
-        }
         val thiz = (Block) (Object) this;
         if (world != null) {
             val block = world.getBlock(x, y, z);
             if (block != thiz) {
                 return ((ColoredBlock)block).getColoredLightValue(world, meta, colorChannel, x, y, z);
+            } else if (Compat.isMultipart(block) && Compat.projRedLightsPresent()) {
+                int res = MultipartColorHelper.getColoredLightValue(block, world, meta, colorChannel, x, y, z);
+                if (res >= 0) {
+                    return res;
+                }
+            }
+        }
+        if (colorLightValue == null) {
+            if (world != null) {
+                return getLightValue(world, x, y, z);
+            } else {
+                return getLightValue();
             }
         }
 

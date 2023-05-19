@@ -10,6 +10,8 @@ package com.falsepattern.rple.internal.color;
 
 import lombok.val;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * Utility class for managing minecraft brightness values, and packed long RGB versions of these brightness values.
  */
@@ -122,6 +124,42 @@ public class BrightnessUtil {
         return result;
     }
 
+    public static long mixAOBrightness(long packedA, long packedB, long packedC, long packedD, double aMul, double bMul, double cMul, double dMul) {
+        long packedResult = 0;
+        for (int i = 0; i <= 40; i += 8) {
+            packedResult |= mixAoBrightnessChannel(packedA, packedB, packedC, packedD, aMul, bMul, cMul, dMul, i);
+        }
+        return packedResult;
+    }
+
+    /**
+     * Takes the average of the passed in brightnesses. Faster than doing it by hand through the API.
+     */
+    public static long packedAverage(long a, long b, boolean ignoreZero) {
+        long resultPacked = 0;
+        for (int i = 0; i <= 40; i += 8) {
+            resultPacked |= getAverageChannel(a, b, i, ignoreZero);
+        }
+        return resultPacked;
+    }
+
+    /**
+     * Takes the average of the passed in brightnesses. Faster than doing it by hand through the API.
+     */
+    public static long packedAverage(long a, long b, long c, long d, boolean ignoreZero) {
+        long resultPacked = 0;
+        if (ignoreZero) {
+            for (int i = 0; i <= 40; i += 8) {
+                resultPacked |= getAverageChannelIgnoreZero(a, b, c, d, i);
+            }
+        } else {
+            for (int i = 0; i <= 40; i += 8) {
+                resultPacked |= getAverageChannel(a, b, c, d, i);
+            }
+        }
+        return resultPacked;
+    }
+
     /**
      * Takes the average of the passed in brightnesses. Faster than doing it by hand through the API.
      */
@@ -131,6 +169,58 @@ public class BrightnessUtil {
             resultPacked |= getAverageChannel(values, n, i, ignoreZero);
         }
         return resultPacked;
+    }
+
+    private static long getAverageChannel(long a, long b, int shift, boolean ignoreZero) {
+        int unitA = unit(a, shift);
+        int unitB = unit(b, shift);
+        if (ignoreZero) {
+            if (unitA == 0) {
+                return unitB;
+            }
+            return (long) unitA << shift;
+        } else {
+            return (long)((int)((unitA + unitB) / 2f) & 0xFF) << shift;
+        }
+    }
+
+    private static long getAverageChannel(long a, long b, long c, long d, int shift) {
+        float light = 0;
+        light += unit(a, shift);
+        light += unit(b, shift);
+        light += unit(c, shift);
+        light += unit(d, shift);
+        light /= 4;
+        return (long)((int)light & 0xFF) << shift;
+    }
+
+    private static long getAverageChannelIgnoreZero(long a, long b, long c, long d, int shift) {
+        int count = 0;
+        float light = 0;
+        int unitA = unit(a, shift);
+        int unitB = unit(b, shift);
+        int unitC = unit(c, shift);
+        int unitD = unit(d, shift);
+        if (unitA != 0) {
+            count++;
+            light += unitA;
+        }
+        if (unitB != 0) {
+            count++;
+            light += unitB;
+        }
+        if (unitC != 0) {
+            count++;
+            light += unitC;
+        }
+        if (unitD != 0) {
+            count++;
+            light += unitD;
+        }
+        if (count != 0) {
+            light /= count;
+        }
+        return (long)((int)light & 0xFF) << shift;
     }
 
     private static long getAverageChannel(long[] packedValues, int n, int shift, boolean ignoreZero) {
@@ -151,10 +241,6 @@ public class BrightnessUtil {
         return (long)((int)light & 0xFF) << shift;
     }
 
-    private static int unit(long val, int channel) {
-        return (int) ((val >>> channel) & 0xFF);
-    }
-
     private static int max3(int red, int green, int blue, int mask) {
         return Math.max(Math.max(red & mask, green & mask), blue & mask);
     }
@@ -165,5 +251,17 @@ public class BrightnessUtil {
 
     private static int decompressBrightness(int compressedBrightness) {
         return ((compressedBrightness & COMPRESSED_SKYLIGHT_MASK) << 8) | (compressedBrightness & COMPRESSED_BLOCKLIGHT_MASK);
+    }
+
+    private static long mixAoBrightnessChannel(long a, long b, long c, long d, double aMul, double bMul, double cMul, double dMul, int channel) {
+        val fA = unit(a, channel) * aMul;
+        val fB = unit(b, channel) * bMul;
+        val fC = unit(c, channel) * cMul;
+        val fD = unit(d, channel) * dMul;
+        return (long)((int)(fA + fB + fC + fD) & 0xFF) << channel;
+    }
+
+    private static int unit(long val, int channel) {
+        return (int) ((val >>> channel) & 0xFF);
     }
 }
