@@ -5,12 +5,13 @@
     "description": "Colorize your lights.",
     "version": "${modVersion}",
     "mcversion": "${minecraftVersion}",
-    "url": "https://github.com/FalsePattern/RPLE",
+    "url": "https://github.com/GTMEGA/RightProperLightingEngine",
     "updateUrl": "",
     "authorList": [
-      "FalsePattern"
+      "FalsePattern",
+      "Ven"
     ],
-    "credits": "",
+    "credits": "Houston, for meticulously testing every change in a production environment.",
     "logoFile": "",
     "screenshots": [],
     "dependencies": []
