@@ -9,6 +9,7 @@
 package com.falsepattern.rple.internal;
 
 import codechicken.multipart.BlockMultipart;
+import com.falsepattern.rple.internal.stubpackage.GlStateManager;
 import shadersmod.client.Shaders;
 
 import net.minecraft.block.Block;
@@ -24,6 +25,10 @@ public class Compat {
 
     public static void toggleLightMapShaders(boolean state) {
         ShadersCompat.toggleLightMap(state);
+    }
+
+    public static void optiFineSetActiveTexture(int texture) {
+        ShadersCompat.setActiveTexture(texture);
     }
 
     public static boolean isMultipart(Block block) {
@@ -55,6 +60,9 @@ public class Compat {
                 Shaders.enableLightmap();
             else
                 Shaders.disableLightmap();
+        }
+        public static void setActiveTexture(int texture) {
+            GlStateManager.activeTextureUnit = texture;
         }
     }
 }

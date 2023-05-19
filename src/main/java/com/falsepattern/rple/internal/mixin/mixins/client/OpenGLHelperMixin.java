@@ -78,16 +78,21 @@ public abstract class OpenGLHelperMixin {
         int prevTexture = GL11.glGetInteger(field_153215_z ? ARBMultitexture.GL_ACTIVE_TEXTURE_ARB : GL13.GL_ACTIVE_TEXTURE);
         if (prevTexture == lightmapTexUnit && texture != lightmapTexUnit) {
             boolean prevTexState = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
+            toggleTexture(prevTexState);
             if (Compat.shadersEnabled()) {
                 Compat.toggleLightMapShaders(prevTexState);
+                doSetActiveTexture(Common.GREEN_LIGHT_MAP_SHADER_TEXTURE_UNIT);
+                toggleTexture(prevTexState);
+                doSetActiveTexture(Common.BLUE_LIGHT_MAP_SHADER_TEXTURE_UNIT);
+                toggleTexture(prevTexState);
+            } else {
+                doSetActiveTexture(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
+                toggleTexture(prevTexState);
+                doSetActiveTexture(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
+                toggleTexture(prevTexState);
             }
-            doSetActiveTexture(Common.RED_LIGHT_MAP_TEXTURE_UNIT);
-            toggleTexture(prevTexState);
-            doSetActiveTexture(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
-            toggleTexture(prevTexState);
-            doSetActiveTexture(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
-            toggleTexture(prevTexState);
         }
+        Compat.optiFineSetActiveTexture(texture);
         doSetActiveTexture(texture);
     }
 }
