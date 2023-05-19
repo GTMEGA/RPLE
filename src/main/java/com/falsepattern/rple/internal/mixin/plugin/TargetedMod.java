@@ -13,12 +13,16 @@ import lombok.*;
 
 import java.util.function.Predicate;
 
+import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.contains;
 import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.startsWith;
 
 @RequiredArgsConstructor
 public enum TargetedMod implements ITargetedMod {
     OPTIFINE("OptiFine", false, startsWith("optifine")),
     CHISEL("Chisel", true, startsWith("chisel")),
+    PROJECTRED_CORE("ProjectRed Core", false, startsWith("projectred").and(contains("base"))),
+    PROJECTRED_ILLUMINATION("ProjectRed Illumination", false, startsWith("projectred").and(contains("lighting"))),
+    MRTJPCORE("MRTJPCore", false, startsWith("mrtjpcore")),
 
     ;
 

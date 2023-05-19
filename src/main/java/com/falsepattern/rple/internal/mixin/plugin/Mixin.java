@@ -17,7 +17,10 @@ import java.util.function.Predicate;
 
 import static com.falsepattern.lib.mixin.IMixin.PredicateHelpers.*;
 import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.CHISEL;
+import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.MRTJPCORE;
 import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.OPTIFINE;
+import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.PROJECTRED_CORE;
+import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.PROJECTRED_ILLUMINATION;
 
 @RequiredArgsConstructor
 public enum Mixin implements IMixin {
@@ -26,6 +29,9 @@ public enum Mixin implements IMixin {
     common_lumina_WorldMixin(Side.COMMON, always(), "lumina.WorldMixin"),
     common_lumina_ChunkMixin(Side.COMMON, always(), "lumina.ChunkMixin"),
     common_lumina_EBSMixin(Side.COMMON, always(), "lumina.EBSMixin"),
+
+    common_mrtjpcore_InstancedBlockMixin(Side.COMMON, require(MRTJPCORE), "mrtjpcore.InstancedBlockMixin"),
+    common_projredillum_TileLampMixin(Side.COMMON, require(PROJECTRED_ILLUMINATION), "projredillum.TileLampMixin"),
 
     client_BlockFluidMixin(Side.CLIENT, always(), "BlockFluidMixin"),
     client_BlockLiquidMixin(Side.CLIENT, always(), "BlockLiquidMixin"),
@@ -46,6 +52,8 @@ public enum Mixin implements IMixin {
     client_OptiFineTessellatorMixin(Side.CLIENT, require(OPTIFINE), "optifine.OptiFineTessellatorMixin"),
 
     client_RenderBlocksCTMMixin(Side.CLIENT, require(CHISEL), "chisel.RenderBlocksCTMMixin"),
+
+    client_projredcore_RenderHaloMixin(Side.CLIENT, require(PROJECTRED_CORE), "projredcore.RenderHaloMixin"),
 
     ;
     // @formatter:on

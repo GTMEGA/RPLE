@@ -30,4 +30,15 @@ dependencies {
     compileOnly(deobfMaven("https://mvn.falsepattern.com/stripped/", "optifine:shadersmod-stripped:1.7.10-hd_u7"))
 
     implementation("team.chisel:chisel-mc1.7.10:2.9.21-mega:dev")
+
+    compileOnly("codechicken:codechickenlib-mc1.7.10:1.2.0-mega:dev")
+
+    //MRTJPCore
+    compileOnly(deobfCurse("mrtjpcore-229002:2279413"))
+
+    //ProjectRed Core 4.7.0pre12.95
+    compileOnly(deobfCurse("projectred-core-228702:2280728"))
+
+    //ProjectRed Illumination 4.7.0pre12.95
+    compileOnly(deobfCurse("projectred-illum-229046:2280733"))
 }
