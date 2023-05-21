@@ -92,7 +92,9 @@ public abstract class OpenGLHelperMixin {
                 toggleTexture(prevTexState);
             }
         }
-        Compat.optiFineSetActiveTexture(texture);
+        if (Compat.shadersEnabled()) {
+            Compat.optiFineSetActiveTexture(texture);
+        }
         doSetActiveTexture(texture);
     }
 }
