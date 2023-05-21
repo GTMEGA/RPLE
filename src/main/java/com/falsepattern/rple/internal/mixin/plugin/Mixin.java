@@ -55,6 +55,8 @@ public enum Mixin implements IMixin {
     client_enderio_ConduitBundleRendererMixin(Side.CLIENT, require(ENDER_IO), "enderio.ConduitBundleRendererMixin"),
     client_enderio_DefaultConduitRendererMixin(Side.CLIENT, require(ENDER_IO), "enderio.DefaultConduitRendererMixin"),
 
+    client_carpentersblocks_LightingHelperMixin(Side.CLIENT, require(CARPENTERS_BLOCKS), "carpentersblocks.LightingHelperMixin"),
+
     ;
     // @formatter:on
 

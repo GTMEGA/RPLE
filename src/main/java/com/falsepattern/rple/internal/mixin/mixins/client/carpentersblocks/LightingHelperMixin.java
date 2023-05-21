@@ -1,0 +1,26 @@
+/*
+ * Copyright (c) 2023 FalsePattern
+ * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
+ * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+ *
+ */
+
+package com.falsepattern.rple.internal.mixin.mixins.client.carpentersblocks;
+
+import com.carpentersblocks.renderer.helper.LightingHelper;
+import com.falsepattern.rple.internal.color.CookieWrappers;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+
+@Mixin(LightingHelper.class)
+public abstract class LightingHelperMixin {
+    /**
+     * @author FalsePattern
+     * @reason Colorize
+     */
+    @Overwrite
+    public static int getAverageBrightness(int brightness1, int brightness2) {
+        return CookieWrappers.average(false, brightness1, brightness2);
+    }
+}
