@@ -25,7 +25,7 @@ public enum TargetedMod implements ITargetedMod {
     PROJECTRED_ILLUMINATION("ProjectRed Illumination", false, startsWith("projectred").and(contains("lighting"))),
     PROJECTRED_COMBINEDJAR("ProjectRed Combined Jar", false, ((Predicate<String>) (str) -> str.matches("projectred-\\d+\\.\\d+\\.\\d+")).or((str) -> str.matches("projectred-\\d+\\.\\d+\\.\\d+pre\\d+\\.\\d+"))),
     MRTJPCORE("MRTJPCore", false, startsWith("mrtjpcore")),
-    ENDER_IO("Ender IO", true, startsWith("enderio")),
+    ENDER_IO("Ender IO", false, startsWith("enderio")),
     CARPENTERS_BLOCKS("Carpenter's Blocks", false, (str) -> str.matches("carpenter'?s( |-|_|%20)?blocks.*"))
     ;
 
