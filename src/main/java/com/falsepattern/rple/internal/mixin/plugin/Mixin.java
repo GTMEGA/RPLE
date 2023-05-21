@@ -16,13 +16,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.falsepattern.lib.mixin.IMixin.PredicateHelpers.*;
-import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.CCLIB;
-import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.CHISEL;
-import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.MRTJPCORE;
-import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.OPTIFINE;
-import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.PROJECTRED_COMBINEDJAR;
-import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.PROJECTRED_CORE;
-import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.PROJECTRED_ILLUMINATION;
+import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.*;
 
 @RequiredArgsConstructor
 public enum Mixin implements IMixin {
@@ -57,6 +51,9 @@ public enum Mixin implements IMixin {
 
     client_cclib_CCRenderStateMixin(Side.CLIENT, require(CCLIB), "cclib.CCRenderStateMixin"),
     client_cclib_LightMatrixMixin(Side.CLIENT, require(CCLIB), "cclib.LightMatrixMixin"),
+
+    client_enderio_ConduitBundleRendererMixin(Side.CLIENT, require(ENDER_IO), "enderio.ConduitBundleRendererMixin"),
+    client_enderio_DefaultConduitRendererMixin(Side.CLIENT, require(ENDER_IO), "enderio.DefaultConduitRendererMixin"),
 
     ;
     // @formatter:on
