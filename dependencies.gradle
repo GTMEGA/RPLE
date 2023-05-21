@@ -33,7 +33,7 @@ dependencies {
 
     compileOnly("codechicken:codechickenlib-mc1.7.10:1.2.0-mega:dev")
 
-    // MRTJPCore
+    // MRTJPCore 1.1.0.33-universal
     compileOnly(deobfCurse("mrtjpcore-229002:2279413"))
 
     // ProjectRed Core 4.7.0pre12.95
@@ -50,4 +50,7 @@ dependencies {
 
     // Ender IO 1.7.10-2.3.0.429_beta
     compileOnly(deobfCurse("ender-io-64578:2322348"))
+
+    // Carpenter's Blocks v3.3.8.2 - MC 1.7.10
+    compileOnly(deobfCurse("carpenters-blocks-228932:2719376"))
 }
