@@ -62,7 +62,6 @@ public class Compat {
                 Shaders.disableLightmap();
         }
 
-        // SKILL_ISSUE: This is broken in dev, test for yourself ;)
         public static void setActiveTexture(int texture) {
             GlStateManager.activeTextureUnit = texture;
         }
