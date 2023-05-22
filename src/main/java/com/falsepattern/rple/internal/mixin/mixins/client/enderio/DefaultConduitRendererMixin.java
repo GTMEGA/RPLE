@@ -13,6 +13,7 @@ public abstract class DefaultConduitRendererMixin implements ConduitRenderer {
     @Redirect(method = "renderEntity",
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V"),
+              remap = true,
               require = 1)
     public void cacheBrightness(Tessellator instance, int oldBrightness) {
         instance.setBrightness(EnderIOConduitsBrightnessHolder.getCookieBrightness());

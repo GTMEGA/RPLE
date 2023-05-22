@@ -16,6 +16,7 @@ public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRender
     @Redirect(method = {"renderWorldBlock", "renderTileEntityAt"},
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/world/World;getLightBrightnessForSkyBlocks(IIII)I"),
+              remap = true,
               require = 1)
     public int cacheBrightness(World world, int posX, int posY, int posZ, int min) {
         val brightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, min);
@@ -26,6 +27,7 @@ public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRender
     @Redirect(method = "renderConduits",
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V"),
+              remap = true,
               require = 1)
     public void cacheBrightness(Tessellator instance, int oldBrightness) {
         instance.setBrightness(EnderIOConduitsBrightnessHolder.getCookieBrightness());
