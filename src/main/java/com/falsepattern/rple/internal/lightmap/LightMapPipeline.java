@@ -8,98 +8,127 @@
 
 package com.falsepattern.rple.internal.lightmap;
 
-import com.falsepattern.rple.api.lightmap.LightMapChannel;
-import com.falsepattern.rple.api.lightmap.LightMapBase;
-import com.falsepattern.rple.api.lightmap.LightMapMask;
-import com.falsepattern.rple.api.lightmap.LightMapMaskType;
-import com.falsepattern.rple.api.lightmap.LightMapPipelineRegistry;
-import lombok.Getter;
+import com.falsepattern.rple.api.lightmap.*;
+import com.falsepattern.rple.internal.Common;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LightMapPipeline implements LightMapPipelineRegistry {
-    public static final LightMapPipeline INSTANCE = new LightMapPipeline();
+    private static final LightMapPipeline INSTANCE = new LightMapPipeline();
 
-    private final List<LightMapMask> blockMasks = new ArrayList<>();
-    private final List<LightMapMask> skyMasks = new ArrayList<>();
+    private final Set<PriorityPair<BlockLightMapBase>> blockBases = new TreeSet<>();
+    private final Set<PriorityPair<SkyLightMapBase>> skyBases= new TreeSet<>();
+    private final List<BlockLightMapMask> blockMasks = new ArrayList<>();
+    private final List<SkyLightMapMask> skyMasks = new ArrayList<>();
 
-    private final Map<LightMapBase, Integer> basePriorities = new IdentityHashMap<>();
-    private final List<LightMapBase> bases = new ArrayList<>();
+    private final LightMap2D mixedLightMap = new LightMap2D();
+    private final LightMap1D tempStrip = new LightMap1D();
 
-    @Getter
-    private final LightMapChannel accumulatorBlock = new LightMapChannel();
-    @Getter
-    private final LightMapChannel accumulatorSky = new LightMapChannel();
-    private final LightMapChannel scratch = new LightMapChannel();
+    public static LightMapPipeline lightMapPipeline() {
+        return INSTANCE;
+    }
+
+    // region Registration
+    @Override
+    public void register(BlockLightMapBase generator, int priority) {
+        val wrappedGenerator = wrappedWithPriority(generator, priority);
+
+        if (blockBases.contains(wrappedGenerator)) {
+            Common.LOG.warn("BlockLightMapBase registered twice!", new Throwable());
+            return;
+        }
+
+        blockBases.add(wrappedGenerator);
+
+    }
 
     @Override
-    public void registerBase(LightMapBase base, int priority) {
-        int i = bases.size() - 1;
-        for (; i >= 0; i--) {
-            int basePr = basePriorities.get(bases.get(i));
-            if (basePr >= priority) {
-                i++;
-                break;
-            }
+    public void register(SkyLightMapBase generator, int priority) {
+        val wrappedGenerator = wrappedWithPriority(generator, priority);
+
+        if (skyBases.contains(wrappedGenerator)) {
+            Common.LOG.warn("SkyLightMapBase registered twice!", new Throwable());
+            return;
         }
-        bases.add(base);
-        basePriorities.put(base, priority);
+
+        skyBases.add(wrappedGenerator);
     }
 
     @Override
-    public void registerMask(LightMapMask mask, LightMapMaskType type) {
-        switch (type) {
-            case BLOCK:
-                blockMasks.add(mask);
-                return;
-            case SKY:
-                skyMasks.add(mask);
-                return;
+    public void register(BlockLightMapMask generator) {
+        if (blockMasks.contains(generator)) {
+            Common.LOG.warn("BlockLightMapMask registered twice!", new Throwable());
+            return;
         }
+
+        blockMasks.add(generator);
     }
 
-    private static void reset(LightMapChannel lightMap) {
-        Arrays.fill(lightMap.R, 1);
-        Arrays.fill(lightMap.G, 1);
-        Arrays.fill(lightMap.B, 1);
-    }
-
-    private static void multiply(float[] accum, float[] scratch) {
-        for (int i = 0; i < LightMapChannel.LIGHT_MAP_SIZE; i++) {
-            accum[i] *= scratch[i];
+    @Override
+    public void register(SkyLightMapMask generator) {
+        if (skyMasks.contains(generator)) {
+            Common.LOG.warn("SkyLightMapMask registered twice!", new Throwable());
+            return;
         }
-    }
 
-    private void multiplyAccumulatorAndScratch(LightMapChannel accumulator) {
-        multiply(accumulator.R, scratch.R);
-        multiply(accumulator.G, scratch.G);
-        multiply(accumulator.B, scratch.B);
+        skyMasks.add(generator);
     }
+    // endregion
 
-    void updateLightMap(float partialTickTime) {
-        reset(accumulatorSky);
-        reset(accumulatorBlock);
-        for (val base: bases) {
-            if (base.enabled()) {
-                base.generateBaseBlock(accumulatorBlock, partialTickTime);
-                base.generateBaseSky(accumulatorSky, partialTickTime);
+    public int[] updateLightMap(float partialTick) {
+        val blockStrip = mixedLightMap.blockLightMap();
+        val skyStrip = mixedLightMap.skyLightMap();
+
+        blockStrip.resetLightMap();
+        skyStrip.resetLightMap();
+
+        for (val blockBase : blockBases) {
+            if (blockBase.value.generateBlockLightMapBase(blockStrip, partialTick))
                 break;
-            }
         }
-        for (val mask: blockMasks) {
-            reset(scratch);
-            mask.generateMask(scratch, partialTickTime);
-            multiplyAccumulatorAndScratch(accumulatorBlock);
+
+        for (val skyBase : skyBases) {
+            if (skyBase.value.generateSkyLightMapBase(skyStrip, partialTick))
+                break;
         }
-        for (val mask: skyMasks) {
-            reset(scratch);
-            mask.generateMask(scratch, partialTickTime);
-            multiplyAccumulatorAndScratch(accumulatorSky);
+
+        for (val mask : blockMasks) {
+            tempStrip.resetLightMap();
+
+            if (mask.generateBlockLightMapMask(tempStrip, partialTick))
+                blockStrip.multLightMap(tempStrip);
+        }
+
+        for (val mask : skyMasks) {
+            tempStrip.resetLightMap();
+
+            if (mask.generateSkyLightMapMask(tempStrip, partialTick))
+                skyStrip.multLightMap(tempStrip);
+        }
+
+        mixedLightMap.mixLightMaps();
+
+        return mixedLightMap.lightMapRGBData();
+    }
+
+    private static <T> PriorityPair<T> wrappedWithPriority(T value, int priority) {
+        return new PriorityPair<>(value, priority);
+    }
+
+    @EqualsAndHashCode
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    private static class PriorityPair<T> implements Comparable<PriorityPair<T>> {
+        private final T value;
+        private final int priority;
+
+        @Override
+        public int compareTo(@NotNull LightMapPipeline.PriorityPair<T> o) {
+            return Integer.compare(priority, o.priority);
         }
     }
 }

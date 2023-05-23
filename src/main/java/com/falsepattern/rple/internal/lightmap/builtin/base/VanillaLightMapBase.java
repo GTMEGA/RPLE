@@ -8,59 +8,57 @@
 
 package com.falsepattern.rple.internal.lightmap.builtin.base;
 
-import com.falsepattern.rple.api.lightmap.LightMapChannel;
 import com.falsepattern.rple.api.lightmap.LightMapBase;
-import lombok.RequiredArgsConstructor;
+import com.falsepattern.rple.api.lightmap.LightMapStrip;
+import com.falsepattern.rple.internal.Common;
 import lombok.val;
 
+import lombok.var;
 import net.minecraft.client.Minecraft;
 
-@RequiredArgsConstructor
+import static com.falsepattern.rple.api.lightmap.LightMapStrip.LIGHT_MAP_STRIP_LENGTH;
+
 public class VanillaLightMapBase implements LightMapBase {
+    private static final int END_DIMENSION_ID = 1;
+
     @Override
-    public void generateBaseBlock(LightMapChannel lightMap, float partialTickTime) {
-        val world = Minecraft.getMinecraft().theWorld;
-        for (int i = 0; i < LightMapChannel.LIGHT_MAP_SIZE; i++) {
-            val light = world.provider.lightBrightnessTable[i];
-            lightMap.R[i] = light;
-            lightMap.G[i] = light;
-            lightMap.B[i] = light;
+    public boolean generateBlockLightMapBase(LightMapStrip output, float partialTick) {
+        val worldProvider = Minecraft.getMinecraft().theWorld.provider;
+
+        for (var i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
+            val brightness = worldProvider.lightBrightnessTable[i];
+            output.setLightMap(i, brightness);
         }
+
+        return true;
     }
 
     @Override
-    public void generateBaseSky(LightMapChannel lightMap, float partialTickTime) {
+    public boolean generateSkyLightMapBase(LightMapStrip output, float partialTick) {
         val world = Minecraft.getMinecraft().theWorld;
+        val worldProvider = world.provider;
 
-        if (world.provider.dimensionId == 1) {
-            for (int i = 0; i < LightMapChannel.LIGHT_MAP_SIZE; i++) {
-                lightMap.R[i] = 0.22F;
-                lightMap.G[i] = 0.28F;
-                lightMap.B[i] = 0.25F;
-            }
-            return;
+        if (worldProvider.dimensionId == END_DIMENSION_ID) {
+            output.fillLightMap(0.22F);
+            return true;
         }
 
-        for (int i = 0; i < LightMapChannel.LIGHT_MAP_SIZE; i++) {
-            val baseBrightness = world.getSunBrightness(1F);
-            float skyBlue;
+        val brightness = world.getSunBrightness(1F);
+        for (var i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
+            var blue = 0F;
 
             if (world.lastLightningBolt > 0) {
-                skyBlue = world.provider.lightBrightnessTable[i];
+                blue = world.provider.lightBrightnessTable[i];
             } else {
-                skyBlue = world.provider.lightBrightnessTable[i] * (baseBrightness * 0.95F + 0.05F);
+                blue = world.provider.lightBrightnessTable[i] * (brightness * 0.95F + 0.05F);
             }
 
-            val skyRed = skyBlue * (baseBrightness * 0.65F + 0.35F);
-            val skyGreen = skyBlue * (baseBrightness * 0.65F + 0.35F);
-            lightMap.R[i] = skyRed;
-            lightMap.G[i] = skyGreen;
-            lightMap.B[i] = skyBlue;
-        }
-    }
+            val red = blue * (brightness * 0.65F + 0.35F);
+            val green = blue * (brightness * 0.65F + 0.35F);
 
-    @Override
-    public boolean enabled() {
+            output.setLightMapRGB(i, red, green, blue);
+        }
+
         return true;
     }
 }

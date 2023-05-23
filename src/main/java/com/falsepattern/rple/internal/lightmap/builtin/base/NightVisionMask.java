@@ -8,8 +8,8 @@
 
 package com.falsepattern.rple.internal.lightmap.builtin.base;
 
-import com.falsepattern.rple.api.lightmap.LightMapChannel;
 import com.falsepattern.rple.api.lightmap.LightMapMask;
+import com.falsepattern.rple.api.lightmap.LightMapStrip;
 import lombok.val;
 
 import net.minecraft.client.Minecraft;
@@ -18,20 +18,33 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.MathHelper;
 
 public class NightVisionMask implements LightMapMask {
-    private float getNightVisionBrightness(EntityPlayer player, float partialTickTime) {
-        int i = player.getActivePotionEffect(Potion.nightVision).getDuration();
-        return i > 200 ? 1.0F : 0.7F + MathHelper.sin(((float)i - partialTickTime) * (float)Math.PI * 0.2F) * 0.3F;
-    }
     @Override
-    public void generateMask(LightMapChannel mask, float partialTickTime) {
-        val mc = Minecraft.getMinecraft();
-        if (mc.thePlayer.isPotionActive(Potion.nightVision)) {
-            val amplitude = getNightVisionBrightness(mc.thePlayer, partialTickTime) * 3;
-            for (int i = 0; i < LightMapChannel.LIGHT_MAP_SIZE; i++) {
-                mask.R[i] = amplitude;
-                mask.G[i] = amplitude;
-                mask.B[i] = amplitude;
-            }
-        }
+    public boolean generateBlockLightMapMask(LightMapStrip output, float partialTick) {
+        return generateNightVisionMask(output, partialTick);
+    }
+
+    @Override
+    public boolean generateSkyLightMapMask(LightMapStrip output, float partialTick) {
+        return generateNightVisionMask(output, partialTick);
+    }
+
+    private static boolean generateNightVisionMask(LightMapStrip output, float partialTick) {
+        val player = Minecraft.getMinecraft().thePlayer;
+        if (!player.isPotionActive(Potion.nightVision))
+            return false;
+
+        val amplitude = nightVisionIntensity(player, partialTick);
+        output.fillLightMap(amplitude);
+
+        return true;
+    }
+
+    private static float nightVisionIntensity(EntityPlayer player, float partialTick) {
+        return nightVisionBrightness(player, partialTick) * 3F;
+    }
+
+    private static float nightVisionBrightness(EntityPlayer player, float partialTick) {
+        val duration = player.getActivePotionEffect(Potion.nightVision).getDuration();
+        return duration > 200 ? 1.0F : 0.7F + MathHelper.sin(((float) duration - partialTick) * (float) Math.PI * 0.2F) * 0.3F;
     }
 }

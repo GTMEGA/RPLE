@@ -8,9 +8,7 @@
 
 package com.falsepattern.rple.api.lightmap;
 
-public final class LightMapChannel {
-    public static final int LIGHT_MAP_SIZE = 16;
-    public final float[] R = new float[LIGHT_MAP_SIZE];
-    public final float[] G = new float[LIGHT_MAP_SIZE];
-    public final float[] B = new float[LIGHT_MAP_SIZE];
+@FunctionalInterface
+public interface BlockLightMapMask {
+    boolean generateBlockLightMapMask(LightMapStrip output, float partialTick);
 }

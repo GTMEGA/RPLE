@@ -19,12 +19,10 @@ import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.api.lightmap.LightMapBase;
 import com.falsepattern.rple.api.lightmap.LightMapMask;
-import com.falsepattern.rple.api.lightmap.LightMapMaskType;
-import com.falsepattern.rple.api.lightmap.LightMapPipelineRegistry;
 import com.falsepattern.rple.internal.blocks.ItemLamp;
 import com.falsepattern.rple.internal.blocks.Lamp;
 import com.falsepattern.rple.internal.client.render.LampRenderingHandler;
-import com.falsepattern.rple.internal.lightmap.builtin.base.BossColorModifier;
+import com.falsepattern.rple.internal.lightmap.builtin.base.BossColorModifierMask;
 import com.falsepattern.rple.internal.lightmap.builtin.base.NightVisionMask;
 import com.falsepattern.rple.internal.lightmap.builtin.base.VanillaLightMapBase;
 import com.falsepattern.rple.internal.storage.ColoredDataManager;
@@ -42,28 +40,29 @@ import lombok.*;
 
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import static com.falsepattern.rple.api.LightMapAPI.lightMapPipelineRegistry;
+
 @Mod(modid = Tags.MODID,
-     version = Tags.VERSION,
-     name = Tags.MODNAME,
-     acceptedMinecraftVersions = "[1.7.10]",
-     dependencies = "required-after:falsepatternlib@[0.11,);" +
-                    "required-after:chunkapi@[0.2,);" +
-                    "required-after:lumina;" +
-                    "required-after:falsetweaks@[2.4,)")
+        version = Tags.VERSION,
+        name = Tags.MODNAME,
+        acceptedMinecraftVersions = "[1.7.10]",
+        dependencies = "required-after:falsepatternlib@[0.11,);" +
+                "required-after:chunkapi@[0.2,);" +
+                "required-after:lumina;" +
+                "required-after:falsetweaks@[2.4,)")
 public class RPLE {
     public static final String[] IDs = new String[]{"RED", "GREEN", "BLUE"};
 
     private static final int[] COLOR_CHANNELS = new int[]{LightConstants.COLOR_CHANNEL_RED,
-                                                          LightConstants.COLOR_CHANNEL_GREEN,
-                                                          LightConstants.COLOR_CHANNEL_BLUE};
-    Object[][] lamps = new Object[][] {
+            LightConstants.COLOR_CHANNEL_GREEN,
+            LightConstants.COLOR_CHANNEL_BLUE};
+    Object[][] lamps = new Object[][]{
             {"red", 15, 0, 0},
             {"magenta", 15, 0, 15},
             {"purple", 7, 0, 15},
@@ -123,16 +122,16 @@ public class RPLE {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        for (val colorChannel: COLOR_CHANNELS) {
+        for (val colorChannel : COLOR_CHANNELS) {
             ChunkDataRegistry.registerDataManager(new ColoredDataManager(colorChannel));
             LumiWorldProviderRegistry.registerWorldProvider(new ColoredWorldProvider(colorChannel));
         }
         RenderingRegistry.registerBlockHandler(new LampRenderingHandler());
     }
 
-    private static LightMapBase lightMapBase = new VanillaLightMapBase();
-    private static LightMapMask nightVisionMask = new NightVisionMask();
-    private static LightMapMask bossColorMask = new BossColorModifier();
+    private static final LightMapBase VANILLA_LIGHT_MAP_BASE = new VanillaLightMapBase();
+    private static final LightMapMask NIGHT_VISION_MASK = new NightVisionMask();
+    private static final LightMapMask BOSS_COLOR_MODIFIER_MASK = new BossColorModifierMask();
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
@@ -143,12 +142,11 @@ public class RPLE {
         } catch (IOException e) {
             Common.LOG.error("Could not set up light values", e);
         }
-        val lightMapRegistry = LightMapPipelineRegistry.getInstance();
-        lightMapRegistry.registerBase(lightMapBase, 1000);
-        lightMapRegistry.registerMask(nightVisionMask, LightMapMaskType.BLOCK);
-        lightMapRegistry.registerMask(nightVisionMask, LightMapMaskType.SKY);
-        lightMapRegistry.registerMask(bossColorMask, LightMapMaskType.BLOCK);
-        lightMapRegistry.registerMask(bossColorMask, LightMapMaskType.SKY);
+
+        val lightMapRegistry = lightMapPipelineRegistry();
+        lightMapRegistry.register(VANILLA_LIGHT_MAP_BASE, 1000);
+        lightMapRegistry.register(NIGHT_VISION_MASK);
+        lightMapRegistry.register(BOSS_COLOR_MODIFIER_MASK);
 
         //FIXME Random broken polygons show up with shaders on some systems with triangulation enabled.
         //      Might be a FalseTweaks bug, gotta look into it later.
@@ -205,7 +203,7 @@ public class RPLE {
             if (!id.startsWith("__")) {
                 val block = GameData.getBlockRegistry().get(id);
                 if (block != null && block != Blocks.air) {
-                    val cBlock = ((ColoredBlock)block);
+                    val cBlock = ((ColoredBlock) block);
                     cBlock.setColoredLightValue(meta, value.r, value.g, value.b);
                 }
             }

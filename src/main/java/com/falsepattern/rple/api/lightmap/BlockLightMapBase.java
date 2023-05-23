@@ -8,6 +8,7 @@
 
 package com.falsepattern.rple.api.lightmap;
 
-public enum LightMapMaskType {
-    BLOCK, SKY
+@FunctionalInterface
+public interface BlockLightMapBase {
+    boolean generateBlockLightMapBase(LightMapStrip output, float partialTick);
 }

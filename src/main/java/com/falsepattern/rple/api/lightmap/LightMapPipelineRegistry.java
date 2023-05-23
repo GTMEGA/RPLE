@@ -8,12 +8,27 @@
 
 package com.falsepattern.rple.api.lightmap;
 
-import com.falsepattern.rple.internal.lightmap.LightMapPipeline;
-
 public interface LightMapPipelineRegistry {
-    static LightMapPipelineRegistry getInstance() {
-        return LightMapPipeline.INSTANCE;
+    default void register(LightMapGenerator generator, int priority) {
+        register((LightMapBase) generator, priority);
+        register(generator);
     }
-    void registerBase(LightMapBase base, int priority);
-    void registerMask(LightMapMask mask, LightMapMaskType maskType);
+
+    default void register(LightMapBase generator, int priority) {
+        register((BlockLightMapBase) generator, priority);
+        register((SkyLightMapBase) generator, priority);
+    }
+
+    void register(BlockLightMapBase generator, int priority);
+
+    void register(SkyLightMapBase generator, int priority);
+
+    default void register(LightMapMask generator) {
+        register((BlockLightMapMask) generator);
+        register((SkyLightMapMask) generator);
+    }
+
+    void register(BlockLightMapMask generator);
+
+    void register(SkyLightMapMask generator);
 }
