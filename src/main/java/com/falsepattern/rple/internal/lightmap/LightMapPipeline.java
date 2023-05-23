@@ -22,7 +22,7 @@ public class LightMapPipeline implements LightMapPipelineRegistry {
     private static final LightMapPipeline INSTANCE = new LightMapPipeline();
 
     private final Set<PriorityPair<BlockLightMapBase>> blockBases = new TreeSet<>();
-    private final Set<PriorityPair<SkyLightMapBase>> skyBases= new TreeSet<>();
+    private final Set<PriorityPair<SkyLightMapBase>> skyBases = new TreeSet<>();
     private final List<BlockLightMapMask> blockMasks = new ArrayList<>();
     private final List<SkyLightMapMask> skyMasks = new ArrayList<>();
 
@@ -84,15 +84,17 @@ public class LightMapPipeline implements LightMapPipelineRegistry {
         val blockStrip = mixedLightMap.blockLightMap();
         val skyStrip = mixedLightMap.skyLightMap();
 
-        blockStrip.resetLightMap();
-        skyStrip.resetLightMap();
 
         for (val blockBase : blockBases) {
+            blockStrip.resetLightMap();
+
             if (blockBase.value.generateBlockLightMapBase(blockStrip, partialTick))
                 break;
         }
 
         for (val skyBase : skyBases) {
+            skyStrip.resetLightMap();
+
             if (skyBase.value.generateSkyLightMapBase(skyStrip, partialTick))
                 break;
         }
