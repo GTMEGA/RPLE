@@ -35,8 +35,8 @@ public class LightMapPipeline implements LightMapPipelineRegistry {
 
     // region Registration
     @Override
-    public void register(BlockLightMapBase generator, int priority) {
-        val wrappedGenerator = wrappedWithPriority(generator, priority);
+    public void registerBlockLightMapBase(BlockLightMapBase blockBase, int priority) {
+        val wrappedGenerator = wrappedWithPriority(blockBase, priority);
 
         if (blockBases.contains(wrappedGenerator)) {
             Common.LOG.warn("BlockLightMapBase registered twice!", new Throwable());
@@ -48,8 +48,8 @@ public class LightMapPipeline implements LightMapPipelineRegistry {
     }
 
     @Override
-    public void register(SkyLightMapBase generator, int priority) {
-        val wrappedGenerator = wrappedWithPriority(generator, priority);
+    public void registerSkyLightMapBase(SkyLightMapBase skyBase, int priority) {
+        val wrappedGenerator = wrappedWithPriority(skyBase, priority);
 
         if (skyBases.contains(wrappedGenerator)) {
             Common.LOG.warn("SkyLightMapBase registered twice!", new Throwable());
@@ -60,23 +60,23 @@ public class LightMapPipeline implements LightMapPipelineRegistry {
     }
 
     @Override
-    public void register(BlockLightMapMask generator) {
-        if (blockMasks.contains(generator)) {
+    public void registerBlockLightMapMask(BlockLightMapMask blockMask) {
+        if (blockMasks.contains(blockMask)) {
             Common.LOG.warn("BlockLightMapMask registered twice!", new Throwable());
             return;
         }
 
-        blockMasks.add(generator);
+        blockMasks.add(blockMask);
     }
 
     @Override
-    public void register(SkyLightMapMask generator) {
-        if (skyMasks.contains(generator)) {
+    public void registerSkyLightMapMask(SkyLightMapMask skyMask) {
+        if (skyMasks.contains(skyMask)) {
             Common.LOG.warn("SkyLightMapMask registered twice!", new Throwable());
             return;
         }
 
-        skyMasks.add(generator);
+        skyMasks.add(skyMask);
     }
     // endregion
 

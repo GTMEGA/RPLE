@@ -9,26 +9,26 @@
 package com.falsepattern.rple.api.lightmap;
 
 public interface LightMapPipelineRegistry {
-    default void register(LightMapGenerator generator, int priority) {
-        register((LightMapBase) generator, priority);
-        register(generator);
+    default void registerLightMapGenerator(LightMapGenerator generator, int priority) {
+        registerLightMapBase(generator, priority);
+        registerLightMapMask(generator);
     }
 
-    default void register(LightMapBase generator, int priority) {
-        register((BlockLightMapBase) generator, priority);
-        register((SkyLightMapBase) generator, priority);
+    default void registerLightMapBase(LightMapBase base, int priority) {
+        registerBlockLightMapBase(base, priority);
+        registerSkyLightMapBase(base, priority);
     }
 
-    void register(BlockLightMapBase generator, int priority);
+    void registerBlockLightMapBase(BlockLightMapBase blockBase, int priority);
 
-    void register(SkyLightMapBase generator, int priority);
+    void registerSkyLightMapBase(SkyLightMapBase skyBase, int priority);
 
-    default void register(LightMapMask generator) {
-        register((BlockLightMapMask) generator);
-        register((SkyLightMapMask) generator);
+    default void registerLightMapMask(LightMapMask mask) {
+        registerBlockLightMapMask(mask);
+        registerSkyLightMapMask(mask);
     }
 
-    void register(BlockLightMapMask generator);
+    void registerBlockLightMapMask(BlockLightMapMask blockMask);
 
-    void register(SkyLightMapMask generator);
+    void registerSkyLightMapMask(SkyLightMapMask skyMask);
 }

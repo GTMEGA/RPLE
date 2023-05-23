@@ -144,9 +144,9 @@ public class RPLE {
         }
 
         val lightMapRegistry = lightMapPipelineRegistry();
-        lightMapRegistry.register(VANILLA_LIGHT_MAP_BASE, 1000);
-        lightMapRegistry.register(NIGHT_VISION_MASK);
-        lightMapRegistry.register(BOSS_COLOR_MODIFIER_MASK);
+        lightMapRegistry.registerLightMapBase(VANILLA_LIGHT_MAP_BASE, 1000);
+        lightMapRegistry.registerLightMapMask(NIGHT_VISION_MASK);
+        lightMapRegistry.registerLightMapMask(BOSS_COLOR_MODIFIER_MASK);
 
         //FIXME Random broken polygons show up with shaders on some systems with triangulation enabled.
         //      Might be a FalseTweaks bug, gotta look into it later.
