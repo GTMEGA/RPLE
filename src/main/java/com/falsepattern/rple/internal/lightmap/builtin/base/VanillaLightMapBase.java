@@ -10,7 +10,6 @@ package com.falsepattern.rple.internal.lightmap.builtin.base;
 
 import com.falsepattern.rple.api.lightmap.LightMapBase;
 import com.falsepattern.rple.api.lightmap.LightMapStrip;
-import com.falsepattern.rple.internal.Common;
 import lombok.val;
 
 import lombok.var;

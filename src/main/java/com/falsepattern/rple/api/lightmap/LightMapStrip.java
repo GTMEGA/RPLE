@@ -7,6 +7,8 @@
 
 package com.falsepattern.rple.api.lightmap;
 
+import org.jetbrains.annotations.Range;
+
 public interface LightMapStrip {
     int LIGHT_MAP_STRIP_LENGTH = 16;
 
@@ -16,15 +18,15 @@ public interface LightMapStrip {
 
     float[] lightMapBlueData();
 
-    LightMapStrip setLightMap(int index, float brightness);
+    LightMapStrip setLightMap(@Range(from = 0, to = LIGHT_MAP_STRIP_LENGTH - 1) int index, float brightness);
 
-    LightMapStrip setLightMapRGB(int index, float red, float green, float blue);
+    LightMapStrip setLightMapRGB(@Range(from = 0, to = LIGHT_MAP_STRIP_LENGTH - 1) int index, float red, float green, float blue);
 
-    LightMapStrip setLightMapRed(int index, float red);
+    LightMapStrip setLightMapRed(@Range(from = 0, to = LIGHT_MAP_STRIP_LENGTH - 1) int index, float red);
 
-    LightMapStrip setLightMapGreen(int index, float green);
+    LightMapStrip setLightMapGreen(@Range(from = 0, to = LIGHT_MAP_STRIP_LENGTH - 1) int index, float green);
 
-    LightMapStrip setLightMapBlue(int index, float blue);
+    LightMapStrip setLightMapBlue(@Range(from = 0, to = LIGHT_MAP_STRIP_LENGTH - 1) int index, float blue);
 
     LightMapStrip fillLightMap(float brightness);
 
