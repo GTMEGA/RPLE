@@ -1,3 +1,4 @@
+//file:noinspection DependencyNotationArgument
 static def curse(curseDep) {
     return "curse.maven:" + curseDep
 }
