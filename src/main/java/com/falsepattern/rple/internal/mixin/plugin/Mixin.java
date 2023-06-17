@@ -59,6 +59,8 @@ public enum Mixin implements IMixin {
 
     client_architecturecraft_Vector3Mixin(Side.CLIENT, require(ARCHITECTURECRAFT), "architecturecraft.Vector3Mixin"),
     client_architecturecraft_BaseWorldRenderTargetMixin(Side.CLIENT, require(ARCHITECTURECRAFT), "architecturecraft.BaseWorldRenderTargetMixin"),
+
+    client_ae2_RenderBlocksWorkaroundMixin(Side.CLIENT, require(AE2), "ae2.RenderBlocksWorkaroundMixin"),
     ;
     // @formatter:on
 

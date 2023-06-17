@@ -57,4 +57,7 @@ dependencies {
 
     // ArchitectureCraft 1.7.2
     compileOnly(deobfCurse("architecturecraft-242001:2352554"))
+
+    // Applied Energistics 2 rv3 beta 6
+    compileOnly(deobfCurse("appliedenergistics2-223794:2296430"))
 }

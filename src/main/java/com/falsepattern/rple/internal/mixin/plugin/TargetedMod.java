@@ -18,6 +18,7 @@ import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.startsWit
 
 @RequiredArgsConstructor
 public enum TargetedMod implements ITargetedMod {
+    AE2("Applied Energistics 2", false, startsWith("appliedenergistics2-")),
     ARCHITECTURECRAFT("ArchitectureCraft", false, startsWith("architecturecraft-")),
     OPTIFINE("OptiFine", false, startsWith("optifine")),
     CHISEL("Chisel", false, startsWith("chisel")),
