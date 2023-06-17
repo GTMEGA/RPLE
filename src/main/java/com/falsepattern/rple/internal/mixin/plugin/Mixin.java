@@ -29,6 +29,9 @@ public enum Mixin implements IMixin {
     common_mrtjpcore_InstancedBlockMixin(Side.COMMON, require(MRTJPCORE), "mrtjpcore.InstancedBlockMixin"),
     common_projredillum_TileLampMixin(Side.COMMON, require(PROJECTRED_ILLUMINATION).or(require(PROJECTRED_COMBINEDJAR)), "projredillum.TileLampMixin"),
 
+    common_ae2_BlockCableBusMixin(Side.COMMON, require(AE2), "ae2.BlockCableBusMixin"),
+    common_ae2_CableBusContainerMixin(Side.COMMON, require(AE2), "ae2.CableBusContainerMixin"),
+
     client_BlockFluidMixin(Side.CLIENT, always(), "BlockFluidMixin"),
     client_BlockLiquidMixin(Side.CLIENT, always(), "BlockLiquidMixin"),
     client_BlockMixin(Side.CLIENT, always(), "BlockMixin"),

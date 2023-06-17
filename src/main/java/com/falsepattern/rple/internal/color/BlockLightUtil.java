@@ -46,12 +46,22 @@ public class BlockLightUtil {
 
     public static int getCompactRGBLightValue(IBlockAccess world, ColoredBlock block, int meta, int x, int y, int z) {
         val red = block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_RED, x, y, z);
+        //This is here if we already generated a packed value somewhere deep inside another mod
+        //Current usages:
+        //AE2 CLApi
+        if (CookieMonster.inspectValue(red) == CookieMonster.IntType.COOKIE) {
+            return red;
+        }
         val green = block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_GREEN, x, y, z);
         val blue = block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_BLUE, x, y, z);
-        return CookieMonster.packedLongToCookie(
-                BrightnessUtil.brightnessesToPackedLong(
-                        BrightnessUtil.lightLevelsToBrightness(red, 0),
-                        BrightnessUtil.lightLevelsToBrightness(green, 0),
-                        BrightnessUtil.lightLevelsToBrightness(blue, 0)));
+        return createCompactRGBLightValue(red, green, blue);
+    }
+
+    public static int createCompactRGBLightValue(int r, int g, int b) {
+        val R = BrightnessUtil.lightLevelsToBrightness(r, 0);
+        val G = BrightnessUtil.lightLevelsToBrightness(g, 0);
+        val B = BrightnessUtil.lightLevelsToBrightness(b, 0);
+        val packed = BrightnessUtil.brightnessesToPackedLong(R, G, B);
+        return CookieMonster.packedLongToCookie(packed);
     }
 }
