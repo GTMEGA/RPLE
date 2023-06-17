@@ -57,6 +57,8 @@ public enum Mixin implements IMixin {
 
     client_carpentersblocks_LightingHelperMixin(Side.CLIENT, require(CARPENTERS_BLOCKS), "carpentersblocks.LightingHelperMixin"),
 
+    client_architecturecraft_Vector3Mixin(Side.CLIENT, require(ARCHITECTURECRAFT), "architecturecraft.Vector3Mixin"),
+    client_architecturecraft_BaseWorldRenderTargetMixin(Side.CLIENT, require(ARCHITECTURECRAFT), "architecturecraft.BaseWorldRenderTargetMixin"),
     ;
     // @formatter:on
 

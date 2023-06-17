@@ -53,4 +53,7 @@ dependencies {
 
     // Carpenter's Blocks v3.3.8.2 - MC 1.7.10
     compileOnly(deobfCurse("carpenters-blocks-228932:2719376"))
+
+    // ArchitectureCraft 1.7.2
+    compileOnly(deobfCurse("architecturecraft-242001:2352554"))
 }

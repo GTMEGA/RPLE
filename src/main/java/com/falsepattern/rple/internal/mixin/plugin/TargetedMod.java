@@ -18,6 +18,7 @@ import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.startsWit
 
 @RequiredArgsConstructor
 public enum TargetedMod implements ITargetedMod {
+    ARCHITECTURECRAFT("ArchitectureCraft", false, startsWith("architecturecraft-")),
     OPTIFINE("OptiFine", false, startsWith("optifine")),
     CHISEL("Chisel", false, startsWith("chisel")),
     CCLIB("CodeChickenLib", false, startsWith("codechickenlib")),
