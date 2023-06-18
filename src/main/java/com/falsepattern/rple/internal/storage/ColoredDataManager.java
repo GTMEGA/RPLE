@@ -14,13 +14,13 @@ import com.falsepattern.rple.internal.Tags;
 import lombok.val;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.NibbleArray;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
+import net.minecraftforge.common.util.Constants;
+
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class ColoredDataManager implements ChunkDataManager.SectionNBTDataManager, ChunkDataManager.PacketDataManager {
     private final int colorChannel;
@@ -72,9 +72,12 @@ public class ColoredDataManager implements ChunkDataManager.SectionNBTDataManage
         }
     }
 
+    private static final int VERSION_HASH = Tags.VERSION.hashCode();
+
     @Override
     public void writeSectionToNBT(Chunk chunk, ExtendedBlockStorage ebs, NBTTagCompound section) {
         val cEbs = ((ColoredCarrierEBS)ebs).getColoredEBS(colorChannel);
+        section.setInteger("v", VERSION_HASH);
         section.setByteArray("BlockLight", cEbs.lumiBlocklightArray().data);
         if (!chunk.worldObj.provider.hasNoSky) {
             section.setByteArray("SkyLight", cEbs.lumiSkylightArray().data);
@@ -84,21 +87,26 @@ public class ColoredDataManager implements ChunkDataManager.SectionNBTDataManage
     @Override
     public void readSectionFromNBT(Chunk chunk, ExtendedBlockStorage ebs, NBTTagCompound section) {
         val cEbs = ((ColoredCarrierEBS)ebs).getColoredEBS(colorChannel);
-        safeNibbleArray(section, "BlockLight", cEbs.lumiBlocklightArray(), EnumSkyBlock.Block);
+        if (!section.hasKey("v", Constants.NBT.TAG_INT)) {
+            return;
+        }
+        val ver = section.getInteger("v");
+        if (ver != VERSION_HASH) {
+            return;
+        }
+        safeNibbleArray(section, "BlockLight", cEbs.lumiBlocklightArray());
         if (!chunk.worldObj.provider.hasNoSky) {
-            safeNibbleArray(section, "SkyLight", cEbs.lumiSkylightArray(), EnumSkyBlock.Sky);
+            safeNibbleArray(section, "SkyLight", cEbs.lumiSkylightArray());
         }
     }
 
-    private static void safeNibbleArray(NBTTagCompound compound, String key, NibbleArray array, EnumSkyBlock esb) {
-        if (compound.hasKey(key, 7)) {
+    private static void safeNibbleArray(NBTTagCompound compound, String key, NibbleArray array) {
+        if (compound.hasKey(key, Constants.NBT.TAG_BYTE_ARRAY)) {
             val arr = compound.getByteArray(key);
             if (arr.length == 2048) {
                 System.arraycopy(arr, 0, array.data, 0, 2048);
-                return;
             }
         }
-        Arrays.fill(array.data, (byte)esb.defaultLightValue);
     }
 
     @Override
