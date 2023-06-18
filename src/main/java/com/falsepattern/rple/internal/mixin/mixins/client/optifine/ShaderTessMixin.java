@@ -23,6 +23,8 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import shadersmod.client.Shaders;
 import shadersmod.client.ShadersTess;
 import shadersmod.common.SMCLog;
@@ -47,6 +49,8 @@ public abstract class ShaderTessMixin {
 
     private IOptiFineTessellatorMixin tessellator = null;
 
+    //region TODO This stuff belongs in FalseTweaks
+
     @ModifyConstant(method = "draw",
                     remap = false,
                     constant = @Constant(intValue = 18))
@@ -60,6 +64,35 @@ public abstract class ShaderTessMixin {
     private static int strideSizeBytes(int constant) {
         return VertexAPI.recomputeVertexInfo(18, Float.BYTES);
     }
+
+    private static int realDrawMode;
+
+    @Inject(method = "draw",
+            at = @At(value = "INVOKE",
+                     target = "Ljava/lang/Math;min(II)I",
+                     remap = false),
+            remap = false,
+            locals = LocalCapture.CAPTURE_FAILHARD,
+            require = 1)
+    private static void preDrawLoop(Tessellator tess, CallbackInfoReturnable<Integer> cir, int voffset, int realDrawMode) {
+        ShaderTessMixin.realDrawMode = realDrawMode;
+    }
+
+    @Redirect(method = "draw",
+              at = @At(value = "INVOKE",
+                       target = "Ljava/lang/Math;min(II)I",
+                       remap = false),
+              remap = false,
+              require = 1)
+    private static int minWarn(int a, int b) {
+        int vCount = Math.min(a, b);
+        if (realDrawMode == GL11.GL_TRIANGLES) {
+            vCount = vCount / 3 * 3;
+        }
+        return vCount;
+    }
+
+    //endregion
 
     @Redirect(method = "preDrawArray",
               at = @At(value = "INVOKE",
@@ -165,7 +198,7 @@ public abstract class ShaderTessMixin {
 
         val drawMode = tessellator.drawMode();
 
-        prepareBuffer();
+        prepareBuffer(drawMode);
 
         if (drawMode == GL11.GL_TRIANGLES) {
             val vertexIndex = tessellator.addedVertices() % TRIANGLE_VERTEX_COUNT;
@@ -210,7 +243,7 @@ public abstract class ShaderTessMixin {
         }
     }
 
-    private void prepareBuffer() {
+    private void prepareBuffer(int drawMode) {
         val bufferSize = tessellator.bufferSize();
 
         if (tessellator.rawBufferIndex() + requiredSpaceInts() <= bufferSize)
@@ -221,7 +254,15 @@ public abstract class ShaderTessMixin {
             return;
         }
 
-        if (bufferSize >= MAX_BUFFER_SIZE_INTS) {
+        final int vertexIndex;
+        if (drawMode == GL11.GL_TRIANGLES) {
+            vertexIndex = tessellator.addedVertices() % TRIANGLE_VERTEX_COUNT;
+        } else if (drawMode == GL11.GL_QUADS) {
+            vertexIndex = tessellator.addedVertices() % QUAD_VERTEX_COUNT;
+        } else {
+            vertexIndex = -1;
+        }
+        if (bufferSize >= MAX_BUFFER_SIZE_INTS && vertexIndex == 0) {
             earlyDraw();
             return;
         }
