@@ -8,19 +8,34 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
+import com.falsepattern.rple.RPLEShaders;
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.color.BrightnessUtil;
 import com.falsepattern.rple.internal.color.CookieMonster;
 import lombok.*;
 import net.minecraft.entity.EntityLivingBase;
+
+import org.lwjgl.opengl.ARBVertexShader;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.*;
+import shadersmod.client.ShaderLine;
+import shadersmod.client.ShaderParser;
 import shadersmod.client.Shaders;
 
 @Mixin(value = Shaders.class,
        remap = false)
 public abstract class ShadersMixin {
+
+    @Shadow
+    public static void setProgramUniform1i(String name, int value) {
+    }
+
+    @Shadow
+    public static int checkGLError(String location) {
+        return 0;
+    }
+
     @Inject(method = "setProgramUniform1i",
             at = @At("HEAD"),
             require = 1)
@@ -32,8 +47,48 @@ public abstract class ShadersMixin {
         }
     }
 
-    @Shadow
-    public static void setProgramUniform1i(String name, int value) {
+    @Redirect(method = "createVertShader",
+            at = @At(value = "INVOKE",
+                     target = "Lshadersmod/client/ShaderParser;parseLine(Ljava/lang/String;)Lshadersmod/client/ShaderLine;"),
+            require = 1)
+    private static ShaderLine parseLineHook(String line) {
+        val sl = ShaderParser.parseLine(line);
+        if (sl != null) {
+            if (sl.isAttribute(RPLEShaders.EDGE_TEX_COORD_ATTRIB_NAME)) {
+                RPLEShaders.useRPLEEdgeTexCoordAttrib = true;
+                RPLEShaders.progUseRPLEEdgeTexCoordAttrib = true;
+            }
+        }
+        return sl;
+    }
+
+    @Inject(method = "init",
+            at = @At(value = "FIELD",
+                     target = "Lshadersmod/client/Shaders;useMidTexCoordAttrib:Z"),
+            require = 1)
+    private static void initHook(CallbackInfo ci) {
+        RPLEShaders.useRPLEEdgeTexCoordAttrib = false;
+    }
+
+    @Inject(method = "setupProgram",
+            at = @At(value = "FIELD",
+                     target = "Lshadersmod/client/Shaders;progUseMidTexCoordAttrib:Z",
+                     ordinal = 0),
+            require = 1)
+    private static void setupResetHook(int program, String vShaderPath, String fShaderPath, CallbackInfoReturnable<Integer> cir) {
+        RPLEShaders.progUseRPLEEdgeTexCoordAttrib = false;
+    }
+
+    @Inject(method = "setupProgram",
+            at = @At(value = "INVOKE",
+                     target = "Lorg/lwjgl/opengl/ARBShaderObjects;glLinkProgramARB(I)V"),
+            locals = LocalCapture.CAPTURE_FAILHARD,
+            require = 1)
+    private static void setupAttribLocation(int program, String vShaderPath, String fShaderPath, CallbackInfoReturnable<Integer> cir, int programid, int vShader, int fShader) {
+        if (RPLEShaders.progUseRPLEEdgeTexCoordAttrib) {
+            ARBVertexShader.glBindAttribLocationARB(programid, RPLEShaders.edgeTexCoordAttrib, RPLEShaders.EDGE_TEX_COORD_ATTRIB_NAME);
+            checkGLError(RPLEShaders.EDGE_TEX_COORD_ATTRIB_NAME);
+        }
     }
 
     @Redirect(method = "beginRender",

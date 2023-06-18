@@ -8,6 +8,7 @@
 
 package com.falsepattern.rple.internal.mixin.extension;
 
+import com.falsepattern.rple.internal.RPLE;
 import lombok.*;
 import lombok.experimental.*;
 
@@ -16,8 +17,6 @@ import lombok.experimental.*;
 @Getter
 @Accessors(fluent = true, chain = true)
 public final class ShaderVertex {
-    // TODO: Unify this with the VertexAPI
-    public static final int VERTEX_STRIDE_INTS = 20;
 
     public static final int POSITION_X_STRIDE_OFFSET = 0;
     public static final int POSITION_Y_STRIDE_OFFSET = 1;
@@ -45,8 +44,6 @@ public final class ShaderVertex {
     public static final int MID_TEXTURE_V_STRIDE_OFFSET = 17;
 
     public static final int RED_LIGHT_MAP_STRIDE_OFFSET = 6;
-    public static final int GREEN_LIGHT_MAP_STRIDE_OFFSET = 18;
-    public static final int BLUE_LIGHT_MAP_STRIDE_OFFSET = 19;
 
     private float positionX;
     private float positionY;
@@ -75,6 +72,9 @@ public final class ShaderVertex {
 
     private int greenLightMapUV;
     private int blueLightMapUV;
+
+    private float edgeTextureU;
+    private float edgeTextureV;
 
     public ShaderVertex textureU(double textureU) {
         this.textureU = (float) textureU;
@@ -124,8 +124,11 @@ public final class ShaderVertex {
         output[MID_TEXTURE_U_STRIDE_OFFSET + index] = Float.floatToRawIntBits(midTextureU);
         output[MID_TEXTURE_V_STRIDE_OFFSET + index] = Float.floatToRawIntBits(midTextureV);
 
-        output[GREEN_LIGHT_MAP_STRIDE_OFFSET + index] = greenLightMapUV;
-        output[BLUE_LIGHT_MAP_STRIDE_OFFSET + index] = blueLightMapUV;
+        output[RPLE.getGreenIndexShader() + index] = greenLightMapUV;
+        output[RPLE.getBlueIndexShader() + index] = blueLightMapUV;
+
+        output[RPLE.getRpleEdgeTexUIndexShader() + index] = Float.floatToRawIntBits(edgeTextureU);
+        output[RPLE.getRpleEdgeTexVIndexShader() + index] = Float.floatToRawIntBits(edgeTextureV);
 
         clear();
     }
@@ -158,5 +161,8 @@ public final class ShaderVertex {
 
         greenLightMapUV = 0;
         blueLightMapUV = 0;
+
+        edgeTextureU = 0F;
+        edgeTextureV = 0F;
     }
 }

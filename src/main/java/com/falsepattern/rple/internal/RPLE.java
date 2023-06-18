@@ -84,6 +84,10 @@ public class RPLE {
     private static int greenIndexNoShader;
     @Getter
     private static int blueIndexNoShader;
+    @Getter
+    private static int rpleEdgeTexUIndexNoShader;
+    @Getter
+    private static int rpleEdgeTexVIndexNoShader;
 
     @Getter
     private static int redIndexShader = 6; //Overrides optifine value
@@ -92,17 +96,25 @@ public class RPLE {
     private static int greenIndexShader;
     @Getter
     private static int blueIndexShader;
+    @Getter
+    private static int rpleEdgeTexUIndexShader;
+    @Getter
+    private static int rpleEdgeTexVIndexShader;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) throws IOException {
         LumiWorldProviderRegistry.hijack();
-        int[] noShaderBuf = new int[2];
-        int[] shaderBuf = new int[2];
-        VertexAPI.allocateExtraVertexSlots(2, noShaderBuf, shaderBuf);
+        int[] noShaderBuf = new int[4];
+        int[] shaderBuf = new int[4];
+        VertexAPI.allocateExtraVertexSlots(4, noShaderBuf, shaderBuf);
         greenIndexNoShader = noShaderBuf[0];
         blueIndexNoShader = noShaderBuf[1];
+        rpleEdgeTexUIndexNoShader = noShaderBuf[2];
+        rpleEdgeTexVIndexNoShader = noShaderBuf[3];
         greenIndexShader = shaderBuf[0];
         blueIndexShader = shaderBuf[1];
+        rpleEdgeTexUIndexShader = shaderBuf[2];
+        rpleEdgeTexVIndexShader = shaderBuf[3];
         if (ColorConfig.ENABLE_LAMPS) {
             for (val lampData : Lamps.values()) {
                 val name = lampData.name().toLowerCase();
@@ -150,7 +162,7 @@ public class RPLE {
 
         //FIXME Random broken polygons show up with shaders on some systems with triangulation enabled.
         //      Might be a FalseTweaks bug, gotta look into it later.
-        ((ToggleableTessellator) Tessellator.instance).disableTriangulator();
+//        ((ToggleableTessellator) Tessellator.instance).disableTriangulator();
     }
 
     private static final Map<String, RGB> valueCache = new HashMap<>();

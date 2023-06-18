@@ -9,6 +9,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
+import com.falsepattern.rple.RPLEShaders;
 import com.falsepattern.rple.internal.color.BrightnessUtil;
 import com.falsepattern.rple.internal.lightmap.LightMapHook;
 import com.falsepattern.rple.internal.RPLE;
@@ -21,16 +22,17 @@ import org.lwjgl.opengl.*;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import shadersmod.client.Shaders;
 import shadersmod.client.ShadersTess;
 import shadersmod.common.SMCLog;
 
+import java.nio.FloatBuffer;
 import java.util.Arrays;
 
-import static com.falsepattern.rple.internal.mixin.extension.ShaderVertex.VERTEX_STRIDE_INTS;
 
 @SuppressWarnings("unused")
-@Mixin(ShadersTess.class)
+@Mixin(value = ShadersTess.class)
 public abstract class ShaderTessMixin {
     private static final int MIN_BUFFER_SIZE_INTS = 0x10000;
     private static final int MAX_BUFFER_SIZE_INTS = 0x1000000;
@@ -59,11 +61,40 @@ public abstract class ShaderTessMixin {
         return VertexAPI.recomputeVertexInfo(18, Float.BYTES);
     }
 
+    @Redirect(method = "preDrawArray",
+              at = @At(value = "INVOKE",
+                       target = "Lorg/lwjgl/opengl/ARBVertexShader;glVertexAttribPointerARB(IIZILjava/nio/FloatBuffer;)V",
+                       ordinal = 0),
+              slice = @Slice(from = @At(value = "FIELD",
+                                        target = "Lshadersmod/client/Shaders;useMidTexCoordAttrib:Z")),
+              remap = false,
+              require = 1)
+    private static void edgeTexCoordPreDraw(int index, int size, boolean normalized, int stride, FloatBuffer buffer) {
+        stride = VertexAPI.recomputeVertexInfo(18, Float.BYTES);
+        ARBVertexShader.glVertexAttribPointerARB(index, size, normalized, stride, buffer);
+        if (RPLEShaders.useRPLEEdgeTexCoordAttrib) {
+            ARBVertexShader.glVertexAttribPointerARB(RPLEShaders.edgeTexCoordAttrib, 2, false, stride, (FloatBuffer) buffer.position(RPLE.getRpleEdgeTexUIndexShader()));
+            ARBVertexShader.glEnableVertexAttribArrayARB(RPLEShaders.edgeTexCoordAttrib);
+        }
+    }
+
+    @Inject(method = "postDrawArray",
+            at = @At(value = "RETURN"),
+            remap = false,
+            require = 1)
+    private static void edgeTexCoordPostDraw(Tessellator tess, CallbackInfo ci) {
+        if (RPLEShaders.useRPLEEdgeTexCoordAttrib && tess.hasTexture) {
+            ARBVertexShader.glDisableVertexAttribArrayARB(RPLEShaders.edgeTexCoordAttrib);
+        }
+    }
+
     @Redirect(method = "draw",
               at = @At(value = "FIELD",
                        target = "Lnet/minecraft/client/renderer/Tessellator;hasBrightness:Z",
                        opcode = Opcodes.GETFIELD,
+                       remap = true,
                        ordinal = 0),
+              remap = false,
               require = 1)
     private static boolean enableLightMaps(Tessellator tessellator) {
         val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).hasBrightness();
@@ -81,7 +112,9 @@ public abstract class ShaderTessMixin {
               at = @At(value = "FIELD",
                        target = "Lnet/minecraft/client/renderer/Tessellator;hasBrightness:Z",
                        opcode = Opcodes.GETFIELD,
+                       remap = true,
                        ordinal = 1),
+              remap = false,
               require = 1)
     private static boolean disableLightMaps(Tessellator tessellator) {
         val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).hasBrightness();
@@ -115,7 +148,7 @@ public abstract class ShaderTessMixin {
      * @author Ven
      * @reason Colorize
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public static void addVertex(Tessellator tessellator, double posX, double posY, double posZ) {
         val accessibleTessellator = ((IOptiFineTessellatorMixin) tessellator);
         val shaderTessellator = (ShaderTessMixin) (Object) accessibleTessellator.shaderTessellator();
@@ -198,11 +231,11 @@ public abstract class ShaderTessMixin {
 
     private int requiredSpaceInts() {
         if (tessellator.drawMode() == GL11.GL_TRIANGLES) {
-            return TRIANGLE_VERTEX_COUNT * VERTEX_STRIDE_INTS;
+            return VertexAPI.recomputeVertexInfo(18, 3);
         } else if (tessellator.drawMode() == GL11.GL_QUADS) {
-            return QUAD_VERTEX_COUNT * VERTEX_STRIDE_INTS;
+            return VertexAPI.recomputeVertexInfo(18, 4);
         } else {
-            return VERTEX_STRIDE_INTS;
+            return VertexAPI.recomputeVertexInfo(18, 1);
         }
     }
 
@@ -249,7 +282,7 @@ public abstract class ShaderTessMixin {
     private void addTrianglePrimitive() {
         calculateTriangleNormal();
         calculateTangent();
-        calculateTriangleMidTextureUV();
+        calculateTriangleMidAndEdgeTextureUV();
 
         addVertex(vertexA);
         addVertex(vertexB);
@@ -259,7 +292,7 @@ public abstract class ShaderTessMixin {
     private void addQuadPrimitive() {
         calculateQuadNormal();
         calculateTangent();
-        calculateQuadMidTextureUV();
+        calculateQuadMidAndEdgeTextureUV();
 
         addVertex(vertexA);
         addVertex(vertexB);
@@ -476,57 +509,79 @@ public abstract class ShaderTessMixin {
         return value != 0F ? (float) Math.sqrt(value) : 1F;
     }
 
-    private void calculateTriangleMidTextureUV() {
-        val midTextureU = average(vertexA.textureU(),
-                                  vertexB.textureU(),
-                                  vertexC.textureU());
+    private void calculateTriangleMidAndEdgeTextureUV() {
+        val minU = min(vertexA.textureU(), vertexB.textureU(), vertexC.textureU());
+        val minV = min(vertexA.textureV(), vertexB.textureV(), vertexC.textureV());
+        val maxU = max(vertexA.textureU(), vertexB.textureU(), vertexC.textureU());
+        val maxV = max(vertexA.textureV(), vertexB.textureV(), vertexC.textureV());
 
-        val midTextureV = average(vertexA.textureV(),
-                                  vertexB.textureV(),
-                                  vertexC.textureV());
+        vertexA.edgeTextureU(minU);
+        vertexB.edgeTextureU(minU);
+        vertexC.edgeTextureU(minU);
 
-        vertexA.midTextureU(midTextureU);
-        vertexB.midTextureU(midTextureU);
-        vertexC.midTextureU(midTextureU);
+        vertexA.edgeTextureV(minV);
+        vertexB.edgeTextureV(minV);
+        vertexC.edgeTextureV(minV);
 
-        vertexA.midTextureV(midTextureV);
-        vertexB.midTextureV(midTextureV);
-        vertexC.midTextureV(midTextureV);
+        val midU = (minU + maxU) / 2;
+        val midV = (minV + maxV) / 2;
+
+        vertexA.midTextureU(midU);
+        vertexB.midTextureU(midU);
+        vertexC.midTextureU(midU);
+
+        vertexA.midTextureV(midV);
+        vertexB.midTextureV(midV);
+        vertexC.midTextureV(midV);
     }
 
-    private static float average(float a, float b, float c) {
-        return (a + b + c) / 3F;
+    private static float min(float a, float b, float c) {
+        return Math.min(Math.min(a, b), c);
+    }
+    private static float max(float a, float b, float c) {
+        return Math.max(Math.max(a, b), c);
     }
 
-    private void calculateQuadMidTextureUV() {
-        val midTextureU = average(vertexA.textureU(),
-                                  vertexB.textureU(),
-                                  vertexC.textureU(),
-                                  vertexD.textureU());
+    private void calculateQuadMidAndEdgeTextureUV() {
+        val minU = min(vertexA.textureU(), vertexB.textureU(), vertexC.textureU(), vertexD.textureU());
+        val minV = min(vertexA.textureV(), vertexB.textureV(), vertexC.textureV(), vertexD.textureV());
+        val maxU = max(vertexA.textureU(), vertexB.textureU(), vertexC.textureU(), vertexD.textureU());
+        val maxV = max(vertexA.textureV(), vertexB.textureV(), vertexC.textureV(), vertexD.textureV());
 
-        val midTextureV = average(vertexA.textureV(),
-                                  vertexB.textureV(),
-                                  vertexC.textureV(),
-                                  vertexD.textureV());
+        vertexA.edgeTextureU(minU);
+        vertexB.edgeTextureU(minU);
+        vertexC.edgeTextureU(minU);
+        vertexD.edgeTextureU(minU);
 
-        vertexA.midTextureU(midTextureU);
-        vertexB.midTextureU(midTextureU);
-        vertexC.midTextureU(midTextureU);
-        vertexD.midTextureU(midTextureU);
+        vertexA.edgeTextureV(minV);
+        vertexB.edgeTextureV(minV);
+        vertexC.edgeTextureV(minV);
+        vertexD.edgeTextureV(minV);
 
-        vertexA.midTextureV(midTextureV);
-        vertexB.midTextureV(midTextureV);
-        vertexC.midTextureV(midTextureV);
-        vertexD.midTextureV(midTextureV);
+        val midU = (minU + maxU) / 2;
+        val midV = (minV + maxV) / 2;
+
+        vertexA.midTextureU(midU);
+        vertexB.midTextureU(midU);
+        vertexC.midTextureU(midU);
+        vertexD.midTextureU(midU);
+
+        vertexA.midTextureV(midV);
+        vertexB.midTextureV(midV);
+        vertexC.midTextureV(midV);
+        vertexD.midTextureV(midV);
     }
 
-    private static float average(float a, float b, float c, float d) {
-        return (a + b + c + d) / 4F;
+    private static float min(float a, float b, float c, float d) {
+        return Math.min(Math.min(a, b), Math.min(c, d));
+    }
+    private static float max(float a, float b, float c, float d) {
+        return Math.max(Math.max(a, b), Math.max(c, d));
     }
 
     private void addVertex(ShaderVertex vertex) {
         vertex.toIntArray(tessellator.rawBufferIndex(), tessellator.rawBuffer());
 
-        tessellator.incrementRawBufferIndex(VERTEX_STRIDE_INTS);
+        tessellator.incrementRawBufferIndex(VertexAPI.recomputeVertexInfo(18, 1));
     }
 }
