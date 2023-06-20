@@ -1,25 +1,25 @@
 /*
- * Copyright (c) 2023 FalsePattern, Ven
+ * Copyright (c) 2023 FalsePattern
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
- *
  */
 
 package com.falsepattern.rple.internal.storage;
 
 import com.falsepattern.lumina.api.ILumiWorld;
 import com.falsepattern.lumina.api.ILumiWorldProvider;
-
+import lombok.AllArgsConstructor;
+import lombok.val;
 import net.minecraft.world.World;
 
-public class ColoredWorldProvider implements ILumiWorldProvider {
+@AllArgsConstructor
+public final class ColoredWorldProvider implements ILumiWorldProvider {
     private final int colorChannel;
-    public ColoredWorldProvider(int colorChannel) {
-        this.colorChannel = colorChannel;
-    }
+
     @Override
     public ILumiWorld getWorld(World world) {
-        return ((ColoredCarrierWorld)world).getColoredWorld(colorChannel);
+        val carrierWorld = (ColoredCarrierWorld) world;
+        return carrierWorld.getColoredWorld(colorChannel);
     }
 }

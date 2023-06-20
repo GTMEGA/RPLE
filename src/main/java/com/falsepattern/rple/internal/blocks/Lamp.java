@@ -1,9 +1,8 @@
 /*
- * Copyright (c) 2023 FalsePattern, Ven
+ * Copyright (c) 2023 FalsePattern
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
- *
  */
 
 package com.falsepattern.rple.internal.blocks;
@@ -12,9 +11,7 @@ import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.client.render.ClampedIcon;
 import com.falsepattern.rple.internal.client.render.LampRenderingHandler;
-import lombok.*;
-import org.jetbrains.annotations.NotNull;
-
+import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -23,15 +20,21 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+// TODO: [PRE_RELEASE] Large parts of this may be included in API as an abstract class
+// TODO: [PRE_RELEASE] Should have a large part of it extracted as an example of how-to implement ColoredBlock
+// TODO: [PRE_RELEASE] Created variants of this block should be defined by a load-time configuration file
 public class Lamp extends Block implements ColoredBlock {
     private static final String GLOW_RESOURCE = Tags.MODID + ":glow";
     public static final int POWERED_BIT = 0b0010;
     public static final int INVERTED_BIT = 0b0001;
-    private IIcon glowIcon;
-    private IIcon poweredIcon;
+
+    private IIcon glowIcon = null;
+    private IIcon poweredIcon = null;
+
     public Lamp() {
         super(Material.redstoneLight);
         setHardness(0.3F);
@@ -71,15 +74,17 @@ public class Lamp extends Block implements ColoredBlock {
     }
 
     private void onBlockUpdate(World world, int x, int y, int z) {
-        if (!world.isRemote) {
-            val indirectlyPowered = world.isBlockIndirectlyGettingPowered(x, y, z);
-            val meta = world.getBlockMetadata(x, y, z);
-            val powered = (meta & POWERED_BIT) != 0;
-            if (powered && !indirectlyPowered) {
-                world.setBlockMetadataWithNotify(x, y, z, meta & ~POWERED_BIT, 3);
-            } else if (!powered && indirectlyPowered) {
-                world.setBlockMetadataWithNotify(x, y, z, meta | POWERED_BIT, 3);
-            }
+        if (world.isRemote)
+            return;
+
+        val indirectlyPowered = world.isBlockIndirectlyGettingPowered(x, y, z);
+        val meta = world.getBlockMetadata(x, y, z);
+        val powered = (meta & POWERED_BIT) != 0;
+
+        if (powered && !indirectlyPowered) {
+            world.setBlockMetadataWithNotify(x, y, z, meta & ~POWERED_BIT, 3);
+        } else if (!powered && indirectlyPowered) {
+            world.setBlockMetadataWithNotify(x, y, z, meta | POWERED_BIT, 3);
         }
     }
 

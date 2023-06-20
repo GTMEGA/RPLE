@@ -1,17 +1,15 @@
 /*
- * Copyright (c) 2023 FalsePattern, Ven
+ * Copyright (c) 2023 FalsePattern
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
- *
  */
 
 package com.falsepattern.rple.api;
 
-import net.minecraft.block.Block;
 import lombok.SneakyThrows;
 import lombok.var;
-
+import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 
 import java.lang.invoke.MethodHandle;
@@ -31,13 +29,16 @@ public interface ColoredBlock {
     default int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
         return 0;
     }
+
     @SneakyThrows
     default int getColoredLightOpacity(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
         return 0;
     }
+
     @SneakyThrows
     default void setColoredLightValue(int meta, int r, int g, int b) {
     }
+
     @SneakyThrows
     default void setColoredLightOpacity(int meta, int r, int g, int b) {
     }
@@ -67,19 +68,24 @@ public interface ColoredBlock {
         public static int getColoredLightValue(MethodHandles.Lookup lookup, Class<?> relativeTo, Object instance, IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
             return (int) doSuperCall(lookup, relativeTo, "getColoredLightValue", getColoredLightValueM).invoke(instance, world, meta, colorChannel, x, y, z);
         }
+
         @SneakyThrows
         public static int getColoredLightOpacity(MethodHandles.Lookup lookup, Class<?> relativeTo, Object instance, IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
             return (int) doSuperCall(lookup, relativeTo, "getColoredLightOpacity", getColoredLightOpacityM).invoke(instance, world, meta, colorChannel, x, y, z);
         }
+
         @SneakyThrows
         public static void setColoredLightValue(MethodHandles.Lookup lookup, Class<?> relativeTo, Object instance, int meta, int r, int g, int b) {
             doSuperCall(lookup, relativeTo, "setColoredLightValue", setColoredLightValueM).invoke(instance, meta, r, g, b);
         }
+
         @SneakyThrows
         public static void setColoredLightOpacity(MethodHandles.Lookup lookup, Class<?> relativeTo, Object instance, int meta, int r, int g, int b) {
             doSuperCall(lookup, relativeTo, "setColoredLightOpacity", setColoredLightOpacityM).invoke(instance, meta, r, g, b);
         }
 
+        // TODO: [PRE_RELEASE] Dynamically finding/invoking MethodHandles is both more complicated -and- slower vs reflection
+        // TODO: [PRE_RELEASE] Why is this in here again? Is this dead code, or does it belong elsewhere?
         private static MethodHandle doSuperCall(MethodHandles.Lookup lookup, Class<?> relativeTo, String name, MethodType type) {
             var klass = relativeTo.getSuperclass();
             while (klass != null) {

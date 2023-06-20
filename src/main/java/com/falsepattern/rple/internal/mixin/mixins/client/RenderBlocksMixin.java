@@ -1,25 +1,15 @@
 /*
- * Copyright (c) 2023 FalsePattern, Ven
+ * Copyright (c) 2023 FalsePattern
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
- *
  */
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.color.BlockLightUtil;
-import com.falsepattern.rple.internal.color.BrightnessUtil;
-import com.falsepattern.rple.internal.color.CookieMonster;
 import com.falsepattern.rple.internal.color.CookieWrappers;
-import lombok.val;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -29,7 +19,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
+// TODO: [PRE_RELEASE] Fluid translucency tweaks belong in FalseTweaks
 @Mixin(value = RenderBlocks.class,
        priority = 1001) //overwriting FalseTweaks mixAOBrightness
 public abstract class RenderBlocksMixin {
@@ -61,6 +57,7 @@ public abstract class RenderBlocksMixin {
     //Ugly evil mixin-mixin hack
     private int meta;
     private static final String GMBFBO = "getMixedBrightnessForBlockOffset(IIILorg/joml/Vector3ic;ZLcom/falsepattern/falsetweaks/modules/triangulator/renderblocks/Facing$Direction;)I";
+
     @SuppressWarnings({"MixinAnnotationTarget", "UnresolvedMixinReference"})
     @Redirect(method = GMBFBO,
               at = @At(value = "INVOKE",
@@ -73,6 +70,7 @@ public abstract class RenderBlocksMixin {
         meta = instance.getBlockMetadata(x, y, z);
         return instance.getBlock(x, y, z);
     }
+
     @SuppressWarnings({"MixinAnnotationTarget", "UnresolvedMixinReference"})
     @Redirect(method = GMBFBO,
               at = @At(value = "INVOKE",
@@ -94,7 +92,7 @@ public abstract class RenderBlocksMixin {
     }
 
     private static final float alpha = 0.7f;
-    
+
     /**
      * @author FalsePattern
      * @reason Water transparency buff
@@ -110,7 +108,7 @@ public abstract class RenderBlocksMixin {
         boolean renderTop = block.shouldSideBeRendered(this.blockAccess, x, y + 1, z, 1);
         boolean renderBottom = block.shouldSideBeRendered(this.blockAccess, x, y - 1, z, 0);
         boolean[] sideRender = new boolean[]{block.shouldSideBeRendered(this.blockAccess, x, y, z - 1, 2), block.shouldSideBeRendered(this.blockAccess, x, y, z + 1, 3),
-                                             block.shouldSideBeRendered(this.blockAccess, x - 1, y, z, 4), block.shouldSideBeRendered(this.blockAccess, x + 1, y, z, 5)};
+                block.shouldSideBeRendered(this.blockAccess, x - 1, y, z, 4), block.shouldSideBeRendered(this.blockAccess, x + 1, y, z, 5)};
 
         if (!renderTop && !renderBottom && !sideRender[0] && !sideRender[1] && !sideRender[2] && !sideRender[3]) {
             return false;
