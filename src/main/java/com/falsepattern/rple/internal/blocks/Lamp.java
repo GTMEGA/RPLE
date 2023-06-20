@@ -10,7 +10,7 @@ package com.falsepattern.rple.internal.blocks;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.client.render.IIconWrapper;
+import com.falsepattern.rple.internal.client.render.ClampedIcon;
 import com.falsepattern.rple.internal.client.render.LampRenderingHandler;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Random;
 
 public class Lamp extends Block implements ColoredBlock {
     private static final String GLOW_RESOURCE = Tags.MODID + ":glow";
@@ -48,7 +47,7 @@ public class Lamp extends Block implements ColoredBlock {
     public void registerBlockIcons(@NotNull IIconRegister register) {
         blockIcon = register.registerIcon(Tags.MODID + ":lamp/off/" + getTextureName());
         poweredIcon = register.registerIcon(Tags.MODID + ":lamp/on/" + getTextureName());
-        glowIcon = new IIconWrapper(register.registerIcon(GLOW_RESOURCE));
+        glowIcon = new ClampedIcon(register.registerIcon(GLOW_RESOURCE));
     }
 
     @Override

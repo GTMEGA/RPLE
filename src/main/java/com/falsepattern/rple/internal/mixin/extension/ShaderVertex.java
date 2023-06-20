@@ -17,7 +17,6 @@ import lombok.experimental.*;
 @Getter
 @Accessors(fluent = true, chain = true)
 public final class ShaderVertex {
-
     public static final int POSITION_X_STRIDE_OFFSET = 0;
     public static final int POSITION_Y_STRIDE_OFFSET = 1;
     public static final int POSITION_Z_STRIDE_OFFSET = 2;
@@ -78,19 +77,16 @@ public final class ShaderVertex {
 
     public ShaderVertex textureU(double textureU) {
         this.textureU = (float) textureU;
-
         return this;
     }
 
     public ShaderVertex textureV(double textureV) {
         this.textureV = (float) textureV;
-
         return this;
     }
 
     public ShaderVertex redLightMapUV(int redLightMapUV) {
         this.lightMapUV = redLightMapUV;
-
         return this;
     }
 

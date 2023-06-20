@@ -8,16 +8,13 @@
 
 package com.falsepattern.rple.internal.mixin.helpers;
 
-import codechicken.multipart.BlockMultipart;
 import codechicken.multipart.TileMultipart;
 import codechicken.multipart.minecraft.McBlockPart;
 import codechicken.multipart.minecraft.RedstoneTorchPart;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.internal.mixin.interfaces.ColoredBlockInternal;
 import lombok.val;
-import mrtjp.projectred.illumination.BaseLightPart;
 import mrtjp.projectred.illumination.ILight;
-
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 
