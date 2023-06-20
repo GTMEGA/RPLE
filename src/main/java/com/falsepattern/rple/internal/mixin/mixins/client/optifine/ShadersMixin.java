@@ -3,7 +3,6 @@
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
- *
  */
 
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
@@ -12,13 +11,17 @@ import com.falsepattern.rple.RPLEShaders;
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.color.BrightnessUtil;
 import com.falsepattern.rple.internal.color.CookieMonster;
-import lombok.*;
+import lombok.val;
 import net.minecraft.entity.EntityLivingBase;
-
 import org.lwjgl.opengl.ARBVertexShader;
-import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.*;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import shadersmod.client.ShaderLine;
 import shadersmod.client.ShaderParser;
 import shadersmod.client.Shaders;

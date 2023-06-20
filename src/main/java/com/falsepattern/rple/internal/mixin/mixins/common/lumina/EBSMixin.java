@@ -3,7 +3,6 @@
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
- *
  */
 
 package com.falsepattern.rple.internal.mixin.mixins.common.lumina;
@@ -13,12 +12,11 @@ import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.internal.storage.ColoredCarrierEBS;
 import com.falsepattern.rple.internal.storage.ColoredLightEBS;
 import lombok.val;
+import net.minecraft.world.chunk.NibbleArray;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-
-import net.minecraft.world.chunk.NibbleArray;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 @Mixin(ExtendedBlockStorage.class)
 public abstract class EBSMixin implements ColoredCarrierEBS {

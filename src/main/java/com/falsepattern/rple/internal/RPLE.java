@@ -3,7 +3,6 @@
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
- *
  */
 
 package com.falsepattern.rple.internal;
@@ -26,7 +25,6 @@ import com.falsepattern.rple.internal.lightmap.vanilla.NightVisionMask;
 import com.falsepattern.rple.internal.lightmap.vanilla.VanillaLightMapBase;
 import com.falsepattern.rple.internal.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.storage.ColoredWorldProvider;
-
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -34,9 +32,9 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
-
-import lombok.*;
-
+import lombok.Data;
+import lombok.Getter;
+import lombok.val;
 import net.minecraft.init.Blocks;
 
 import java.io.IOException;

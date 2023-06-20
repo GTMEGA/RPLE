@@ -3,7 +3,6 @@
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
- *
  */
 
 package com.falsepattern.rple.internal.mixin.mixins.client.architecturecraft;
@@ -12,19 +11,14 @@ import com.falsepattern.lib.util.MathUtil;
 import com.falsepattern.rple.internal.color.BrightnessUtil;
 import com.falsepattern.rple.internal.color.CookieMonster;
 import com.falsepattern.rple.internal.mixin.interfaces.architecturecraft.IVector3Mixin;
-import gcewing.architecture.BaseRenderTarget;
-import gcewing.architecture.BaseUtils;
-import gcewing.architecture.BaseWorldRenderTarget;
-import gcewing.architecture.BlockPos;
-import gcewing.architecture.Vector3;
+import gcewing.architecture.*;
 import lombok.val;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(value = BaseWorldRenderTarget.class,
        remap = false)
