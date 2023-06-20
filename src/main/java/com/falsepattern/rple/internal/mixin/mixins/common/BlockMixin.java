@@ -9,6 +9,7 @@ package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.api.VanillaLightColor;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.mixin.helpers.MultipartColorHelper;
 import com.falsepattern.rple.internal.mixin.interfaces.ColoredBlockInternal;
@@ -20,13 +21,18 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import static com.falsepattern.rple.api.RPLELightColor.RPLE_LIGHT_COLOR_MAX;
+
 @Mixin(Block.class)
 public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
-    @Shadow public abstract int getLightValue();
+    @Shadow
+    public abstract int getLightValue();
 
-    @Shadow public abstract int getLightOpacity();
+    @Shadow
+    public abstract int getLightOpacity();
 
-    @Shadow protected boolean useNeighborBrightness;
+    @Shadow
+    protected boolean useNeighborBrightness;
 
     private int[][] colorLightValue;
     private int[][] colorOpacity;
@@ -78,14 +84,14 @@ public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
     @Overwrite(remap = false)
     public int getLightValue(IBlockAccess world, int x, int y, int z) {
         val block = world.getBlock(x, y, z);
-        val thiz = (Block)(Object)this;
-        if (block != thiz) {
+        if (block != thiz())
             return block.getLightValue(world, x, y, z);
-        }
         val meta = world.getBlockMetadata(x, y, z);
+
         val r = getColoredLightValueRaw(meta, LightConstants.COLOR_CHANNEL_RED);
         val g = getColoredLightValueRaw(meta, LightConstants.COLOR_CHANNEL_GREEN);
         val b = getColoredLightValueRaw(meta, LightConstants.COLOR_CHANNEL_BLUE);
+
         return r > g ? Math.max(r, b) : Math.max(g, b);
     }
 
@@ -106,40 +112,37 @@ public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
     @Overwrite(remap = false)
     public int getLightOpacity(IBlockAccess world, int x, int y, int z) {
         val block = world.getBlock(x, y, z);
-        val thiz = (Block)(Object)this;
-        if (block != thiz) {
+        if (block != thiz())
             return block.getLightOpacity(world, x, y, z);
-        }
         val meta = world.getBlockMetadata(x, y, z);
+
         val r = getColoredLightOpacity(world, meta, LightConstants.COLOR_CHANNEL_RED, x, y, z);
         val g = getColoredLightOpacity(world, meta, LightConstants.COLOR_CHANNEL_GREEN, x, y, z);
         val b = getColoredLightOpacity(world, meta, LightConstants.COLOR_CHANNEL_BLUE, x, y, z);
+
         return r < g ? Math.max(r, b) : Math.max(g, b);
     }
 
     @Override
     public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-        val thiz = (Block) (Object) this;
         if (world != null) {
             val block = world.getBlock(x, y, z);
-            if (block != thiz) {
-                return ((ColoredBlock)block).getColoredLightValue(world, meta, colorChannel, x, y, z);
-            } else if (Compat.isMultipart(block) && Compat.projRedLightsPresent()) {
+            if (block != thiz())
+                return ((ColoredBlock) block).getColoredLightValue(world, meta, colorChannel, x, y, z);
+
+            if (Compat.isMultipart(block) && Compat.projRedLightsPresent()) {
                 int res = MultipartColorHelper.getColoredLightValue(block, world, meta, colorChannel, x, y, z);
-                if (res >= 0) {
+                if (res >= 0)
                     return res;
-                }
-            }
-        }
-        if (colorLightValue == null) {
-            if (world != null) {
-                return getLightValue(world, x, y, z);
-            } else {
-                return getLightValue();
             }
         }
 
-        return getColoredLightValueRaw(meta, colorChannel);
+        if (colorLightValue != null)
+            return getColoredLightValueRaw(meta, colorChannel);
+
+        if (world != null)
+            return getLightValue(world, x, y, z);
+        return getLightValue();
     }
 
     @Override
@@ -156,24 +159,28 @@ public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
 
     @Override
     public int getColoredLightOpacity(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-        // TODO: Remove this back once the opacity configs are done, again very helpful for debugging right now!
-        val thiz = (Block)(Object)this;
-        if (thiz instanceof BlockStainedGlass) {
-            val c = LightConstants.colors[colorChannel][(~meta) & 0xF];
-            return 15 - c;
-        }
-        return getColoredLightOpacityRaw(meta, colorChannel);
+        // TODO: [PRE_RELEASE] Remove this back once the opacity configs are done, again very helpful for debugging right now!
+        if (!(thiz() instanceof BlockStainedGlass))
+            return getColoredLightOpacityRaw(meta, colorChannel);
+
+        val lightColor = VanillaLightColor.ofBlockMeta(meta);
+        val lightChannel = lightColor.rgbChannel(colorChannel);
+
+        return RPLE_LIGHT_COLOR_MAX - lightChannel;
     }
 
     @Override
     public int getColoredLightOpacityRaw(int meta, int colorChannel) {
-        if (colorOpacity == null) {
+        if (colorOpacity == null)
             return getLightOpacity();
-        } else {
-            if (meta >= colorOpacity.length) {
-                meta = 0;
-            }
-            return colorOpacity[meta][colorChannel];
-        }
+
+        // TODO: [PRE_RELEASE] Ensure proper AIOOB check!
+        if (meta >= colorOpacity.length)
+            meta = 0;
+        return colorOpacity[meta][colorChannel];
+    }
+
+    private Block thiz() {
+        return (Block) (Object) this;
     }
 }
