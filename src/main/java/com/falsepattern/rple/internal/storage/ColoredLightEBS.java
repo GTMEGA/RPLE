@@ -11,9 +11,11 @@ import com.falsepattern.lumina.api.ILumiEBS;
 import com.falsepattern.lumina.api.ILumiEBSRoot;
 import com.falsepattern.rple.api.LightConstants;
 import net.minecraft.world.chunk.NibbleArray;
+import org.jetbrains.annotations.Nullable;
 
 public final class ColoredLightEBS implements ILumiEBS {
     private final ILumiEBSRoot carrier;
+    @Nullable
     private final NibbleArray skylightArray;
     private final NibbleArray blocklightArray;
 

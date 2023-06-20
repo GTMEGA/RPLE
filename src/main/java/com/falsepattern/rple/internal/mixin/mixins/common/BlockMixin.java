@@ -9,19 +9,21 @@ package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.api.VanillaLightColor;
+import com.falsepattern.rple.api.color.ColorAPI;
+import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.mixin.helpers.MultipartColorHelper;
 import com.falsepattern.rple.internal.mixin.interfaces.ColoredBlockInternal;
 import lombok.val;
+import lombok.var;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStainedGlass;
 import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import static com.falsepattern.rple.api.RPLELightColor.RPLE_LIGHT_COLOR_MAX;
 
 @Mixin(Block.class)
 public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
@@ -34,8 +36,8 @@ public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
     @Shadow
     protected boolean useNeighborBrightness;
 
-    private int[][] colorLightValue;
-    private int[][] colorOpacity;
+    private int @Nullable [][] colorLightValue = null;
+    private int @Nullable [][] colorOpacity = null;
 
     @Override
     public void setColoredLightValue(int meta, int r, int g, int b) {
@@ -50,25 +52,26 @@ public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
     private static int[][] add(int[][] oldArray, int meta, int r, int g, int b) {
         if (oldArray == null) {
             val newArray = new int[meta + 1][];
-            for (int i = 0; i <= meta; i++) {
+            for (var i = 0; i <= meta; i++)
                 setChannels(r, g, b, newArray[meta] = new int[3]);
-            }
+
             return newArray;
-        } else if (oldArray.length <= meta) {
-            int oldLength = oldArray.length;
-            val newArray = new int[meta + 1][];
-            for (int i = 0; i < oldLength; i++) {
-                newArray[i] = oldArray[i];
-            }
-            for (int i = oldLength; i <= meta; i++) {
-                setChannels(r, g, b, newArray[meta] = new int[3]);
-            }
-            return newArray;
-        } else {
-            val element = oldArray[meta];
-            setChannels(r, g, b, element);
-            return oldArray;
         }
+
+        if (oldArray.length <= meta) {
+            val oldLength = oldArray.length;
+            val newArray = new int[meta + 1][];
+
+            System.arraycopy(oldArray, 0, newArray, 0, oldLength);
+
+            for (var i = oldLength; i <= meta; i++)
+                setChannels(r, g, b, newArray[meta] = new int[3]);
+            return newArray;
+        }
+
+        val element = oldArray[meta];
+        setChannels(r, g, b, element);
+        return oldArray;
     }
 
     private static void setChannels(int r, int g, int b, int[] element) {
@@ -131,7 +134,7 @@ public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
                 return ((ColoredBlock) block).getColoredLightValue(world, meta, colorChannel, x, y, z);
 
             if (Compat.isMultipart(block) && Compat.projRedLightsPresent()) {
-                int res = MultipartColorHelper.getColoredLightValue(block, world, meta, colorChannel, x, y, z);
+                val res = MultipartColorHelper.getColoredLightValue(block, world, meta, colorChannel, x, y, z);
                 if (res >= 0)
                     return res;
             }
@@ -147,14 +150,12 @@ public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
 
     @Override
     public int getColoredLightValueRaw(int meta, int colorChannel) {
-        if (colorLightValue == null) {
+        if (colorLightValue == null)
             return getLightValue();
-        } else {
-            if (meta >= colorLightValue.length) {
-                meta = 0;
-            }
-            return colorLightValue[meta][colorChannel];
-        }
+
+        if (meta >= colorLightValue.length)
+            meta = 0;
+        return colorLightValue[meta][colorChannel];
     }
 
     @Override
@@ -163,10 +164,10 @@ public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
         if (!(thiz() instanceof BlockStainedGlass))
             return getColoredLightOpacityRaw(meta, colorChannel);
 
-        val lightColor = VanillaLightColor.ofBlockMeta(meta);
-        val lightChannel = lightColor.rgbChannel(colorChannel);
+        val lightColor = ColorAPI.ofBlockMeta(meta);
+        val lightChannel = ColorChannel.values()[colorChannel].component(lightColor);
 
-        return RPLE_LIGHT_COLOR_MAX - lightChannel;
+        return ColorAPI.COLOR_MAX - lightChannel;
     }
 
     @Override

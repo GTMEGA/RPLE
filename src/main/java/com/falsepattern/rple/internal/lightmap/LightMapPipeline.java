@@ -39,20 +39,17 @@ public class LightMapPipeline implements LightMapPipelineRegistry {
     @Override
     public void registerBlockLightMapBase(BlockLightMapBase blockBase, int priority) {
         val wrappedGenerator = wrappedWithPriority(blockBase, priority);
-
         if (blockBases.contains(wrappedGenerator)) {
             Common.LOG.warn("BlockLightMapBase registered twice!", new Throwable());
             return;
         }
 
         blockBases.add(wrappedGenerator);
-
     }
 
     @Override
     public void registerSkyLightMapBase(SkyLightMapBase skyBase, int priority) {
         val wrappedGenerator = wrappedWithPriority(skyBase, priority);
-
         if (skyBases.contains(wrappedGenerator)) {
             Common.LOG.warn("SkyLightMapBase registered twice!", new Throwable());
             return;
@@ -86,37 +83,31 @@ public class LightMapPipeline implements LightMapPipelineRegistry {
         val blockStrip = mixedLightMap.blockLightMap();
         val skyStrip = mixedLightMap.skyLightMap();
 
-
         for (val blockBase : blockBases) {
             blockStrip.resetLightMap();
-
             if (blockBase.value.generateBlockLightMapBase(blockStrip, partialTick))
                 break;
         }
 
         for (val skyBase : skyBases) {
             skyStrip.resetLightMap();
-
             if (skyBase.value.generateSkyLightMapBase(skyStrip, partialTick))
                 break;
         }
 
         for (val mask : blockMasks) {
             tempStrip.resetLightMap();
-
             if (mask.generateBlockLightMapMask(tempStrip, partialTick))
                 blockStrip.multLightMap(tempStrip);
         }
 
         for (val mask : skyMasks) {
             tempStrip.resetLightMap();
-
             if (mask.generateSkyLightMapMask(tempStrip, partialTick))
                 skyStrip.multLightMap(tempStrip);
         }
 
         mixedLightMap.mixLightMaps();
-
         return mixedLightMap.lightMapRGBData();
     }
 

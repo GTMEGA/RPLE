@@ -134,7 +134,6 @@ public class LightMapHook {
 
         for (var i = 0; i < Common.LIGHT_MAP_2D_SIZE; i++) {
             val colorRGB = lightMapRGB[i];
-
             RED_LIGHT_MAP.colors[i] = colorRGB | 0xFF00FFFF;
             GREEN_LIGHT_MAP.colors[i] = colorRGB | 0xFFFF00FF;
             BLUE_LIGHT_MAP.colors[i] = colorRGB | 0xFFFFFF00;

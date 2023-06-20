@@ -201,7 +201,6 @@ public final class ColoredLightWorld implements ILumiWorld {
         val bz = z + (chunk.z() * 16);
 
         val lightValue = getLightValue(access, block, meta, bx, y, bz);
-
         return Math.max(savedLightValue, lightValue);
     }
 }
