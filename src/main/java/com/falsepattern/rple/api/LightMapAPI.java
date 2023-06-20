@@ -7,13 +7,41 @@
 
 package com.falsepattern.rple.api;
 
-import com.falsepattern.rple.api.lightmap.LightMapPipelineRegistry;
+import com.falsepattern.rple.api.lightmap.*;
 import com.falsepattern.rple.internal.lightmap.LightMapPipeline;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class LightMapAPI {
-    public static LightMapPipelineRegistry lightMapPipelineRegistry() {
+    public static void registerLightMapGenerator(LightMapGenerator generator, int priority) {
+        lightMapPipelineRegistry().registerLightMapGenerator(generator, priority);
+    }
+
+    public static void registerLightMapBase(LightMapBase base, int priority) {
+        lightMapPipelineRegistry().registerLightMapBase(base, priority);
+    }
+
+    public static void registerBlockLightMapBase(BlockLightMapBase blockBase, int priority) {
+        lightMapPipelineRegistry().registerBlockLightMapBase(blockBase, priority);
+    }
+
+    public static void registerSkyLightMapBase(SkyLightMapBase skyBase, int priority) {
+        lightMapPipelineRegistry().registerSkyLightMapBase(skyBase, priority);
+    }
+
+    public static void registerLightMapMask(LightMapMask mask) {
+        lightMapPipelineRegistry().registerLightMapMask(mask);
+    }
+
+    public static void registerBlockLightMapMask(BlockLightMapMask blockMask) {
+        lightMapPipelineRegistry().registerBlockLightMapMask(blockMask);
+    }
+
+    public static void registerSkyLightMapMask(SkyLightMapMask skyMask) {
+        lightMapPipelineRegistry().registerSkyLightMapMask(skyMask);
+    }
+
+    public static LightMapRegistry lightMapPipelineRegistry() {
         return LightMapPipeline.lightMapPipeline();
     }
 }

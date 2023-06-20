@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.lightmap.vanilla;
+package com.falsepattern.rple.api.lightmap.vanilla;
 
 import com.falsepattern.rple.api.lightmap.LightMapMask;
 import com.falsepattern.rple.api.lightmap.LightMapStrip;
@@ -26,7 +26,7 @@ public class NightVisionMask implements LightMapMask {
         return generateNightVisionMask(output, partialTick);
     }
 
-    private static boolean generateNightVisionMask(LightMapStrip output, float partialTick) {
+    protected boolean generateNightVisionMask(LightMapStrip output, float partialTick) {
         val player = Minecraft.getMinecraft().thePlayer;
         if (!player.isPotionActive(Potion.nightVision))
             return false;
@@ -37,11 +37,11 @@ public class NightVisionMask implements LightMapMask {
         return true;
     }
 
-    private static float nightVisionIntensity(EntityPlayer player, float partialTick) {
+    protected float nightVisionIntensity(EntityPlayer player, float partialTick) {
         return nightVisionBrightness(player, partialTick) * 3F;
     }
 
-    private static float nightVisionBrightness(EntityPlayer player, float partialTick) {
+    protected float nightVisionBrightness(EntityPlayer player, float partialTick) {
         val duration = player.getActivePotionEffect(Potion.nightVision).getDuration();
         return duration > 200 ? 1.0F : 0.7F + MathHelper.sin(((float) duration - partialTick) * (float) Math.PI * 0.2F) * 0.3F;
     }

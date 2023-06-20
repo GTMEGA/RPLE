@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api.lightmap;
 
-public interface LightMapPipelineRegistry {
+public interface LightMapRegistry {
     default void registerLightMapGenerator(LightMapGenerator generator, int priority) {
         registerLightMapBase(generator, priority);
         registerLightMapMask(generator);

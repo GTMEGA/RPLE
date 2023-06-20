@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class LightMapPipeline implements LightMapPipelineRegistry {
+public class LightMapPipeline implements LightMapRegistry {
     private static final LightMapPipeline INSTANCE = new LightMapPipeline();
 
     private final Set<PriorityPair<BlockLightMapBase>> blockBases = new TreeSet<>();

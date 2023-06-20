@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.lightmap.vanilla;
+package com.falsepattern.rple.api.lightmap.vanilla;
 
 import com.falsepattern.rple.api.lightmap.LightMapMask;
 import com.falsepattern.rple.api.lightmap.LightMapStrip;
@@ -25,7 +25,7 @@ public class BossColorModifierMask implements LightMapMask {
         return true;
     }
 
-    private static void generateBossColorModifierMask(LightMapStrip output, float partialTick) {
+    protected void generateBossColorModifierMask(LightMapStrip output, float partialTick) {
         val intensity = bossColorModifierIntensity(partialTick);
         val red = (1F - intensity) + 0.7F * intensity;
         val green = (1F - intensity) + 0.6F * intensity;
@@ -34,9 +34,9 @@ public class BossColorModifierMask implements LightMapMask {
         output.fillLightMapRGB(red, green, blue);
     }
 
-    private static float bossColorModifierIntensity(float partialTick) {
+    protected float bossColorModifierIntensity(float partialTick) {
         val entityRenderer = Minecraft.getMinecraft().entityRenderer;
         return entityRenderer.bossColorModifierPrev +
-                (entityRenderer.bossColorModifier - entityRenderer.bossColorModifierPrev) * partialTick;
+               (entityRenderer.bossColorModifier - entityRenderer.bossColorModifierPrev) * partialTick;
     }
 }

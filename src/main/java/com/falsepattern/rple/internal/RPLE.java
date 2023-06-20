@@ -15,14 +15,15 @@ import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
 import com.falsepattern.rple.Lamps;
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.api.LightMapAPI;
 import com.falsepattern.rple.api.lightmap.LightMapBase;
 import com.falsepattern.rple.api.lightmap.LightMapMask;
+import com.falsepattern.rple.api.lightmap.vanilla.BossColorModifierMask;
+import com.falsepattern.rple.api.lightmap.vanilla.NightVisionMask;
+import com.falsepattern.rple.api.lightmap.vanilla.VanillaLightMapBase;
 import com.falsepattern.rple.internal.blocks.ItemLamp;
 import com.falsepattern.rple.internal.blocks.Lamp;
 import com.falsepattern.rple.internal.client.render.LampRenderingHandler;
-import com.falsepattern.rple.internal.lightmap.vanilla.BossColorModifierMask;
-import com.falsepattern.rple.internal.lightmap.vanilla.NightVisionMask;
-import com.falsepattern.rple.internal.lightmap.vanilla.VanillaLightMapBase;
 import com.falsepattern.rple.internal.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.storage.ColoredWorldProvider;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -41,8 +42,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
-
-import static com.falsepattern.rple.api.LightMapAPI.lightMapPipelineRegistry;
 
 @Mod(modid = Tags.MODID,
         version = Tags.VERSION,
@@ -151,14 +150,9 @@ public class RPLE {
             Common.LOG.error("Could not set up light values", e);
         }
 
-        val lightMapRegistry = lightMapPipelineRegistry();
-        lightMapRegistry.registerLightMapBase(VANILLA_LIGHT_MAP_BASE, 1000);
-        lightMapRegistry.registerLightMapMask(NIGHT_VISION_MASK);
-        lightMapRegistry.registerLightMapMask(BOSS_COLOR_MODIFIER_MASK);
-
-        //FIXME Random broken polygons show up with shaders on some systems with triangulation enabled.
-        //      Might be a FalseTweaks bug, gotta look into it later.
-//        ((ToggleableTessellator) Tessellator.instance).disableTriangulator();
+        LightMapAPI.registerLightMapBase(VANILLA_LIGHT_MAP_BASE, 1000);
+        LightMapAPI.registerLightMapMask(NIGHT_VISION_MASK);
+        LightMapAPI.registerLightMapMask(BOSS_COLOR_MODIFIER_MASK);
     }
 
     private static final Map<String, RGB> valueCache = new HashMap<>();

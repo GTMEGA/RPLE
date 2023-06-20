@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.lightmap.vanilla;
+package com.falsepattern.rple.api.lightmap.vanilla;
 
 import com.falsepattern.rple.api.lightmap.LightMapBase;
 import com.falsepattern.rple.api.lightmap.LightMapStrip;
@@ -16,7 +16,7 @@ import net.minecraft.client.Minecraft;
 import static com.falsepattern.rple.api.lightmap.LightMapStrip.LIGHT_MAP_STRIP_LENGTH;
 
 public class VanillaLightMapBase implements LightMapBase {
-    private static final int END_DIMENSION_ID = 1;
+    protected static final int END_DIMENSION_ID = 1;
 
     @Override
     public boolean generateBlockLightMapBase(LightMapStrip output, float partialTick) {
