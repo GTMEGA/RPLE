@@ -10,7 +10,6 @@ package com.falsepattern.rple.internal;
 
 
 import com.falsepattern.chunk.api.ChunkDataRegistry;
-import com.falsepattern.falsetweaks.api.triangulator.ToggleableTessellator;
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.lib.util.ResourceUtil;
 import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
@@ -22,9 +21,9 @@ import com.falsepattern.rple.api.lightmap.LightMapMask;
 import com.falsepattern.rple.internal.blocks.ItemLamp;
 import com.falsepattern.rple.internal.blocks.Lamp;
 import com.falsepattern.rple.internal.client.render.LampRenderingHandler;
-import com.falsepattern.rple.internal.lightmap.builtin.base.BossColorModifierMask;
-import com.falsepattern.rple.internal.lightmap.builtin.base.NightVisionMask;
-import com.falsepattern.rple.internal.lightmap.builtin.base.VanillaLightMapBase;
+import com.falsepattern.rple.internal.lightmap.vanilla.BossColorModifierMask;
+import com.falsepattern.rple.internal.lightmap.vanilla.NightVisionMask;
+import com.falsepattern.rple.internal.lightmap.vanilla.VanillaLightMapBase;
 import com.falsepattern.rple.internal.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.storage.ColoredWorldProvider;
 
@@ -38,7 +37,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import lombok.*;
 
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 
 import java.io.IOException;
