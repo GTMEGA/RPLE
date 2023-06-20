@@ -7,18 +7,15 @@
 
 package com.falsepattern.rple.api.color;
 
-public enum ColorChannel {
-    RED, GREEN, BLUE;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
-    public int componentFromColor(RPLEColour color) {
-        switch (this) {
-            default:
-            case RED:
-                return color.red();
-            case GREEN:
-                return color.green();
-            case BLUE:
-                return color.blue();
-        }
-    }
+@Getter
+@Accessors(fluent = true, chain = false)
+@AllArgsConstructor
+public class CustomColor implements RPLEColour {
+    protected final int red;
+    protected final int green;
+    protected final int blue;
 }

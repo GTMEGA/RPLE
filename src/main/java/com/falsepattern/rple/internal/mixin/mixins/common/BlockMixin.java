@@ -9,8 +9,8 @@ package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.api.color.ColorAPI;
 import com.falsepattern.rple.api.color.ColorChannel;
+import com.falsepattern.rple.api.color.RPLEColorAPI;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.mixin.helpers.MultipartColorHelper;
 import com.falsepattern.rple.internal.mixin.interfaces.ColoredBlockInternal;
@@ -164,10 +164,10 @@ public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
         if (!(thiz() instanceof BlockStainedGlass))
             return getColoredLightOpacityRaw(meta, colorChannel);
 
-        val lightColor = ColorAPI.ofBlockMeta(meta);
-        val lightChannel = ColorChannel.values()[colorChannel].component(lightColor);
+        val lightColor = RPLEColorAPI.vanillaBlockMetaColor(meta);
+        val lightChannel = ColorChannel.values()[colorChannel].componentFromColor(lightColor);
 
-        return ColorAPI.COLOR_MAX - lightChannel;
+        return RPLEColorAPI.COLOR_MAX - lightChannel;
     }
 
     @Override

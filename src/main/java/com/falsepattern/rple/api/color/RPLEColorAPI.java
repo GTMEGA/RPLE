@@ -14,17 +14,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @UtilityClass
-public final class ColorAPI {
+public final class RPLEColorAPI {
     private static final Logger LOG = LogManager.getLogger(Tags.MODNAME + "|ColorAPI");
 
     public static final int COLOR_MIN = 0;
     public static final int COLOR_MAX = 15;
 
-    public static int clampColorComponent(int component) {
-        return MathUtil.clamp(component, COLOR_MIN, COLOR_MAX);
-    }
-
-    public static RPLEColour ofBlockMeta(int meta) {
+    public static RPLEColour vanillaBlockMetaColor(int meta) {
         if (meta < COLOR_MIN || meta > COLOR_MAX)
             return errorColor();
 
@@ -33,5 +29,9 @@ public final class ColorAPI {
 
     public static RPLEColour errorColor() {
         return VanillaColor.RED;
+    }
+
+    public static int clampColorComponent(int component) {
+        return MathUtil.clamp(component, COLOR_MIN, COLOR_MAX);
     }
 }
