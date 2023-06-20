@@ -8,8 +8,8 @@
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.api.ColoredBlock;
-import com.falsepattern.rple.internal.color.BlockLightUtil;
-import com.falsepattern.rple.internal.color.CookieWrappers;
+import com.falsepattern.rple.internal.common.helper.color.BlockLightUtil;
+import com.falsepattern.rple.internal.common.helper.color.CookieWrappers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;

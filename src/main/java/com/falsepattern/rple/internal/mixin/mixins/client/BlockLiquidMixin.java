@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.color.CookieWrappers;
+import com.falsepattern.rple.internal.common.helper.color.CookieWrappers;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockLiquid;

@@ -9,7 +9,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.Compat;
-import com.falsepattern.rple.internal.color.CookieMonster;
+import com.falsepattern.rple.internal.common.helper.color.CookieMonster;
 import com.falsepattern.rple.internal.mixin.helpers.OpenGlHelperPacked;
 import net.minecraft.client.renderer.OpenGlHelper;
 import org.lwjgl.opengl.ARBMultitexture;

@@ -15,17 +15,17 @@ import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
 import com.falsepattern.rple.Lamps;
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.api.LightMapAPI;
+import com.falsepattern.rple.api.RPLELightMapAPI;
 import com.falsepattern.rple.api.lightmap.LightMapBase;
 import com.falsepattern.rple.api.lightmap.LightMapMask;
 import com.falsepattern.rple.api.lightmap.vanilla.BossColorModifierMask;
 import com.falsepattern.rple.api.lightmap.vanilla.NightVisionMask;
 import com.falsepattern.rple.api.lightmap.vanilla.VanillaLightMapBase;
-import com.falsepattern.rple.internal.blocks.ItemLamp;
-import com.falsepattern.rple.internal.blocks.Lamp;
-import com.falsepattern.rple.internal.client.render.LampRenderingHandler;
-import com.falsepattern.rple.internal.storage.ColoredDataManager;
-import com.falsepattern.rple.internal.storage.ColoredWorldProvider;
+import com.falsepattern.rple.internal.block.LampBlock;
+import com.falsepattern.rple.internal.block.LampItemBlock;
+import com.falsepattern.rple.internal.client.render.LampRenderer;
+import com.falsepattern.rple.internal.common.helper.storage.ColoredDataManager;
+import com.falsepattern.rple.internal.common.helper.storage.ColoredWorldProvider;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -44,33 +44,23 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 @Mod(modid = Tags.MODID,
-        version = Tags.VERSION,
-        name = Tags.MODNAME,
-        acceptedMinecraftVersions = "[1.7.10]",
-        dependencies = "required-after:falsepatternlib@[0.11,);" +
-                "required-after:chunkapi@[0.2,);" +
-                "required-after:lumina;" +
-                "required-after:falsetweaks@[2.4,)")
+     version = Tags.VERSION,
+     name = Tags.MODNAME,
+     acceptedMinecraftVersions = "[1.7.10]",
+     dependencies = "required-after:falsepatternlib@[0.11,);" +
+                    "required-after:chunkapi@[0.2,);" +
+                    "required-after:lumina;" +
+                    "required-after:falsetweaks@[2.4,)")
 public class RPLE {
     public static final String[] IDs = new String[]{"RED", "GREEN", "BLUE"};
 
     private static final int[] COLOR_CHANNELS = new int[]{LightConstants.COLOR_CHANNEL_RED,
             LightConstants.COLOR_CHANNEL_GREEN,
             LightConstants.COLOR_CHANNEL_BLUE};
-    Object[][] lamps = new Object[][]{
-            {"red", 15, 0, 0},
-            {"magenta", 15, 0, 15},
-            {"purple", 7, 0, 15},
-            {"blue", 0, 0, 15},
-            {"azure", 7, 7, 15},
-            {"cyan", 0, 15, 15},
-            {"green", 0, 15, 0},
-            {"lime", 7, 15, 7},
-            {"yellow", 15, 15, 0},
-            {"orange", 15, 7, 0},
-            {"pink", 15, 7, 15},
-            {"white", 15, 15, 15}
-    };
+
+    private static final LightMapBase VANILLA_LIGHT_MAP_BASE = new VanillaLightMapBase();
+    private static final LightMapMask NIGHT_VISION_MASK = new NightVisionMask();
+    private static final LightMapMask BOSS_COLOR_MODIFIER_MASK = new BossColorModifierMask();
 
     @Getter
     private static int redIndexNoShader = 7; //Overrides vanilla value
@@ -116,13 +106,13 @@ public class RPLE {
                 val r = lampData.r;
                 val g = lampData.g;
                 val b = lampData.b;
-                val lamp = new Lamp();
+                val lamp = new LampBlock();
                 lamp.setBlockName(Tags.MODID + ".lamp." + name).setBlockTextureName(name);
                 lamp.setColoredLightValue(0, 0, 0, 0);
-                lamp.setColoredLightValue(Lamp.INVERTED_BIT, r, g, b);
-                lamp.setColoredLightValue(Lamp.POWERED_BIT, r, g, b);
-                lamp.setColoredLightValue(Lamp.INVERTED_BIT | Lamp.POWERED_BIT, 0, 0, 0);
-                GameRegistry.registerBlock(lamp, ItemLamp.class, "lamp." + name);
+                lamp.setColoredLightValue(LampBlock.INVERTED_BIT, r, g, b);
+                lamp.setColoredLightValue(LampBlock.POWERED_BIT, r, g, b);
+                lamp.setColoredLightValue(LampBlock.INVERTED_BIT | LampBlock.POWERED_BIT, 0, 0, 0);
+                GameRegistry.registerBlock(lamp, LampItemBlock.class, "lamp." + name);
             }
         }
     }
@@ -133,12 +123,8 @@ public class RPLE {
             ChunkDataRegistry.registerDataManager(new ColoredDataManager(colorChannel));
             LumiWorldProviderRegistry.registerWorldProvider(new ColoredWorldProvider(colorChannel));
         }
-        RenderingRegistry.registerBlockHandler(new LampRenderingHandler());
+        RenderingRegistry.registerBlockHandler(new LampRenderer());
     }
-
-    private static final LightMapBase VANILLA_LIGHT_MAP_BASE = new VanillaLightMapBase();
-    private static final LightMapMask NIGHT_VISION_MASK = new NightVisionMask();
-    private static final LightMapMask BOSS_COLOR_MODIFIER_MASK = new BossColorModifierMask();
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
@@ -150,9 +136,9 @@ public class RPLE {
             Common.LOG.error("Could not set up light values", e);
         }
 
-        LightMapAPI.registerLightMapBase(VANILLA_LIGHT_MAP_BASE, 1000);
-        LightMapAPI.registerLightMapMask(NIGHT_VISION_MASK);
-        LightMapAPI.registerLightMapMask(BOSS_COLOR_MODIFIER_MASK);
+        RPLELightMapAPI.registerLightMapBase(VANILLA_LIGHT_MAP_BASE, 1000);
+        RPLELightMapAPI.registerLightMapMask(NIGHT_VISION_MASK);
+        RPLELightMapAPI.registerLightMapMask(BOSS_COLOR_MODIFIER_MASK);
     }
 
     private static final Map<String, RGB> valueCache = new HashMap<>();

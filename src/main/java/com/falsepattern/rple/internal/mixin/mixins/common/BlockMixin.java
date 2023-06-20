@@ -9,8 +9,8 @@ package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.api.color.RPLEColorAPI;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.mixin.helpers.MultipartColorHelper;
 import com.falsepattern.rple.internal.mixin.interfaces.ColoredBlockInternal;

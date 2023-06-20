@@ -5,9 +5,11 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.api.color;
+package com.falsepattern.rple.api;
 
 import com.falsepattern.lib.util.MathUtil;
+import com.falsepattern.rple.api.color.RPLEColour;
+import com.falsepattern.rple.api.color.VanillaColor;
 import com.falsepattern.rple.internal.Tags;
 import lombok.experimental.UtilityClass;
 import org.apache.logging.log4j.LogManager;

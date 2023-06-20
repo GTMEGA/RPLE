@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.carpentersblocks;
 
 import com.carpentersblocks.renderer.helper.LightingHelper;
-import com.falsepattern.rple.internal.color.CookieWrappers;
+import com.falsepattern.rple.internal.common.helper.color.CookieWrappers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 

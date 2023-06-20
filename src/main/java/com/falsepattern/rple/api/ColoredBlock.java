@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
  * Note: Due to mixin breaking super calls with mixin-implemented interfaces on super classes,
  * you need to use {@link SuperCallHelper}.
  */
+@Deprecated
 public interface ColoredBlock {
     @SneakyThrows
     default int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {

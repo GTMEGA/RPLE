@@ -9,8 +9,8 @@ package com.falsepattern.rple.internal.mixin.mixins.common.lumina;
 
 import com.falsepattern.lumina.api.ILumiEBSRoot;
 import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.internal.storage.ColoredCarrierEBS;
-import com.falsepattern.rple.internal.storage.ColoredLightEBS;
+import com.falsepattern.rple.internal.common.helper.storage.ColoredCarrierEBS;
+import com.falsepattern.rple.internal.common.helper.storage.ColoredLightEBS;
 import lombok.val;
 import net.minecraft.world.chunk.NibbleArray;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;

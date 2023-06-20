@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.storage;
+package com.falsepattern.rple.internal.common.helper.storage;
 
 import com.falsepattern.lumina.api.ILightingEngine;
 import com.falsepattern.lumina.api.ILumiWorld;
@@ -13,7 +13,7 @@ import com.falsepattern.lumina.api.ILumiWorldRoot;
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.color.BrightnessUtil;
+import com.falsepattern.rple.internal.common.helper.color.BrightnessUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.Getter;

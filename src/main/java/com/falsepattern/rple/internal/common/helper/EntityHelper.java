@@ -5,8 +5,9 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal;
+package com.falsepattern.rple.internal.common.helper;
 
+import com.falsepattern.rple.internal.Common;
 import lombok.val;
 import net.minecraft.entity.Entity;
 

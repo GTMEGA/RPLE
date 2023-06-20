@@ -8,9 +8,9 @@
 package com.falsepattern.rple.internal.mixin.mixins.common.lumina;
 
 import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.internal.storage.ColoredCarrierChunk;
-import com.falsepattern.rple.internal.storage.ColoredCarrierWorld;
-import com.falsepattern.rple.internal.storage.ColoredLightChunk;
+import com.falsepattern.rple.internal.common.helper.storage.ColoredCarrierChunk;
+import com.falsepattern.rple.internal.common.helper.storage.ColoredCarrierWorld;
+import com.falsepattern.rple.internal.common.helper.storage.ColoredLightChunk;
 import lombok.val;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

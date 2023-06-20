@@ -8,11 +8,11 @@
 package com.falsepattern.rple.api;
 
 import com.falsepattern.rple.api.lightmap.*;
-import com.falsepattern.rple.internal.lightmap.LightMapPipeline;
+import com.falsepattern.rple.internal.common.helper.lightmap.LightMapPipeline;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public final class LightMapAPI {
+public final class RPLELightMapAPI {
     public static void registerLightMapGenerator(LightMapGenerator generator, int priority) {
         lightMapPipelineRegistry().registerLightMapGenerator(generator, priority);
     }

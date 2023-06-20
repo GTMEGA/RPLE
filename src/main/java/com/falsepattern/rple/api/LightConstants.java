@@ -7,6 +7,7 @@
 
 package com.falsepattern.rple.api;
 
+@Deprecated
 public class LightConstants {
     public static final int COLOR_CHANNEL_RED = 0;
     public static final int COLOR_CHANNEL_GREEN = 1;

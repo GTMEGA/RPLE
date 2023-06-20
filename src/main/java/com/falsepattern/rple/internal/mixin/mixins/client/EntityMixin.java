@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.EntityHelper;
-import com.falsepattern.rple.internal.color.BrightnessUtil;
-import com.falsepattern.rple.internal.color.CookieMonster;
+import com.falsepattern.rple.internal.common.helper.EntityHelper;
+import com.falsepattern.rple.internal.common.helper.color.BrightnessUtil;
+import com.falsepattern.rple.internal.common.helper.color.CookieMonster;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;

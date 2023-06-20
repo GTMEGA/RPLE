@@ -5,12 +5,12 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.blocks;
+package com.falsepattern.rple.internal.block;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.client.render.ClampedIcon;
-import com.falsepattern.rple.internal.client.render.LampRenderingHandler;
+import com.falsepattern.rple.internal.client.render.LampRenderer;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -27,7 +27,7 @@ import java.util.List;
 // TODO: [PRE_RELEASE] Large parts of this may be included in API as an abstract class
 // TODO: [PRE_RELEASE] Should have a large part of it extracted as an example of how-to implement ColoredBlock
 // TODO: [PRE_RELEASE] Created variants of this block should be defined by a load-time configuration file
-public class Lamp extends Block implements ColoredBlock {
+public class LampBlock extends Block implements ColoredBlock {
     private static final String GLOW_RESOURCE = Tags.MODID + ":glow";
     public static final int POWERED_BIT = 0b0010;
     public static final int INVERTED_BIT = 0b0001;
@@ -35,7 +35,7 @@ public class Lamp extends Block implements ColoredBlock {
     private IIcon glowIcon = null;
     private IIcon poweredIcon = null;
 
-    public Lamp() {
+    public LampBlock() {
         super(Material.redstoneLight);
         setHardness(0.3F);
         setStepSound(soundTypeGlass);
@@ -106,7 +106,7 @@ public class Lamp extends Block implements ColoredBlock {
 
     @Override
     public int getRenderType() {
-        return LampRenderingHandler.RENDER_ID;
+        return LampRenderer.RENDER_ID;
     }
 
     @Override

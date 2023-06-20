@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.storage;
+package com.falsepattern.rple.internal.common.helper.storage;
 
 import com.falsepattern.lumina.api.ILumiEBS;
 import com.falsepattern.lumina.api.ILumiEBSRoot;
