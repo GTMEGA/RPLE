@@ -16,22 +16,22 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 public enum VanillaColor implements RPLEColour {
     // @formatter:off
-    WHITE      (15, 15, 15),
-    ORANGE     (15, 12, 10),
-    MAGENTA    (15,  0, 15),
-    LIGHT_BLUE ( 0,  8, 15),
-    YELLOW     (15, 15,  0),
-    LIME       ( 8, 15,  0),
-    PINK       (15, 10, 13),
-    GRAY       ( 5,  5,  5),
-    LIGHT_GRAY (10, 10, 10),
-    CYAN       ( 0, 15, 15),
-    PURPLE     (10,  0, 15),
-    BLUE       ( 0,  0, 15),
-    BROWN      ( 8,  3,  0),
-    GREEN      ( 0, 15,  0),
-    RED        (15,  0,  0),
-    BLACK      ( 0,  0,  0),
+    WHITE_COLOR      (15, 15, 15),
+    ORANGE_COLOR     (15, 12, 10),
+    MAGENTA_COLOR    (15,  0, 15),
+    LIGHT_BLUE_COLOR ( 0,  8, 15),
+    YELLOW_COLOR     (15, 15,  0),
+    LIME_COLOR       ( 8, 15,  0),
+    PINK_COLOR       (15, 10, 13),
+    GRAY_COLOR       ( 5,  5,  5),
+    LIGHT_GRAY_COLOR (10, 10, 10),
+    CYAN_COLOR       ( 0, 15, 15),
+    PURPLE_COLOR     (10,  0, 15),
+    BLUE_COLOR       ( 0,  0, 15),
+    BROWN_COLOR      ( 8,  3,  0),
+    GREEN_COLOR      ( 0, 15,  0),
+    RED_COLOR        (15,  0,  0),
+    BLACK_COLOR      ( 0,  0,  0),
     // @formatter:on
     ;
 

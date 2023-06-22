@@ -8,6 +8,7 @@
 package com.falsepattern.rple.api;
 
 import com.falsepattern.lib.util.MathUtil;
+import com.falsepattern.rple.api.color.CustomColor;
 import com.falsepattern.rple.api.color.RPLEColour;
 import com.falsepattern.rple.api.color.VanillaColor;
 import com.falsepattern.rple.internal.Tags;
@@ -18,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 @UtilityClass
 public final class RPLEColorAPI {
     private static final Logger LOG = LogManager.getLogger(Tags.MODNAME + "|ColorAPI");
+    private static final RPLEColour ERROR_COLOR = new CustomColor(15, 0, 0);
 
     public static final int COLOR_MIN = 0;
     public static final int COLOR_MAX = 15;
@@ -30,7 +32,7 @@ public final class RPLEColorAPI {
     }
 
     public static RPLEColour errorColor() {
-        return VanillaColor.RED;
+        return ERROR_COLOR;
     }
 
     public static int clampColorComponent(int component) {
