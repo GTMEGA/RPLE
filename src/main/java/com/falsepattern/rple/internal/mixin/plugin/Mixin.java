@@ -49,6 +49,7 @@ public enum Mixin implements IMixin {
     client_OptiFineTessellatorMixin(Side.CLIENT, require(OPTIFINE), "optifine.OptiFineTessellatorMixin"),
 
     client_RenderBlocksCTMMixin(Side.CLIENT, require(CHISEL), "chisel.RenderBlocksCTMMixin"),
+    client_RenderBlocksEldritchMixin(Side.CLIENT, require(CHISEL), "chisel.RenderBlocksEldritchMixin"),
 
     client_projredcore_RenderHaloMixin(Side.CLIENT, require(PROJECTRED_CORE).or(require(PROJECTRED_COMBINEDJAR)), "projredcore.RenderHaloMixin"),
 
