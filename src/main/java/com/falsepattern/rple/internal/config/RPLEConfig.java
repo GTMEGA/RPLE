@@ -5,13 +5,14 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal;
+package com.falsepattern.rple.internal.config;
 
 import com.falsepattern.lib.config.Config;
 import com.falsepattern.lib.config.ConfigurationManager;
+import com.falsepattern.rple.internal.Tags;
 
 @Config(modid = Tags.MODID)
-public class ColorConfig {
+public class RPLEConfig {
     @Config.Comment("Set this to true if you want to enable the debug lamps (no crafting recipes, only available through\n" +
                     "creative mode or NEI.)")
     @Config.Name("enable lamps")

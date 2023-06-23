@@ -26,6 +26,7 @@ import com.falsepattern.rple.internal.block.LampItemBlock;
 import com.falsepattern.rple.internal.client.render.LampRenderer;
 import com.falsepattern.rple.internal.common.helper.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.common.helper.storage.ColoredWorldProvider;
+import com.falsepattern.rple.internal.config.RPLEConfig;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -100,7 +101,7 @@ public class RPLE {
         blueIndexShader = shaderBuf[1];
         rpleEdgeTexUIndexShader = shaderBuf[2];
         rpleEdgeTexVIndexShader = shaderBuf[3];
-        if (ColorConfig.ENABLE_LAMPS) {
+        if (RPLEConfig.ENABLE_LAMPS) {
             for (val lampData : Lamps.values()) {
                 val name = lampData.name().toLowerCase();
                 val r = lampData.r;

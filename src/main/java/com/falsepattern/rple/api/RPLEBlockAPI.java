@@ -13,15 +13,28 @@ import net.minecraft.block.Block;
 
 @UtilityClass
 public final class RPLEBlockAPI {
+    public static void setBlockFallbackBrightness(RPLEColour colour, String blockName) {
+//        GameData.getBlockRegistry().getRaw()
+    }
+
     public static void setBlockFallbackBrightness(RPLEColour colour, Block block) {
     }
 
-    public static void setBlockFallbackBrightness(RPLEColour colour, Block block, int blockMeta) {
+    public static void setBlockFallbackBrightnessWithMeta(RPLEColour colour, String blockName, int blockMeta) {
+    }
+
+    public static void setBlockFallbackBrightnessWithMeta(RPLEColour colour, Block block, int blockMeta) {
+    }
+
+    public static void setBlockFallbackTranslucency(RPLEColour colour, String blockName) {
     }
 
     public static void setBlockFallbackTranslucency(RPLEColour colour, Block block) {
     }
 
-    public static void setBlockFallbackTranslucency(RPLEColour colour, Block block, int blockMeta) {
+    public static void setBlockFallbackTranslucencyWithMeta(RPLEColour colour, String blockName, int blockMeta) {
+    }
+
+    public static void setBlockFallbackTranslucencyWithMeta(RPLEColour colour, Block block, int blockMeta) {
     }
 }
