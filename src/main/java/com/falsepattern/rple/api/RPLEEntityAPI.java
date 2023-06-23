@@ -8,8 +8,10 @@
 package com.falsepattern.rple.api;
 
 import com.falsepattern.rple.internal.common.helper.EntityHelper;
+import lombok.experimental.UtilityClass;
 
-public class RPLEEntityAPI {
+@UtilityClass
+public final class RPLEEntityAPI {
     /**
      * By default, any entity that overrides getBrightnessForRender will get a vanilla-style light value from Entity.getBrightnessForRender.
      * You can use this to remove this blocking logic from specific classes. Note: make sure all your superclasses

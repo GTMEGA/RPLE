@@ -60,6 +60,7 @@ public final class ColoredLightWorld implements ILumiWorld {
         return getLightValue(carrier, block, meta, x, y, z);
     }
 
+    // TODO: [PRE_RELEASE] Replace the cast
     public int getLightValue(IBlockAccess access, Block block, int meta, int x, int y, int z) {
         val colouredBlock = ((ColoredBlock) block);
         return colouredBlock.getColoredLightValue(access, meta, colorChannel, x, y, z);
@@ -70,6 +71,7 @@ public final class ColoredLightWorld implements ILumiWorld {
         return getLightOpacity(carrier, block, meta, x, y, z);
     }
 
+    // TODO: [PRE_RELEASE] Replace the cast
     public int getLightOpacity(IBlockAccess access, Block block, int meta, int x, int y, int z) {
         val colouredBlock = ((ColoredBlock) block);
         return colouredBlock.getColoredLightOpacity(access, meta, colorChannel, x, y, z);
