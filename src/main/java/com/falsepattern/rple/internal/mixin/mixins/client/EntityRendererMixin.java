@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.Common;
-import com.falsepattern.rple.internal.common.helper.lightmap.LightMapHook;
+import com.falsepattern.rple.internal.common.lightmap.LightMapHook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;

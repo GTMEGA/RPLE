@@ -8,8 +8,8 @@
 package com.falsepattern.rple.internal.mixin.mixins.common.lumina;
 
 import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.internal.common.helper.storage.ColoredCarrierWorld;
-import com.falsepattern.rple.internal.common.helper.storage.ColoredLightWorld;
+import com.falsepattern.rple.internal.common.storage.ColoredCarrierWorld;
+import com.falsepattern.rple.internal.common.storage.ColoredLightWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 

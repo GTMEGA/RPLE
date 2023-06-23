@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.chisel;
 
-import com.falsepattern.rple.internal.common.helper.color.CookieWrappers;
+import com.falsepattern.rple.internal.common.color.CookieWrappers;
 import net.minecraft.client.renderer.RenderBlocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

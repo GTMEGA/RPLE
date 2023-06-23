@@ -8,8 +8,8 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.architecturecraft;
 
 import com.falsepattern.lib.util.MathUtil;
-import com.falsepattern.rple.internal.common.helper.color.BrightnessUtil;
-import com.falsepattern.rple.internal.common.helper.color.CookieMonster;
+import com.falsepattern.rple.internal.common.color.BrightnessUtil;
+import com.falsepattern.rple.internal.common.color.CookieMonster;
 import com.falsepattern.rple.internal.mixin.interfaces.architecturecraft.IVector3Mixin;
 import gcewing.architecture.*;
 import lombok.val;

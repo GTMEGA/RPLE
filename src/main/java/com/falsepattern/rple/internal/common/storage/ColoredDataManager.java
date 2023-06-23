@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.helper.storage;
+package com.falsepattern.rple.internal.common.storage;
 
 import com.falsepattern.chunk.api.ChunkDataManager;
 import com.falsepattern.rple.internal.RPLE;

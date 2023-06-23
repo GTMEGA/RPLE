@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.ae2;
 
 import appeng.client.render.RenderBlocksWorkaround;
-import com.falsepattern.rple.internal.common.helper.color.CookieWrappers;
+import com.falsepattern.rple.internal.common.color.CookieWrappers;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import org.spongepowered.asm.mixin.Mixin;

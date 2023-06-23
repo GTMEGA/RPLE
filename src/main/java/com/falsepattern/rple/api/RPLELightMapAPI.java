@@ -8,7 +8,7 @@
 package com.falsepattern.rple.api;
 
 import com.falsepattern.rple.api.lightmap.*;
-import com.falsepattern.rple.internal.common.helper.lightmap.LightMapPipeline;
+import com.falsepattern.rple.internal.common.lightmap.LightMapPipeline;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

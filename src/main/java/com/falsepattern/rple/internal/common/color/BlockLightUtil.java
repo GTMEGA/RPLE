@@ -5,11 +5,11 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.helper.color;
+package com.falsepattern.rple.internal.common.color;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.internal.common.helper.storage.ColoredCarrierWorld;
+import com.falsepattern.rple.internal.common.storage.ColoredCarrierWorld;
 import lombok.val;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;

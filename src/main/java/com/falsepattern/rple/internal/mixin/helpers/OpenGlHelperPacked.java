@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.helpers;
 
 import com.falsepattern.rple.internal.Common;
-import com.falsepattern.rple.internal.common.helper.color.BrightnessUtil;
+import com.falsepattern.rple.internal.common.color.BrightnessUtil;
 import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;
 

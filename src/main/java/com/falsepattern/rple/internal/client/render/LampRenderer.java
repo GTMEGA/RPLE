@@ -11,7 +11,7 @@ import com.falsepattern.falsetweaks.Compat;
 import com.falsepattern.falsetweaks.api.triangulator.ToggleableTessellator;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.internal.block.LampBlock;
-import com.falsepattern.rple.internal.common.helper.color.BrightnessUtil;
+import com.falsepattern.rple.internal.common.color.BrightnessUtil;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;

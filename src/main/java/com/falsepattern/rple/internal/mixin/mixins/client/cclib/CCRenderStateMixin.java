@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.cclib;
 
 import codechicken.lib.render.CCRenderState;
-import com.falsepattern.rple.internal.common.helper.color.CookieMonster;
+import com.falsepattern.rple.internal.common.color.CookieMonster;
 import com.falsepattern.rple.internal.mixin.helpers.OpenGlHelperPacked;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
