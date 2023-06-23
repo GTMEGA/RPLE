@@ -7,14 +7,14 @@
 
 package com.falsepattern.rple.internal.config.container;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import lombok.val;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 
@@ -41,22 +41,39 @@ import java.util.Map;
 @AllArgsConstructor
 public final class ColorConfig {
     private final Palette palette;
-    @SerializedName("brightness")
-    private final Map<BlockReference, ColorReference> lightBlocks;
-    @SerializedName("translucency")
-    private final Map<BlockReference, ColorReference> translucentBlocks;
+    private final LinkedHashMap<BlockReference, ColorReference> brightness;
+    private final LinkedHashMap<BlockReference, ColorReference> translucency;
 
     public ColorConfig() {
         this.palette = new Palette();
-        this.lightBlocks = new HashMap<>();
-        this.translucentBlocks = new HashMap<>();
+        this.brightness = new LinkedHashMap<>();
+        this.translucency = new LinkedHashMap<>();
     }
 
-    public @UnmodifiableView Map<BlockReference, ColorReference> lightBlocks() {
-        return Collections.unmodifiableMap(lightBlocks);
+    public ColorConfig setPaletteColor(String name, String colorHex) {
+        palette.setColor(name, colorHex);
+        return this;
     }
 
-    public @UnmodifiableView Map<BlockReference, ColorReference> translucentBlocks() {
-        return Collections.unmodifiableMap(translucentBlocks);
+    public ColorConfig setBlockBrightness(String blockName, String color) {
+        val blockReference = new BlockReference(blockName);
+        val colorReference = new ColorReference(color);
+        brightness.put(blockReference, colorReference);
+        return this;
+    }
+
+    public ColorConfig setBlockTranslucency(String blockName, String color) {
+        val blockReference = new BlockReference(blockName);
+        val colorReference = new ColorReference(color);
+        translucency.put(blockReference, colorReference);
+        return this;
+    }
+
+    public @UnmodifiableView Map<BlockReference, ColorReference> brightness() {
+        return Collections.unmodifiableMap(brightness);
+    }
+
+    public @UnmodifiableView Map<BlockReference, ColorReference> translucency() {
+        return Collections.unmodifiableMap(translucency);
     }
 }

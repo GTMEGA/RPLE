@@ -10,20 +10,25 @@ package com.falsepattern.rple.internal.config.container;
 import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.color.RPLEColour;
 import lombok.val;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class ColorReference {
     private final @Nullable String paletteColorName;
     private final @Nullable HexColor uniqueColor;
 
-    public ColorReference(@NotNull String paletteColorName) {
-        this.paletteColorName = paletteColorName;
-        this.uniqueColor = null;
-    }
+    public ColorReference(String color) {
+        String paletteColorName = null;
+        HexColor uniqueColor = null;
 
-    public ColorReference(@NotNull HexColor uniqueColor) {
-        this.paletteColorName = null;
+        if (color != null) {
+            if (HexColor.isValidColorHex(color)) {
+                uniqueColor = new HexColor(color);
+            } else {
+                paletteColorName = color;
+            }
+        }
+
+        this.paletteColorName = paletteColorName;
         this.uniqueColor = uniqueColor;
     }
 

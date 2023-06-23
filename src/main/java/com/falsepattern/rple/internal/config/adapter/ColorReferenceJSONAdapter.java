@@ -8,7 +8,6 @@
 package com.falsepattern.rple.internal.config.adapter;
 
 import com.falsepattern.rple.internal.config.container.ColorReference;
-import com.falsepattern.rple.internal.config.container.HexColor;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -25,9 +24,6 @@ public final class ColorReferenceJSONAdapter extends TypeAdapter<ColorReference>
 
     @Override
     public ColorReference read(JsonReader in) {
-        final String colorString = colorConfigGSON().fromJson(in, String.class);
-        if (HexColor.isValidColorHex(colorString))
-            return new ColorReference(new HexColor(colorString));
-        return new ColorReference(colorString);
+        return new ColorReference(colorConfigGSON().fromJson(in, String.class));
     }
 }

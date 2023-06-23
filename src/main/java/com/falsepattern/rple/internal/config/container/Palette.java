@@ -25,6 +25,10 @@ public final class Palette {
         this.colors = new LinkedHashMap<>();
     }
 
+    public void setColor(String name, String colorHex) {
+        colors.put(name, new HexColor(colorHex));
+    }
+
     public @UnmodifiableView Map<String, HexColor> colors() {
         return Collections.unmodifiableMap(colors);
     }

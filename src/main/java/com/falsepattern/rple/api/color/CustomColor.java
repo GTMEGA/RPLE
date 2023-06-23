@@ -10,6 +10,7 @@ package com.falsepattern.rple.api.color;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import lombok.val;
 
 @Getter
 @Accessors(fluent = true, chain = false)
@@ -18,4 +19,27 @@ public class CustomColor implements RPLEColour {
     protected final int red;
     protected final int green;
     protected final int blue;
+
+    @Override
+    public int hashCode() {
+        return (red << 8) | (green << 4) | blue;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (!(obj instanceof RPLEColour))
+            return false;
+
+        val otherColor = (RPLEColour) obj;
+        if (this.red != otherColor.red())
+            return false;
+        if (this.green != otherColor.green())
+            return false;
+        if (this.blue != otherColor.blue())
+            return false;
+
+        return true;
+    }
 }

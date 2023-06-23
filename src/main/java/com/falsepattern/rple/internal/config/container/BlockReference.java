@@ -7,6 +7,7 @@
 
 package com.falsepattern.rple.internal.config.container;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Getter
 @Accessors(fluent = true, chain = false)
+@EqualsAndHashCode
 public final class BlockReference {
     private final String domain;
     private final String name;

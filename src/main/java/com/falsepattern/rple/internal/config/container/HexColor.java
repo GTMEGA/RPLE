@@ -63,6 +63,29 @@ public final class HexColor implements RPLEColour {
     }
 
     @Override
+    public int hashCode() {
+        return (red << 8) | (green << 4) | blue;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (!(obj instanceof RPLEColour))
+            return false;
+
+        val otherColor = (RPLEColour) obj;
+        if (this.red != otherColor.red())
+            return false;
+        if (this.green != otherColor.green())
+            return false;
+        if (this.blue != otherColor.blue())
+            return false;
+
+        return true;
+    }
+
+    @Override
     public String toString() {
         return asColorHex;
     }
