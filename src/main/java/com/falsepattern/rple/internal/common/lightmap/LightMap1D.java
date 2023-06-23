@@ -19,7 +19,8 @@ import static com.falsepattern.rple.internal.Common.LIGHT_MAP_1D_SIZE;
 
 @Getter
 @Accessors(fluent = true, chain = true)
-public class LightMap1D implements LightMapStrip {
+@SuppressWarnings("MismatchedReadAndWriteOfArray")
+public final class LightMap1D implements LightMapStrip {
     private final float[] lightMapRedData;
     private final float[] lightMapGreenData;
     private final float[] lightMapBlueData;

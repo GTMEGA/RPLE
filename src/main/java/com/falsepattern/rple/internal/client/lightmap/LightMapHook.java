@@ -5,10 +5,11 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.lightmap;
+package com.falsepattern.rple.internal.client.lightmap;
 
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.Compat;
+import com.falsepattern.rple.internal.common.lightmap.LightMapPipeline;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.val;
@@ -25,10 +26,11 @@ import static com.falsepattern.rple.internal.Common.LIGHT_MAP_1D_SIZE;
 import static net.minecraft.client.Minecraft.getMinecraft;
 
 @SideOnly(Side.CLIENT)
-public class LightMapHook {
+public final class LightMapHook {
     private static final float TEXTURE_SCALE = 1F / 256F;
     private static final float TEXTURE_TRANSLATION = 8F;
 
+    // TODO: [PRE-RELEASE] Do not use public fields.
     public static LightMapHook RED_LIGHT_MAP;
     public static LightMapHook GREEN_LIGHT_MAP;
     public static LightMapHook BLUE_LIGHT_MAP;

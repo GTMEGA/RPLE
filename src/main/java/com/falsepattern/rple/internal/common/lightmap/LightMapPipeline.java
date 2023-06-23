@@ -9,8 +9,8 @@ package com.falsepattern.rple.internal.common.lightmap;
 
 import com.falsepattern.rple.api.lightmap.*;
 import com.falsepattern.rple.internal.Common;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class LightMapPipeline implements LightMapRegistry {
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
+public final class LightMapPipeline implements LightMapRegistry {
     private static final LightMapPipeline INSTANCE = new LightMapPipeline();
 
     private final Set<PriorityPair<BlockLightMapBase>> blockBases = new TreeSet<>();
@@ -116,7 +119,7 @@ public class LightMapPipeline implements LightMapRegistry {
     }
 
     @EqualsAndHashCode
-    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    @RequiredArgsConstructor(access = PRIVATE)
     private static class PriorityPair<T> implements Comparable<PriorityPair<T>> {
         private final T value;
         private final int priority;

@@ -5,10 +5,11 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple;
+package com.falsepattern.rple.internal.common.block;
 
 import lombok.RequiredArgsConstructor;
 
+@Deprecated
 @RequiredArgsConstructor
 public enum Lamps {
     RED(15, 0, 0),

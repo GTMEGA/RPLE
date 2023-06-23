@@ -7,6 +7,7 @@
 
 package com.falsepattern.rple.api.lightmap;
 
+//TODO: remove the default methods
 public interface LightMapRegistry {
     default void registerLightMapGenerator(LightMapGenerator generator, int priority) {
         registerLightMapBase(generator, priority);

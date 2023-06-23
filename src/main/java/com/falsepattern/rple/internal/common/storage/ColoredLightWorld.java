@@ -13,7 +13,7 @@ import com.falsepattern.lumina.api.ILumiWorldRoot;
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.common.color.BrightnessUtil;
+import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.Getter;

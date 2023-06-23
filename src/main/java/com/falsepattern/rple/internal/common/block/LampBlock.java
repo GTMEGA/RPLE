@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.block;
+package com.falsepattern.rple.internal.common.block;
 
 import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.internal.Tags;

@@ -9,8 +9,8 @@ package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.rple.RPLEShaders;
 import com.falsepattern.rple.internal.Common;
-import com.falsepattern.rple.internal.common.color.BrightnessUtil;
-import com.falsepattern.rple.internal.common.color.CookieMonster;
+import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
+import com.falsepattern.rple.internal.common.helper.CookieMonster;
 import lombok.val;
 import net.minecraft.entity.EntityLivingBase;
 import org.lwjgl.opengl.ARBVertexShader;

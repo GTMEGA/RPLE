@@ -11,7 +11,7 @@ import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.lighting.LC;
 import codechicken.lib.lighting.LightMatrix;
 import codechicken.lib.render.CCRenderState;
-import com.falsepattern.rple.internal.common.color.CookieWrappers;
+import com.falsepattern.rple.internal.common.helper.CookieWrappers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
