@@ -12,9 +12,9 @@ import com.falsepattern.chunk.api.ChunkDataRegistry;
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.lib.util.ResourceUtil;
 import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
-import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.api.RPLELightMapAPI;
+import com.falsepattern.rple.api.color.CustomColor;
 import com.falsepattern.rple.api.lightmap.LightMapBase;
 import com.falsepattern.rple.api.lightmap.LightMapMask;
 import com.falsepattern.rple.api.lightmap.vanilla.BossColorModifierMask;
@@ -27,22 +27,24 @@ import com.falsepattern.rple.internal.common.block.Lamps;
 import com.falsepattern.rple.internal.common.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.common.storage.ColoredWorldProvider;
 import com.falsepattern.rple.internal.config.RPLEConfig;
+import com.falsepattern.rple.internal.config.container.ColorConfig;
+import com.falsepattern.rple.internal.config.container.HexColor;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.Data;
 import lombok.Getter;
 import lombok.val;
-import net.minecraft.init.Blocks;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+
+import static com.falsepattern.rple.internal.config.ColorConfigHandler.fromObjectToPrettyPrintJson;
 
 @Mod(modid = Tags.MODID,
      version = Tags.VERSION,
@@ -146,6 +148,8 @@ public class RPLE {
     private static int currentLine = 0;
 
     private static void setupLightValues() throws IOException {
+        val config = new ColorConfig();
+
         val data = ResourceUtil.getResourceStringFromJar("/default_lightvals.txt", RPLE.class);
         val lines = new StringTokenizer(data, "\r\n");
         while (lines.hasMoreTokens()) {
@@ -180,7 +184,7 @@ public class RPLE {
                 continue;
             }
             val id = targetSplitter.nextToken();
-            int meta = 0;
+            int meta = -1;
             if (count == 2) {
                 val metaToken = targetSplitter.nextToken();
                 try {
@@ -190,14 +194,21 @@ public class RPLE {
                 }
             }
             if (!id.startsWith("__")) {
-                val block = GameData.getBlockRegistry().get(id);
-                if (block != null && block != Blocks.air) {
-                    val cBlock = ((ColoredBlock) block);
-                    cBlock.setColoredLightValue(meta, value.r, value.g, value.b);
-                }
+                val blockName = id + (meta < 0 ? "" : (":" + meta));
+                val colorHex = new HexColor(new CustomColor(value.r, value.g, value.b)).asColorHex();
+                config.setBlockBrightness(blockName, colorHex);
+//                val block = GameData.getBlockRegistry().get(id);
+//                if (block != null && block != Blocks.air) {
+//                    System.out.println(id);
+//                    val cBlock = ((ColoredBlock) block);
+//                    cBlock.setColoredLightValue(meta, value.r, value.g, value.b);
+//                }
             }
             valueCache.put(assignee, value);
         }
+        val generatedJSON = fromObjectToPrettyPrintJson(config);
+        System.out.println("\n" + generatedJSON);
+        System.out.println("done");
     }
 
     private static final RGB EMPTY = new RGB(0, 0, 0);

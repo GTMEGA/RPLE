@@ -7,18 +7,25 @@
 
 package com.falsepattern.rple.api.color;
 
+import com.falsepattern.rple.api.RPLEColorAPI;
+
 public enum ColorChannel {
     RED_CHANNEL, GREEN_CHANNEL, BLUE_CHANNEL;
 
     public int componentFromColor(RPLEColour color) {
+        final int component;
         switch (this) {
             default:
             case RED_CHANNEL:
-                return color.red();
+                component = color.red();
+                break;
             case GREEN_CHANNEL:
-                return color.green();
+                component = color.green();
+                break;
             case BLUE_CHANNEL:
-                return color.blue();
+                component = color.blue();
+                break;
         }
+        return RPLEColorAPI.clampColorComponent(component);
     }
 }

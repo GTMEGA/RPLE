@@ -1,7 +1,8 @@
+
 # Hardcoded, do not delete
-__vanilla__:0 = 000
-__vanilla__:1 = 111
-__vanilla__:2 = 222
+__vanilla__:0 = 111
+__vanilla__:1 = 333
+__vanilla__:2 = 444
 __vanilla__:3 = 332
 __vanilla__:4 = 443
 __vanilla__:5 = 554
@@ -16,7 +17,7 @@ __vanilla__:13 = dda
 __vanilla__:14 = edb
 __vanilla__:15 = fec
 
-__vanilla__:color/0 = 000
+__vanilla__:color/0 = 111
 __vanilla__:color/1 = f00
 __vanilla__:color/2 = 0f0
 __vanilla__:color/3 = 830
@@ -34,7 +35,7 @@ __vanilla__:color/14 = fca
 __vanilla__:color/15 = fff
 
 
-__vanilla__:color_weak/0 = 000
+__vanilla__:color_weak/0 = 111
 __vanilla__:color_weak/1 = 800
 __vanilla__:color_weak/2 = 080
 __vanilla__:color_weak/3 = 420
@@ -52,17 +53,17 @@ __vanilla__:color_weak/14 = 865
 __vanilla__:color_weak/15 = 888
 
 # Vanilla
-
-minecraft:fire = fd0
-minecraft:lava = fa0
+# 0123456789ABCDEF RGB
+minecraft:fire = ec0
+minecraft:lava = f90
 minecraft:flowing_lava = @minecraft:lava
-minecraft:glowstone = feb
+minecraft:glowstone = cc7
 minecraft:lit_furnace = dca
-minecraft:lit_redstone_ore = 900
-minecraft:portal = 63b
-minecraft:powered_repeater = 900
-minecraft:redstone_torch = 700
-minecraft:torch = eda
+minecraft:lit_redstone_ore = 511
+minecraft:portal = 919
+minecraft:powered_repeater = 611
+minecraft:redstone_torch = 611
+minecraft:torch = da8
 minecraft:brown_mushroom = 110
 minecraft:lit_pumpkin = fdb
 minecraft:brewing_stand = 111
@@ -71,7 +72,7 @@ minecraft:end_portal_frame = 011
 minecraft:dragon_egg = 011
 minecraft:lit_redstone_lamp = @minecraft:glowstone
 minecraft:ender_chest = 376
-minecraft:beacon = fff
+minecraft:beacon = ccc
 minecraft:powered_comparator = @minecraft:powered_repeater
 
 # Chisel vanilla-compatible blocks
@@ -92,8 +93,40 @@ chisel:futuraCircuit/12 = @__vanilla__:color_weak/12
 chisel:futuraCircuit/13 = @__vanilla__:color_weak/13
 chisel:futuraCircuit/14 = @__vanilla__:color_weak/14
 chisel:futuraCircuit/15 = @__vanilla__:color_weak/15
-chisel:hexPlating = 777
-chisel:hexLargePlating = 777
+#chisel:hexPlating = 777
+chisel:hexPlating/0 = @__vanilla__:color_weak/0
+chisel:hexPlating/1 = @__vanilla__:color_weak/1
+chisel:hexPlating/2 = @__vanilla__:color_weak/2
+chisel:hexPlating/3 = @__vanilla__:color_weak/3
+chisel:hexPlating/4 = @__vanilla__:color_weak/4
+chisel:hexPlating/5 = @__vanilla__:color_weak/5
+chisel:hexPlating/6 = @__vanilla__:color_weak/6
+chisel:hexPlating/7 = @__vanilla__:color_weak/7
+chisel:hexPlating/8 = @__vanilla__:color_weak/8
+chisel:hexPlating/9 = @__vanilla__:color_weak/9
+chisel:hexPlating/10 = @__vanilla__:color_weak/10
+chisel:hexPlating/11 = @__vanilla__:color_weak/11
+chisel:hexPlating/12 = @__vanilla__:color_weak/12
+chisel:hexPlating/13 = @__vanilla__:color_weak/13
+chisel:hexPlating/14 = @__vanilla__:color_weak/14
+chisel:hexPlating/15 = @__vanilla__:color_weak/15
+#chisel:hexLargePlating = 777
+chisel:hexLargePlating/0 = @__vanilla__:color_weak/0
+chisel:hexLargePlating/1 = @__vanilla__:color_weak/1
+chisel:hexLargePlating/2 = @__vanilla__:color_weak/2
+chisel:hexLargePlating/3 = @__vanilla__:color_weak/3
+chisel:hexLargePlating/4 = @__vanilla__:color_weak/4
+chisel:hexLargePlating/5 = @__vanilla__:color_weak/5
+chisel:hexLargePlating/6 = @__vanilla__:color_weak/6
+chisel:hexLargePlating/7 = @__vanilla__:color_weak/7
+chisel:hexLargePlating/8 = @__vanilla__:color_weak/8
+chisel:hexLargePlating/9 = @__vanilla__:color_weak/9
+chisel:hexLargePlating/10 = @__vanilla__:color_weak/10
+chisel:hexLargePlating/11 = @__vanilla__:color_weak/11
+chisel:hexLargePlating/12 = @__vanilla__:color_weak/12
+chisel:hexLargePlating/13 = @__vanilla__:color_weak/13
+chisel:hexLargePlating/14 = @__vanilla__:color_weak/14
+chisel:hexLargePlating/15 = @__vanilla__:color_weak/15
 chisel:holystone = 333
 chisel:glowstone = @minecraft:glowstone
 chisel:jackolantern1 = @minecraft:lit_pumpkin
@@ -112,7 +145,7 @@ chisel:jackolantern13 = @minecraft:lit_pumpkin
 chisel:jackolantern14 = @minecraft:lit_pumpkin
 chisel:jackolantern15 = @minecraft:lit_pumpkin
 chisel:jackolantern16 = @minecraft:lit_pumpkin
-chisel:lavastone = fb0
+chisel:lavastone = e80
 chisel:torch1 = @minecraft:torch
 chisel:torch2 = @minecraft:torch
 chisel:torch3 = @minecraft:torch
@@ -162,15 +195,15 @@ ExtraUtilities:magnumTorch = @ExtraUtilities:chandelier
 
 # Natura
 Natura:Thornvines = 970
-Natura:greenGlowshroom = 090
-Natura:purpleGlowshroom = 509
-Natura:blueGlowshroom = 059
+Natura:greenGlowshroom = 091
+Natura:purpleGlowshroom = 708
+Natura:blueGlowshroom = 039
 Natura:Glowshroom/0 = @Natura:greenGlowshroom
 Natura:Glowshroom/1 = @Natura:purpleGlowshroom
 Natura:Glowshroom/2 = @Natura:blueGlowshroom
 
 # IC2
-IC2:blockLuminator = fff
+IC2:blockLuminator = ffe
 
 # Advanced Solar Panel
 AdvancedSolarPanel:BlockMolecularTransformer = 0cf
@@ -201,6 +234,8 @@ Thaumcraft:blockCandle = @minecraft:torch
 Thaumcraft:blockArcaneFurnace = @minecraft:lava
 Thaumcraft:blockHole = aaa
 Thaumcraft:blockEldritchNothing = 333
+Thaumcraft:blockAiry = 888
+Thaumcraft:blockCustomPlant:5 = 403
 
 # Railcraft
 Railcraft:lantern.stone = @minecraft:torch
@@ -235,7 +270,7 @@ HardcoreEnderExpansion:laser_beam = f8f
 HardcoreEnderExpansion:temple_end_portal = @minecraft:end_portal
 
 # Forestry
-Forestry:beehives = ccc
+Forestry:beehives = 431
 
 # Bees
 ExtraBees:hive = @Forestry:beehives
@@ -317,9 +352,9 @@ witchery:mirrorblock = aaa
 witchery:mirrorblock2 = aaa
 
 # Ztones
-Ztones:lampf = fff
-Ztones:lampt = fff
-Ztones:lampb = fff
+Ztones:lampf = ffe
+Ztones:lampt = ddc
+Ztones:lampb = aa9
 
 # Thaumic Tinkerer
 ThaumicTinkerer:gaseousLight = ccc
@@ -330,6 +365,9 @@ BiblioCraft:BiblioLantern = fed
 BiblioCraft:BiblioIronLantern = @BiblioCraft:BiblioLantern
 BiblioCraft:BiblioLamp = fff
 BiblioCraft:BiblioIronLamp = @BiblioCraft:BiblioLamp
+
+# BoP
+BiomesOPlenty:coral1:15 = 708
 
 # BiblioWoods
 BiblioWoodsBoP:BiblioWooddesk = @BiblioCraft:BiblioDesk
@@ -365,14 +403,14 @@ DraconicEvolution:potentiometer = 444
 DraconicEvolution:safetyFlame = @minecraft:fire
 
 # Gadomancy
-gadomancy:BlockStickyJar = @Thaumcraft:blockJar
-gadomancy:BlockRemoteJar = @Thaumcraft:blockJar
-gadomancy:BlockExtendedNodeJar = @Thaumcraft:blockJar
+gadomancy:BlockStickyJar = @Thaumcraft:blockJar/0
+gadomancy:BlockRemoteJar = @Thaumcraft:blockJar/0
+gadomancy:BlockExtendedNodeJar = @Thaumcraft:blockJar/0
 
 # Thaumic Exploration
-ThaumicExploration:trashJar = @Thaumcraft:blockJar
-ThaumicExploration:boundJar = @Thaumcraft:blockJar
-ThaumicExploration:thinkTankJar = @Thaumcraft:blockJar
+ThaumicExploration:trashJar = @Thaumcraft:blockJar/0
+ThaumicExploration:boundJar = @Thaumcraft:blockJar/0
+ThaumicExploration:thinkTankJar = @Thaumcraft:blockJar/0
 ThaumicExploration:floatCandle = @minecraft:torch
 
 # OpenBlocks

@@ -24,6 +24,6 @@ public final class HexColorJSONAdapter extends TypeAdapter<HexColor> {
 
     @Override
     public HexColor read(JsonReader in) {
-        return new HexColor(colorConfigGSON().fromJson(in, String.class));
+        return new HexColor(colorConfigGSON().<String>fromJson(in, String.class));
     }
 }
