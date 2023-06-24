@@ -18,12 +18,26 @@ public class CookieWrappers {
         return CookieMonster.packedLongToCookie(BrightnessUtil.packedMax(CookieMonster.cookieToPackedLong(cookieA), CookieMonster.cookieToPackedLong(cookieB)));
     }
 
+    public static int mixAOBrightness(int brightTL, int brightBL, int brightBR, int brightTR, double lerpTB, double lerpLR) {
+        val packedTL = CookieMonster.cookieToPackedLong(brightTL);
+        val packedBL = CookieMonster.cookieToPackedLong(brightBL);
+        val packedBR = CookieMonster.cookieToPackedLong(brightBR);
+        val packedTR = CookieMonster.cookieToPackedLong(brightTR);
+        return CookieMonster.packedLongToCookie(BrightnessUtil.mixAOBrightness(packedTL, packedBL, packedBR, packedTR, lerpTB, lerpLR));
+    }
+
     public static int mixAOBrightness(int a, int b, int c, int d, double aMul, double bMul, double cMul, double dMul) {
         val packedA = CookieMonster.cookieToPackedLong(a);
         val packedB = CookieMonster.cookieToPackedLong(b);
         val packedC = CookieMonster.cookieToPackedLong(c);
         val packedD = CookieMonster.cookieToPackedLong(d);
         return CookieMonster.packedLongToCookie(BrightnessUtil.mixAOBrightness(packedA, packedB, packedC, packedD, aMul, bMul, cMul, dMul));
+    }
+
+    public static int mixAOBrightness(int a, int b, double aMul, double bMul) {
+        val packedA = CookieMonster.cookieToPackedLong(a);
+        val packedB = CookieMonster.cookieToPackedLong(b);
+        return CookieMonster.packedLongToCookie(BrightnessUtil.mixAOBrightness(packedA, packedB, aMul, bMul));
     }
 
     public static int average(boolean ignoreZero, int a, int b) {

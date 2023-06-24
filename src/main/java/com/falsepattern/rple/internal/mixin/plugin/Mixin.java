@@ -65,6 +65,9 @@ public enum Mixin implements IMixin {
     client_architecturecraft_BaseWorldRenderTargetMixin(Side.CLIENT, require(ARCHITECTURECRAFT), "architecturecraft.BaseWorldRenderTargetMixin"),
 
     client_ae2_RenderBlocksWorkaroundMixin(Side.CLIENT, require(AE2), "ae2.RenderBlocksWorkaroundMixin"),
+
+    client_storagedrawers_RenderUtilMixin(Side.CLIENT, require(STORAGE_DRAWERS), "storagedrawers.RenderUtilMixin"),
+    client_storagedrawers_RenderHelperAOMixin(Side.CLIENT, require(STORAGE_DRAWERS), "storagedrawers.RenderHelperAOMixin"),
     ;
     // @formatter:on
 

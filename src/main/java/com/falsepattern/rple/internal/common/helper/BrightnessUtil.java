@@ -128,6 +128,30 @@ public class BrightnessUtil {
         return result;
     }
 
+    public static long mixAOBrightness(long packedA, long packedB, double aMul, double bMul) {
+        long packedResult = 0;
+        for (int i = 0; i <= 40; i += 8) {
+            packedResult |= lerpChannel(packedA, packedB, aMul, bMul, i);
+        }
+        return packedResult;
+    }
+
+    private static long lerpChannel(long packedA, long packedB, double aMul, double bMul, int offset) {
+        val a = (double) unit(packedA, offset) * aMul;
+        val b = (double) unit(packedB, offset) * bMul;
+        return (((long) (a + b)) & 0xFF) << offset;
+    }
+
+
+
+    public static long mixAOBrightness(long packedTL, long packedBL, long packedBR, long packedTR, double lerpTB, double lerpLR) {
+        val lTL = (1.0 - lerpTB) * (1.0 - lerpLR);
+        val lTR = (1.0 - lerpTB) * lerpLR;
+        val lBL = lerpTB * (1.0 - lerpLR);
+        val lBR = lerpTB * lerpLR;
+        return mixAOBrightness(packedTL, packedTR, packedBL, packedBR, lTL, lTR, lBL, lBR);
+    }
+
     public static long mixAOBrightness(long packedA, long packedB, long packedC, long packedD, double aMul, double bMul, double cMul, double dMul) {
         long packedResult = 0;
         for (int i = 0; i <= 40; i += 8) {
