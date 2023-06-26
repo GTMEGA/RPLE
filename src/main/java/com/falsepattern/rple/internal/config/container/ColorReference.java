@@ -9,12 +9,27 @@ package com.falsepattern.rple.internal.config.container;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.color.RPLEColour;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import lombok.val;
 import org.jetbrains.annotations.Nullable;
 
+@Accessors(fluent = true, chain = false)
 public final class ColorReference {
+    public static final String INVALID_COLOR = "invalid_color";
+
     private final @Nullable String paletteColorName;
     private final @Nullable HexColor uniqueColor;
+
+    @Getter
+    private final boolean isValid;
+
+    public ColorReference(@Nullable HexColor uniqueColor) {
+        this.paletteColorName = null;
+        this.uniqueColor = uniqueColor;
+
+        this.isValid = this.uniqueColor != null;
+    }
 
     public ColorReference(String color) {
         String paletteColorName = null;
@@ -23,16 +38,23 @@ public final class ColorReference {
         if (color != null) {
             if (HexColor.isValidColorHex(color)) {
                 uniqueColor = new HexColor(color);
-            } else if (Palette.isValidPaletteColorName(color)) {
+            } else if (ColorPalette.isValidPaletteColorName(color)) {
                 paletteColorName = color;
             }
+
+            this.isValid = true;
+        } else {
+            this.isValid = false;
         }
 
         this.paletteColorName = paletteColorName;
         this.uniqueColor = uniqueColor;
     }
 
-    public RPLEColour color(Palette palette) {
+    public RPLEColour color(ColorPalette palette) {
+        if (!isValid)
+            return RPLEColorAPI.errorColor();
+
         if (uniqueColor != null)
             return uniqueColor;
 
@@ -52,6 +74,6 @@ public final class ColorReference {
         if (paletteColorName != null)
             return paletteColorName;
 
-        return "invalid_color";
+        return INVALID_COLOR;
     }
 }

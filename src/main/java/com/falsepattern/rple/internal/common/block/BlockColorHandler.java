@@ -8,68 +8,89 @@
 package com.falsepattern.rple.internal.common.block;
 
 import com.falsepattern.rple.api.block.BlockColorRegistry;
+import com.falsepattern.rple.api.block.ColoredLightBlock;
+import com.falsepattern.rple.api.block.ColoredTranslucentBlock;
+import com.falsepattern.rple.api.block.RPLEBlockColorizer;
+import com.falsepattern.rple.api.color.GreyscaleColor;
 import com.falsepattern.rple.api.color.RPLEColour;
-import com.falsepattern.rple.api.color.RPLENamedColour;
+import com.falsepattern.rple.internal.config.container.BlockReference;
+import com.falsepattern.rple.internal.config.container.ColorConfig;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.val;
 import net.minecraft.block.Block;
+import net.minecraft.world.IBlockAccess;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BlockColorHandler implements BlockColorRegistry {
-    @Override
-    public void setBlockBrightness(Block block, int blockMeta, RPLEColour color) {
+    private static final BlockColorHandler INSTANCE = new BlockColorHandler();
 
+    public static BlockColorHandler blockColorHandler() {
+        return INSTANCE;
+    }
+
+    public RPLEColour blockColoredBrightness(IBlockAccess world,
+                                             Block block,
+                                             int blockMeta,
+                                             int posX,
+                                             int posY,
+                                             int posZ) {
+        if (block instanceof ColoredLightBlock) {
+            val colouredLightBlock = (ColoredLightBlock) block;
+            val color = colouredLightBlock.getColoredBrightness(world, blockMeta, posX, posY, posZ);
+            if (color != null)
+                return color;
+        }
+
+        // Lookup happens here!
+
+        val vanillaLightValue = block.getLightValue(world, posX, posY, posZ);
+        return GreyscaleColor.fromVanillaLightValue(vanillaLightValue);
+    }
+
+    public RPLEColour blockColoredTranslucency(IBlockAccess world,
+                                               Block block,
+                                               int blockMeta,
+                                               int posX,
+                                               int posY,
+                                               int posZ) {
+        if (block instanceof ColoredTranslucentBlock) {
+            val colouredTranslucentBlock = (ColoredTranslucentBlock) block;
+            val color = colouredTranslucentBlock.getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+            if (color != null)
+                return color;
+        }
+
+        // Lookup happens here!
+
+        val vanillaLightOpacity = block.getLightOpacity(world, posX, posY, posZ);
+        return GreyscaleColor.fromVanillaLightOpacity(vanillaLightOpacity);
     }
 
     @Override
-    public void setBlockBrightness(Block block, int blockMeta, RPLENamedColour color) {
-
+    public RPLEBlockColorizer colorizeBlock(Block block) {
+        return new BlockColorizer(new BlockReference(block), this::applyBlockColors);
     }
 
     @Override
-    public void setBlockBrightness(Block block, RPLEColour color) {
-
+    public RPLEBlockColorizer colorizeBlock(Block block, int blockMeta) {
+        return new BlockColorizer(new BlockReference(block, blockMeta), this::applyBlockColors);
     }
 
     @Override
-    public void setBlockBrightness(Block block, RPLENamedColour color) {
-
+    public RPLEBlockColorizer colorizeBlock(String blockID) {
+        return new BlockColorizer(new BlockReference(blockID), this::applyBlockColors);
     }
 
-    @Override
-    public void setBlockBrightness(String blockName, RPLEColour color) {
+    private void applyBlockColors(BlockColorizer colorizer) {
+        val foo = new ColorConfig();
 
-    }
+        val block = colorizer.block();
 
-    @Override
-    public void setBlockBrightness(String blockName, RPLENamedColour color) {
+        foo.setBlockBrightness(block, colorizer.brightness().get());
+        foo.setBlockTranslucency(block, colorizer.translucency().get());
 
-    }
-
-    @Override
-    public void setBlockTranslucency(Block block, int blockMeta, RPLEColour color) {
-
-    }
-
-    @Override
-    public void setBlockTranslucency(Block block, int blockMeta, RPLENamedColour color) {
-
-    }
-
-    @Override
-    public void setBlockTranslucency(Block block, RPLEColour color) {
-
-    }
-
-    @Override
-    public void setBlockTranslucency(Block block, RPLENamedColour color) {
-
-    }
-
-    @Override
-    public void setBlockTranslucency(String blockName, RPLEColour color) {
-
-    }
-
-    @Override
-    public void setBlockTranslucency(String blockName, RPLENamedColour color) {
-
+        foo.addPaletteColor(colorizer.paletteBrightness().get());
+        foo.addPaletteColor(colorizer.paletteTranslucency().get());
     }
 }

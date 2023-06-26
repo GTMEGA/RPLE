@@ -24,6 +24,6 @@ public final class BlockReferenceJSONAdapter extends TypeAdapter<BlockReference>
 
     @Override
     public BlockReference read(JsonReader in) {
-        return new BlockReference(colorConfigGSON().fromJson(in, String.class));
+        return new BlockReference(colorConfigGSON().<String>fromJson(in, String.class));
     }
 }

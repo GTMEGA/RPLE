@@ -31,12 +31,49 @@ public final class HexColor implements RPLEColour {
     private final boolean isValid;
 
     public HexColor(RPLEColour colour) {
-        this.red = RED_CHANNEL.componentFromColor(colour);
-        this.green = GREEN_CHANNEL.componentFromColor(colour);
-        this.blue = BLUE_CHANNEL.componentFromColor(colour);
+        this.red = RPLEColorAPI.clampColorComponent(colour.red());
+        this.green = RPLEColorAPI.clampColorComponent(colour.green());
+        this.blue = RPLEColorAPI.clampColorComponent(colour.blue());
 
         this.asColorHex = colorHexFromColor(colour);
         this.isValid = true;
+    }
+
+    public HexColor(int colour) {
+        var red = COLOR_MIN;
+        var green = COLOR_MIN;
+        var blue = COLOR_MIN;
+
+        var asColorHex = "";
+        var isValid = false;
+
+        try {
+            if (colour < 0x000 || colour > 0xFFF)
+                throw new IllegalArgumentException();
+
+            red = colour >> 8 & 0xF;
+            green = colour >> 4 & 0xF;
+            blue = colour & 0xF;
+
+            asColorHex = String.format("0x%1X%1X%1X", red, green, blue);
+            isValid = true;
+        } catch (IllegalArgumentException e) {
+            val errorColor = RPLEColorAPI.errorColor();
+
+            red = errorColor.red();
+            green = errorColor.green();
+            blue = errorColor.blue();
+
+            asColorHex = colorHexFromColor(errorColor);
+            isValid = false;
+        }
+
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+
+        this.asColorHex = asColorHex;
+        this.isValid = isValid;
     }
 
     public HexColor(String colorHex) {
@@ -78,25 +115,12 @@ public final class HexColor implements RPLEColour {
 
     @Override
     public int hashCode() {
-        return (red << 8) | (green << 4) | blue;
+        return RPLEColorAPI.colorHashCode(this);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (!(obj instanceof RPLEColour))
-            return false;
-
-        val otherColor = (RPLEColour) obj;
-        if (this.red != otherColor.red())
-            return false;
-        if (this.green != otherColor.green())
-            return false;
-        if (this.blue != otherColor.blue())
-            return false;
-
-        return true;
+        return RPLEColorAPI.colorEquals(this, obj);
     }
 
     @Override
@@ -123,14 +147,14 @@ public final class HexColor implements RPLEColour {
         val green = GREEN_CHANNEL.componentFromColor(colour);
         val blue = BLUE_CHANNEL.componentFromColor(colour);
 
-        val redHex = fromNibbleToHexChar(red);
-        val greenHex = fromNibbleToHexChar(green);
-        val blueHex = fromNibbleToHexChar(blue);
+        val redHex = hexCharFromNibble(red);
+        val greenHex = hexCharFromNibble(green);
+        val blueHex = hexCharFromNibble(blue);
 
         return String.format("0x%c%c%c", redHex, greenHex, blueHex);
     }
 
-    private static char fromNibbleToHexChar(int nibble) {
+    private static char hexCharFromNibble(int nibble) {
         if (nibble < 0)
             return '0';
 

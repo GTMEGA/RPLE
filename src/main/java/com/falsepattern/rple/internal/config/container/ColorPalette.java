@@ -8,6 +8,7 @@
 package com.falsepattern.rple.internal.config.container;
 
 import com.falsepattern.rple.api.color.RPLEColour;
+import com.falsepattern.rple.api.color.RPLENamedColour;
 import lombok.val;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -16,20 +17,41 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public final class Palette {
+public final class ColorPalette {
     private final LinkedHashMap<String, HexColor> colors;
 
-    public Palette() {
+    public ColorPalette() {
         this(new LinkedHashMap<>());
     }
 
-    public Palette(LinkedHashMap<String, HexColor> colors) {
+    public ColorPalette(LinkedHashMap<String, HexColor> colors) {
         this.colors = colors;
         this.colors.entrySet()
                    .removeIf(c -> isValidPaletteColor(c.getKey(), c.getValue()));
     }
 
-    public void setColor(String name, String colorHex) {
+    public void addPaletteColor(RPLENamedColour color) {
+        if (color == null)
+            return;
+
+        val colorDomain = color.colorDomain();
+        val colorName = color.colorName();
+
+        if (colorDomain == null || colorDomain.isEmpty())
+            return;
+        if (colorName == null || colorName.isEmpty())
+            return;
+
+        val paletteColorName = colorDomain + ":" + colorName;
+        if (colors.containsKey(paletteColorName))
+            return;
+
+        val paletteColor = new HexColor(color);
+        if (isValidPaletteColor(paletteColorName, paletteColor))
+            colors.put(paletteColorName, paletteColor);
+    }
+
+    public void addColor(String name, String colorHex) {
         val color = new HexColor(colorHex);
 
         if (isValidPaletteColor(name, color))
@@ -42,6 +64,10 @@ public final class Palette {
 
     public Optional<RPLEColour> colour(String colorName) {
         return Optional.ofNullable(colors.get(colorName));
+    }
+
+    public void reset() {
+        colors.clear();
     }
 
     @Override

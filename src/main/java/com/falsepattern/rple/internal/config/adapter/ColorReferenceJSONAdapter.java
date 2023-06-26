@@ -24,6 +24,6 @@ public final class ColorReferenceJSONAdapter extends TypeAdapter<ColorReference>
 
     @Override
     public ColorReference read(JsonReader in) {
-        return new ColorReference(colorConfigGSON().fromJson(in, String.class));
+        return new ColorReference(colorConfigGSON().<String>fromJson(in, String.class));
     }
 }

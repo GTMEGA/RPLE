@@ -7,54 +7,55 @@
 
 package com.falsepattern.rple.internal.config.container;
 
+import com.falsepattern.rple.api.color.RPLENamedColour;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
-import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
-
-/*
-{
-    palette: {
-      "red": "0xF00",
-      "blue": "0x00C",
-      "dim_blue": "0x004",
-    },
-    brightness: {
-        "minecraft:glowstone" : "0xF0B",
-        "minecraft:lit_furnace" : "red",
-        "chisel:futuraCircuit" : "dim_blue",
-        "chisel:futuraCircuit:0" : "0xFFF"
-    },
-    translucency: {
-        "minecraft:stained_glass" : "blue"
-    }
-}
- */
 @Getter
 @Accessors(fluent = true, chain = false)
 @AllArgsConstructor
 public final class ColorConfig {
-    private final Palette palette;
+    private final ColorPalette palette;
     private final LinkedHashMap<BlockReference, ColorReference> brightness;
     private final LinkedHashMap<BlockReference, ColorReference> translucency;
 
     public ColorConfig() {
-        this.palette = new Palette();
+        this.palette = new ColorPalette();
         this.brightness = new LinkedHashMap<>();
         this.translucency = new LinkedHashMap<>();
     }
 
+    public void addPaletteColor(RPLENamedColour colour) {
+        palette.addPaletteColor(colour);
+    }
+
+    public void setBlockBrightness(BlockReference block, ColorReference color) {
+        if (brightness.containsKey(block))
+            return;
+
+        if (block.isValid() && color.isValid())
+            brightness.put(block, color);
+    }
+
+    public void setBlockTranslucency(BlockReference block, ColorReference color) {
+        if (translucency.containsKey(block))
+            return;
+
+        if (block.isValid() && color.isValid())
+            translucency.put(block, color);
+    }
+
+    @Deprecated
     public ColorConfig setPaletteColor(String name, String colorHex) {
-        palette.setColor(name, colorHex);
+        palette.addColor(name, colorHex);
         return this;
     }
 
+    @Deprecated
     public ColorConfig setBlockBrightness(String blockName, String color) {
         val blockReference = new BlockReference(blockName);
         val colorReference = new ColorReference(color);
@@ -62,6 +63,7 @@ public final class ColorConfig {
         return this;
     }
 
+    @Deprecated
     public ColorConfig setBlockTranslucency(String blockName, String color) {
         val blockReference = new BlockReference(blockName);
         val colorReference = new ColorReference(color);
@@ -69,11 +71,9 @@ public final class ColorConfig {
         return this;
     }
 
-    public @UnmodifiableView Map<BlockReference, ColorReference> brightness() {
-        return Collections.unmodifiableMap(brightness);
-    }
-
-    public @UnmodifiableView Map<BlockReference, ColorReference> translucency() {
-        return Collections.unmodifiableMap(translucency);
+    public void reset() {
+        palette.reset();
+        brightness.clear();
+        translucency.clear();
     }
 }
