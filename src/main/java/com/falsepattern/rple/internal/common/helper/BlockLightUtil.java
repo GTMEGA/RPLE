@@ -7,8 +7,8 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
-import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.api.OldColoredBlock;
 import com.falsepattern.rple.internal.common.storage.ColoredCarrierWorld;
 import lombok.val;
 import net.minecraft.world.ChunkCache;
@@ -42,7 +42,7 @@ public class BlockLightUtil {
         return CookieMonster.packedLongToCookie(BrightnessUtil.brightnessesToPackedLong(red, green, blue));
     }
 
-    public static int getCompactRGBLightValue(IBlockAccess world, ColoredBlock block, int meta, int x, int y, int z) {
+    public static int getCompactRGBLightValue(IBlockAccess world, OldColoredBlock block, int meta, int x, int y, int z) {
         val red = block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_RED, x, y, z);
         //This is here if we already generated a packed value somewhere deep inside another mod
         //Current usages:

@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.mrtjpcore;
 
-import com.falsepattern.rple.api.ColoredBlock;
+import com.falsepattern.rple.api.OldColoredBlock;
 import mrtjp.core.block.InstancedBlock;
 import mrtjp.core.block.InstancedBlockTile;
 import net.minecraft.tileentity.TileEntity;
@@ -17,15 +17,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import java.lang.invoke.MethodHandles;
 
 @Mixin(InstancedBlock.class)
-public abstract class InstancedBlockMixin implements ColoredBlock {
+public abstract class InstancedBlockMixin implements OldColoredBlock {
     private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
 
     @Override
     public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
         TileEntity te = world.getTileEntity(x, y, z);
         int color;
-        if (te instanceof InstancedBlockTile && te instanceof ColoredBlock) {
-            ColoredBlock colorTE = (ColoredBlock)te;
+        if (te instanceof InstancedBlockTile && te instanceof OldColoredBlock) {
+            OldColoredBlock colorTE = (OldColoredBlock) te;
             color = colorTE.getColoredLightValue(world, meta, colorChannel, x, y, z);
         } else if (te instanceof InstancedBlockTile) {
             InstancedBlockTile tile = (InstancedBlockTile) te;

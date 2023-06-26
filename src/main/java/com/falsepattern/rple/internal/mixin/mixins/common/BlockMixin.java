@@ -7,13 +7,13 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common;
 
-import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.api.OldColoredBlock;
 import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.mixin.helpers.MultipartColorHelper;
-import com.falsepattern.rple.internal.mixin.interfaces.ColoredBlockInternal;
+import com.falsepattern.rple.internal.mixin.interfaces.OldColoredBlockInternal;
 import lombok.val;
 import lombok.var;
 import net.minecraft.block.Block;
@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 
 @Mixin(Block.class)
-public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
+public abstract class BlockMixin implements OldColoredBlock, OldColoredBlockInternal {
     @Shadow
     public abstract int getLightValue();
 
@@ -131,7 +131,7 @@ public abstract class BlockMixin implements ColoredBlock, ColoredBlockInternal {
         if (world != null) {
             val block = world.getBlock(x, y, z);
             if (block != thiz())
-                return ((ColoredBlock) block).getColoredLightValue(world, meta, colorChannel, x, y, z);
+                return ((OldColoredBlock) block).getColoredLightValue(world, meta, colorChannel, x, y, z);
 
             if (Compat.isMultipart(block) && Compat.projRedLightsPresent()) {
                 val res = MultipartColorHelper.getColoredLightValue(block, world, meta, colorChannel, x, y, z);

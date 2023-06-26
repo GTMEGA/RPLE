@@ -7,8 +7,8 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.projredillum;
 
-import com.falsepattern.rple.api.ColoredBlock;
 import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.api.OldColoredBlock;
 import mrtjp.projectred.illumination.TileLamp;
 import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,14 +18,18 @@ import org.spongepowered.asm.mixin.Shadow;
 @Pseudo
 @Mixin(value = TileLamp.class,
        remap = false)
-public abstract class TileLampMixin implements ColoredBlock {
-    @Shadow public abstract boolean powered();
+public abstract class TileLampMixin implements OldColoredBlock {
+    @Shadow
+    public abstract boolean powered();
 
-    @Shadow public abstract boolean inverted();
+    @Shadow
+    public abstract boolean inverted();
 
-    @Shadow public abstract int getColor();
+    @Shadow
+    public abstract int getColor();
 
-    @Shadow public abstract int getLightValue();
+    @Shadow
+    public abstract int getLightValue();
 
     @Override
     public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {

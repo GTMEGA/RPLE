@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
  * you need to use {@link SuperCallHelper}.
  */
 @Deprecated
-public interface ColoredBlock {
+public interface OldColoredBlock {
     @SneakyThrows
     default int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
         return 0;
@@ -52,10 +52,10 @@ public interface ColoredBlock {
 
         static {
             try {
-                getColoredLightValueM = getMType(ColoredBlock.class.getDeclaredMethod("getColoredLightValue", IBlockAccess.class, int.class, int.class, int.class, int.class, int.class));
-                getColoredLightOpacityM = getMType(ColoredBlock.class.getDeclaredMethod("getColoredLightOpacity", IBlockAccess.class, int.class, int.class, int.class, int.class, int.class));
-                setColoredLightValueM = getMType(ColoredBlock.class.getDeclaredMethod("setColoredLightValue", int.class, int.class, int.class, int.class));
-                setColoredLightOpacityM = getMType(ColoredBlock.class.getDeclaredMethod("setColoredLightOpacity", int.class, int.class, int.class, int.class));
+                getColoredLightValueM = getMType(OldColoredBlock.class.getDeclaredMethod("getColoredLightValue", IBlockAccess.class, int.class, int.class, int.class, int.class, int.class));
+                getColoredLightOpacityM = getMType(OldColoredBlock.class.getDeclaredMethod("getColoredLightOpacity", IBlockAccess.class, int.class, int.class, int.class, int.class, int.class));
+                setColoredLightValueM = getMType(OldColoredBlock.class.getDeclaredMethod("setColoredLightValue", int.class, int.class, int.class, int.class));
+                setColoredLightOpacityM = getMType(OldColoredBlock.class.getDeclaredMethod("setColoredLightOpacity", int.class, int.class, int.class, int.class));
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }

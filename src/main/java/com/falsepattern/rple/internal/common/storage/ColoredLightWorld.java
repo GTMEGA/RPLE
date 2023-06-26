@@ -10,7 +10,7 @@ package com.falsepattern.rple.internal.common.storage;
 import com.falsepattern.lumina.api.ILightingEngine;
 import com.falsepattern.lumina.api.ILumiWorld;
 import com.falsepattern.lumina.api.ILumiWorldRoot;
-import com.falsepattern.rple.api.ColoredBlock;
+import com.falsepattern.rple.api.OldColoredBlock;
 import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
@@ -62,7 +62,7 @@ public final class ColoredLightWorld implements ILumiWorld {
 
     // TODO: [PRE_RELEASE] Replace the cast
     public int getLightValue(IBlockAccess access, Block block, int meta, int x, int y, int z) {
-        val colouredBlock = ((ColoredBlock) block);
+        val colouredBlock = ((OldColoredBlock) block);
         return colouredBlock.getColoredLightValue(access, meta, colorChannel, x, y, z);
     }
 
@@ -73,7 +73,7 @@ public final class ColoredLightWorld implements ILumiWorld {
 
     // TODO: [PRE_RELEASE] Replace the cast
     public int getLightOpacity(IBlockAccess access, Block block, int meta, int x, int y, int z) {
-        val colouredBlock = ((ColoredBlock) block);
+        val colouredBlock = ((OldColoredBlock) block);
         return colouredBlock.getColoredLightOpacity(access, meta, colorChannel, x, y, z);
     }
 

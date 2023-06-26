@@ -7,7 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.interfaces;
 
-public interface ColoredBlockInternal {
+@Deprecated
+public interface OldColoredBlockInternal {
     int getColoredLightValueRaw(int meta, int colorChannel);
+
     int getColoredLightOpacityRaw(int meta, int colorChannel);
 }

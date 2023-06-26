@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.api.ColoredBlock;
+import com.falsepattern.rple.api.OldColoredBlock;
 import com.falsepattern.rple.internal.common.helper.BlockLightUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -28,13 +28,13 @@ public abstract class BlockMixin {
     public int getMixedBrightnessForBlock(IBlockAccess world, int x, int y, int z) {
         Block block = world.getBlock(x, y, z);
         int meta = world.getBlockMetadata(x, y, z);
-        int l = world.getLightBrightnessForSkyBlocks(x, y, z, BlockLightUtil.getCompactRGBLightValue(world, (ColoredBlock) block, meta, x, y, z));
+        int l = world.getLightBrightnessForSkyBlocks(x, y, z, BlockLightUtil.getCompactRGBLightValue(world, (OldColoredBlock) block, meta, x, y, z));
 
         if (l == 0 && block instanceof BlockSlab) {
             --y;
             block = world.getBlock(x, y, z);
             meta = world.getBlockMetadata(x, y, z);
-            return world.getLightBrightnessForSkyBlocks(x, y, z, BlockLightUtil.getCompactRGBLightValue(world, (ColoredBlock) block, meta, x, y, z));
+            return world.getLightBrightnessForSkyBlocks(x, y, z, BlockLightUtil.getCompactRGBLightValue(world, (OldColoredBlock) block, meta, x, y, z));
         } else {
             return l;
         }

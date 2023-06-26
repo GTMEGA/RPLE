@@ -11,7 +11,7 @@ import codechicken.multipart.TileMultipart;
 import codechicken.multipart.minecraft.McBlockPart;
 import codechicken.multipart.minecraft.RedstoneTorchPart;
 import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.internal.mixin.interfaces.ColoredBlockInternal;
+import com.falsepattern.rple.internal.mixin.interfaces.OldColoredBlockInternal;
 import lombok.val;
 import mrtjp.projectred.illumination.ILight;
 import net.minecraft.block.Block;
@@ -34,10 +34,10 @@ public class MultipartColorHelper {
                 } else if (element instanceof RedstoneTorchPart) {
                     val torch = ((RedstoneTorchPart)element);
                     if (torch.active()) {
-                        sum += ((ColoredBlockInternal)torch.getBlock()).getColoredLightValueRaw(0, colorChannel);
+                        sum += ((OldColoredBlockInternal) torch.getBlock()).getColoredLightValueRaw(0, colorChannel);
                     }
                 } else if (element instanceof McBlockPart) {
-                    val block = (ColoredBlockInternal)((McBlockPart) element).getBlock();
+                    val block = (OldColoredBlockInternal) ((McBlockPart) element).getBlock();
                     sum += block.getColoredLightValueRaw(0, colorChannel);
                 }
             }

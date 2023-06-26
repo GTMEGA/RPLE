@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.block;
 
-import com.falsepattern.rple.api.ColoredBlock;
+import com.falsepattern.rple.api.OldColoredBlock;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.client.render.ClampedIcon;
 import com.falsepattern.rple.internal.client.render.LampRenderer;
@@ -27,7 +27,7 @@ import java.util.List;
 // TODO: [PRE_RELEASE] Large parts of this may be included in API as an abstract class
 // TODO: [PRE_RELEASE] Should have a large part of it extracted as an example of how-to implement ColoredBlock
 // TODO: [PRE_RELEASE] Created variants of this block should be defined by a load-time configuration file
-public class LampBlock extends Block implements ColoredBlock {
+public class LampBlock extends Block implements OldColoredBlock {
     private static final String GLOW_RESOURCE = Tags.MODID + ":glow";
     public static final int POWERED_BIT = 0b0010;
     public static final int INVERTED_BIT = 0b0001;
