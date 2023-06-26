@@ -23,7 +23,7 @@ public final class ColorReference {
         if (color != null) {
             if (HexColor.isValidColorHex(color)) {
                 uniqueColor = new HexColor(color);
-            } else {
+            } else if (Palette.isValidPaletteColorName(color)) {
                 paletteColorName = color;
             }
         }

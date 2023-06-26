@@ -15,10 +15,13 @@ import lombok.experimental.Accessors;
 @Getter
 @Accessors(fluent = true, chain = false)
 @AllArgsConstructor
-public class CustomColor implements RPLEColour {
+public class CustomNamedColor implements RPLENamedColour {
     protected final int red;
     protected final int green;
     protected final int blue;
+
+    protected final String colorDomain;
+    protected final String colorName;
 
     @Override
     public int hashCode() {
@@ -27,6 +30,6 @@ public class CustomColor implements RPLEColour {
 
     @Override
     public boolean equals(Object obj) {
-        return RPLEColorAPI.colorEquals(this, obj);
+        return RPLEColorAPI.namedColorEquals(this, obj);
     }
 }

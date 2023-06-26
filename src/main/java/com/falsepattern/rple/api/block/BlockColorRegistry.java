@@ -8,34 +8,31 @@
 package com.falsepattern.rple.api.block;
 
 import com.falsepattern.rple.api.color.RPLEColour;
+import com.falsepattern.rple.api.color.RPLENamedColour;
 import net.minecraft.block.Block;
 
 public interface BlockColorRegistry {
-    void addPaletteColor(String name, RPLEColour color);
-
-    void addPaletteColor(String name, String color);
-
     void setBlockBrightness(Block block, int blockMeta, RPLEColour color);
 
-    void setBlockBrightness(Block block, int blockMeta, String color);
+    void setBlockBrightness(Block block, int blockMeta, RPLENamedColour color);
 
     void setBlockBrightness(Block block, RPLEColour color);
 
-    void setBlockBrightness(Block block, String color);
+    void setBlockBrightness(Block block, RPLENamedColour color);
 
     void setBlockBrightness(String blockName, RPLEColour color);
 
-    void setBlockBrightness(String blockName, String color);
+    void setBlockBrightness(String blockName, RPLENamedColour color);
 
     void setBlockTranslucency(Block block, int blockMeta, RPLEColour color);
 
-    void setBlockTranslucency(Block block, int blockMeta, String color);
+    void setBlockTranslucency(Block block, int blockMeta, RPLENamedColour color);
 
     void setBlockTranslucency(Block block, RPLEColour color);
 
-    void setBlockTranslucency(Block block, String color);
+    void setBlockTranslucency(Block block, RPLENamedColour color);
 
     void setBlockTranslucency(String blockName, RPLEColour color);
 
-    void setBlockTranslucency(String blockName, String color);
+    void setBlockTranslucency(String blockName, RPLENamedColour color);
 }

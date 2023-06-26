@@ -8,7 +8,6 @@
 package com.falsepattern.rple.internal.config.container;
 
 import com.falsepattern.rple.api.color.RPLEColour;
-import lombok.AllArgsConstructor;
 import lombok.val;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -17,16 +16,24 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@AllArgsConstructor
 public final class Palette {
     private final LinkedHashMap<String, HexColor> colors;
 
     public Palette() {
-        this.colors = new LinkedHashMap<>();
+        this(new LinkedHashMap<>());
+    }
+
+    public Palette(LinkedHashMap<String, HexColor> colors) {
+        this.colors = colors;
+        this.colors.entrySet()
+                   .removeIf(c -> isValidPaletteColor(c.getKey(), c.getValue()));
     }
 
     public void setColor(String name, String colorHex) {
-        colors.put(name, new HexColor(colorHex));
+        val color = new HexColor(colorHex);
+
+        if (isValidPaletteColor(name, color))
+            colors.put(name, new HexColor(colorHex));
     }
 
     public @UnmodifiableView Map<String, HexColor> colors() {
@@ -48,5 +55,23 @@ public final class Palette {
         }
 
         return sb.toString();
+    }
+
+    public static boolean isValidPaletteColor(String colorName, HexColor color) {
+        if (colorName == null)
+            return false;
+        if (color == null)
+            return false;
+
+        if (!isValidPaletteColorName(colorName))
+            return false;
+
+        return color.isValid();
+    }
+
+    public static boolean isValidPaletteColorName(String colorName) {
+        if (colorName == null)
+            return false;
+        return !colorName.toLowerCase().startsWith("0x");
     }
 }

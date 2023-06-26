@@ -144,9 +144,13 @@ public class RPLE {
         RPLELightMapAPI.registerLightMapMask(BOSS_COLOR_MODIFIER_MASK);
     }
 
+    @Deprecated
     private static final Map<String, RGB> valueCache = new HashMap<>();
+
+    @Deprecated
     private static int currentLine = 0;
 
+    @Deprecated
     private static void setupLightValues() throws IOException {
         val config = new ColorConfig();
 
@@ -213,6 +217,7 @@ public class RPLE {
 
     private static final RGB EMPTY = new RGB(0, 0, 0);
 
+    @Deprecated
     private static RGB resolve(String value) {
         if (value.charAt(0) == '@') {
             val key = value.substring(1);
@@ -237,6 +242,7 @@ public class RPLE {
     }
 
     @Data
+    @Deprecated
     private static class RGB {
         private final int r;
         private final int g;

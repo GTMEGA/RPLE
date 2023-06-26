@@ -28,6 +28,7 @@ public final class HexColor implements RPLEColour {
     private final int blue;
 
     private final String asColorHex;
+    private final boolean isValid;
 
     public HexColor(RPLEColour colour) {
         this.red = RED_CHANNEL.componentFromColor(colour);
@@ -35,6 +36,7 @@ public final class HexColor implements RPLEColour {
         this.blue = BLUE_CHANNEL.componentFromColor(colour);
 
         this.asColorHex = colorHexFromColor(colour);
+        this.isValid = true;
     }
 
     public HexColor(String colorHex) {
@@ -43,6 +45,7 @@ public final class HexColor implements RPLEColour {
         var blue = COLOR_MIN;
 
         var asColorHex = "";
+        var isValid = false;
 
         try {
             if (!isValidColorHex(colorHex))
@@ -53,6 +56,7 @@ public final class HexColor implements RPLEColour {
             blue = componentFromHex(BLUE_CHANNEL, colorHex);
 
             asColorHex = colorHex;
+            isValid = true;
         } catch (IllegalArgumentException e) {
             val errorColor = RPLEColorAPI.errorColor();
 
@@ -61,6 +65,7 @@ public final class HexColor implements RPLEColour {
             blue = errorColor.blue();
 
             asColorHex = colorHexFromColor(errorColor);
+            isValid = false;
         }
 
         this.red = red;
@@ -68,6 +73,7 @@ public final class HexColor implements RPLEColour {
         this.blue = blue;
 
         this.asColorHex = asColorHex;
+        this.isValid = isValid;
     }
 
     @Override

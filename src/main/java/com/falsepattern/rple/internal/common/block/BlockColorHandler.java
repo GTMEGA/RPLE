@@ -9,26 +9,17 @@ package com.falsepattern.rple.internal.common.block;
 
 import com.falsepattern.rple.api.block.BlockColorRegistry;
 import com.falsepattern.rple.api.color.RPLEColour;
+import com.falsepattern.rple.api.color.RPLENamedColour;
 import net.minecraft.block.Block;
 
 public final class BlockColorHandler implements BlockColorRegistry {
-    @Override
-    public void addPaletteColor(String name, RPLEColour color) {
-
-    }
-
-    @Override
-    public void addPaletteColor(String name, String color) {
-
-    }
-
     @Override
     public void setBlockBrightness(Block block, int blockMeta, RPLEColour color) {
 
     }
 
     @Override
-    public void setBlockBrightness(Block block, int blockMeta, String color) {
+    public void setBlockBrightness(Block block, int blockMeta, RPLENamedColour color) {
 
     }
 
@@ -38,7 +29,7 @@ public final class BlockColorHandler implements BlockColorRegistry {
     }
 
     @Override
-    public void setBlockBrightness(Block block, String color) {
+    public void setBlockBrightness(Block block, RPLENamedColour color) {
 
     }
 
@@ -48,7 +39,7 @@ public final class BlockColorHandler implements BlockColorRegistry {
     }
 
     @Override
-    public void setBlockBrightness(String blockName, String color) {
+    public void setBlockBrightness(String blockName, RPLENamedColour color) {
 
     }
 
@@ -58,7 +49,7 @@ public final class BlockColorHandler implements BlockColorRegistry {
     }
 
     @Override
-    public void setBlockTranslucency(Block block, int blockMeta, String color) {
+    public void setBlockTranslucency(Block block, int blockMeta, RPLENamedColour color) {
 
     }
 
@@ -68,7 +59,7 @@ public final class BlockColorHandler implements BlockColorRegistry {
     }
 
     @Override
-    public void setBlockTranslucency(Block block, String color) {
+    public void setBlockTranslucency(Block block, RPLENamedColour color) {
 
     }
 
@@ -78,7 +69,7 @@ public final class BlockColorHandler implements BlockColorRegistry {
     }
 
     @Override
-    public void setBlockTranslucency(String blockName, String color) {
+    public void setBlockTranslucency(String blockName, RPLENamedColour color) {
 
     }
 }
