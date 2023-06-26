@@ -75,7 +75,7 @@ public abstract class BlockMixin implements IBlockColorizerMixin {
         if (passBaseBrightness.get())
             return;
 
-        val color = rple$getColoredBrightness(0);
+        val color = rple$getColoredBrightness();
         val lightValue = RPLEColorAPI.maxColorComponent(color);
 
         cir.setReturnValue(lightValue);
@@ -111,7 +111,7 @@ public abstract class BlockMixin implements IBlockColorizerMixin {
         if (passBaseOpacity.get())
             return;
 
-        val color = rple$getColoredTranslucency(0);
+        val color = rple$getColoredTranslucency();
         val lightValue = RPLEColorAPI.invertColorComponent(RPLEColorAPI.minColorComponent(color));
 
         cir.setReturnValue(lightValue);
@@ -186,7 +186,7 @@ public abstract class BlockMixin implements IBlockColorizerMixin {
                 return color;
         }
 
-        val metaTranslucency = lookupMetaTranslucency(0);
+        val metaTranslucency = lookupMetaTranslucency(blockMeta);
         if (metaTranslucency != null)
             return metaTranslucency;
 
