@@ -7,6 +7,8 @@
 
 package com.falsepattern.rple.internal.common.storage;
 
+import com.falsepattern.rple.api.color.ColorChannel;
+
 public interface ColoredCarrierEBS {
-    ColoredLightEBS getColoredEBS(int colorChannel);
+    ColoredLightEBS getColoredEBS(ColorChannel channel);
 }

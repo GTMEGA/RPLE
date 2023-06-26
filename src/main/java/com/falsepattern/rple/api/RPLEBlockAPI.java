@@ -7,34 +7,34 @@
 
 package com.falsepattern.rple.api;
 
-import com.falsepattern.rple.api.color.RPLEColour;
+import com.falsepattern.rple.api.color.RPLEColor;
 import lombok.experimental.UtilityClass;
 import net.minecraft.block.Block;
 
 @UtilityClass
 public final class RPLEBlockAPI {
-    public static void setBlockFallbackBrightness(RPLEColour colour, String blockName) {
+    public static void setBlockFallbackBrightness(RPLEColor color, String blockName) {
 //        GameData.getBlockRegistry().getRaw()
     }
 
-    public static void setBlockFallbackBrightness(RPLEColour colour, Block block) {
+    public static void setBlockFallbackBrightness(RPLEColor color, Block block) {
     }
 
-    public static void setBlockFallbackBrightnessWithMeta(RPLEColour colour, String blockName, int blockMeta) {
+    public static void setBlockFallbackBrightnessWithMeta(RPLEColor color, String blockName, int blockMeta) {
     }
 
-    public static void setBlockFallbackBrightnessWithMeta(RPLEColour colour, Block block, int blockMeta) {
+    public static void setBlockFallbackBrightnessWithMeta(RPLEColor color, Block block, int blockMeta) {
     }
 
-    public static void setBlockFallbackTranslucency(RPLEColour colour, String blockName) {
+    public static void setBlockFallbackTranslucency(RPLEColor color, String blockName) {
     }
 
-    public static void setBlockFallbackTranslucency(RPLEColour colour, Block block) {
+    public static void setBlockFallbackTranslucency(RPLEColor color, Block block) {
     }
 
-    public static void setBlockFallbackTranslucencyWithMeta(RPLEColour colour, String blockName, int blockMeta) {
+    public static void setBlockFallbackTranslucencyWithMeta(RPLEColor color, String blockName, int blockMeta) {
     }
 
-    public static void setBlockFallbackTranslucencyWithMeta(RPLEColour colour, Block block, int blockMeta) {
+    public static void setBlockFallbackTranslucencyWithMeta(RPLEColor color, Block block, int blockMeta) {
     }
 }

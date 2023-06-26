@@ -5,10 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.api.color;
+package com.falsepattern.rple.api.block;
 
-public interface RPLENamedColour extends RPLEColour {
-    String colorDomain();
-
-    String colorName();
+public interface RPLEColoredBlock extends ColoredLightBlock, ColoredTranslucentBlock {
 }

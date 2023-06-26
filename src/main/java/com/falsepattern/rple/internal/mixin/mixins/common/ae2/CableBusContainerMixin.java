@@ -7,14 +7,14 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.ae2;
 
-import appeng.api.parts.IPart;
 import appeng.api.util.AEColor;
 import appeng.helpers.AEMultiTile;
 import appeng.parts.CableBusContainer;
 import appeng.parts.CableBusStorage;
 import appeng.parts.ICableBusContainer;
-import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.mixin.interfaces.ae2.ICableBusContainerMixin;
+import lombok.val;
 import lombok.var;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,42 +22,38 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(value = CableBusContainer.class,
        remap = false)
-public abstract class CableBusContainerMixin extends CableBusStorage implements AEMultiTile, ICableBusContainer,
-        ICableBusContainerMixin {
-    @Shadow public abstract AEColor getColor();
+public abstract class CableBusContainerMixin extends CableBusStorage implements AEMultiTile,
+                                                                                ICableBusContainer,
+                                                                                ICableBusContainerMixin {
+    @Shadow
+    public abstract AEColor getColor();
 
     @Override
-    public int getColoredLightValue(int colorChannel) {
-        int light = 0;
-        ForgeDirection[] arr$ = ForgeDirection.values();
-        int len$ = arr$.length;
-
-        for(int i$ = 0; i$ < len$; ++i$) {
-            ForgeDirection d = arr$[i$];
-            IPart p = this.getPart(d);
-            if (p != null) {
-                light = Math.max(p.getLightLevel(), light);
-            }
+    public int getColoredLightValue(ColorChannel channel) {
+        var light = 0;
+        for (val direction : ForgeDirection.values()) {
+            val part = getPart(direction);
+            if (part != null)
+                light = Math.max(part.getLightLevel(), light);
         }
 
-        if (light > 0) {
-            var color = this.getColor().mediumVariant;
-            switch (colorChannel) {
-                case LightConstants.COLOR_CHANNEL_RED:
-                    color = (color >>> 16) & 0xff;
-                    break;
-                case LightConstants.COLOR_CHANNEL_GREEN:
-                    color = (color >>> 8) & 0xff;
-                    break;
-                case LightConstants.COLOR_CHANNEL_BLUE:
-                    color = color & 0xff;
-                    break;
-                default:
-                    color = 0;
-            }
-            return (int)((color / 255f) * light);
-        } else {
+        if (light < 1)
             return 0;
+
+        var color = getColor().mediumVariant;
+        switch (channel) {
+            default:
+            case RED_CHANNEL:
+                color = (color >>> 16) & 0xff;
+                break;
+            case GREEN_CHANNEL:
+                color = (color >>> 8) & 0xff;
+                break;
+            case BLUE_CHANNEL:
+                color = color & 0xff;
+                break;
         }
+
+        return (int) (((float) color / 255F) * (float) light);
     }
 }

@@ -10,8 +10,8 @@ package com.falsepattern.rple.api;
 import com.falsepattern.lib.util.MathUtil;
 import com.falsepattern.rple.api.color.DefaultColor;
 import com.falsepattern.rple.api.color.ErrorColor;
-import com.falsepattern.rple.api.color.RPLEColour;
-import com.falsepattern.rple.api.color.RPLENamedColour;
+import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.api.color.RPLENamedColor;
 import com.falsepattern.rple.internal.Tags;
 import lombok.experimental.UtilityClass;
 import lombok.val;
@@ -28,14 +28,14 @@ public final class RPLEColorAPI {
     public static final int COLOR_MAX = 15;
 
     @Deprecated
-    public static RPLEColour vanillaBlockMetaColor(int meta) {
+    public static RPLEColor vanillaBlockMetaColor(int meta) {
         if (meta < COLOR_MIN || meta > COLOR_MAX)
             return errorColor();
 
         return DefaultColor.values()[meta];
     }
 
-    public static RPLEColour errorColor() {
+    public static RPLEColor errorColor() {
         return ErrorColor.errorColor();
     }
 
@@ -43,7 +43,19 @@ public final class RPLEColorAPI {
         return MathUtil.clamp(component, COLOR_MIN, COLOR_MAX);
     }
 
-    public static int colorHashCode(RPLEColour colour) {
+    public static int invertColorComponent(int component) {
+        return COLOR_MAX - clampColorComponent(component);
+    }
+
+    public static int minColorComponent(RPLEColor color) {
+        return Math.min(color.red(), Math.min(color.green(), color.blue()));
+    }
+
+    public static int maxColorComponent(RPLEColor color) {
+        return Math.max(color.red(), Math.max(color.green(), color.blue()));
+    }
+
+    public static int colorHashCode(RPLEColor colour) {
         if (colour == null)
             return 0;
 
@@ -51,13 +63,13 @@ public final class RPLEColorAPI {
     }
 
     public static boolean colorEquals(Object valueA, Object valueB) {
-        if (!(valueA instanceof RPLEColour))
+        if (!(valueA instanceof RPLEColor))
             return false;
-        if (!(valueB instanceof RPLEColour))
+        if (!(valueB instanceof RPLEColor))
             return false;
 
-        val colorA = (RPLEColour) valueA;
-        val colorB = (RPLEColour) valueB;
+        val colorA = (RPLEColor) valueA;
+        val colorB = (RPLEColor) valueB;
 
         if (colorA.red() != colorB.red())
             return false;
@@ -70,13 +82,13 @@ public final class RPLEColorAPI {
     }
 
     public static boolean namedColorEquals(Object valueA, Object valueB) {
-        if (!(valueA instanceof RPLENamedColour))
+        if (!(valueA instanceof RPLENamedColor))
             return false;
-        if (!(valueB instanceof RPLENamedColour))
+        if (!(valueB instanceof RPLENamedColor))
             return false;
 
-        val colorA = (RPLENamedColour) valueA;
-        val colorB = (RPLENamedColour) valueB;
+        val colorA = (RPLENamedColor) valueA;
+        val colorB = (RPLENamedColor) valueB;
 
         if (colorA.red() != colorB.red())
             return false;

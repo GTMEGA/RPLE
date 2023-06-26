@@ -12,7 +12,7 @@ import com.falsepattern.rple.api.block.ColoredLightBlock;
 import com.falsepattern.rple.api.block.ColoredTranslucentBlock;
 import com.falsepattern.rple.api.block.RPLEBlockColorizer;
 import com.falsepattern.rple.api.color.GreyscaleColor;
-import com.falsepattern.rple.api.color.RPLEColour;
+import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.internal.config.container.BlockReference;
 import com.falsepattern.rple.internal.config.container.ColorConfig;
 import lombok.AccessLevel;
@@ -29,12 +29,12 @@ public final class BlockColorHandler implements BlockColorRegistry {
         return INSTANCE;
     }
 
-    public RPLEColour blockColoredBrightness(IBlockAccess world,
-                                             Block block,
-                                             int blockMeta,
-                                             int posX,
-                                             int posY,
-                                             int posZ) {
+    public RPLEColor blockColoredBrightness(IBlockAccess world,
+                                            Block block,
+                                            int blockMeta,
+                                            int posX,
+                                            int posY,
+                                            int posZ) {
         if (block instanceof ColoredLightBlock) {
             val colouredLightBlock = (ColoredLightBlock) block;
             val color = colouredLightBlock.getColoredBrightness(world, blockMeta, posX, posY, posZ);
@@ -48,12 +48,12 @@ public final class BlockColorHandler implements BlockColorRegistry {
         return GreyscaleColor.fromVanillaLightValue(vanillaLightValue);
     }
 
-    public RPLEColour blockColoredTranslucency(IBlockAccess world,
-                                               Block block,
-                                               int blockMeta,
-                                               int posX,
-                                               int posY,
-                                               int posZ) {
+    public RPLEColor blockColoredTranslucency(IBlockAccess world,
+                                              Block block,
+                                              int blockMeta,
+                                              int posX,
+                                              int posY,
+                                              int posZ) {
         if (block instanceof ColoredTranslucentBlock) {
             val colouredTranslucentBlock = (ColoredTranslucentBlock) block;
             val color = colouredTranslucentBlock.getColoredTranslucency(world, blockMeta, posX, posY, posZ);

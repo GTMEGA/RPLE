@@ -7,6 +7,8 @@
 
 package com.falsepattern.rple.internal.common.storage;
 
+import com.falsepattern.rple.api.color.ColorChannel;
+
 public interface ColoredCarrierChunk {
-    ColoredLightChunk getColoredChunk(int colorChannel);
+    ColoredLightChunk getColoredChunk(ColorChannel channel);
 }

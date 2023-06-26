@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api.color;
 
-public interface RPLEColour {
+public interface RPLEColor {
     int red();
 
     int green();

@@ -7,33 +7,31 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.mrtjpcore;
 
-import com.falsepattern.rple.api.OldColoredBlock;
 import mrtjp.core.block.InstancedBlock;
-import mrtjp.core.block.InstancedBlockTile;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
 
 import java.lang.invoke.MethodHandles;
 
 @Mixin(InstancedBlock.class)
-public abstract class InstancedBlockMixin implements OldColoredBlock {
+public abstract class InstancedBlockMixin {
     private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
 
-    @Override
-    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
-        int color;
-        if (te instanceof InstancedBlockTile && te instanceof OldColoredBlock) {
-            OldColoredBlock colorTE = (OldColoredBlock) te;
-            color = colorTE.getColoredLightValue(world, meta, colorChannel, x, y, z);
-        } else if (te instanceof InstancedBlockTile) {
-            InstancedBlockTile tile = (InstancedBlockTile) te;
-            color = tile.getLightValue();
-        } else {
-            color = SuperCallHelper.getColoredLightValue(lookup, InstancedBlock.class, this, world, meta, colorChannel, x, y, z);
-        }
-        return color;
-    }
+    //TODO: [PRE-RELEASE] Fix this compatibility patch
+//    @Override
+//    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
+//        TileEntity te = world.getTileEntity(x, y, z);
+//        int color;
+//
+//        if (te instanceof InstancedBlockTile && te instanceof OldColoredBlock) {
+//            OldColoredBlock colorTE = (OldColoredBlock) te;
+//            color = colorTE.getColoredLightValue(world, meta, colorChannel, x, y, z);
+//        } else if (te instanceof InstancedBlockTile) {
+//            InstancedBlockTile tile = (InstancedBlockTile) te;
+//            color = tile.getLightValue();
+//        } else {
+//            color = SuperCallHelper.getColoredLightValue(lookup, InstancedBlock.class, this, world, meta, colorChannel, x, y, z);
+//        }
+//        return color;
+//    }
 
 }

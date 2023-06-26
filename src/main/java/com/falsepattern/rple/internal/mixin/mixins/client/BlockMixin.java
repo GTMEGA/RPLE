@@ -7,10 +7,10 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.api.OldColoredBlock;
 import com.falsepattern.rple.internal.common.helper.BlockLightUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import lombok.var;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.world.IBlockAccess;
@@ -25,18 +25,23 @@ public abstract class BlockMixin {
      */
     @SideOnly(Side.CLIENT)
     @Overwrite
-    public int getMixedBrightnessForBlock(IBlockAccess world, int x, int y, int z) {
-        Block block = world.getBlock(x, y, z);
-        int meta = world.getBlockMetadata(x, y, z);
-        int l = world.getLightBrightnessForSkyBlocks(x, y, z, BlockLightUtil.getCompactRGBLightValue(world, (OldColoredBlock) block, meta, x, y, z));
+    public int getMixedBrightnessForBlock(IBlockAccess world, int posX, int posY, int posZ) {
+        var block = world.getBlock(posX, posY, posZ);
+        var blockMeta = world.getBlockMetadata(posX, posY, posZ);
 
-        if (l == 0 && block instanceof BlockSlab) {
-            --y;
-            block = world.getBlock(x, y, z);
-            meta = world.getBlockMetadata(x, y, z);
-            return world.getLightBrightnessForSkyBlocks(x, y, z, BlockLightUtil.getCompactRGBLightValue(world, (OldColoredBlock) block, meta, x, y, z));
-        } else {
-            return l;
+        var compactRGBLightValue = BlockLightUtil.getCompactRGBLightValue(world, block, blockMeta, posX, posY, posZ);
+        var brightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, compactRGBLightValue);
+
+        if (brightness == 0 && block instanceof BlockSlab) {
+            --posY;
+
+            block = world.getBlock(posX, posY, posZ);
+            blockMeta = world.getBlockMetadata(posX, posY, posZ);
+
+            compactRGBLightValue = BlockLightUtil.getCompactRGBLightValue(world, block, blockMeta, posX, posY, posZ);
+            brightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, compactRGBLightValue);
         }
+
+        return brightness;
     }
 }

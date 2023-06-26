@@ -10,10 +10,11 @@ package com.falsepattern.rple.internal.common.storage;
 import com.falsepattern.lumina.api.ILightingEngine;
 import com.falsepattern.lumina.api.ILumiWorld;
 import com.falsepattern.lumina.api.ILumiWorldRoot;
-import com.falsepattern.rple.api.OldColoredBlock;
-import com.falsepattern.rple.internal.RPLE;
+import com.falsepattern.rple.api.RPLEColorAPI;
+import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
+import com.falsepattern.rple.internal.mixin.interfaces.IBlockColorizerMixin;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.Getter;
@@ -29,30 +30,32 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 public final class ColoredLightWorld implements ILumiWorld {
-    @Getter
     @Setter
+    @Getter
     private ILightingEngine lightingEngine;
     private final World carrier;
     private final String id;
 
-    public final int colorChannel;
+    @Getter
+    private final ColorChannel channel;
 
-    public ColoredLightWorld(World world, int colorChannel) {
+    public ColoredLightWorld(World world, ColorChannel channel) {
         this.carrier = world;
-        this.colorChannel = colorChannel;
-        this.id = Tags.MODID + "_" + Tags.VERSION + "_" + RPLE.IDs[colorChannel];
+        this.id = Tags.MODID + "_" + Tags.VERSION + "_" + channel.name();
+
+        this.channel = channel;
     }
 
     @Override
     public ColoredLightChunk lumiWrap(Chunk chunk) {
         val carrierChunk = (ColoredCarrierChunk) chunk;
-        return carrierChunk.getColoredChunk(colorChannel);
+        return carrierChunk.getColoredChunk(channel);
     }
 
     @Override
     public ColoredLightEBS lumiWrap(ExtendedBlockStorage ebs) {
         val carrierEBS = (ColoredCarrierEBS) ebs;
-        return carrierEBS.getColoredEBS(colorChannel);
+        return carrierEBS.getColoredEBS(channel);
     }
 
     @Override
@@ -61,20 +64,22 @@ public final class ColoredLightWorld implements ILumiWorld {
     }
 
     // TODO: [PRE_RELEASE] Replace the cast
-    public int getLightValue(IBlockAccess access, Block block, int meta, int x, int y, int z) {
-        val colouredBlock = ((OldColoredBlock) block);
-        return colouredBlock.getColoredLightValue(access, meta, colorChannel, x, y, z);
+    public int getLightValue(IBlockAccess world, Block block, int blockMeta, int posX, int posY, int posZ) {
+        val colorizedBlock = ((IBlockColorizerMixin) block);
+        val color = colorizedBlock.rple$getColoredBrightness(world, blockMeta, posX, posY, posZ);
+        return channel.componentFromColor(color);
     }
 
     @Override
-    public int lumiGetLightOpacity(Block block, int meta, int x, int y, int z) {
-        return getLightOpacity(carrier, block, meta, x, y, z);
+    public int lumiGetLightOpacity(Block block, int blockMeta, int posX, int posY, int posZ) {
+        return getLightOpacity(carrier, block, blockMeta, posX, posY, posZ);
     }
 
     // TODO: [PRE_RELEASE] Replace the cast
-    public int getLightOpacity(IBlockAccess access, Block block, int meta, int x, int y, int z) {
-        val colouredBlock = ((OldColoredBlock) block);
-        return colouredBlock.getColoredLightOpacity(access, meta, colorChannel, x, y, z);
+    public int getLightOpacity(IBlockAccess world, Block block, int blockMeta, int posX, int posY, int posZ) {
+        val colorizedBlock = ((IBlockColorizerMixin) block);
+        val color = colorizedBlock.rple$getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+        return RPLEColorAPI.invertColorComponent(channel.componentFromColor(color));
     }
 
     @Override

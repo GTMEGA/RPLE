@@ -7,7 +7,6 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.api.OldColoredBlock;
 import com.falsepattern.rple.internal.common.helper.BlockLightUtil;
 import com.falsepattern.rple.internal.common.helper.CookieWrappers;
 import net.minecraft.block.Block;
@@ -78,8 +77,8 @@ public abstract class RenderBlocksMixin {
                        remap = true),
               remap = false,
               require = 3)
-    private int grabDefaultLight(Block instance, IBlockAccess access, int x, int y, int z) {
-        return BlockLightUtil.getCompactRGBLightValue(access, (OldColoredBlock) instance, meta, x, y, z);
+    private int grabDefaultLight(Block block, IBlockAccess world, int posX, int posY, int posZ) {
+        return BlockLightUtil.getCompactRGBLightValue(world, block, meta, posX, posY, posZ);
     }
 
     /**

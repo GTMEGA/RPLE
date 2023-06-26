@@ -7,178 +7,262 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common;
 
-import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.api.OldColoredBlock;
 import com.falsepattern.rple.api.RPLEColorAPI;
-import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.Compat;
-import com.falsepattern.rple.internal.mixin.helpers.MultipartColorHelper;
-import com.falsepattern.rple.internal.mixin.interfaces.OldColoredBlockInternal;
+import com.falsepattern.rple.api.block.ColoredLightBlock;
+import com.falsepattern.rple.api.block.ColoredTranslucentBlock;
+import com.falsepattern.rple.api.color.GreyscaleColor;
+import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.internal.mixin.interfaces.IBlockColorizerMixin;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.val;
-import lombok.var;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStainedGlass;
+import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-
+@Accessors(fluent = true, chain = false)
 @Mixin(Block.class)
-public abstract class BlockMixin implements OldColoredBlock, OldColoredBlockInternal {
+public abstract class BlockMixin implements IBlockColorizerMixin {
     @Shadow
     public abstract int getLightValue();
+
+    @Shadow(remap = false)
+    public abstract int getLightValue(IBlockAccess world, int x, int y, int z);
 
     @Shadow
     public abstract int getLightOpacity();
 
-    @Shadow
-    protected boolean useNeighborBrightness;
+    @Shadow(remap = false)
+    public abstract int getLightOpacity(IBlockAccess world, int x, int y, int z);
 
-    private int @Nullable [][] colorLightValue = null;
-    private int @Nullable [][] colorOpacity = null;
+    @Setter
+    @Nullable
+    private RPLEColor baseColoredBrightness = null;
+    @Setter
+    @Nullable
+    private RPLEColor baseColoredTranslucency = null;
 
-    @Override
-    public void setColoredLightValue(int meta, int r, int g, int b) {
-        colorLightValue = add(colorLightValue, meta, r, g, b);
+    @Setter
+    @Nullable
+    private RPLEColor @Nullable [] metaColoredBrightness = null;
+    @Setter
+    @Nullable
+    private RPLEColor @Nullable [] metaColoredTranslucency = null;
+
+    private ThreadLocal<Boolean> passBaseBrightness = new ThreadLocal<>();
+    private ThreadLocal<Boolean> passBaseOpacity = new ThreadLocal<>();
+
+    @Inject(method = "<init>",
+            at = @At("RETURN"),
+            require = 1)
+    private void initThreadLocals(Material material, CallbackInfo ci) {
+        passBaseBrightness = ThreadLocal.withInitial(() -> false);
+        passBaseOpacity = ThreadLocal.withInitial(() -> false);
+    }
+
+    @Inject(method = "getLightValue()I",
+            at = @At("HEAD"),
+            cancellable = true,
+            require = 1)
+    private void rpleLightValue(CallbackInfoReturnable<Integer> cir) {
+        if (passBaseBrightness.get())
+            return;
+
+        val color = rple$getColoredBrightness(0);
+        val lightValue = RPLEColorAPI.maxColorComponent(color);
+
+        cir.setReturnValue(lightValue);
+        cir.cancel();
+    }
+
+    @Inject(method = "getLightValue(Lnet/minecraft/world/IBlockAccess;III)I",
+            at = @At("HEAD"),
+            cancellable = true,
+            remap = false,
+            require = 1)
+    private void rpleLightValue(IBlockAccess world,
+                                int posX,
+                                int posY,
+                                int posZ,
+                                CallbackInfoReturnable<Integer> cir) {
+        if (passBaseBrightness.get())
+            return;
+
+        val blockMeta = world.getBlockMetadata(posX, posY, posZ);
+        val color = rple$getColoredBrightness(world, blockMeta, posX, posY, posZ);
+        val lightValue = RPLEColorAPI.maxColorComponent(color);
+
+        cir.setReturnValue(lightValue);
+        cir.cancel();
+    }
+
+    @Inject(method = "getLightOpacity()I",
+            at = @At("HEAD"),
+            cancellable = true,
+            require = 1)
+    private void rpleLightOpacity(CallbackInfoReturnable<Integer> cir) {
+        if (passBaseOpacity.get())
+            return;
+
+        val color = rple$getColoredTranslucency(0);
+        val lightValue = RPLEColorAPI.invertColorComponent(RPLEColorAPI.minColorComponent(color));
+
+        cir.setReturnValue(lightValue);
+        cir.cancel();
+    }
+
+    @Inject(method = "getLightOpacity(Lnet/minecraft/world/IBlockAccess;III)I",
+            at = @At("HEAD"),
+            cancellable = true,
+            remap = false,
+            require = 1)
+    private void rpleLightOpacity(IBlockAccess world,
+                                  int posX,
+                                  int posY,
+                                  int posZ,
+                                  CallbackInfoReturnable<Integer> cir) {
+        if (passBaseOpacity.get())
+            return;
+
+        val blockMeta = world.getBlockMetadata(posX, posY, posZ);
+        val color = rple$getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+        val lightOpacity = RPLEColorAPI.invertColorComponent(RPLEColorAPI.maxColorComponent(color));
+
+        cir.setReturnValue(lightOpacity);
+        cir.cancel();
     }
 
     @Override
-    public void setColoredLightOpacity(int meta, int r, int g, int b) {
-        colorOpacity = add(colorOpacity, meta, r, g, b);
-    }
-
-    private static int[][] add(int[][] oldArray, int meta, int r, int g, int b) {
-        if (oldArray == null) {
-            val newArray = new int[meta + 1][];
-            for (var i = 0; i <= meta; i++)
-                setChannels(r, g, b, newArray[meta] = new int[3]);
-
-            return newArray;
+    public RPLEColor rple$getColoredBrightness(int blockMeta) {
+        if (thiz() instanceof ColoredLightBlock) {
+            val coloredLightBlock = (ColoredLightBlock) thiz();
+            val color = coloredLightBlock.getColoredBrightness(blockMeta);
+            if (color != null)
+                return color;
         }
 
-        if (oldArray.length <= meta) {
-            val oldLength = oldArray.length;
-            val newArray = new int[meta + 1][];
+        val metaBrightness = lookupMetaBrightness(blockMeta);
+        if (metaBrightness != null)
+            return metaBrightness;
 
-            System.arraycopy(oldArray, 0, newArray, 0, oldLength);
+        if (baseColoredBrightness != null)
+            return baseColoredBrightness;
 
-            for (var i = oldLength; i <= meta; i++)
-                setChannels(r, g, b, newArray[meta] = new int[3]);
-            return newArray;
+        return fallbackBrightness();
+    }
+
+    @Override
+    public RPLEColor rple$getColoredBrightness(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+        if (thiz() instanceof ColoredLightBlock) {
+            val coloredLightBlock = (ColoredLightBlock) thiz();
+            val color = coloredLightBlock.getColoredBrightness(world, blockMeta, posX, posY, posZ);
+            if (color != null)
+                return color;
         }
 
-        val element = oldArray[meta];
-        setChannels(r, g, b, element);
-        return oldArray;
-    }
+        val metaBrightness = lookupMetaBrightness(blockMeta);
+        if (metaBrightness != null)
+            return metaBrightness;
 
-    private static void setChannels(int r, int g, int b, int[] element) {
-        element[LightConstants.COLOR_CHANNEL_RED] = r;
-        element[LightConstants.COLOR_CHANNEL_GREEN] = g;
-        element[LightConstants.COLOR_CHANNEL_BLUE] = b;
-    }
+        if (baseColoredBrightness != null)
+            return baseColoredBrightness;
 
-    /**
-     * @author FalsePattern
-     * @reason Return max of colored
-     */
-    @Overwrite(remap = false)
-    public int getLightValue(IBlockAccess world, int x, int y, int z) {
-        val block = world.getBlock(x, y, z);
-        if (block != thiz())
-            return block.getLightValue(world, x, y, z);
-        val meta = world.getBlockMetadata(x, y, z);
-
-        val r = getColoredLightValueRaw(meta, LightConstants.COLOR_CHANNEL_RED);
-        val g = getColoredLightValueRaw(meta, LightConstants.COLOR_CHANNEL_GREEN);
-        val b = getColoredLightValueRaw(meta, LightConstants.COLOR_CHANNEL_BLUE);
-
-        return r > g ? Math.max(r, b) : Math.max(g, b);
-    }
-
-    //TODO Implement this. Cut feature due to lack of time.
-//    /**
-//     * @author FalsePattern
-//     * @reason TODO
-//     */
-//    @Overwrite
-//    public boolean getUseNeighborBrightness() {
-//        return ((Object)this) instanceof BlockStainedGlass ? false : useNeighborBrightness;
-//    }
-
-    /**
-     * @author FalsePattern
-     * @reason Return min of colored
-     */
-    @Overwrite(remap = false)
-    public int getLightOpacity(IBlockAccess world, int x, int y, int z) {
-        val block = world.getBlock(x, y, z);
-        if (block != thiz())
-            return block.getLightOpacity(world, x, y, z);
-        val meta = world.getBlockMetadata(x, y, z);
-
-        val r = getColoredLightOpacity(world, meta, LightConstants.COLOR_CHANNEL_RED, x, y, z);
-        val g = getColoredLightOpacity(world, meta, LightConstants.COLOR_CHANNEL_GREEN, x, y, z);
-        val b = getColoredLightOpacity(world, meta, LightConstants.COLOR_CHANNEL_BLUE, x, y, z);
-
-        return r < g ? Math.max(r, b) : Math.max(g, b);
+        return fallbackBrightness(world, posX, posY, posZ);
     }
 
     @Override
-    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-        if (world != null) {
-            val block = world.getBlock(x, y, z);
-            if (block != thiz())
-                return ((OldColoredBlock) block).getColoredLightValue(world, meta, colorChannel, x, y, z);
-
-            if (Compat.isMultipart(block) && Compat.projRedLightsPresent()) {
-                val res = MultipartColorHelper.getColoredLightValue(block, world, meta, colorChannel, x, y, z);
-                if (res >= 0)
-                    return res;
-            }
+    public RPLEColor rple$getColoredTranslucency(int blockMeta) {
+        if (thiz() instanceof ColoredTranslucentBlock) {
+            val coloredTranslucentBlock = (ColoredTranslucentBlock) thiz();
+            val color = coloredTranslucentBlock.getColoredTranslucency(blockMeta);
+            if (color != null)
+                return color;
         }
 
-        if (colorLightValue != null)
-            return getColoredLightValueRaw(meta, colorChannel);
+        val metaTranslucency = lookupMetaTranslucency(0);
+        if (metaTranslucency != null)
+            return metaTranslucency;
 
-        if (world != null)
-            return getLightValue(world, x, y, z);
-        return getLightValue();
+        if (baseColoredTranslucency != null)
+            return baseColoredTranslucency;
+
+        return fallbackTranslucency();
     }
 
     @Override
-    public int getColoredLightValueRaw(int meta, int colorChannel) {
-        if (colorLightValue == null)
-            return getLightValue();
+    public RPLEColor rple$getColoredTranslucency(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+        if (thiz() instanceof ColoredTranslucentBlock) {
+            val coloredTranslucentBlock = (ColoredTranslucentBlock) thiz();
+            val color = coloredTranslucentBlock.getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+            if (color != null)
+                return color;
+        }
 
-        if (meta >= colorLightValue.length)
-            meta = 0;
-        return colorLightValue[meta][colorChannel];
+        val metaTranslucency = lookupMetaTranslucency(blockMeta);
+        if (metaTranslucency != null)
+            return metaTranslucency;
+
+        if (baseColoredTranslucency != null)
+            return baseColoredTranslucency;
+
+        return fallbackTranslucency(world, posX, posY, posZ);
     }
 
-    @Override
-    public int getColoredLightOpacity(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-        // TODO: [PRE_RELEASE] Remove this back once the opacity configs are done, again very helpful for debugging right now!
-        if (!(thiz() instanceof BlockStainedGlass))
-            return getColoredLightOpacityRaw(meta, colorChannel);
+    private @Nullable RPLEColor lookupMetaBrightness(int blockMeta) {
+        if (blockMeta < 0)
+            return null;
+        if (metaColoredBrightness == null)
+            return null;
+        if (blockMeta >= metaColoredBrightness.length)
+            return null;
 
-        val lightColor = RPLEColorAPI.vanillaBlockMetaColor(meta);
-        val lightChannel = ColorChannel.values()[colorChannel].componentFromColor(lightColor);
-
-        return RPLEColorAPI.COLOR_MAX - lightChannel;
+        return metaColoredBrightness[blockMeta];
     }
 
-    @Override
-    public int getColoredLightOpacityRaw(int meta, int colorChannel) {
-        if (colorOpacity == null)
-            return getLightOpacity();
+    private @Nullable RPLEColor lookupMetaTranslucency(int blockMeta) {
+        if (blockMeta < 0)
+            return null;
+        if (metaColoredTranslucency == null)
+            return null;
+        if (blockMeta >= metaColoredTranslucency.length)
+            return null;
 
-        // TODO: [PRE_RELEASE] Ensure proper AIOOB check!
-        if (meta >= colorOpacity.length)
-            meta = 0;
-        return colorOpacity[meta][colorChannel];
+        return metaColoredTranslucency[blockMeta];
+    }
+
+    private RPLEColor fallbackBrightness() {
+        passBaseBrightness.set(true);
+        val color = GreyscaleColor.fromVanillaLightValue(getLightValue());
+        passBaseBrightness.set(false);
+        return color;
+    }
+
+    private RPLEColor fallbackBrightness(IBlockAccess world, int posX, int posY, int posZ) {
+        passBaseBrightness.set(true);
+        val color = GreyscaleColor.fromVanillaLightValue(getLightValue(world, posX, posY, posZ));
+        passBaseBrightness.set(false);
+        return color;
+    }
+
+    private RPLEColor fallbackTranslucency() {
+        passBaseOpacity.set(true);
+        val color = GreyscaleColor.fromVanillaLightOpacity(getLightOpacity());
+        passBaseOpacity.set(false);
+        return color;
+    }
+
+    private RPLEColor fallbackTranslucency(IBlockAccess world, int posX, int posY, int posZ) {
+        passBaseOpacity.set(true);
+        val color = GreyscaleColor.fromVanillaLightOpacity(getLightOpacity(world, posX, posY, posZ));
+        passBaseOpacity.set(false);
+        return color;
     }
 
     private Block thiz() {

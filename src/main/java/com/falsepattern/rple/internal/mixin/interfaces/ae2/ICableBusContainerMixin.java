@@ -7,6 +7,8 @@
 
 package com.falsepattern.rple.internal.mixin.interfaces.ae2;
 
+import com.falsepattern.rple.api.color.ColorChannel;
+
 public interface ICableBusContainerMixin {
-    int getColoredLightValue(int colorChannel);
+    int getColoredLightValue(ColorChannel channel);
 }

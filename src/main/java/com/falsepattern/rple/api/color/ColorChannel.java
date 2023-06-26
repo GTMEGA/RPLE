@@ -12,7 +12,7 @@ import com.falsepattern.rple.api.RPLEColorAPI;
 public enum ColorChannel {
     RED_CHANNEL, GREEN_CHANNEL, BLUE_CHANNEL;
 
-    public int componentFromColor(RPLEColour color) {
+    public int componentFromColor(RPLEColor color) {
         final int component;
         switch (this) {
             default:

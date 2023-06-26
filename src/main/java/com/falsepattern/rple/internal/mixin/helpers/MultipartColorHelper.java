@@ -8,41 +8,40 @@
 package com.falsepattern.rple.internal.mixin.helpers;
 
 import codechicken.multipart.TileMultipart;
-import codechicken.multipart.minecraft.McBlockPart;
-import codechicken.multipart.minecraft.RedstoneTorchPart;
-import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.internal.mixin.interfaces.OldColoredBlockInternal;
+import com.falsepattern.rple.api.RPLEColorAPI;
 import lombok.val;
-import mrtjp.projectred.illumination.ILight;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 
 public class MultipartColorHelper {
     public static int getColoredLightValue(Block vBlock, IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-        val tile = world.getTileEntity(x, y, z);
-        if (tile instanceof TileMultipart) {
-            val tileMultipart = (TileMultipart) tile;
-            val iter = tileMultipart.partList().iterator();
-            int sum = 0;
-            while (iter.hasNext()) {
-                val element = iter.next();
-                if (element instanceof ILight) {
-                    val lightElement = (ILight) element;
-                    if (lightElement.isOn()) {
-                        sum += LightConstants.colors[colorChannel][~lightElement.getColor() & 15];
-                    }
-                } else if (element instanceof RedstoneTorchPart) {
-                    val torch = ((RedstoneTorchPart)element);
-                    if (torch.active()) {
-                        sum += ((OldColoredBlockInternal) torch.getBlock()).getColoredLightValueRaw(0, colorChannel);
-                    }
-                } else if (element instanceof McBlockPart) {
-                    val block = (OldColoredBlockInternal) ((McBlockPart) element).getBlock();
-                    sum += block.getColoredLightValueRaw(0, colorChannel);
-                }
-            }
-            return Math.min(sum, 15);
-        }
-        return -1;
+        val tileEntity = world.getTileEntity(x, y, z);
+
+        if (!(tileEntity instanceof TileMultipart))
+            return -1;
+
+        //TODO: [PRE-RELEASE] Fix this compatibility patch
+        val tileMultipart = (TileMultipart) tileEntity;
+        val iter = tileMultipart.partList().iterator();
+        int sum = 0;
+//        while (iter.hasNext()) {
+//            val element = iter.next();
+//            if (element instanceof ILight) {
+//                val lightElement = (ILight) element;
+//                if (lightElement.isOn()) {
+//                    sum += LightConstants.colors[colorChannel][~lightElement.getColor() & 15];
+//                }
+//            } else if (element instanceof RedstoneTorchPart) {
+//                val torch = ((RedstoneTorchPart) element);
+//                if (torch.active()) {
+//                    sum += ((OldColoredBlockInternal) torch.getBlock()).getColoredLightValueRaw(0, colorChannel);
+//                }
+//            } else if (element instanceof McBlockPart) {
+//                val block = (OldColoredBlockInternal) ((McBlockPart) element).getBlock();
+//                sum += block.getColoredLightValueRaw(0, colorChannel);
+//            }
+//        }
+
+        return RPLEColorAPI.clampColorComponent(sum);
     }
 }

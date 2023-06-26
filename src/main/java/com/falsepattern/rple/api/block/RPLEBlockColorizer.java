@@ -7,21 +7,21 @@
 
 package com.falsepattern.rple.api.block;
 
-import com.falsepattern.rple.api.color.RPLEColour;
-import com.falsepattern.rple.api.color.RPLENamedColour;
+import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.api.color.RPLENamedColor;
 
 public interface RPLEBlockColorizer {
     RPLEBlockColorizer brightness(int color);
 
-    RPLEBlockColorizer brightness(RPLEColour color);
+    RPLEBlockColorizer brightness(RPLEColor color);
 
-    RPLEBlockColorizer brightness(RPLENamedColour color);
+    RPLEBlockColorizer brightness(RPLENamedColor color);
 
     RPLEBlockColorizer translucency(int color);
 
-    RPLEBlockColorizer translucency(RPLEColour color);
+    RPLEBlockColorizer translucency(RPLEColor color);
 
-    RPLEBlockColorizer translucency(RPLENamedColour color);
+    RPLEBlockColorizer translucency(RPLENamedColor color);
 
     void apply();
 }

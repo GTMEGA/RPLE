@@ -14,7 +14,7 @@ import lombok.val;
 
 @Getter
 @Accessors(fluent = true, chain = false)
-public enum GreyscaleColor implements RPLENamedColour {
+public enum GreyscaleColor implements RPLENamedColor {
     LEVEL_0,
     LEVEL_1,
     LEVEL_2,
@@ -62,7 +62,7 @@ public enum GreyscaleColor implements RPLENamedColour {
     }
 
     public static GreyscaleColor fromVanillaLightOpacity(int vanillaLightOpacity) {
-        val ordinal = RPLEColorAPI.COLOR_MAX - RPLEColorAPI.clampColorComponent(vanillaLightOpacity);
+        val ordinal = RPLEColorAPI.invertColorComponent(vanillaLightOpacity);
         return values()[ordinal];
     }
 }

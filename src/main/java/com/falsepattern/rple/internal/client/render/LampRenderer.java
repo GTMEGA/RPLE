@@ -9,7 +9,6 @@ package com.falsepattern.rple.internal.client.render;
 
 import com.falsepattern.falsetweaks.Compat;
 import com.falsepattern.falsetweaks.api.triangulator.ToggleableTessellator;
-import com.falsepattern.rple.api.LightConstants;
 import com.falsepattern.rple.internal.common.block.LampBlock;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -58,9 +57,10 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
 
         if (glowing) {
             val lamp = (LampBlock) block;
-            val r = lamp.getColoredLightValue(null, meta, LightConstants.COLOR_CHANNEL_RED, 0, 0, 0) * 17;
-            val g = lamp.getColoredLightValue(null, meta, LightConstants.COLOR_CHANNEL_GREEN, 0, 0, 0) * 17;
-            val b = lamp.getColoredLightValue(null, meta, LightConstants.COLOR_CHANNEL_BLUE, 0, 0, 0) * 17;
+            // TODO: [PRE-RELEASE] Patch this up
+            val r = 0;
+            val g = 0;
+            val b = 0;
             tessellator.setBrightness(BrightnessUtil.lightLevelsToBrightness(15, 15));
             tessellator.setColorRGBA(r, g, b, 128);
             drawGlowCube(tessellator, 0, 0, 0, NULL, lamp.getGlowIcon());
@@ -107,9 +107,10 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
             }
         }
 
-        val r = lamp.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_RED, x, y, z) * 17;
-        val g = lamp.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_GREEN, x, y, z) * 17;
-        val b = lamp.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_BLUE, x, y, z) * 17;
+        // TODO: [PRE-RELEASE] Patch this up
+        val r = 0;
+        val g = 0;
+        val b = 0;
 
         tessellator.setBrightness(BrightnessUtil.lightLevelsToBrightness(15, 15));
         tessellator.setColorOpaque(r, g, b);

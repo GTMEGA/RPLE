@@ -9,33 +9,30 @@ package com.falsepattern.rple.internal.mixin.mixins.common.ae2;
 
 import appeng.block.networking.BlockCableBus;
 import appeng.parts.ICableBusContainer;
-import com.falsepattern.rple.api.OldColoredBlock;
-import com.falsepattern.rple.internal.mixin.interfaces.ae2.ICableBusContainerMixin;
-import lombok.val;
-import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(value = BlockCableBus.class,
        remap = false)
-public abstract class BlockCableBusMixin implements OldColoredBlock {
+public abstract class BlockCableBusMixin {
     @Shadow
     protected abstract ICableBusContainer cb(IBlockAccess w, int x, int y, int z);
 
-    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-        val thiz = (Block) (Object) this;
-        Block block = world.getBlock(x, y, z);
-        if (block != null && block != thiz) {
-            return block.getLightValue(world, x, y, z);
-        } else if (block == null) {
-            return 0;
-        } else {
-            val cb = this.cb(world, x, y, z);
-            if (cb instanceof ICableBusContainerMixin) {
-                return ((ICableBusContainerMixin)cb).getColoredLightValue(colorChannel);
-            }
-            return cb.getLightValue();
-        }
-    }
+    // TODO: [PRE_RELEASE] Fluid translucency tweaks belong in FalseTweaks
+//    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
+//        val thiz = (Block) (Object) this;
+//        Block block = world.getBlock(x, y, z);
+//        if (block != null && block != thiz) {
+//            return block.getLightValue(world, x, y, z);
+//        } else if (block == null) {
+//            return 0;
+//        } else {
+//            val cb = this.cb(world, x, y, z);
+//            if (cb instanceof ICableBusContainerMixin) {
+//                return ((ICableBusContainerMixin)cb).getColoredLightValue(colorChannel);
+//            }
+//            return cb.getLightValue();
+//        }
+//    }
 }

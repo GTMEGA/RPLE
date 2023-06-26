@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.config.container;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
-import com.falsepattern.rple.api.color.RPLEColour;
+import com.falsepattern.rple.api.color.RPLEColor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -51,7 +51,7 @@ public final class ColorReference {
         this.uniqueColor = uniqueColor;
     }
 
-    public RPLEColour color(ColorPalette palette) {
+    public RPLEColor color(ColorPalette palette) {
         if (!isValid)
             return RPLEColorAPI.errorColor();
 

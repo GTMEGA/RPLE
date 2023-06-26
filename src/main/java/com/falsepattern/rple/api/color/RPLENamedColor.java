@@ -5,11 +5,10 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.mixin.interfaces;
+package com.falsepattern.rple.api.color;
 
-@Deprecated
-public interface OldColoredBlockInternal {
-    int getColoredLightValueRaw(int meta, int colorChannel);
+public interface RPLENamedColor extends RPLEColor {
+    String colorDomain();
 
-    int getColoredLightOpacityRaw(int meta, int colorChannel);
+    String colorName();
 }

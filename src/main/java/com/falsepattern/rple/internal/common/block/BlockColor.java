@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.block;
 
-import com.falsepattern.rple.api.color.RPLEColour;
+import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.internal.config.container.BlockReference;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import lombok.Getter;
@@ -25,18 +25,18 @@ public final class BlockColor {
     private final Block block;
 
     @Nullable
-    private final RPLEColour baseColor;
+    private final RPLEColor baseColor;
     @Nullable
-    private final RPLEColour[] blockMetaColors;
+    private final RPLEColor[] blockMetaColors;
 
     @Getter
     private final boolean isValid;
 
-    public BlockColor(Block block, Map<BlockReference, RPLEColour> blocks) {
+    public BlockColor(Block block, Map<BlockReference, RPLEColor> blocks) {
         this.block = block;
 
-        RPLEColour baseColor = null;
-        RPLEColour[] blockMetaColors = null;
+        RPLEColor baseColor = null;
+        RPLEColor[] blockMetaColors = null;
 
         var isValid = false;
 
@@ -46,7 +46,7 @@ public final class BlockColor {
 
             val baseBlockReference = new BlockReference(block);
             var biggestMeta = -1;
-            val blocksWithMeta = new TIntObjectHashMap<RPLEColour>();
+            val blocksWithMeta = new TIntObjectHashMap<RPLEColor>();
             for (val blockColor : blocks.entrySet()) {
                 val blockReference = blockColor.getKey();
                 if (!baseBlockReference.isSameBlockType(blockReference))
@@ -66,7 +66,7 @@ public final class BlockColor {
             }
 
             if (biggestMeta >= 0) {
-                blockMetaColors = new RPLEColour[biggestMeta + 1];
+                blockMetaColors = new RPLEColor[biggestMeta + 1];
 
                 val iterator = blocksWithMeta.iterator();
                 while (iterator.hasNext()) {
@@ -90,14 +90,14 @@ public final class BlockColor {
         this.isValid = isValid;
     }
 
-    public @Nullable RPLEColour ofBlockMeta(int blockMeta) {
+    public @Nullable RPLEColor ofBlockMeta(int blockMeta) {
         val metaColor = lookupMetaColor(blockMeta);
         if (metaColor != null)
             return metaColor;
         return baseColor;
     }
 
-    private @Nullable RPLEColour lookupMetaColor(int blockMeta) {
+    private @Nullable RPLEColor lookupMetaColor(int blockMeta) {
         if (blockMeta < 0)
             return null;
         if (blockMetaColors == null)

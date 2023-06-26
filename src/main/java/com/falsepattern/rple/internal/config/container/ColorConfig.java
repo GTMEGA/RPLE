@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.config.container;
 
-import com.falsepattern.rple.api.color.RPLENamedColour;
+import com.falsepattern.rple.api.color.RPLENamedColor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -29,8 +29,8 @@ public final class ColorConfig {
         this.translucency = new LinkedHashMap<>();
     }
 
-    public void addPaletteColor(RPLENamedColour colour) {
-        palette.addPaletteColor(colour);
+    public void addPaletteColor(RPLENamedColor color) {
+        palette.addPaletteColor(color);
     }
 
     public void setBlockBrightness(BlockReference block, ColorReference color) {

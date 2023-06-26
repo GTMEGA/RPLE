@@ -8,42 +8,57 @@
 package com.falsepattern.rple.internal.mixin.mixins.common.lumina;
 
 import com.falsepattern.lumina.api.ILumiEBSRoot;
-import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.common.storage.ColoredCarrierEBS;
 import com.falsepattern.rple.internal.common.storage.ColoredLightEBS;
 import lombok.val;
 import net.minecraft.world.chunk.NibbleArray;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import static com.falsepattern.rple.api.color.ColorChannel.*;
+
 @Mixin(ExtendedBlockStorage.class)
 public abstract class EBSMixin implements ColoredCarrierEBS {
-    @Shadow private NibbleArray skylightArray;
-    private ColoredLightEBS cRed;
-    private ColoredLightEBS cGreen;
-    private ColoredLightEBS cBlue;
+    @Shadow
+    private NibbleArray skylightArray;
+
+    @Nullable
+    private ColoredLightEBS cRed = null;
+    @Nullable
+    private ColoredLightEBS cGreen = null;
+    @Nullable
+    private ColoredLightEBS cBlue = null;
+
     private boolean colorInit;
 
     @Override
-    public ColoredLightEBS getColoredEBS(int colorChannel) {
+    public ColoredLightEBS getColoredEBS(ColorChannel channel) {
         if (!colorInit) {
             initColoredEBS(this.skylightArray != null);
             colorInit = true;
         }
-        switch (colorChannel) {
-            case LightConstants.COLOR_CHANNEL_RED: return cRed;
-            case LightConstants.COLOR_CHANNEL_GREEN: return cGreen;
-            case LightConstants.COLOR_CHANNEL_BLUE: return cBlue;
-            default: throw new IllegalArgumentException();
+
+        switch (channel) {
+            default:
+            case RED_CHANNEL:
+                return cRed;
+            case GREEN_CHANNEL:
+                return cGreen;
+            case BLUE_CHANNEL:
+                return cBlue;
         }
     }
 
     private void initColoredEBS(boolean hasSky) {
-        cRed = new ColoredLightEBS(LightConstants.COLOR_CHANNEL_RED, (ILumiEBSRoot) this, hasSky);
-        cGreen = new ColoredLightEBS(LightConstants.COLOR_CHANNEL_GREEN, (ILumiEBSRoot) this, hasSky);
-        cBlue = new ColoredLightEBS(LightConstants.COLOR_CHANNEL_BLUE, (ILumiEBSRoot) this, hasSky);
+        val thiz = (ILumiEBSRoot) this;
+
+        this.cRed = new ColoredLightEBS(RED_CHANNEL, thiz, hasSky);
+        this.cGreen = new ColoredLightEBS(GREEN_CHANNEL, thiz, hasSky);
+        this.cBlue = new ColoredLightEBS(BLUE_CHANNEL, thiz, hasSky);
     }
 
     /**
@@ -52,11 +67,11 @@ public abstract class EBSMixin implements ColoredCarrierEBS {
      */
     @Overwrite
     public int getExtSkylightValue(int x, int y, int z) {
-        val carr = (ColoredCarrierEBS) this;
-        return max3(carr.getColoredEBS(LightConstants.COLOR_CHANNEL_RED).lumiSkylightArray(),
-                    carr.getColoredEBS(LightConstants.COLOR_CHANNEL_GREEN).lumiSkylightArray(),
-                    carr.getColoredEBS(LightConstants.COLOR_CHANNEL_BLUE).lumiSkylightArray(),
-                    x, y, z);
+        val redLightArray = getColoredEBS(RED_CHANNEL).lumiSkylightArray();
+        val greenLightArray = getColoredEBS(GREEN_CHANNEL).lumiSkylightArray();
+        val blueLightArray = getColoredEBS(BLUE_CHANNEL).lumiSkylightArray();
+
+        return max3(redLightArray, greenLightArray, blueLightArray, x, y, z);
     }
 
     /**
@@ -65,11 +80,11 @@ public abstract class EBSMixin implements ColoredCarrierEBS {
      */
     @Overwrite
     public int getExtBlocklightValue(int x, int y, int z) {
-        val carr = (ColoredCarrierEBS) this;
-        return max3(carr.getColoredEBS(LightConstants.COLOR_CHANNEL_RED).lumiBlocklightArray(),
-                    carr.getColoredEBS(LightConstants.COLOR_CHANNEL_GREEN).lumiBlocklightArray(),
-                    carr.getColoredEBS(LightConstants.COLOR_CHANNEL_BLUE).lumiBlocklightArray(),
-                    x, y, z);
+        val redLightArray = getColoredEBS(RED_CHANNEL).lumiBlocklightArray();
+        val greenLightArray = getColoredEBS(GREEN_CHANNEL).lumiBlocklightArray();
+        val blueLightArray = getColoredEBS(BLUE_CHANNEL).lumiBlocklightArray();
+
+        return max3(redLightArray, greenLightArray, blueLightArray, x, y, z);
     }
 
     private static int max3(NibbleArray a, NibbleArray b, NibbleArray c, int x, int y, int z) {

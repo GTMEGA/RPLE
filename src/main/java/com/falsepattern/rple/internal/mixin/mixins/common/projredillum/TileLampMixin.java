@@ -7,10 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.projredillum;
 
-import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.api.OldColoredBlock;
 import mrtjp.projectred.illumination.TileLamp;
-import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 @Pseudo
 @Mixin(value = TileLamp.class,
        remap = false)
-public abstract class TileLampMixin implements OldColoredBlock {
+public abstract class TileLampMixin {
     @Shadow
     public abstract boolean powered();
 
@@ -31,24 +28,26 @@ public abstract class TileLampMixin implements OldColoredBlock {
     @Shadow
     public abstract int getLightValue();
 
-    @Override
-    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-        return this.inverted() != this.powered() ? LightConstants.colors[colorChannel][~this.getColor() & 0xF] : 0;
-    }
+// TODO: [PRE_RELEASE] Fluid translucency tweaks belong in FalseTweaks
 
-    @Override
-    public int getColoredLightOpacity(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-        //noop
-        return 0;
-    }
-
-    @Override
-    public void setColoredLightValue(int meta, int r, int g, int b) {
-        //noop
-    }
-
-    @Override
-    public void setColoredLightOpacity(int meta, int r, int g, int b) {
-        //noop
-    }
+//    @Override
+//    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
+//        return this.inverted() != this.powered() ? LightConstants.colors[colorChannel][~this.getColor() & 0xF] : 0;
+//    }
+//
+//    @Override
+//    public int getColoredLightOpacity(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
+//        //noop
+//        return 0;
+//    }
+//
+//    @Override
+//    public void setColoredLightValue(int meta, int r, int g, int b) {
+//        //noop
+//    }
+//
+//    @Override
+//    public void setColoredLightOpacity(int meta, int r, int g, int b) {
+//        //noop
+//    }
 }

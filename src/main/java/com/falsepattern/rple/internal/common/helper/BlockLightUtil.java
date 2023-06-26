@@ -7,13 +7,16 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
-import com.falsepattern.rple.api.LightConstants;
-import com.falsepattern.rple.api.OldColoredBlock;
+import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.common.storage.ColoredCarrierWorld;
+import com.falsepattern.rple.internal.mixin.interfaces.IBlockColorizerMixin;
 import lombok.val;
+import net.minecraft.block.Block;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import static com.falsepattern.rple.api.color.ColorChannel.*;
 
 /**
  * Shared logic used by multiple mixins, couldn't find a better place for these.
@@ -22,36 +25,50 @@ public class BlockLightUtil {
     /**
      * The method that makes all of this work. Replaces the regular brightness logic with our custom packed/cookie system.
      */
-    public static int getRGBBrightnessAt(IBlockAccess access, int x, int y, int z, int minBlockLight) {
-        //Unpack the minimum brightness
-        int minRed, minGreen, minBlue;
-        val packed = CookieMonster.cookieToPackedLong(minBlockLight);
-        minRed = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessRed(packed));
-        minGreen = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessGreen(packed));
-        minBlue = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessBlue(packed));
+    public static int getRGBBrightnessAt(IBlockAccess world, int posX, int posY, int posZ, int minBlockLight) {
+        val packedMinBrightness = CookieMonster.cookieToPackedLong(minBlockLight);
+        val minRedBrightness = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessRed(packedMinBrightness));
+        val minGreenBrightness = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessGreen(packedMinBrightness));
+        val minBlueBrightness = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessBlue(packedMinBrightness));
 
-        //Grab the colored world accessor
-        val carrier = access instanceof World ? ((ColoredCarrierWorld) access) : (ColoredCarrierWorld) (((ChunkCache) access).worldObj);
+        final ColoredCarrierWorld carrier;
+        if (world instanceof World) {
+            carrier = (ColoredCarrierWorld) world;
+        } else {
+            carrier = (ColoredCarrierWorld) (((ChunkCache) world).worldObj);
+        }
 
-        //Grab the colored channels
-        val red = carrier.getColoredWorld(LightConstants.COLOR_CHANNEL_RED).getLightBrightnessForSkyBlocksWorld(access, x, y, z, minRed);
-        val green = carrier.getColoredWorld(LightConstants.COLOR_CHANNEL_GREEN).getLightBrightnessForSkyBlocksWorld(access, x, y, z, minGreen);
-        val blue = carrier.getColoredWorld(LightConstants.COLOR_CHANNEL_BLUE).getLightBrightnessForSkyBlocksWorld(access, x, y, z, minBlue);
+        val red = carrier.coloredWorld(RED_CHANNEL)
+                         .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minRedBrightness);
+        val green = carrier.coloredWorld(ColorChannel.GREEN_CHANNEL)
+                           .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minGreenBrightness);
+        val blue = carrier.coloredWorld(ColorChannel.BLUE_CHANNEL)
+                          .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minBlueBrightness);
 
-        //Pack it
         return CookieMonster.packedLongToCookie(BrightnessUtil.brightnessesToPackedLong(red, green, blue));
     }
 
-    public static int getCompactRGBLightValue(IBlockAccess world, OldColoredBlock block, int meta, int x, int y, int z) {
-        val red = block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_RED, x, y, z);
-        //This is here if we already generated a packed value somewhere deep inside another mod
-        //Current usages:
-        //AE2 CLApi
-        if (CookieMonster.inspectValue(red) == CookieMonster.IntType.COOKIE) {
+    public static int getCompactRGBLightValue(IBlockAccess world,
+                                              Block block,
+                                              int blockMeta,
+                                              int posX,
+                                              int posY,
+                                              int posZ) {
+        // TODO: [PRE-RELEASE] fix thisss
+        val colorizedBlock = (IBlockColorizerMixin) block;
+        val color = colorizedBlock.rple$getColoredBrightness(world, blockMeta, posX, posY, posZ);
+
+        val red = RED_CHANNEL.componentFromColor(color);
+        val green = GREEN_CHANNEL.componentFromColor(color);
+        val blue = BLUE_CHANNEL.componentFromColor(color);
+
+        // TODO: [PRE-RELEASE] 100% broken now.
+        // This is here if we already generated a packed value somewhere deep inside another mod
+        // Current usages:
+        // AE2 CLApi
+        if (CookieMonster.inspectValue(red) == CookieMonster.IntType.COOKIE)
             return red;
-        }
-        val green = block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_GREEN, x, y, z);
-        val blue = block.getColoredLightValue(world, meta, LightConstants.COLOR_CHANNEL_BLUE, x, y, z);
+
         return createCompactRGBLightValue(red, green, blue);
     }
 

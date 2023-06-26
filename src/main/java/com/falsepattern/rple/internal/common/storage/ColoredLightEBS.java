@@ -9,9 +9,11 @@ package com.falsepattern.rple.internal.common.storage;
 
 import com.falsepattern.lumina.api.ILumiEBS;
 import com.falsepattern.lumina.api.ILumiEBSRoot;
-import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.api.color.ColorChannel;
 import net.minecraft.world.chunk.NibbleArray;
 import org.jetbrains.annotations.Nullable;
+
+import static com.falsepattern.rple.api.color.ColorChannel.RED_CHANNEL;
 
 public final class ColoredLightEBS implements ILumiEBS {
     private final ILumiEBSRoot carrier;
@@ -19,10 +21,10 @@ public final class ColoredLightEBS implements ILumiEBS {
     private final NibbleArray skylightArray;
     private final NibbleArray blocklightArray;
 
-    public ColoredLightEBS(int colorChannel, ILumiEBSRoot carrier, boolean hasSky) {
+    public ColoredLightEBS(ColorChannel channel, ILumiEBSRoot carrier, boolean hasSky) {
         this.carrier = carrier;
 
-        if (colorChannel == LightConstants.COLOR_CHANNEL_RED) {
+        if (channel == RED_CHANNEL) {
             blocklightArray = ((ILumiEBS) carrier).lumiBlocklightArray();
             skylightArray = ((ILumiEBS) carrier).lumiSkylightArray();
         } else {

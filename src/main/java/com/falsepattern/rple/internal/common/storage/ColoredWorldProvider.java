@@ -9,17 +9,18 @@ package com.falsepattern.rple.internal.common.storage;
 
 import com.falsepattern.lumina.api.ILumiWorld;
 import com.falsepattern.lumina.api.ILumiWorldProvider;
+import com.falsepattern.rple.api.color.ColorChannel;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import net.minecraft.world.World;
 
 @AllArgsConstructor
 public final class ColoredWorldProvider implements ILumiWorldProvider {
-    private final int colorChannel;
+    private final ColorChannel channel;
 
     @Override
     public ILumiWorld getWorld(World world) {
         val carrierWorld = (ColoredCarrierWorld) world;
-        return carrierWorld.getColoredWorld(colorChannel);
+        return carrierWorld.coloredWorld(channel);
     }
 }

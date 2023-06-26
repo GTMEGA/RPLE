@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Accessors(fluent = true, chain = false)
 @AllArgsConstructor
-public class CustomColor implements RPLEColour {
+public class CustomColor implements RPLEColor {
     protected final int red;
     protected final int green;
     protected final int blue;

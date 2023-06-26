@@ -7,9 +7,17 @@
 
 package com.falsepattern.rple.api.block;
 
-import com.falsepattern.rple.api.color.RPLEColour;
+import com.falsepattern.rple.api.color.RPLEColor;
 import net.minecraft.world.IBlockAccess;
 
 public interface ColoredLightBlock {
-    RPLEColour getColoredBrightness(IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
+    RPLEColor getColoredBrightness();
+
+    default RPLEColor getColoredBrightness(int blockMeta) {
+        return getColoredBrightness();
+    }
+
+    default RPLEColor getColoredBrightness(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+        return getColoredBrightness(blockMeta);
+    }
 }

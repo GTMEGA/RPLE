@@ -12,10 +12,10 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ErrorColor implements RPLENamedColour {
+public final class ErrorColor implements RPLENamedColor {
     private static final ErrorColor INSTANCE = new ErrorColor();
 
-    public static RPLENamedColour errorColor() {
+    public static RPLENamedColor errorColor() {
         return INSTANCE;
     }
 

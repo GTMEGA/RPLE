@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 
 @Getter
 @Accessors(fluent = true, chain = false)
-public enum DefaultColor implements RPLENamedColour {
+public enum DefaultColor implements RPLENamedColor {
     // @formatter:off
     WHITE          (15, 15, 15),
     ORANGE         (15, 12, 10),

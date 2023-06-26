@@ -8,13 +8,15 @@
 package com.falsepattern.rple.internal.common.storage;
 
 import com.falsepattern.lumina.api.*;
-import com.falsepattern.rple.api.LightConstants;
+import com.falsepattern.rple.api.color.ColorChannel;
 import lombok.val;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.chunk.Chunk;
 
+import static com.falsepattern.rple.api.color.ColorChannel.RED_CHANNEL;
+
 public final class ColoredLightChunk implements ILumiChunk {
-    private final int colorChannel;
+    private final ColorChannel channel;
     private final ColoredLightWorld world;
     private final Chunk carrier;
 
@@ -26,11 +28,11 @@ public final class ColoredLightChunk implements ILumiChunk {
     private boolean isLightInitialized;
 
     public ColoredLightChunk(ColoredLightWorld world, Chunk carrier) {
-        this.colorChannel = world.colorChannel;
+        this.channel = world.getChannel();
         this.world = world;
         this.carrier = carrier;
 
-        if (world.colorChannel == LightConstants.COLOR_CHANNEL_RED) {
+        if (this.channel == RED_CHANNEL) {
             this.updateSkylightColumns = carrier.updateSkylightColumns;
             this.heightMap = carrier.heightMap;
         } else {
@@ -45,7 +47,7 @@ public final class ColoredLightChunk implements ILumiChunk {
         if (ebs == null)
             return null;
 
-        return ((ColoredCarrierEBS) ebs).getColoredEBS(colorChannel);
+        return ((ColoredCarrierEBS) ebs).getColoredEBS(channel);
     }
 
     @Override

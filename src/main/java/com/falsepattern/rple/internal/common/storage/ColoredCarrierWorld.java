@@ -7,6 +7,8 @@
 
 package com.falsepattern.rple.internal.common.storage;
 
+import com.falsepattern.rple.api.color.ColorChannel;
+
 public interface ColoredCarrierWorld {
-    ColoredLightWorld getColoredWorld(int colorChannel);
+    ColoredLightWorld coloredWorld(ColorChannel channel);
 }

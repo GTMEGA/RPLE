@@ -8,9 +8,9 @@
 package com.falsepattern.rple.internal.common.storage;
 
 import com.falsepattern.chunk.api.ChunkDataManager;
-import com.falsepattern.rple.internal.RPLE;
+import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.chunk.Chunk;
@@ -20,11 +20,11 @@ import net.minecraftforge.common.util.Constants;
 
 import java.nio.ByteBuffer;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public final class ColoredDataManager implements ChunkDataManager.SectionNBTDataManager, ChunkDataManager.PacketDataManager {
     private static final int VERSION_HASH = Tags.VERSION.hashCode();
 
-    private final int colorChannel;
+    private final ColorChannel channel;
 
     @Override
     public int maxPacketSize() {
@@ -35,7 +35,7 @@ public final class ColoredDataManager implements ChunkDataManager.SectionNBTData
     public void writeToBuffer(Chunk chunk, int ebsMask, boolean forceUpdate, ByteBuffer data) {
         val carrier = (ColoredCarrierChunk) chunk;
         val hasSky = !chunk.worldObj.provider.hasNoSky;
-        val cn = carrier.getColoredChunk(colorChannel);
+        val cn = carrier.getColoredChunk(channel);
         for (int i = 0; i < 16; i++) {
             if ((ebsMask & (1 << i)) == 0)
                 continue;
@@ -54,7 +54,7 @@ public final class ColoredDataManager implements ChunkDataManager.SectionNBTData
     public void readFromBuffer(Chunk chunk, int ebsMask, boolean forceUpdate, ByteBuffer buffer) {
         val carrier = (ColoredCarrierChunk) chunk;
         val hasSky = !chunk.worldObj.provider.hasNoSky;
-        val cn = carrier.getColoredChunk(colorChannel);
+        val cn = carrier.getColoredChunk(channel);
         for (int i = 0; i < 16; i++) {
             if ((ebsMask & (1 << i)) == 0)
                 continue;
@@ -71,7 +71,7 @@ public final class ColoredDataManager implements ChunkDataManager.SectionNBTData
 
     @Override
     public void writeSectionToNBT(Chunk chunk, ExtendedBlockStorage ebs, NBTTagCompound section) {
-        val cEbs = ((ColoredCarrierEBS) ebs).getColoredEBS(colorChannel);
+        val cEbs = ((ColoredCarrierEBS) ebs).getColoredEBS(channel);
         section.setInteger("v", VERSION_HASH);
         section.setByteArray("BlockLight", cEbs.lumiBlocklightArray().data);
 
@@ -81,7 +81,7 @@ public final class ColoredDataManager implements ChunkDataManager.SectionNBTData
 
     @Override
     public void readSectionFromNBT(Chunk chunk, ExtendedBlockStorage ebs, NBTTagCompound section) {
-        val cEbs = ((ColoredCarrierEBS) ebs).getColoredEBS(colorChannel);
+        val cEbs = ((ColoredCarrierEBS) ebs).getColoredEBS(channel);
 
         if (!section.hasKey("v", Constants.NBT.TAG_INT))
             return;
@@ -111,6 +111,6 @@ public final class ColoredDataManager implements ChunkDataManager.SectionNBTData
 
     @Override
     public String id() {
-        return RPLE.IDs[colorChannel];
+        return channel.name();
     }
 }

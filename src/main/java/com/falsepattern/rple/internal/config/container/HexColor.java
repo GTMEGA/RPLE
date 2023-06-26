@@ -9,7 +9,7 @@ package com.falsepattern.rple.internal.config.container;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.api.color.RPLEColour;
+import com.falsepattern.rple.api.color.RPLEColor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -20,7 +20,7 @@ import static com.falsepattern.rple.api.color.ColorChannel.*;
 
 @Getter
 @Accessors(fluent = true, chain = false)
-public final class HexColor implements RPLEColour {
+public final class HexColor implements RPLEColor {
     private static final String EXPECTED_REGEX = "0x[A-F0-9]{3}$";
 
     private final int red;
@@ -30,12 +30,12 @@ public final class HexColor implements RPLEColour {
     private final String asColorHex;
     private final boolean isValid;
 
-    public HexColor(RPLEColour colour) {
-        this.red = RPLEColorAPI.clampColorComponent(colour.red());
-        this.green = RPLEColorAPI.clampColorComponent(colour.green());
-        this.blue = RPLEColorAPI.clampColorComponent(colour.blue());
+    public HexColor(RPLEColor color) {
+        this.red = RPLEColorAPI.clampColorComponent(color.red());
+        this.green = RPLEColorAPI.clampColorComponent(color.green());
+        this.blue = RPLEColorAPI.clampColorComponent(color.blue());
 
-        this.asColorHex = colorHexFromColor(colour);
+        this.asColorHex = colorHexFromColor(color);
         this.isValid = true;
     }
 
@@ -142,7 +142,7 @@ public final class HexColor implements RPLEColour {
         return Integer.parseUnsignedInt(hexString, 16);
     }
 
-    private static String colorHexFromColor(RPLEColour colour) {
+    private static String colorHexFromColor(RPLEColor colour) {
         val red = RED_CHANNEL.componentFromColor(colour);
         val green = GREEN_CHANNEL.componentFromColor(colour);
         val blue = BLUE_CHANNEL.componentFromColor(colour);
