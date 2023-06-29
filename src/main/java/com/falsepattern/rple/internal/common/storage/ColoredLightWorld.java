@@ -14,7 +14,6 @@ import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
-import com.falsepattern.rple.internal.mixin.interfaces.IBlockColorizerMixin;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.Getter;
@@ -28,6 +27,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+
+import static com.falsepattern.rple.api.RPLEBlockAPI.getColoredBrightnessSafe;
+import static com.falsepattern.rple.api.RPLEBlockAPI.getColoredTranslucencySafe;
 
 public final class ColoredLightWorld implements ILumiWorld {
     @Setter
@@ -63,10 +65,8 @@ public final class ColoredLightWorld implements ILumiWorld {
         return getLightValue(carrier, block, meta, x, y, z);
     }
 
-    // TODO: [PRE_RELEASE] Replace the cast
     public int getLightValue(IBlockAccess world, Block block, int blockMeta, int posX, int posY, int posZ) {
-        val colorizedBlock = ((IBlockColorizerMixin) block);
-        val color = colorizedBlock.rple$getColoredBrightness(world, blockMeta, posX, posY, posZ);
+        val color = getColoredBrightnessSafe(world, block, blockMeta, posX, posY, posZ);
         return channel.componentFromColor(color);
     }
 
@@ -75,10 +75,8 @@ public final class ColoredLightWorld implements ILumiWorld {
         return getLightOpacity(carrier, block, blockMeta, posX, posY, posZ);
     }
 
-    // TODO: [PRE_RELEASE] Replace the cast
     public int getLightOpacity(IBlockAccess world, Block block, int blockMeta, int posX, int posY, int posZ) {
-        val colorizedBlock = ((IBlockColorizerMixin) block);
-        val color = colorizedBlock.rple$getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+        val color = getColoredTranslucencySafe(world, block, blockMeta, posX, posY, posZ);
         return RPLEColorAPI.invertColorComponent(channel.componentFromColor(color));
     }
 

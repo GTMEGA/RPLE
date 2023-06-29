@@ -13,11 +13,7 @@ import net.minecraft.world.IBlockAccess;
 public interface ColoredTranslucentBlock {
     RPLEColor getColoredTranslucency();
 
-    default RPLEColor getColoredTranslucency(int blockMeta) {
-        return getColoredTranslucency();
-    }
+    RPLEColor getColoredTranslucency(int blockMeta);
 
-    default RPLEColor getColoredTranslucency(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
-        return getColoredTranslucency(blockMeta);
-    }
+    RPLEColor getColoredTranslucency(IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
 }

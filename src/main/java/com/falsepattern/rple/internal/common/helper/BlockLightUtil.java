@@ -9,13 +9,13 @@ package com.falsepattern.rple.internal.common.helper;
 
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.common.storage.ColoredCarrierWorld;
-import com.falsepattern.rple.internal.mixin.interfaces.IBlockColorizerMixin;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import static com.falsepattern.rple.api.RPLEBlockAPI.getColoredBrightnessSafe;
 import static com.falsepattern.rple.api.color.ColorChannel.*;
 
 /**
@@ -54,9 +54,7 @@ public class BlockLightUtil {
                                               int posX,
                                               int posY,
                                               int posZ) {
-        // TODO: [PRE-RELEASE] fix thisss
-        val colorizedBlock = (IBlockColorizerMixin) block;
-        val color = colorizedBlock.rple$getColoredBrightness(world, blockMeta, posX, posY, posZ);
+        val color = getColoredBrightnessSafe(world, block, blockMeta, posX, posY, posZ);
 
         val red = RED_CHANNEL.componentFromColor(color);
         val green = GREEN_CHANNEL.componentFromColor(color);

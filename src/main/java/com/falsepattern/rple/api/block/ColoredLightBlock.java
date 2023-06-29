@@ -13,11 +13,7 @@ import net.minecraft.world.IBlockAccess;
 public interface ColoredLightBlock {
     RPLEColor getColoredBrightness();
 
-    default RPLEColor getColoredBrightness(int blockMeta) {
-        return getColoredBrightness();
-    }
+    RPLEColor getColoredBrightness(int blockMeta);
 
-    default RPLEColor getColoredBrightness(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
-        return getColoredBrightness(blockMeta);
-    }
+    RPLEColor getColoredBrightness(IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
 }

@@ -15,6 +15,8 @@ import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.api.color.CustomColor;
 import com.falsepattern.rple.internal.client.render.LampRenderer;
+import com.falsepattern.rple.internal.common.block.LampBlock;
+import com.falsepattern.rple.internal.common.block.LampItemBlock;
 import com.falsepattern.rple.internal.common.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.common.storage.ColoredWorldProvider;
 import com.falsepattern.rple.internal.config.container.ColorConfig;
@@ -24,6 +26,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.Data;
 import lombok.Getter;
 import lombok.val;
@@ -83,6 +86,10 @@ public class RPLE {
         blueIndexShader = shaderBuf[1];
         rpleEdgeTexUIndexShader = shaderBuf[2];
         rpleEdgeTexVIndexShader = shaderBuf[3];
+
+        val lamp = new LampBlock();
+        lamp.setBlockName(Tags.MODID + ".lamp." + "blue").setBlockTextureName("blue");
+        GameRegistry.registerBlock(lamp, LampItemBlock.class, "lamp." + "blue");
 
         //TODO: [PRE-RELEASE] Fix these values
 //        if (RPLEConfig.ENABLE_LAMPS) {

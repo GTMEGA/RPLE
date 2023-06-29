@@ -12,7 +12,6 @@ import com.falsepattern.rple.api.block.ColoredLightBlock;
 import com.falsepattern.rple.api.block.ColoredTranslucentBlock;
 import com.falsepattern.rple.api.color.GreyscaleColor;
 import com.falsepattern.rple.api.color.RPLEColor;
-import com.falsepattern.rple.internal.mixin.interfaces.IBlockColorizerMixin;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -29,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Accessors(fluent = true, chain = false)
 @Mixin(Block.class)
-public abstract class BlockMixin implements IBlockColorizerMixin {
+public abstract class BlockMixin implements ColoredLightBlock, ColoredTranslucentBlock {
     @Shadow
     public abstract int getLightValue();
 
@@ -75,7 +74,7 @@ public abstract class BlockMixin implements IBlockColorizerMixin {
         if (passBaseBrightness.get())
             return;
 
-        val color = rple$getColoredBrightness();
+        val color = getColoredBrightness();
         val lightValue = RPLEColorAPI.maxColorComponent(color);
 
         cir.setReturnValue(lightValue);
@@ -96,7 +95,7 @@ public abstract class BlockMixin implements IBlockColorizerMixin {
             return;
 
         val blockMeta = world.getBlockMetadata(posX, posY, posZ);
-        val color = rple$getColoredBrightness(world, blockMeta, posX, posY, posZ);
+        val color = getColoredBrightness(world, blockMeta, posX, posY, posZ);
         val lightValue = RPLEColorAPI.maxColorComponent(color);
 
         cir.setReturnValue(lightValue);
@@ -111,7 +110,7 @@ public abstract class BlockMixin implements IBlockColorizerMixin {
         if (passBaseOpacity.get())
             return;
 
-        val color = rple$getColoredTranslucency();
+        val color = getColoredTranslucency();
         val lightValue = RPLEColorAPI.invertColorComponent(RPLEColorAPI.minColorComponent(color));
 
         cir.setReturnValue(lightValue);
@@ -132,7 +131,7 @@ public abstract class BlockMixin implements IBlockColorizerMixin {
             return;
 
         val blockMeta = world.getBlockMetadata(posX, posY, posZ);
-        val color = rple$getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+        val color = getColoredTranslucency(world, blockMeta, posX, posY, posZ);
         val lightOpacity = RPLEColorAPI.invertColorComponent(RPLEColorAPI.maxColorComponent(color));
 
         cir.setReturnValue(lightOpacity);
@@ -140,14 +139,12 @@ public abstract class BlockMixin implements IBlockColorizerMixin {
     }
 
     @Override
-    public RPLEColor rple$getColoredBrightness(int blockMeta) {
-        if (thiz() instanceof ColoredLightBlock) {
-            val coloredLightBlock = (ColoredLightBlock) thiz();
-            val color = coloredLightBlock.getColoredBrightness(blockMeta);
-            if (color != null)
-                return color;
-        }
+    public RPLEColor getColoredBrightness() {
+        return getColoredBrightness(0);
+    }
 
+    @Override
+    public RPLEColor getColoredBrightness(int blockMeta) {
         val metaBrightness = lookupMetaBrightness(blockMeta);
         if (metaBrightness != null)
             return metaBrightness;
@@ -159,14 +156,7 @@ public abstract class BlockMixin implements IBlockColorizerMixin {
     }
 
     @Override
-    public RPLEColor rple$getColoredBrightness(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
-        if (thiz() instanceof ColoredLightBlock) {
-            val coloredLightBlock = (ColoredLightBlock) thiz();
-            val color = coloredLightBlock.getColoredBrightness(world, blockMeta, posX, posY, posZ);
-            if (color != null)
-                return color;
-        }
-
+    public RPLEColor getColoredBrightness(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
         val metaBrightness = lookupMetaBrightness(blockMeta);
         if (metaBrightness != null)
             return metaBrightness;
@@ -178,14 +168,12 @@ public abstract class BlockMixin implements IBlockColorizerMixin {
     }
 
     @Override
-    public RPLEColor rple$getColoredTranslucency(int blockMeta) {
-        if (thiz() instanceof ColoredTranslucentBlock) {
-            val coloredTranslucentBlock = (ColoredTranslucentBlock) thiz();
-            val color = coloredTranslucentBlock.getColoredTranslucency(blockMeta);
-            if (color != null)
-                return color;
-        }
+    public RPLEColor getColoredTranslucency() {
+        return getColoredTranslucency(0);
+    }
 
+    @Override
+    public RPLEColor getColoredTranslucency(int blockMeta) {
         val metaTranslucency = lookupMetaTranslucency(blockMeta);
         if (metaTranslucency != null)
             return metaTranslucency;
@@ -197,14 +185,7 @@ public abstract class BlockMixin implements IBlockColorizerMixin {
     }
 
     @Override
-    public RPLEColor rple$getColoredTranslucency(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
-        if (thiz() instanceof ColoredTranslucentBlock) {
-            val coloredTranslucentBlock = (ColoredTranslucentBlock) thiz();
-            val color = coloredTranslucentBlock.getColoredTranslucency(world, blockMeta, posX, posY, posZ);
-            if (color != null)
-                return color;
-        }
-
+    public RPLEColor getColoredTranslucency(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
         val metaTranslucency = lookupMetaTranslucency(blockMeta);
         if (metaTranslucency != null)
             return metaTranslucency;

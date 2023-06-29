@@ -7,34 +7,124 @@
 
 package com.falsepattern.rple.api;
 
+import com.falsepattern.rple.api.block.ColoredLightBlock;
+import com.falsepattern.rple.api.block.ColoredTranslucentBlock;
 import com.falsepattern.rple.api.color.RPLEColor;
 import lombok.experimental.UtilityClass;
+import lombok.val;
 import net.minecraft.block.Block;
+import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.Nullable;
+
+import static com.falsepattern.rple.api.RPLEColorAPI.errorColor;
 
 @UtilityClass
 public final class RPLEBlockAPI {
-    public static void setBlockFallbackBrightness(RPLEColor color, String blockName) {
-//        GameData.getBlockRegistry().getRaw()
+    public static RPLEColor getColoredBrightnessSafe(Block block) {
+        val colouredLightBlock = colouredLightBlockFromBlock(block);
+        if (colouredLightBlock == null)
+            return errorColor();
+
+        try {
+            val color = colouredLightBlock.getColoredBrightness();
+            if (color != null)
+                return color;
+        } catch (Exception ignored) {
+        }
+
+        return errorColor();
     }
 
-    public static void setBlockFallbackBrightness(RPLEColor color, Block block) {
+    public static RPLEColor getColoredBrightnessSafe(Block block, int blockMeta) {
+        val colouredLightBlock = colouredLightBlockFromBlock(block);
+        if (colouredLightBlock == null)
+            return errorColor();
+
+        try {
+            val color = colouredLightBlock.getColoredBrightness(blockMeta);
+            if (color != null)
+                return color;
+        } catch (Exception ignored) {
+        }
+
+        return errorColor();
     }
 
-    public static void setBlockFallbackBrightnessWithMeta(RPLEColor color, String blockName, int blockMeta) {
+    public static RPLEColor getColoredBrightnessSafe(IBlockAccess world, Block block, int blockMeta, int posX, int posY, int posZ) {
+        val colouredLightBlock = colouredLightBlockFromBlock(block);
+        if (colouredLightBlock == null)
+            return errorColor();
+
+        try {
+            val color = colouredLightBlock.getColoredBrightness(world, blockMeta, posX, posY, posZ);
+            if (color != null)
+                return color;
+        } catch (Exception ignored) {
+        }
+
+        return errorColor();
     }
 
-    public static void setBlockFallbackBrightnessWithMeta(RPLEColor color, Block block, int blockMeta) {
+    public static RPLEColor getColoredTranslucencySafe(Block block) {
+        val colouredLightBlock = colouredTranslucentBlockFromBlock(block);
+        if (colouredLightBlock == null)
+            return errorColor();
+
+        try {
+            val color = colouredLightBlock.getColoredTranslucency();
+            if (color != null)
+                return color;
+        } catch (Exception ignored) {
+        }
+
+        return errorColor();
     }
 
-    public static void setBlockFallbackTranslucency(RPLEColor color, String blockName) {
+    public static RPLEColor getColoredTranslucencySafe(Block block, int blockMeta) {
+        val colouredLightBlock = colouredTranslucentBlockFromBlock(block);
+        if (colouredLightBlock == null)
+            return errorColor();
+
+        try {
+            val color = colouredLightBlock.getColoredTranslucency(blockMeta);
+            if (color != null)
+                return color;
+        } catch (Exception ignored) {
+        }
+
+        return errorColor();
     }
 
-    public static void setBlockFallbackTranslucency(RPLEColor color, Block block) {
+    public static RPLEColor getColoredTranslucencySafe(IBlockAccess world, Block block, int blockMeta, int posX, int posY, int posZ) {
+        val colouredLightBlock = colouredTranslucentBlockFromBlock(block);
+        if (colouredLightBlock == null)
+            return errorColor();
+
+        try {
+            val color = colouredLightBlock.getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+            if (color != null)
+                return color;
+        } catch (Exception ignored) {
+        }
+
+        return errorColor();
     }
 
-    public static void setBlockFallbackTranslucencyWithMeta(RPLEColor color, String blockName, int blockMeta) {
+    private static @Nullable ColoredLightBlock colouredLightBlockFromBlock(Block block) {
+        if (block == null)
+            return null;
+        if (block instanceof ColoredLightBlock)
+            return (ColoredLightBlock) block;
+
+        return null;
     }
 
-    public static void setBlockFallbackTranslucencyWithMeta(RPLEColor color, Block block, int blockMeta) {
+    private static @Nullable ColoredTranslucentBlock colouredTranslucentBlockFromBlock(Block block) {
+        if (block == null)
+            return null;
+        if (block instanceof ColoredTranslucentBlock)
+            return (ColoredTranslucentBlock) block;
+
+        return null;
     }
 }
