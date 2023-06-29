@@ -22,10 +22,10 @@ import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class BlockColorHandler implements BlockColorRegistry {
-    private static final BlockColorHandler INSTANCE = new BlockColorHandler();
+public final class BlockColorManager implements BlockColorRegistry {
+    private static final BlockColorManager INSTANCE = new BlockColorManager();
 
-    public static BlockColorHandler blockColorHandler() {
+    public static BlockColorManager blockColorHandler() {
         return INSTANCE;
     }
 

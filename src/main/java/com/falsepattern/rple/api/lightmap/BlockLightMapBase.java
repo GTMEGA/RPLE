@@ -8,6 +8,6 @@
 package com.falsepattern.rple.api.lightmap;
 
 @FunctionalInterface
-public interface BlockLightMapBase {
+public interface BlockLightMapBase extends LightMapProvider {
     boolean generateBlockLightMapBase(LightMapStrip output, float partialTick);
 }

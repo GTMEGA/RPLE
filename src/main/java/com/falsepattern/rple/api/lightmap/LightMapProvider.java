@@ -7,7 +7,5 @@
 
 package com.falsepattern.rple.api.lightmap;
 
-@FunctionalInterface
-public interface SkyLightMapBase extends LightMapProvider {
-    boolean generateSkyLightMapBase(LightMapStrip output, float partialTick);
+public interface LightMapProvider {
 }

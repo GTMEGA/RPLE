@@ -8,23 +8,30 @@
 package com.falsepattern.rple.internal.common.lightmap;
 
 import com.falsepattern.rple.api.lightmap.*;
-import com.falsepattern.rple.internal.Common;
+import com.falsepattern.rple.api.lightmap.vanilla.BossColorModifierMask;
+import com.falsepattern.rple.api.lightmap.vanilla.NightVisionMask;
+import com.falsepattern.rple.api.lightmap.vanilla.VanillaLightMapBase;
+import com.falsepattern.rple.internal.Tags;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
+import static com.falsepattern.rple.internal.event.EventPoster.postLightMapRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class LightMapPipeline implements LightMapRegistry {
+    private static final Logger LOG = LogManager.getLogger(Tags.MODNAME + "|" + "Light Map Pipeline");
+
     private static final LightMapPipeline INSTANCE = new LightMapPipeline();
+
+    private final Set<LightMapProvider> lightMapProviders = Collections.newSetFromMap(new IdentityHashMap<>());
 
     private final Set<PriorityPair<BlockLightMapBase>> blockBases = new TreeSet<>();
     private final Set<PriorityPair<SkyLightMapBase>> skyBases = new TreeSet<>();
@@ -34,53 +41,108 @@ public final class LightMapPipeline implements LightMapRegistry {
     private final LightMap2D mixedLightMap = new LightMap2D();
     private final LightMap1D tempStrip = new LightMap1D();
 
+    private boolean registryLocked = false;
+
     public static LightMapPipeline lightMapPipeline() {
         return INSTANCE;
     }
 
+    public void registerLightMaps() {
+        if (registryLocked)
+            return;
+
+        registerVanillaLightMaps(this);
+        postLightMapRegistrationEvent(this);
+
+        registryLocked = true;
+    }
+
+    private static void registerVanillaLightMaps(LightMapRegistry registry) {
+        registry.registerLightMapBase(new VanillaLightMapBase(), 1000);
+        registry.registerLightMapMask(new NightVisionMask());
+        registry.registerLightMapMask(new BossColorModifierMask());
+    }
+
     // region Registration
+
+    @Override
+    public void registerLightMapGenerator(LightMapGenerator generator, int priority) {
+        if (!registerLightMapProvider(generator))
+            return;
+
+        blockBases.add(wrappedWithPriority(generator, priority));
+        skyBases.add(wrappedWithPriority(generator, priority));
+        blockMasks.add(generator);
+        skyMasks.add(generator);
+    }
+
+    @Override
+    public void registerLightMapBase(LightMapBase base, int priority) {
+        if (!registerLightMapProvider(base))
+            return;
+
+        blockBases.add(new PriorityPair<>(base, priority));
+        skyBases.add(wrappedWithPriority(base, priority));
+    }
+
     @Override
     public void registerBlockLightMapBase(BlockLightMapBase blockBase, int priority) {
-        val wrappedGenerator = wrappedWithPriority(blockBase, priority);
-        if (blockBases.contains(wrappedGenerator)) {
-            Common.LOG.warn("BlockLightMapBase registered twice!", new Throwable());
+        if (!registerLightMapProvider(blockBase))
             return;
-        }
 
-        blockBases.add(wrappedGenerator);
+        blockBases.add(wrappedWithPriority(blockBase, priority));
     }
 
     @Override
     public void registerSkyLightMapBase(SkyLightMapBase skyBase, int priority) {
-        val wrappedGenerator = wrappedWithPriority(skyBase, priority);
-        if (skyBases.contains(wrappedGenerator)) {
-            Common.LOG.warn("SkyLightMapBase registered twice!", new Throwable());
+        if (!registerLightMapProvider(skyBase))
             return;
-        }
 
-        skyBases.add(wrappedGenerator);
+        skyBases.add(wrappedWithPriority(skyBase, priority));
+    }
+
+    @Override
+    public void registerLightMapMask(LightMapMask mask) {
+        if (!registerLightMapProvider(mask))
+            return;
+
+        blockMasks.add(mask);
+        skyMasks.add(mask);
     }
 
     @Override
     public void registerBlockLightMapMask(BlockLightMapMask blockMask) {
-        if (blockMasks.contains(blockMask)) {
-            Common.LOG.warn("BlockLightMapMask registered twice!", new Throwable());
+        if (!registerLightMapProvider(blockMask))
             return;
-        }
 
         blockMasks.add(blockMask);
     }
 
     @Override
     public void registerSkyLightMapMask(SkyLightMapMask skyMask) {
-        if (skyMasks.contains(skyMask)) {
-            Common.LOG.warn("SkyLightMapMask registered twice!", new Throwable());
+        if (!registerLightMapProvider(skyMask))
             return;
-        }
 
         skyMasks.add(skyMask);
     }
-    // endregion
+
+    private boolean registerLightMapProvider(LightMapProvider provider) {
+        if (registryLocked) {
+            LOG.error("Failed to register light map provider after post init", new Throwable());
+            return false;
+        }
+        if (provider == null) {
+            LOG.error("Light map provider can't be null", new Throwable());
+            return false;
+        }
+        if (lightMapProviders.contains(provider)) {
+            LOG.error("Tried to register light map provider twice", new Throwable());
+            return false;
+        }
+
+        lightMapProviders.add(provider);
+        return true;
+    }
 
     public int[] updateLightMap(float partialTick) {
         val blockStrip = mixedLightMap.blockLightMap();

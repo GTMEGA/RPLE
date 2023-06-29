@@ -12,14 +12,8 @@ import com.falsepattern.chunk.api.ChunkDataRegistry;
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.lib.util.ResourceUtil;
 import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
-import com.falsepattern.rple.api.RPLELightMapAPI;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.api.color.CustomColor;
-import com.falsepattern.rple.api.lightmap.LightMapBase;
-import com.falsepattern.rple.api.lightmap.LightMapMask;
-import com.falsepattern.rple.api.lightmap.vanilla.BossColorModifierMask;
-import com.falsepattern.rple.api.lightmap.vanilla.NightVisionMask;
-import com.falsepattern.rple.api.lightmap.vanilla.VanillaLightMapBase;
 import com.falsepattern.rple.internal.client.render.LampRenderer;
 import com.falsepattern.rple.internal.common.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.common.storage.ColoredWorldProvider;
@@ -39,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import static com.falsepattern.rple.internal.common.lightmap.LightMapPipeline.lightMapPipeline;
 import static com.falsepattern.rple.internal.config.ColorConfigHandler.fromObjectToPrettyPrintJson;
 
 @Mod(modid = Tags.MODID,
@@ -50,10 +45,6 @@ import static com.falsepattern.rple.internal.config.ColorConfigHandler.fromObjec
                     "required-after:lumina;" +
                     "required-after:falsetweaks@[2.4,)")
 public class RPLE {
-    private static final LightMapBase VANILLA_LIGHT_MAP_BASE = new VanillaLightMapBase();
-    private static final LightMapMask NIGHT_VISION_MASK = new NightVisionMask();
-    private static final LightMapMask BOSS_COLOR_MODIFIER_MASK = new BossColorModifierMask();
-
     @Getter
     private static int redIndexNoShader = 7; //Overrides vanilla value
     //These two grabbed from ftweaks
@@ -135,9 +126,7 @@ public class RPLE {
             Common.LOG.error("Could not set up light values", e);
         }
 
-        RPLELightMapAPI.registerLightMapBase(VANILLA_LIGHT_MAP_BASE, 1000);
-        RPLELightMapAPI.registerLightMapMask(NIGHT_VISION_MASK);
-        RPLELightMapAPI.registerLightMapMask(BOSS_COLOR_MODIFIER_MASK);
+        lightMapPipeline().registerLightMaps();
     }
 
     @Deprecated

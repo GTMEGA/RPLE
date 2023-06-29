@@ -9,24 +9,15 @@ package com.falsepattern.rple.api.lightmap;
 
 //TODO: remove the default methods
 public interface LightMapRegistry {
-    default void registerLightMapGenerator(LightMapGenerator generator, int priority) {
-        registerLightMapBase(generator, priority);
-        registerLightMapMask(generator);
-    }
+    void registerLightMapGenerator(LightMapGenerator generator, int priority);
 
-    default void registerLightMapBase(LightMapBase base, int priority) {
-        registerBlockLightMapBase(base, priority);
-        registerSkyLightMapBase(base, priority);
-    }
+    void registerLightMapBase(LightMapBase base, int priority);
 
     void registerBlockLightMapBase(BlockLightMapBase blockBase, int priority);
 
     void registerSkyLightMapBase(SkyLightMapBase skyBase, int priority);
 
-    default void registerLightMapMask(LightMapMask mask) {
-        registerBlockLightMapMask(mask);
-        registerSkyLightMapMask(mask);
-    }
+    void registerLightMapMask(LightMapMask mask);
 
     void registerBlockLightMapMask(BlockLightMapMask blockMask);
 

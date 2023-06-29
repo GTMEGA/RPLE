@@ -8,6 +8,6 @@
 package com.falsepattern.rple.api.lightmap;
 
 @FunctionalInterface
-public interface SkyLightMapMask {
+public interface SkyLightMapMask extends LightMapProvider {
     boolean generateSkyLightMapMask(LightMapStrip output, float partialTick);
 }
