@@ -8,11 +8,11 @@
 package com.falsepattern.rple.internal;
 
 import codechicken.multipart.BlockMultipart;
-import com.falsepattern.rple.internal.stubpackage.GlStateManager;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Loader;
 import net.minecraft.block.Block;
 import shadersmod.client.Shaders;
+import stubpackage.GlStateManager;
 
 public class Compat {
     private static Boolean multipartPresent;
