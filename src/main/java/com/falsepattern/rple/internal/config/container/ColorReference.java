@@ -9,6 +9,7 @@ package com.falsepattern.rple.internal.config.container;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.api.color.RPLENamedColor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -23,6 +24,32 @@ public final class ColorReference {
 
     @Getter
     private final boolean isValid;
+
+    public ColorReference(RPLENamedColor color) {
+        this.uniqueColor = null;
+
+        nameCheck:
+        {
+            val colorDomain = color.colorDomain();
+            val colorName = color.colorName();
+
+            if (colorDomain == null || colorDomain.isEmpty())
+                break nameCheck;
+            if (colorName == null || colorName.isEmpty())
+                break nameCheck;
+
+            val paletteColorName = colorDomain + ":" + colorName;
+            if (!ColorPalette.isValidPaletteColorName(paletteColorName))
+                break nameCheck;
+
+            this.paletteColorName = paletteColorName;
+            this.isValid = true;
+            return;
+        }
+
+        this.paletteColorName = INVALID_COLOR;
+        this.isValid = false;
+    }
 
     public ColorReference(@Nullable HexColor uniqueColor) {
         this.paletteColorName = null;

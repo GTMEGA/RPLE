@@ -19,8 +19,7 @@ import net.minecraft.block.Block;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static com.falsepattern.rple.internal.common.RPLEDefaultValues.preloadDefaultColorPalette;
-import static com.falsepattern.rple.internal.common.RPLEDefaultValues.registerDefaultBlockColors;
+import static com.falsepattern.rple.internal.common.RPLEDefaultValues.*;
 import static com.falsepattern.rple.internal.event.EventPoster.postBlockColorRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -45,7 +44,8 @@ public final class BlockColorLoader implements BlockColorRegistry {
         config = new BlockColorConfig();
         preloadDefaultColorPalette(config);
 
-        registerDefaultBlockColors(this);
+        registerDefaultBlockBrightnessColors(this);
+        registerDefaultBlockTranslucencyColors(this);
         postBlockColorRegistrationEvent(this);
 
         // Save the config to disk

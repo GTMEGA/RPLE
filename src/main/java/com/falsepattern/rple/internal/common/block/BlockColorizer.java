@@ -89,7 +89,7 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     public RPLEBlockColorizer brightness(RPLENamedColor color) {
         resetBrightness();
         if (color != null) {
-            this.brightness = new ColorReference(new HexColor(color));
+            this.brightness = new ColorReference(color);
             this.paletteBrightness = color;
         }
         return this;
@@ -114,7 +114,7 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     public RPLEBlockColorizer translucency(RPLENamedColor color) {
         resetTranslucency();
         if (color != null) {
-            this.translucency = new ColorReference(new HexColor(color));
+            this.translucency = new ColorReference(color);
             this.paletteTranslucency = color;
         }
         return this;
