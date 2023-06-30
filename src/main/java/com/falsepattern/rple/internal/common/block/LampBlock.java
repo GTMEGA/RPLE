@@ -30,6 +30,7 @@ import java.util.List;
 // TODO: [PRE_RELEASE] Large parts of this may be included in API as an abstract class
 // TODO: [PRE_RELEASE] Should have a large part of it extracted as an example of how-to implement ColoredBlock
 // TODO: [PRE_RELEASE] Created variants of this block should be defined by a load-time configuration file
+@Deprecated
 public class LampBlock extends Block implements ColoredLightBlock {
     private static final String GLOW_RESOURCE = Tags.MODID + ":glow";
     public static final int POWERED_BIT = 0b0010;

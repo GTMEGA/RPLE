@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 //TODO test class
 @Mixin(ChunkCache.class)
-public abstract class ChunkCacheMixin {
+public abstract class ChunkCacheMixin implements IBlockAccess {
 
     /**
      * @author FalsePattern
@@ -26,6 +26,6 @@ public abstract class ChunkCacheMixin {
     @SideOnly(Side.CLIENT)
     @Overwrite
     public int getLightBrightnessForSkyBlocks(int x, int y, int z, int minBlockLight) {
-        return BlockLightUtil.getRGBBrightnessAt((IBlockAccess)this, x, y, z, minBlockLight);
+        return BlockLightUtil.getRGBBrightnessAt(this, x, y, z, minBlockLight);
     }
 }

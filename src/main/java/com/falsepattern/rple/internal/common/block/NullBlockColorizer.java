@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public final class FallbackBlockColorizer implements RPLEBlockColorizer {
-    private static final FallbackBlockColorizer INSTANCE = new FallbackBlockColorizer();
+public final class NullBlockColorizer implements RPLEBlockColorizer {
+    private static final NullBlockColorizer INSTANCE = new NullBlockColorizer();
 
-    public static RPLEBlockColorizer fallbackBlockColorizer() {
+    public static RPLEBlockColorizer nullBlockColorizer() {
         return INSTANCE;
     }
 

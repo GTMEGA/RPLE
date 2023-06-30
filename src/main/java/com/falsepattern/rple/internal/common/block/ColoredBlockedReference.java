@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Accessors(fluent = true, chain = false)
 @RequiredArgsConstructor
-public class ColoredBlockedReference {
+public final class ColoredBlockedReference {
     private final IColoredBlockMixin block;
 
     @Setter

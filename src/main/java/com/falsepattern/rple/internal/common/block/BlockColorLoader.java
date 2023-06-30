@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.IdentityHashMap;
 
 import static com.falsepattern.rple.internal.common.RPLEDefaultValues.*;
-import static com.falsepattern.rple.internal.common.block.FallbackBlockColorizer.fallbackBlockColorizer;
+import static com.falsepattern.rple.internal.common.block.NullBlockColorizer.nullBlockColorizer;
 import static com.falsepattern.rple.internal.config.ColorConfigHandler.loadCustomConfig;
 import static com.falsepattern.rple.internal.config.ColorConfigHandler.saveGeneratedConfig;
 import static com.falsepattern.rple.internal.event.EventPoster.postBlockColorRegistrationEvent;
@@ -129,12 +129,12 @@ public final class BlockColorLoader implements BlockColorRegistry {
     public RPLEBlockColorizer colorizeBlock(Block block) {
         if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
-            return fallbackBlockColorizer();
+            return nullBlockColorizer();
         }
 
         val blockID = blockIDFromBlock(block);
         if (blockID == null)
-            return fallbackBlockColorizer();
+            return nullBlockColorizer();
 
         return new BlockColorizer(new BlockReference(blockID), this::applyBlockColors);
     }
@@ -143,12 +143,12 @@ public final class BlockColorLoader implements BlockColorRegistry {
     public RPLEBlockColorizer colorizeBlock(Block block, int blockMeta) {
         if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
-            return fallbackBlockColorizer();
+            return nullBlockColorizer();
         }
 
         val blockID = blockIDFromBlock(block);
         if (blockID == null)
-            return fallbackBlockColorizer();
+            return nullBlockColorizer();
 
         return new BlockColorizer(new BlockReference(blockID + ":" + blockMeta), this::applyBlockColors);
     }
@@ -157,12 +157,12 @@ public final class BlockColorLoader implements BlockColorRegistry {
     public RPLEBlockColorizer colorizeBlock(String blockID) {
         if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
-            return fallbackBlockColorizer();
+            return nullBlockColorizer();
         }
 
         if (blockID == null) {
             LOG.error("Block ID can't be null", new Throwable());
-            return fallbackBlockColorizer();
+            return nullBlockColorizer();
         }
 
         return new BlockColorizer(new BlockReference(blockID), this::applyBlockColors);

@@ -9,7 +9,6 @@ package com.falsepattern.rple.internal.client.lightmap;
 
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.Compat;
-import com.falsepattern.rple.internal.common.lightmap.LightMapPipeline;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.val;

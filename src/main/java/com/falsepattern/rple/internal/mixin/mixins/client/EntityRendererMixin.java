@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,14 +24,21 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
-public abstract class EntityRendererMixin {
-    @Shadow private boolean lightmapUpdateNeeded;
+public abstract class EntityRendererMixin implements IResourceManagerReloadListener {
+    @Shadow
+    private boolean lightmapUpdateNeeded;
 
-    @Shadow @Final private DynamicTexture lightmapTexture;
+    @Shadow
+    @Final
+    private DynamicTexture lightmapTexture;
 
-    @Shadow @Final private ResourceLocation locationLightMap;
+    @Shadow
+    @Final
+    private ResourceLocation locationLightMap;
 
-    @Shadow @Final private int[] lightmapColors;
+    @Shadow
+    @Final
+    private int[] lightmapColors;
 
     @Inject(method = "<init>",
             at = @At(value = "RETURN"),

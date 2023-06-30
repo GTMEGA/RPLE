@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 //TODO test class
 @Mixin(World.class)
-public abstract class WorldMixin {
+public abstract class WorldMixin implements IBlockAccess {
     /**
      * @author FalsePattern
      * @reason test
@@ -25,6 +25,6 @@ public abstract class WorldMixin {
     @SideOnly(Side.CLIENT)
     @Overwrite
     public int getLightBrightnessForSkyBlocks(int x, int y, int z, int minBlockLight) {
-        return BlockLightUtil.getRGBBrightnessAt((IBlockAccess) this, x, y, z, minBlockLight);
+        return BlockLightUtil.getRGBBrightnessAt(this, x, y, z, minBlockLight);
     }
 }

@@ -28,8 +28,8 @@ import lombok.val;
 
 import java.io.IOException;
 
+import static com.falsepattern.rple.internal.client.lightmap.LightMapPipeline.lightMapPipeline;
 import static com.falsepattern.rple.internal.common.block.BlockColorLoader.blockColorLoader;
-import static com.falsepattern.rple.internal.common.lightmap.LightMapPipeline.lightMapPipeline;
 
 @Mod(modid = Tags.MODID,
      version = Tags.VERSION,

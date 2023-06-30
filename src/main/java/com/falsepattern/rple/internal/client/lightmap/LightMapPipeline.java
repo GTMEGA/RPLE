@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.lightmap;
+package com.falsepattern.rple.internal.client.lightmap;
 
 import com.falsepattern.rple.api.lightmap.*;
 import com.falsepattern.rple.internal.Tags;

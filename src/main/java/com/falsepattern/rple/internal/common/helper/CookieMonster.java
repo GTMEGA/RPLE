@@ -10,6 +10,7 @@ package com.falsepattern.rple.internal.common.helper;
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.mixin.mixins.client.TessellatorMixin;
 import lombok.val;
+import lombok.var;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -25,7 +26,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * manager! Additionally, they should not be saved anywhere, as they expire very quickly.
  */
 public class CookieMonster {
-
     // Cookie format (bits):
     // 0100 0000 IIII IIII IIII IIII 0000 000P
     // I - index bits
@@ -102,11 +102,11 @@ public class CookieMonster {
      * @return 0 if the number has even bit-parity, 1 if the number has odd bit-parity.
      */
     private static int parity(int x) {
-        int y = x ^ (x >>> 1);
-        y = y ^ (y >>> 2);
-        y = y ^ (y >>> 4);
-        y = y ^ (y >>> 8);
-        y = y ^ (y >>> 16);
+        var y = x ^ (x >>> 1);
+        y ^= y >>> 2;
+        y ^= y >>> 4;
+        y ^= y >>> 8;
+        y ^= y >>> 16;
 
         return y & 1;
     }

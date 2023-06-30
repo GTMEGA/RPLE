@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
+@Deprecated
 public class LampItemBlock extends ItemBlock {
     public LampItemBlock(Block block) {
         super(block);

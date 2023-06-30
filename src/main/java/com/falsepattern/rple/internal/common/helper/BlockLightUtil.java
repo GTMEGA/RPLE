@@ -56,16 +56,17 @@ public class BlockLightUtil {
                                               int posZ) {
         val color = getColoredBrightnessSafe(world, block, blockMeta, posX, posY, posZ);
 
-        val red = RED_CHANNEL.componentFromColor(color);
-        val green = GREEN_CHANNEL.componentFromColor(color);
-        val blue = BLUE_CHANNEL.componentFromColor(color);
-
         // TODO: [PRE-RELEASE] 100% broken now.
         // This is here if we already generated a packed value somewhere deep inside another mod
         // Current usages:
         // AE2 CLApi
-        if (CookieMonster.inspectValue(red) == CookieMonster.IntType.COOKIE)
-            return red;
+//        val potentialCookie = color.red();
+//        if (CookieMonster.inspectValue(potentialCookie) == CookieMonster.IntType.COOKIE)
+//            return potentialCookie;
+
+        val red = RED_CHANNEL.componentFromColor(color);
+        val green = GREEN_CHANNEL.componentFromColor(color);
+        val blue = BLUE_CHANNEL.componentFromColor(color);
 
         return createCompactRGBLightValue(red, green, blue);
     }
