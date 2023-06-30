@@ -60,4 +60,7 @@ dependencies {
 
     // Applied Energistics 2 rv3 beta 6
     compileOnly(deobfCurse("appliedenergistics2-223794:2296430"))
+
+    // Storage Drawers 1.10.9
+    compileOnly(deobfCurse("storagedrawers-223852:2469586"))
 }
