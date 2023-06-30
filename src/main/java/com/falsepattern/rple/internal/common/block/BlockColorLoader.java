@@ -13,13 +13,19 @@ import com.falsepattern.rple.api.color.RPLENamedColor;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.config.container.BlockColorConfig;
 import com.falsepattern.rple.internal.config.container.BlockReference;
+import com.falsepattern.rple.internal.mixin.interfaces.IColoredBlockMixin;
+import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.NoArgsConstructor;
 import lombok.val;
 import net.minecraft.block.Block;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.IdentityHashMap;
 
 import static com.falsepattern.rple.internal.common.RPLEDefaultValues.*;
+import static com.falsepattern.rple.internal.common.block.FallbackBlockColorizer.fallbackBlockColorizer;
 import static com.falsepattern.rple.internal.event.EventPoster.postBlockColorRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -55,39 +61,149 @@ public final class BlockColorLoader implements BlockColorRegistry {
         // If load fails, load an empty config
         // Iterate over the config and apply it to each block
 
+        val colorPalette = config.palette();
+        val blockBrightnessMap = config.brightness();
+        val blockTranslucencyMap = config.translucency();
+
+        val colouredBlocks = new IdentityHashMap<IColoredBlockMixin, ColoredBlockedReference>();
+
+        for (val blockBrightness : blockBrightnessMap.entrySet()) {
+            val blockReference = blockBrightness.getKey();
+            if (!blockReference.isValid())
+                continue;
+
+            val block = blockFromBlockReference(blockReference);
+            if (block == null)
+                continue;
+
+            val blockColorReference = blockBrightness.getValue();
+            val brightness = blockColorReference.color(colorPalette);
+
+            val colouredBlock = colouredBlocks.computeIfAbsent(block, ColoredBlockedReference::new);
+
+            val blockMeta = blockReference.meta();
+            if (blockMeta.isPresent()) {
+                colouredBlock.metaBrightness(blockMeta.get(), brightness);
+            } else {
+                colouredBlock.brightness(brightness);
+            }
+        }
+
+        for (val blockTranslucency : blockTranslucencyMap.entrySet()) {
+            val blockReference = blockTranslucency.getKey();
+            if (!blockReference.isValid())
+                continue;
+
+            val block = blockFromBlockReference(blockReference);
+            if (block == null)
+                continue;
+
+            val blockColorReference = blockTranslucency.getValue();
+            val translucency = blockColorReference.color(colorPalette);
+
+            val colouredBlock = colouredBlocks.computeIfAbsent(block, ColoredBlockedReference::new);
+
+            val blockMeta = blockReference.meta();
+            if (blockMeta.isPresent()) {
+                colouredBlock.metaTranslucency(blockMeta.get(), translucency);
+            } else {
+                colouredBlock.translucency(translucency);
+            }
+        }
+
+        colouredBlocks.values().forEach(ColoredBlockedReference::apply);
+
         registryLocked = true;
     }
 
     @Override
     public RPLEBlockColorizer colorizeBlock(Block block) {
-        if (registryLocked)
+        if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
-        return new BlockColorizer(new BlockReference(block), this::applyBlockColors);
+            return fallbackBlockColorizer();
+        }
+
+        val blockID = blockIDFromBlock(block);
+        if (blockID == null)
+            return fallbackBlockColorizer();
+
+        return new BlockColorizer(new BlockReference(blockID), this::applyBlockColors);
     }
 
     @Override
     public RPLEBlockColorizer colorizeBlock(Block block, int blockMeta) {
-        if (registryLocked)
+        if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
-        return new BlockColorizer(new BlockReference(block, blockMeta), this::applyBlockColors);
+            return fallbackBlockColorizer();
+        }
+
+        val blockID = blockIDFromBlock(block);
+        if (blockID == null)
+            return fallbackBlockColorizer();
+
+        return new BlockColorizer(new BlockReference(blockID + ":" + blockMeta), this::applyBlockColors);
     }
 
     @Override
     public RPLEBlockColorizer colorizeBlock(String blockID) {
-        if (registryLocked)
+        if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
+            return fallbackBlockColorizer();
+        }
+
+        if (blockID == null) {
+            LOG.error("Block ID can't be null", new Throwable());
+            return fallbackBlockColorizer();
+        }
+
         return new BlockColorizer(new BlockReference(blockID), this::applyBlockColors);
+    }
+
+    private @Nullable String blockIDFromBlock(@Nullable Block block) {
+        if (block == null) {
+            LOG.error("Block can't be null", new Throwable());
+            return null;
+        }
+
+        val blockID = GameRegistry.findUniqueIdentifierFor(block);
+        if (blockID == null) {
+            LOG.error("Block not registered", new Throwable());
+            return null;
+        }
+
+        val blockDomain = blockID.modId;
+        if (blockDomain == null) {
+            LOG.error("Block domain can't be null", new Throwable());
+            return null;
+        }
+
+        val blockName = blockID.name;
+        if (blockName == null) {
+            LOG.error("Block name can't be null", new Throwable());
+            return null;
+        }
+
+        return blockDomain + ":" + blockName;
+    }
+
+    private @Nullable IColoredBlockMixin blockFromBlockReference(BlockReference blockReference) {
+        if (blockReference == null)
+            return null;
+
+        val blockDomain = blockReference.domain();
+        val blockName = blockReference.name();
+        if (blockDomain == null || blockName == null)
+            return null;
+
+        val block = GameRegistry.findBlock(blockDomain, blockName);
+        if (block instanceof IColoredBlockMixin)
+            return (IColoredBlockMixin) block;
+        return null;
     }
 
     private void applyBlockColors(BlockColorizer colorizer) {
         if (registryLocked) {
             LOG.error("Failed to apply block colors after post init", new Throwable());
-            return;
-        }
-
-        val block = colorizer.block();
-        if (!block.isValid()) {
-            LOG.error("Failed to apply color to invalid block", new Throwable());
             return;
         }
 

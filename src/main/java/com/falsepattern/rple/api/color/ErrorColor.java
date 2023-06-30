@@ -8,10 +8,11 @@
 package com.falsepattern.rple.api.color;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
-import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
 public final class ErrorColor implements RPLENamedColor {
     private static final ErrorColor INSTANCE = new ErrorColor();
 

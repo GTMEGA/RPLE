@@ -25,7 +25,6 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Accessors(fluent = true, chain = false)
 public final class BlockColorizer implements RPLEBlockColorizer {
-    @Getter
     private final BlockReference block;
     private final Consumer<BlockColorizer> applyCallback;
 

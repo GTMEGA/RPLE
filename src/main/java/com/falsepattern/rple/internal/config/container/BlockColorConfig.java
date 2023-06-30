@@ -12,8 +12,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
+import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Getter
 @Accessors(fluent = true, chain = false)
@@ -27,6 +31,14 @@ public final class BlockColorConfig {
         this.palette = new ColorPalette();
         this.brightness = new LinkedHashMap<>();
         this.translucency = new LinkedHashMap<>();
+    }
+
+    public @Unmodifiable Map<BlockReference, ColorReference> brightness() {
+        return Collections.unmodifiableMap(brightness);
+    }
+
+    public @UnmodifiableView Map<BlockReference, ColorReference> translucency() {
+        return Collections.unmodifiableMap(translucency);
     }
 
     public void addPaletteColor(RPLENamedColor color) {
