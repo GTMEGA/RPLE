@@ -19,7 +19,7 @@ import com.falsepattern.rple.internal.common.block.LampBlock;
 import com.falsepattern.rple.internal.common.block.LampItemBlock;
 import com.falsepattern.rple.internal.common.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.common.storage.ColoredWorldProvider;
-import com.falsepattern.rple.internal.config.container.ColorConfig;
+import com.falsepattern.rple.internal.config.container.BlockColorConfig;
 import com.falsepattern.rple.internal.config.container.HexColor;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import static com.falsepattern.rple.internal.common.block.BlockColorLoader.blockColorLoader;
 import static com.falsepattern.rple.internal.common.lightmap.LightMapPipeline.lightMapPipeline;
 import static com.falsepattern.rple.internal.config.ColorConfigHandler.fromObjectToPrettyPrintJson;
 
@@ -134,6 +135,7 @@ public class RPLE {
         }
 
         lightMapPipeline().registerLightMaps();
+        blockColorLoader().registerBlockColors();
     }
 
     @Deprecated
@@ -144,7 +146,7 @@ public class RPLE {
 
     @Deprecated
     private static void setupLightValues() throws IOException {
-        val config = new ColorConfig();
+        val config = new BlockColorConfig();
 
         val data = ResourceUtil.getResourceStringFromJar("/default_lightvals.txt", RPLE.class);
         val lines = new StringTokenizer(data, "\r\n");

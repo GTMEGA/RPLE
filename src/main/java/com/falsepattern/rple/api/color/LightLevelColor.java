@@ -14,26 +14,26 @@ import lombok.val;
 
 @Getter
 @Accessors(fluent = true, chain = false)
-public enum GreyscaleColor implements RPLENamedColor {
-    LEVEL_0,
-    LEVEL_1,
-    LEVEL_2,
-    LEVEL_3,
-    LEVEL_4,
-    LEVEL_5,
-    LEVEL_6,
-    LEVEL_7,
-    LEVEL_8,
-    LEVEL_9,
-    LEVEL_10,
-    LEVEL_11,
-    LEVEL_12,
-    LEVEL_13,
-    LEVEL_14,
-    LEVEL_15,
+public enum LightLevelColor implements RPLENamedColor {
+    VALUE_0,
+    VALUE_1,
+    VALUE_2,
+    VALUE_3,
+    VALUE_4,
+    VALUE_5,
+    VALUE_6,
+    VALUE_7,
+    VALUE_8,
+    VALUE_9,
+    VALUE_10,
+    VALUE_11,
+    VALUE_12,
+    VALUE_13,
+    VALUE_14,
+    VALUE_15,
     ;
 
-    public static final String GREYSCALE_COLOR_DOMAIN = "greyscale";
+    public static final String LIGHT_LEVEL_COLOR_DOMAIN = "light_level";
 
     private final int red;
     private final int green;
@@ -41,7 +41,7 @@ public enum GreyscaleColor implements RPLENamedColor {
 
     private final String colorName;
 
-    GreyscaleColor() {
+    LightLevelColor() {
         val level = ordinal();
 
         this.red = level;
@@ -53,15 +53,15 @@ public enum GreyscaleColor implements RPLENamedColor {
 
     @Override
     public String colorDomain() {
-        return GREYSCALE_COLOR_DOMAIN;
+        return LIGHT_LEVEL_COLOR_DOMAIN;
     }
 
-    public static GreyscaleColor fromVanillaLightValue(int vanillaLightValue) {
+    public static LightLevelColor fromVanillaLightValue(int vanillaLightValue) {
         val ordinal = RPLEColorAPI.clampColorComponent(vanillaLightValue);
         return values()[ordinal];
     }
 
-    public static GreyscaleColor fromVanillaLightOpacity(int vanillaLightOpacity) {
+    public static LightLevelColor fromVanillaLightOpacity(int vanillaLightOpacity) {
         val ordinal = RPLEColorAPI.invertColorComponent(vanillaLightOpacity);
         return values()[ordinal];
     }

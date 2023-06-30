@@ -8,10 +8,9 @@
 package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
-import com.falsepattern.rple.api.block.ColoredLightBlock;
-import com.falsepattern.rple.api.block.ColoredTranslucentBlock;
-import com.falsepattern.rple.api.color.GreyscaleColor;
+import com.falsepattern.rple.api.color.LightLevelColor;
 import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.internal.mixin.interfaces.IColoredBlockMixin;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -28,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Accessors(fluent = true, chain = false)
 @Mixin(Block.class)
-public abstract class BlockMixin implements ColoredLightBlock, ColoredTranslucentBlock {
+public abstract class BlockMixin implements IColoredBlockMixin {
     @Shadow
     public abstract int getLightValue();
 
@@ -220,28 +219,28 @@ public abstract class BlockMixin implements ColoredLightBlock, ColoredTranslucen
 
     private RPLEColor fallbackBrightness() {
         passBaseBrightness.set(true);
-        val color = GreyscaleColor.fromVanillaLightValue(getLightValue());
+        val color = LightLevelColor.fromVanillaLightValue(getLightValue());
         passBaseBrightness.set(false);
         return color;
     }
 
     private RPLEColor fallbackBrightness(IBlockAccess world, int posX, int posY, int posZ) {
         passBaseBrightness.set(true);
-        val color = GreyscaleColor.fromVanillaLightValue(getLightValue(world, posX, posY, posZ));
+        val color = LightLevelColor.fromVanillaLightValue(getLightValue(world, posX, posY, posZ));
         passBaseBrightness.set(false);
         return color;
     }
 
     private RPLEColor fallbackTranslucency() {
         passBaseOpacity.set(true);
-        val color = GreyscaleColor.fromVanillaLightOpacity(getLightOpacity());
+        val color = LightLevelColor.fromVanillaLightOpacity(getLightOpacity());
         passBaseOpacity.set(false);
         return color;
     }
 
     private RPLEColor fallbackTranslucency(IBlockAccess world, int posX, int posY, int posZ) {
         passBaseOpacity.set(true);
-        val color = GreyscaleColor.fromVanillaLightOpacity(getLightOpacity(world, posX, posY, posZ));
+        val color = LightLevelColor.fromVanillaLightOpacity(getLightOpacity(world, posX, posY, posZ));
         passBaseOpacity.set(false);
         return color;
     }

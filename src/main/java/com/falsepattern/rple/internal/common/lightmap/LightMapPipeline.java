@@ -8,9 +8,6 @@
 package com.falsepattern.rple.internal.common.lightmap;
 
 import com.falsepattern.rple.api.lightmap.*;
-import com.falsepattern.rple.api.lightmap.vanilla.BossColorModifierMask;
-import com.falsepattern.rple.api.lightmap.vanilla.NightVisionMask;
-import com.falsepattern.rple.api.lightmap.vanilla.VanillaLightMapBase;
 import com.falsepattern.rple.internal.Tags;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -22,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static com.falsepattern.rple.internal.common.RPLEDefaultValues.registerDefaultLightMaps;
 import static com.falsepattern.rple.internal.event.EventPoster.postLightMapRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -51,16 +49,10 @@ public final class LightMapPipeline implements LightMapRegistry {
         if (registryLocked)
             return;
 
-        registerVanillaLightMaps(this);
+        registerDefaultLightMaps(this);
         postLightMapRegistrationEvent(this);
 
         registryLocked = true;
-    }
-
-    private static void registerVanillaLightMaps(LightMapRegistry registry) {
-        registry.registerLightMapBase(new VanillaLightMapBase(), 1000);
-        registry.registerLightMapMask(new NightVisionMask());
-        registry.registerLightMapMask(new BossColorModifierMask());
     }
 
     // region Registration
@@ -176,10 +168,6 @@ public final class LightMapPipeline implements LightMapRegistry {
         return mixedLightMap.lightMapRGBData();
     }
 
-    private static <T> PriorityPair<T> wrappedWithPriority(T value, int priority) {
-        return new PriorityPair<>(value, priority);
-    }
-
     @EqualsAndHashCode
     @RequiredArgsConstructor(access = PRIVATE)
     private static class PriorityPair<T> implements Comparable<PriorityPair<T>> {
@@ -190,5 +178,9 @@ public final class LightMapPipeline implements LightMapRegistry {
         public int compareTo(@NotNull LightMapPipeline.PriorityPair<T> o) {
             return Integer.compare(priority, o.priority);
         }
+    }
+
+    private static <T> PriorityPair<T> wrappedWithPriority(T value, int priority) {
+        return new PriorityPair<>(value, priority);
     }
 }

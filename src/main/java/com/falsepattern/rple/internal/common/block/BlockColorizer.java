@@ -13,12 +13,15 @@ import com.falsepattern.rple.api.color.RPLENamedColor;
 import com.falsepattern.rple.internal.config.container.BlockReference;
 import com.falsepattern.rple.internal.config.container.ColorReference;
 import com.falsepattern.rple.internal.config.container.HexColor;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import static lombok.AccessLevel.PRIVATE;
 
 @Accessors(fluent = true, chain = false)
 public final class BlockColorizer implements RPLEBlockColorizer {
@@ -47,12 +50,16 @@ public final class BlockColorizer implements RPLEBlockColorizer {
         this.hasApplied = false;
     }
 
-    public Optional<ColorReference> brightness() {
-        return Optional.ofNullable(brightness);
+    public Optional<BlockColorReference> brightness() {
+        if (brightness == null)
+            return Optional.empty();
+        return Optional.of(wrappedBlockColor(block, brightness));
     }
 
-    public Optional<ColorReference> translucency() {
-        return Optional.ofNullable(translucency);
+    public Optional<BlockColorReference> translucency() {
+        if (translucency == null)
+            return Optional.empty();
+        return Optional.of(wrappedBlockColor(block, translucency));
     }
 
     public Optional<RPLENamedColor> paletteBrightness() {
@@ -130,5 +137,21 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     private void resetTranslucency() {
         this.translucency = null;
         this.paletteTranslucency = null;
+    }
+
+    @Getter
+    @Accessors(fluent = true, chain = false)
+    @AllArgsConstructor(access = PRIVATE)
+    public static final class BlockColorReference {
+        private final BlockReference block;
+        private final ColorReference color;
+
+        public boolean isValid() {
+            return block.isValid() && color.isValid();
+        }
+    }
+
+    private static BlockColorReference wrappedBlockColor(BlockReference block, ColorReference color) {
+        return new BlockColorReference(block, color);
     }
 }

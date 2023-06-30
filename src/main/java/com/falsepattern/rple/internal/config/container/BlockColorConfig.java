@@ -18,12 +18,12 @@ import java.util.LinkedHashMap;
 @Getter
 @Accessors(fluent = true, chain = false)
 @AllArgsConstructor
-public final class ColorConfig {
+public final class BlockColorConfig {
     private final ColorPalette palette;
     private final LinkedHashMap<BlockReference, ColorReference> brightness;
     private final LinkedHashMap<BlockReference, ColorReference> translucency;
 
-    public ColorConfig() {
+    public BlockColorConfig() {
         this.palette = new ColorPalette();
         this.brightness = new LinkedHashMap<>();
         this.translucency = new LinkedHashMap<>();
@@ -50,13 +50,13 @@ public final class ColorConfig {
     }
 
     @Deprecated
-    public ColorConfig setPaletteColor(String name, String colorHex) {
+    public BlockColorConfig setPaletteColor(String name, String colorHex) {
         palette.addColor(name, colorHex);
         return this;
     }
 
     @Deprecated
-    public ColorConfig setBlockBrightness(String blockName, String color) {
+    public BlockColorConfig setBlockBrightness(String blockName, String color) {
         val blockReference = new BlockReference(blockName);
         val colorReference = new ColorReference(color);
         brightness.put(blockReference, colorReference);
@@ -64,7 +64,7 @@ public final class ColorConfig {
     }
 
     @Deprecated
-    public ColorConfig setBlockTranslucency(String blockName, String color) {
+    public BlockColorConfig setBlockTranslucency(String blockName, String color) {
         val blockReference = new BlockReference(blockName);
         val colorReference = new ColorReference(color);
         translucency.put(blockReference, colorReference);
