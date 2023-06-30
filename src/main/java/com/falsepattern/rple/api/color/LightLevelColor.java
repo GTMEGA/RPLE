@@ -15,22 +15,22 @@ import lombok.val;
 @Getter
 @Accessors(fluent = true, chain = false)
 public enum LightLevelColor implements RPLENamedColor {
-    VALUE_0,
-    VALUE_1,
-    VALUE_2,
-    VALUE_3,
-    VALUE_4,
-    VALUE_5,
-    VALUE_6,
-    VALUE_7,
-    VALUE_8,
-    VALUE_9,
-    VALUE_10,
-    VALUE_11,
-    VALUE_12,
-    VALUE_13,
-    VALUE_14,
-    VALUE_15,
+    LIGHT_LEVEL_0,
+    LIGHT_LEVEL_1,
+    LIGHT_LEVEL_2,
+    LIGHT_LEVEL_3,
+    LIGHT_LEVEL_4,
+    LIGHT_LEVEL_5,
+    LIGHT_LEVEL_6,
+    LIGHT_LEVEL_7,
+    LIGHT_LEVEL_8,
+    LIGHT_LEVEL_9,
+    LIGHT_LEVEL_10,
+    LIGHT_LEVEL_11,
+    LIGHT_LEVEL_12,
+    LIGHT_LEVEL_13,
+    LIGHT_LEVEL_14,
+    LIGHT_LEVEL_15,
     ;
 
     public static final String LIGHT_LEVEL_COLOR_DOMAIN = "light_level";

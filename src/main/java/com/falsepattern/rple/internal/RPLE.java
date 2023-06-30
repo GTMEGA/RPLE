@@ -10,35 +10,26 @@ package com.falsepattern.rple.internal;
 
 import com.falsepattern.chunk.api.ChunkDataRegistry;
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.lib.util.ResourceUtil;
 import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.api.color.CustomColor;
 import com.falsepattern.rple.internal.client.render.LampRenderer;
 import com.falsepattern.rple.internal.common.block.LampBlock;
 import com.falsepattern.rple.internal.common.block.LampItemBlock;
 import com.falsepattern.rple.internal.common.storage.ColoredDataManager;
 import com.falsepattern.rple.internal.common.storage.ColoredWorldProvider;
-import com.falsepattern.rple.internal.config.container.BlockColorConfig;
-import com.falsepattern.rple.internal.config.container.HexColor;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import lombok.Data;
 import lombok.Getter;
 import lombok.val;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 import static com.falsepattern.rple.internal.common.block.BlockColorLoader.blockColorLoader;
 import static com.falsepattern.rple.internal.common.lightmap.LightMapPipeline.lightMapPipeline;
-import static com.falsepattern.rple.internal.config.ColorConfigHandler.fromObjectToPrettyPrintJson;
 
 @Mod(modid = Tags.MODID,
      version = Tags.VERSION,
@@ -128,118 +119,7 @@ public class RPLE {
         ChunkDataRegistry.disableDataManager("minecraft", "blocklight");
         ChunkDataRegistry.disableDataManager("minecraft", "skylight");
 
-        try {
-            setupLightValues();
-        } catch (IOException e) {
-            Common.LOG.error("Could not set up light values", e);
-        }
-
         lightMapPipeline().registerLightMaps();
         blockColorLoader().registerBlockColors();
-    }
-
-    @Deprecated
-    private static final Map<String, RGB> valueCache = new HashMap<>();
-
-    @Deprecated
-    private static int currentLine = 0;
-
-    @Deprecated
-    private static void setupLightValues() throws IOException {
-        val config = new BlockColorConfig();
-
-        val data = ResourceUtil.getResourceStringFromJar("/default_lightvals.txt", RPLE.class);
-        val lines = new StringTokenizer(data, "\r\n");
-        while (lines.hasMoreTokens()) {
-            currentLine++;
-            val unSanitized = lines.nextToken();
-            //Remove comments
-            val comment = unSanitized.indexOf('#');
-            final String sanitized;
-            if (comment >= 0) {
-                sanitized = unSanitized.substring(0, comment).trim();
-            } else {
-                sanitized = unSanitized.trim();
-            }
-            if (sanitized.length() == 0) {
-                continue;
-            }
-            val splitter = new StringTokenizer(sanitized, "=");
-            if (splitter.countTokens() > 2) {
-                Common.LOG.error("ColorConfig line {} is malformed (multiple equal signs): {}", currentLine, unSanitized);
-                continue;
-            }
-            if (splitter.countTokens() < 2) {
-                Common.LOG.error("ColorConfig line {} is malformed (missing equal sign): {}", currentLine, unSanitized);
-                continue;
-            }
-            val assignee = splitter.nextToken().trim();
-            val value = resolve(splitter.nextToken().trim());
-            val targetSplitter = new StringTokenizer(assignee, "/");
-            val count = targetSplitter.countTokens();
-            if (count < 1 || count > 2) {
-                Common.LOG.error("ColorConfig line {} is malformed (invalid assignee): {}", currentLine, assignee);
-                continue;
-            }
-            val id = targetSplitter.nextToken();
-            int meta = -1;
-            if (count == 2) {
-                val metaToken = targetSplitter.nextToken();
-                try {
-                    meta = Integer.parseInt(metaToken);
-                } catch (NumberFormatException e) {
-                    Common.LOG.error("ColorConfig line {} malformed (invalid metadata): {}", currentLine, metaToken);
-                }
-            }
-            if (!id.startsWith("__")) {
-                val blockName = id + (meta < 0 ? "" : (":" + meta));
-                val colorHex = new HexColor(new CustomColor(value.r, value.g, value.b)).asColorHex();
-                config.setBlockBrightness(blockName, colorHex);
-//                val block = GameData.getBlockRegistry().get(id);
-//                if (block != null && block != Blocks.air) {
-//                    System.out.println(id);
-//                    val cBlock = ((ColoredBlock) block);
-//                    cBlock.setColoredLightValue(meta, value.r, value.g, value.b);
-//                }
-            }
-            valueCache.put(assignee, value);
-        }
-        val generatedJSON = fromObjectToPrettyPrintJson(config);
-        System.out.println("\n" + generatedJSON);
-        System.out.println("done");
-    }
-
-    private static final RGB EMPTY = new RGB(0, 0, 0);
-
-    @Deprecated
-    private static RGB resolve(String value) {
-        if (value.charAt(0) == '@') {
-            val key = value.substring(1);
-            if (!valueCache.containsKey(key)) {
-                Common.LOG.error("ColorConfig line {} malformed (nonexistent backref): {}", currentLine, key);
-                return EMPTY;
-            }
-            return valueCache.get(key);
-        }
-        if (value.length() != 3) {
-            Common.LOG.error("ColorConfig line {} malformed (invalid light value): {}", currentLine, value);
-            return EMPTY;
-        }
-        final int packed;
-        try {
-            packed = Integer.parseInt(value, 16);
-        } catch (NumberFormatException e) {
-            Common.LOG.error("ColorConfig line {} malformed (unparseable hex number): {}", currentLine, value);
-            return EMPTY;
-        }
-        return new RGB((packed & 0xF00) >>> 8, (packed & 0x0F0) >>> 4, (packed & 0x00F));
-    }
-
-    @Data
-    @Deprecated
-    private static class RGB {
-        private final int r;
-        private final int g;
-        private final int b;
     }
 }

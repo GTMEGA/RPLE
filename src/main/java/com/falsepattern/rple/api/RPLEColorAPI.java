@@ -12,18 +12,13 @@ import com.falsepattern.rple.api.color.DefaultColor;
 import com.falsepattern.rple.api.color.ErrorColor;
 import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.api.color.RPLENamedColor;
-import com.falsepattern.rple.internal.Tags;
 import lombok.experimental.UtilityClass;
 import lombok.val;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
 @UtilityClass
 public final class RPLEColorAPI {
-    private static final Logger LOG = LogManager.getLogger(Tags.MODNAME + "|ColorAPI");
-
     public static final int COLOR_MIN = 0;
     public static final int COLOR_MAX = 15;
 

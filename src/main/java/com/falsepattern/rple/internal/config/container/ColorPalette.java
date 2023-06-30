@@ -27,7 +27,7 @@ public final class ColorPalette {
     public ColorPalette(LinkedHashMap<String, HexColor> colors) {
         this.colors = colors;
         this.colors.entrySet()
-                   .removeIf(c -> isValidPaletteColor(c.getKey(), c.getValue()));
+                   .removeIf(c -> !isValidPaletteColor(c.getKey(), c.getValue()));
     }
 
     public void addPaletteColor(RPLENamedColor color) {

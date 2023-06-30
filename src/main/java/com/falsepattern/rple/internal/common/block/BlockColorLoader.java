@@ -22,10 +22,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.IdentityHashMap;
 
 import static com.falsepattern.rple.internal.common.RPLEDefaultValues.*;
 import static com.falsepattern.rple.internal.common.block.FallbackBlockColorizer.fallbackBlockColorizer;
+import static com.falsepattern.rple.internal.config.ColorConfigHandler.loadCustomConfig;
+import static com.falsepattern.rple.internal.config.ColorConfigHandler.saveGeneratedConfig;
 import static com.falsepattern.rple.internal.event.EventPoster.postBlockColorRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -53,6 +56,19 @@ public final class BlockColorLoader implements BlockColorRegistry {
         registerDefaultBlockBrightnessColors(this);
         registerDefaultBlockTranslucencyColors(this);
         postBlockColorRegistrationEvent(this);
+
+        try {
+            saveGeneratedConfig(config);
+        } catch (IOException e) {
+            LOG.warn("Failed to save generated config", e);
+        }
+
+        try {
+            loadCustomConfig().ifPresent(customConfig -> config = customConfig);
+        } catch (IOException e) {
+            LOG.warn("Failed to load custom config", e);
+            config = new BlockColorConfig();
+        }
 
         // Save the config to disk
         // Try to find the user config

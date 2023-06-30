@@ -7,7 +7,6 @@
 
 package com.falsepattern.rple.api.color;
 
-import com.falsepattern.rple.internal.Tags;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -53,7 +52,7 @@ public enum DefaultColor implements RPLENamedColor {
     // @formatter:on
     ;
 
-    public static final String DEFAULT_COLOR_DOMAIN = Tags.MODID;
+    public static final String DEFAULT_COLOR_DOMAIN = "default";
 
     private final int red;
     private final int green;

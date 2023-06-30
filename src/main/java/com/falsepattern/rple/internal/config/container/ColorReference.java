@@ -58,24 +58,33 @@ public final class ColorReference {
         this.isValid = this.uniqueColor != null;
     }
 
-    public ColorReference(String color) {
-        String paletteColorName = null;
-        HexColor uniqueColor = null;
+    public ColorReference(@Nullable String color) {
+        nameCheck:
+        {
+            if (color == null)
+                break nameCheck;
 
-        if (color != null) {
             if (HexColor.isValidColorHex(color)) {
-                uniqueColor = new HexColor(color);
-            } else if (ColorPalette.isValidPaletteColorName(color)) {
-                paletteColorName = color;
+                this.paletteColorName = null;
+                this.uniqueColor = new HexColor(color);
+
+                this.isValid = true;
+                return;
             }
 
-            this.isValid = true;
-        } else {
-            this.isValid = false;
+            if (ColorPalette.isValidPaletteColorName(color)) {
+                this.paletteColorName = color;
+                this.uniqueColor = null;
+
+                this.isValid = true;
+                return;
+            }
         }
 
-        this.paletteColorName = paletteColorName;
-        this.uniqueColor = uniqueColor;
+        this.paletteColorName = null;
+        this.uniqueColor = null;
+
+        this.isValid = false;
     }
 
     public RPLEColor color(ColorPalette palette) {
