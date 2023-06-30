@@ -70,13 +70,6 @@ public final class BlockColorLoader implements BlockColorRegistry {
             config = new BlockColorConfig();
         }
 
-        // Save the config to disk
-        // Try to find the user config
-        // If found, try load if
-        // If load is successful, use it
-        // If load fails, load an empty config
-        // Iterate over the config and apply it to each block
-
         val colorPalette = config.palette();
         val blockBrightnessMap = config.brightness();
         val blockTranslucencyMap = config.translucency();
