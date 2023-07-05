@@ -50,7 +50,12 @@ public final class RPLEBlockAPI {
         return errorColor();
     }
 
-    public static RPLEColor getColoredBrightnessSafe(IBlockAccess world, Block block, int blockMeta, int posX, int posY, int posZ) {
+    public static RPLEColor getColoredBrightnessSafe(IBlockAccess world,
+                                                     Block block,
+                                                     int blockMeta,
+                                                     int posX,
+                                                     int posY,
+                                                     int posZ) {
         val colouredLightBlock = colouredLightBlockFromBlock(block);
         if (colouredLightBlock == null)
             return errorColor();
@@ -95,7 +100,12 @@ public final class RPLEBlockAPI {
         return errorColor();
     }
 
-    public static RPLEColor getColoredTranslucencySafe(IBlockAccess world, Block block, int blockMeta, int posX, int posY, int posZ) {
+    public static RPLEColor getColoredTranslucencySafe(IBlockAccess world,
+                                                       Block block,
+                                                       int blockMeta,
+                                                       int posX,
+                                                       int posY,
+                                                       int posZ) {
         val colouredLightBlock = colouredTranslucentBlockFromBlock(block);
         if (colouredLightBlock == null)
             return errorColor();

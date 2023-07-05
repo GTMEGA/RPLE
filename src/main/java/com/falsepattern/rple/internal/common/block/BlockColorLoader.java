@@ -60,13 +60,13 @@ public final class BlockColorLoader implements BlockColorRegistry {
         try {
             saveGeneratedConfig(config);
         } catch (IOException e) {
-            LOG.warn("Failed to save generated config", e);
+            LOG.error("Failed to save generated config", e);
         }
 
         try {
             loadCustomConfig().ifPresent(customConfig -> config = customConfig);
         } catch (IOException e) {
-            LOG.warn("Failed to load custom config", e);
+            LOG.error("Failed to load custom config", e);
             config = new BlockColorConfig();
         }
 
