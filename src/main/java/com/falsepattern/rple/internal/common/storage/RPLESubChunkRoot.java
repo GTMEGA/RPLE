@@ -7,8 +7,9 @@
 
 package com.falsepattern.rple.internal.common.storage;
 
+import com.falsepattern.lumina.api.chunk.LumiSubChunkRoot;
 import com.falsepattern.rple.api.color.ColorChannel;
 
-public interface ColoredCarrierWorld {
-    ColoredLightWorld coloredWorld(ColorChannel channel);
+public interface RPLESubChunkRoot extends LumiSubChunkRoot {
+    RPLESubChunk rpleSubChunk(ColorChannel channel);
 }

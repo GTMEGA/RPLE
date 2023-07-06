@@ -7,8 +7,9 @@
 
 package com.falsepattern.rple.internal.common.storage;
 
+import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
 import com.falsepattern.rple.api.color.ColorChannel;
 
-public interface ColoredCarrierEBS {
-    ColoredLightEBS getColoredEBS(ColorChannel channel);
+public interface RPLEChunkRoot extends LumiChunkRoot {
+    RPLEChunk rpleChunk(ColorChannel channel);
 }

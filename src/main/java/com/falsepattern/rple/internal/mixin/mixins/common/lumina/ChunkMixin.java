@@ -7,10 +7,11 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.lumina;
 
+import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.common.storage.ColoredCarrierChunk;
-import com.falsepattern.rple.internal.common.storage.ColoredCarrierWorld;
-import com.falsepattern.rple.internal.common.storage.ColoredLightChunk;
+import com.falsepattern.rple.internal.common.storage.RPLEChunk;
+import com.falsepattern.rple.internal.common.storage.RPLEChunkRoot;
+import com.falsepattern.rple.internal.common.storage.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -21,46 +22,45 @@ import org.spongepowered.asm.mixin.Shadow;
 import static com.falsepattern.rple.api.color.ColorChannel.*;
 
 @Mixin(Chunk.class)
-public abstract class ChunkMixin implements ColoredCarrierChunk {
+public abstract class ChunkMixin implements LumiChunk, RPLEChunkRoot {
     @Shadow
     public World worldObj;
+    @Shadow
+    public int[] heightMap;
+    @Shadow
+    public boolean[] updateSkylightColumns;
 
     @Nullable
-    private ColoredLightChunk cRed = null;
+    private RPLEChunk redChannel = null;
     @Nullable
-    private ColoredLightChunk cGreen = null;
+    private RPLEChunk greenChannel = null;
     @Nullable
-    private ColoredLightChunk cBlue = null;
+    private RPLEChunk blueChannel = null;
 
     private boolean colorInit = false;
 
     @Override
-    public ColoredLightChunk getColoredChunk(ColorChannel channel) {
+    public RPLEChunk rpleChunk(ColorChannel channel) {
         if (!colorInit) {
-            initColoredChunk();
+            rpleChunkInit();
             colorInit = true;
         }
 
         switch (channel) {
             default:
             case RED_CHANNEL:
-                return cRed;
+                return redChannel;
             case GREEN_CHANNEL:
-                return cGreen;
+                return greenChannel;
             case BLUE_CHANNEL:
-                return cBlue;
+                return blueChannel;
         }
     }
 
-    private void initColoredChunk() {
-        val carrierWorld = (ColoredCarrierWorld) worldObj;
-
-        this.cRed = new ColoredLightChunk(carrierWorld.coloredWorld(RED_CHANNEL), thiz());
-        this.cGreen = new ColoredLightChunk(carrierWorld.coloredWorld(GREEN_CHANNEL), thiz());
-        this.cBlue = new ColoredLightChunk(carrierWorld.coloredWorld(BLUE_CHANNEL), thiz());
-    }
-
-    private Chunk thiz() {
-        return (Chunk) (Object) this;
+    private void rpleChunkInit() {
+        val rpleWorldRoot = (RPLEWorldRoot) worldObj;
+        this.redChannel = new RPLEChunk(this, rpleWorldRoot.rpleWorld(RED_CHANNEL), heightMap, updateSkylightColumns);
+        this.greenChannel = new RPLEChunk(this, rpleWorldRoot.rpleWorld(GREEN_CHANNEL));
+        this.blueChannel = new RPLEChunk(this, rpleWorldRoot.rpleWorld(BLUE_CHANNEL));
     }
 }

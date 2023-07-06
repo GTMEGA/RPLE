@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.common.storage;
 
-import com.falsepattern.lumina.api.ILightingEngine;
-import com.falsepattern.lumina.api.ILumiWorld;
-import com.falsepattern.lumina.api.ILumiWorldRoot;
+import com.falsepattern.lumina.api.engine.LumiLightingEngine;
+import com.falsepattern.lumina.api.world.LumiWorld;
+import com.falsepattern.lumina.api.world.LumiWorldRoot;
 import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
@@ -18,6 +18,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.val;
 import lombok.var;
 import net.minecraft.block.Block;
@@ -31,38 +32,42 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import static com.falsepattern.rple.api.RPLEBlockAPI.getColoredBrightnessSafe;
 import static com.falsepattern.rple.api.RPLEBlockAPI.getColoredTranslucencySafe;
 
-public final class ColoredLightWorld implements ILumiWorld {
-    @Setter
-    @Getter
-    private ILightingEngine lightingEngine;
-    private final World carrier;
-    private final String id;
 
+@Accessors(fluent = true, chain = false)
+public final class RPLEWorld implements LumiWorld {
+    private final LumiWorld delegate;
     @Getter
     private final ColorChannel channel;
 
-    public ColoredLightWorld(World world, ColorChannel channel) {
-        this.carrier = world;
-        this.id = Tags.MODID + "_" + Tags.VERSION + "_" + channel.name();
+    @Getter
+    private final String luminaWorldID;
 
+    @Setter
+    @Getter
+    private LumiLightingEngine lightingEngine;
+
+    public RPLEWorld(LumiWorld delegate, ColorChannel channel) {
+        this.delegate = delegate;
         this.channel = channel;
+
+        this.luminaWorldID = Tags.MODID + "_" + Tags.VERSION + "_" + channel.name();
     }
 
     @Override
-    public ColoredLightChunk lumiWrap(Chunk chunk) {
-        val carrierChunk = (ColoredCarrierChunk) chunk;
-        return carrierChunk.getColoredChunk(channel);
+    public RPLEChunk toLumiChunk(Chunk chunk) {
+        val rpleChunkRoot = (RPLEChunkRoot) chunk;
+        return rpleChunkRoot.rpleChunk(channel);
     }
 
     @Override
-    public ColoredLightEBS lumiWrap(ExtendedBlockStorage ebs) {
-        val carrierEBS = (ColoredCarrierEBS) ebs;
-        return carrierEBS.getColoredEBS(channel);
+    public RPLESubChunk toLumiSubChunk(ExtendedBlockStorage subChunk) {
+        val rpleSubChunkRoot = (RPLESubChunkRoot) subChunk;
+        return rpleSubChunkRoot.rpleSubChunk(channel);
     }
 
     @Override
-    public int lumiGetLightValue(Block block, int meta, int x, int y, int z) {
-        return getLightValue(carrier, block, meta, x, y, z);
+    public int lumiGetLightValue(Block block, int blockMeta, int posX, int posY, int posZ) {
+        return getLightValue((World) delegate, block, blockMeta, posX, posY, posZ);
     }
 
     public int getLightValue(IBlockAccess world, Block block, int blockMeta, int posX, int posY, int posZ) {
@@ -72,7 +77,7 @@ public final class ColoredLightWorld implements ILumiWorld {
 
     @Override
     public int lumiGetLightOpacity(Block block, int blockMeta, int posX, int posY, int posZ) {
-        return getLightOpacity(carrier, block, blockMeta, posX, posY, posZ);
+        return getLightOpacity((World) delegate, block, blockMeta, posX, posY, posZ);
     }
 
     public int getLightOpacity(IBlockAccess world, Block block, int blockMeta, int posX, int posY, int posZ) {
@@ -81,13 +86,8 @@ public final class ColoredLightWorld implements ILumiWorld {
     }
 
     @Override
-    public String lumiId() {
-        return id;
-    }
-
-    @Override
-    public ILumiWorldRoot root() {
-        return (ILumiWorldRoot) carrier;
+    public LumiWorldRoot worldRoot() {
+        return delegate.worldRoot();
     }
 
     @SideOnly(Side.CLIENT)
@@ -111,7 +111,7 @@ public final class ColoredLightWorld implements ILumiWorld {
         if (x < -30000000 || z < -30000000 || x >= 30000000 || z > 30000000)
             return skyBlock.defaultLightValue;
 
-        if (skyBlock == EnumSkyBlock.Sky && carrier.provider.hasNoSky)
+        if (skyBlock == EnumSkyBlock.Sky && !delegate.worldRoot().hasSkyLight())
             return 0;
 
         int cX;
@@ -154,7 +154,7 @@ public final class ColoredLightWorld implements ILumiWorld {
                 return skyBlock.defaultLightValue;
             }
 
-            val chunk = lumiWrap(vanillaChunk);
+            val chunk = toLumiChunk(vanillaChunk);
             if (skyBlock == EnumSkyBlock.Block)
                 return getIntrinsicOrSavedBlockLightValue(access, chunk, x & 15, y, z & 15);
             return chunk.getSavedLightValue(skyBlock, x & 15, y, z & 15);
@@ -191,21 +191,24 @@ public final class ColoredLightWorld implements ILumiWorld {
             return skyBlock.defaultLightValue;
         }
 
-        val chunk = lumiWrap(vanillaChunk);
+        val chunk = toLumiChunk(vanillaChunk);
         if (skyBlock == EnumSkyBlock.Block)
             return getIntrinsicOrSavedBlockLightValue(access, chunk, x & 15, y, z & 15);
         return chunk.getSavedLightValue(skyBlock, x & 15, y, z & 15);
     }
 
-    private int getIntrinsicOrSavedBlockLightValue(IBlockAccess access, ColoredLightChunk chunk, int x, int y, int z) {
-        val savedLightValue = chunk.getSavedLightValue(EnumSkyBlock.Block, x, y, z);
+    @Deprecated
+    private int getIntrinsicOrSavedBlockLightValue(IBlockAccess access, RPLEChunk chunk, int subChunkPosX, int posY, int subChunkPosZ) {
+        val chunkRoot = chunk.chunkRoot();
 
-        val block = chunk.root().rootGetBlock(x, y, z);
-        val meta = chunk.root().rootGetBlockMetadata(x, y, z);
-        val bx = x + (chunk.x() * 16);
-        val bz = z + (chunk.z() * 16);
+        val posX = subChunkPosX + (chunk.chunkPosX() * 16);
+        val posZ = subChunkPosZ + (chunk.chunkPosZ() * 16);
 
-        val lightValue = getLightValue(access, block, meta, bx, y, bz);
+        val block = chunkRoot.getBlock(subChunkPosX, posY, subChunkPosZ);
+        val blockMeta = chunkRoot.getBlockMeta(subChunkPosX, posY, subChunkPosZ);
+
+        val savedLightValue = chunk.getSavedLightValue(EnumSkyBlock.Block, subChunkPosX, posY, subChunkPosZ);
+        val lightValue = getLightValue(access, block, blockMeta, posX, posY, posZ);
         return Math.max(savedLightValue, lightValue);
     }
 }

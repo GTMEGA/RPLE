@@ -16,7 +16,7 @@ import com.falsepattern.rple.internal.client.render.LampRenderer;
 import com.falsepattern.rple.internal.common.block.LampBlock;
 import com.falsepattern.rple.internal.common.block.LampItemBlock;
 import com.falsepattern.rple.internal.common.storage.ColoredDataManager;
-import com.falsepattern.rple.internal.common.storage.ColoredWorldProvider;
+import com.falsepattern.rple.internal.common.storage.RPLEWorldProvider;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -107,9 +107,9 @@ public class RPLE {
         ChunkDataRegistry.registerDataManager(new ColoredDataManager(ColorChannel.GREEN_CHANNEL));
         ChunkDataRegistry.registerDataManager(new ColoredDataManager(ColorChannel.BLUE_CHANNEL));
 
-        LumiWorldProviderRegistry.registerWorldProvider(new ColoredWorldProvider(ColorChannel.RED_CHANNEL));
-        LumiWorldProviderRegistry.registerWorldProvider(new ColoredWorldProvider(ColorChannel.GREEN_CHANNEL));
-        LumiWorldProviderRegistry.registerWorldProvider(new ColoredWorldProvider(ColorChannel.BLUE_CHANNEL));
+        LumiWorldProviderRegistry.registerWorldProvider(new RPLEWorldProvider(ColorChannel.RED_CHANNEL));
+        LumiWorldProviderRegistry.registerWorldProvider(new RPLEWorldProvider(ColorChannel.GREEN_CHANNEL));
+        LumiWorldProviderRegistry.registerWorldProvider(new RPLEWorldProvider(ColorChannel.BLUE_CHANNEL));
 
         RenderingRegistry.registerBlockHandler(new LampRenderer());
     }

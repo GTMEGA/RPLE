@@ -12,6 +12,7 @@ import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import lombok.var;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.NibbleArray;
@@ -33,56 +34,57 @@ public final class ColoredDataManager implements ChunkDataManager.SectionNBTData
 
     @Override
     public void writeToBuffer(Chunk chunk, int ebsMask, boolean forceUpdate, ByteBuffer data) {
-        val carrier = (ColoredCarrierChunk) chunk;
+        val rpleChunkRoot = (RPLEChunkRoot) chunk;
+        val rpleChunk = rpleChunkRoot.rpleChunk(channel);
         val hasSky = !chunk.worldObj.provider.hasNoSky;
-        val cn = carrier.getColoredChunk(channel);
-        for (int i = 0; i < 16; i++) {
+        for (var i = 0; i < 16; i++) {
             if ((ebsMask & (1 << i)) == 0)
                 continue;
 
-            val ebs = cn.lumiEBS(i);
-            if (ebs == null)
+            val rpleSubChunk = rpleChunk.subChunk(i);
+            if (rpleSubChunk == null)
                 continue;
 
-            data.put(ebs.lumiBlocklightArray().data);
+            data.put(rpleSubChunk.blockLight().data);
             if (hasSky)
-                data.put(ebs.lumiSkylightArray().data);
+                data.put(rpleSubChunk.skyLight().data);
         }
     }
 
     @Override
     public void readFromBuffer(Chunk chunk, int ebsMask, boolean forceUpdate, ByteBuffer buffer) {
-        val carrier = (ColoredCarrierChunk) chunk;
+        val rpleChunkRoot = (RPLEChunkRoot) chunk;
+        val rpleChunk = rpleChunkRoot.rpleChunk(channel);
         val hasSky = !chunk.worldObj.provider.hasNoSky;
-        val cn = carrier.getColoredChunk(channel);
-        for (int i = 0; i < 16; i++) {
+        for (var i = 0; i < 16; i++) {
             if ((ebsMask & (1 << i)) == 0)
                 continue;
 
-            val ebs = cn.lumiEBS(i);
-            if (ebs == null)
+            val rpleSubChunk = rpleChunk.subChunk(i);
+            if (rpleSubChunk == null)
                 continue;
 
-            buffer.get(ebs.lumiBlocklightArray().data);
+            buffer.get(rpleSubChunk.blockLight().data);
             if (hasSky)
-                buffer.get(ebs.lumiSkylightArray().data);
+                buffer.get(rpleSubChunk.skyLight().data);
         }
     }
 
     @Override
     public void writeSectionToNBT(Chunk chunk, ExtendedBlockStorage ebs, NBTTagCompound section) {
-        val cEbs = ((ColoredCarrierEBS) ebs).getColoredEBS(channel);
-        section.setInteger("v", VERSION_HASH);
-        section.setByteArray("BlockLight", cEbs.lumiBlocklightArray().data);
+        val rpleSubChunkRoot = (RPLESubChunkRoot)ebs;
+        val rpleSubChunk = rpleSubChunkRoot.rpleSubChunk(channel);
+        val hasSky = !chunk.worldObj.provider.hasNoSky;
 
-        if (!chunk.worldObj.provider.hasNoSky)
-            section.setByteArray("SkyLight", cEbs.lumiSkylightArray().data);
+        section.setInteger("v", VERSION_HASH);
+        section.setByteArray("BlockLight", rpleSubChunk.blockLight().data);
+
+        if (hasSky)
+            section.setByteArray("SkyLight", rpleSubChunk.skyLight().data);
     }
 
     @Override
     public void readSectionFromNBT(Chunk chunk, ExtendedBlockStorage ebs, NBTTagCompound section) {
-        val cEbs = ((ColoredCarrierEBS) ebs).getColoredEBS(channel);
-
         if (!section.hasKey("v", Constants.NBT.TAG_INT))
             return;
 
@@ -90,9 +92,13 @@ public final class ColoredDataManager implements ChunkDataManager.SectionNBTData
         if (ver != VERSION_HASH)
             return;
 
-        safeNibbleArray(section, "BlockLight", cEbs.lumiBlocklightArray());
-        if (!chunk.worldObj.provider.hasNoSky)
-            safeNibbleArray(section, "SkyLight", cEbs.lumiSkylightArray());
+        val rpleSubChunkRoot = (RPLESubChunkRoot)ebs;
+        val rpleSubChunk = rpleSubChunkRoot.rpleSubChunk(channel);
+        val hasSky = !chunk.worldObj.provider.hasNoSky;
+
+        safeNibbleArray(section, "BlockLight", rpleSubChunk.blockLight());
+        if (hasSky)
+            safeNibbleArray(section, "SkyLight", rpleSubChunk.skyLight());
     }
 
     private static void safeNibbleArray(NBTTagCompound compound, String key, NibbleArray array) {

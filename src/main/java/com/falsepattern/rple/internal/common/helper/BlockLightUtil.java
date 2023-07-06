@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.common.helper;
 
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.common.storage.ColoredCarrierWorld;
+import com.falsepattern.rple.internal.common.storage.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.ChunkCache;
@@ -31,19 +31,19 @@ public class BlockLightUtil {
         val minGreenBrightness = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessGreen(packedMinBrightness));
         val minBlueBrightness = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessBlue(packedMinBrightness));
 
-        final ColoredCarrierWorld carrier;
+        final RPLEWorldRoot rpleWorldRoot;
         if (world instanceof World) {
-            carrier = (ColoredCarrierWorld) world;
+            rpleWorldRoot = (RPLEWorldRoot) world;
         } else {
-            carrier = (ColoredCarrierWorld) (((ChunkCache) world).worldObj);
+            rpleWorldRoot = (RPLEWorldRoot) (((ChunkCache) world).worldObj);
         }
 
-        val red = carrier.coloredWorld(RED_CHANNEL)
-                         .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minRedBrightness);
-        val green = carrier.coloredWorld(ColorChannel.GREEN_CHANNEL)
-                           .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minGreenBrightness);
-        val blue = carrier.coloredWorld(ColorChannel.BLUE_CHANNEL)
-                          .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minBlueBrightness);
+        val red = rpleWorldRoot.rpleWorld(RED_CHANNEL)
+                               .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minRedBrightness);
+        val green = rpleWorldRoot.rpleWorld(ColorChannel.GREEN_CHANNEL)
+                                 .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minGreenBrightness);
+        val blue = rpleWorldRoot.rpleWorld(ColorChannel.BLUE_CHANNEL)
+                                .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minBlueBrightness);
 
         return CookieMonster.packedLongToCookie(BrightnessUtil.brightnessesToPackedLong(red, green, blue));
     }

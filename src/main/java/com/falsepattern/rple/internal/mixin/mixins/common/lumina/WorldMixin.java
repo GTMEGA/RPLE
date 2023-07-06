@@ -7,53 +7,50 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.lumina;
 
+import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.common.storage.ColoredCarrierWorld;
-import com.falsepattern.rple.internal.common.storage.ColoredLightWorld;
+import com.falsepattern.rple.internal.common.storage.RPLEWorld;
+import com.falsepattern.rple.internal.common.storage.RPLEWorldRoot;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import sun.tools.jar.resources.jar;
 
 import static com.falsepattern.rple.api.color.ColorChannel.*;
 
 @Mixin(World.class)
-public abstract class WorldMixin implements ColoredCarrierWorld {
+public abstract class WorldMixin implements IBlockAccess, LumiWorld, RPLEWorldRoot {
     @Nullable
-    private ColoredLightWorld cRed = null;
+    private RPLEWorld redChannelWorld = null;
     @Nullable
-    private ColoredLightWorld cGreen = null;
+    private RPLEWorld greenChannelWorld = null;
     @Nullable
-    private ColoredLightWorld cBlue = null;
+    private RPLEWorld blueChannelWorld = null;
 
     private boolean colorInit = false;
 
     @Override
-    public ColoredLightWorld coloredWorld(ColorChannel channel) {
+    public RPLEWorld rpleWorld(ColorChannel channel) {
         if (!colorInit) {
-            initColoredWorld();
+            rpleWorldInit();
             colorInit = true;
         }
 
         switch (channel) {
             default:
             case RED_CHANNEL:
-                return cRed;
+                return redChannelWorld;
             case GREEN_CHANNEL:
-                return cGreen;
+                return greenChannelWorld;
             case BLUE_CHANNEL:
-                return cBlue;
+                return blueChannelWorld;
         }
     }
 
-    private void initColoredWorld() {
-        cRed = new ColoredLightWorld(thiz(), RED_CHANNEL);
-        cGreen = new ColoredLightWorld(thiz(), GREEN_CHANNEL);
-        cBlue = new ColoredLightWorld(thiz(), BLUE_CHANNEL);
-
-        colorInit = true;
-    }
-
-    private World thiz() {
-        return (World) (Object) this;
+    private void rpleWorldInit() {
+        redChannelWorld = new RPLEWorld(this, RED_CHANNEL);
+        greenChannelWorld = new RPLEWorld(this, GREEN_CHANNEL);
+        blueChannelWorld = new RPLEWorld(this, BLUE_CHANNEL);
     }
 }
