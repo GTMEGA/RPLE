@@ -34,7 +34,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class BlockColorLoader implements BlockColorRegistry {
-    private static final Logger LOG = LogManager.getLogger(Tags.MODNAME + "|" + "Block Color Loader");
+    private static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME + "|" + "Block Color Loader");
 
     private static final BlockColorLoader INSTANCE = new BlockColorLoader();
 

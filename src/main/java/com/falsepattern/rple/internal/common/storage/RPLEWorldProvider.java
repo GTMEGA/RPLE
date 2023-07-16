@@ -7,19 +7,41 @@
 
 package com.falsepattern.rple.internal.common.storage;
 
+import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.lumina.api.world.LumiWorldProvider;
 import com.falsepattern.rple.api.color.ColorChannel;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-@AllArgsConstructor
+import static com.falsepattern.rple.api.color.ColorChannel.*;
+import static lombok.AccessLevel.PRIVATE;
+
+@AllArgsConstructor(access = PRIVATE)
 public final class RPLEWorldProvider implements LumiWorldProvider {
     private final ColorChannel channel;
 
+    private static final RPLEWorldProvider RED_CHANNEL_INSTANCE = new RPLEWorldProvider(RED_CHANNEL);
+    private static final RPLEWorldProvider GREEN_CHANNEL_INSTANCE = new RPLEWorldProvider(GREEN_CHANNEL);
+    private static final RPLEWorldProvider BLUE_CHANNEL_INSTANCE = new RPLEWorldProvider(BLUE_CHANNEL);
+
+    public static RPLEWorldProvider redRPLEWorldProvider() {
+        return RED_CHANNEL_INSTANCE;
+    }
+
+    public static RPLEWorldProvider greenRPLEWorldProvider() {
+        return GREEN_CHANNEL_INSTANCE;
+    }
+
+    public static RPLEWorldProvider blueRPLEWorldProvider() {
+        return BLUE_CHANNEL_INSTANCE;
+    }
+
     @Override
-    public RPLEWorld toLumiWorld(World world) {
-        val rpleWorld = (RPLEWorldRoot) world;
-        return rpleWorld.rpleWorld(channel);
+    public @Nullable LumiWorld provideWorld(@NotNull World worldBase) {
+        val worldRoot = (RPLEWorldRoot) worldBase;
+        return worldRoot.rple$world(channel);
     }
 }

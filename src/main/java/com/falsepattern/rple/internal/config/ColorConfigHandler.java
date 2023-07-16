@@ -48,7 +48,7 @@ public final class ColorConfigHandler {
         CONFIG_PATH = FileUtil.getMinecraftHome()
                               .toPath()
                               .resolve("config")
-                              .resolve(Tags.MODID);
+                              .resolve(Tags.MOD_ID);
         GENERATED_CONFIG_FILE = CONFIG_PATH.resolve("generated_colors.json").toFile();
         CUSTOM_CONFIG_FILE = CONFIG_PATH.resolve("custom_colors.json").toFile();
     }

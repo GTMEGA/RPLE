@@ -25,7 +25,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class LightMapPipeline implements LightMapRegistry {
-    private static final Logger LOG = LogManager.getLogger(Tags.MODNAME + "|" + "Light Map Pipeline");
+    private static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME + "|" + "Light Map Pipeline");
 
     private static final LightMapPipeline INSTANCE = new LightMapPipeline();
 

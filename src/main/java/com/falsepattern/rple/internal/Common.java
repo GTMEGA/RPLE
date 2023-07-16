@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL13;
  * Non-minecraft stuff to avoid accidental classloading in spaghetti code
  */
 public class Common {
-    public static final Logger LOG = LogManager.getLogger(Tags.MODID);
+    public static final Logger LOG = LogManager.getLogger(Tags.MOD_ID);
 
     public static final int LIGHT_MAP_1D_SIZE = 16;
     public static final int LIGHT_MAP_2D_SIZE = LIGHT_MAP_1D_SIZE * LIGHT_MAP_1D_SIZE;

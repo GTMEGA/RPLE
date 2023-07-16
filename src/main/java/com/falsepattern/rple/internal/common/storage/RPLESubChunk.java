@@ -8,41 +8,79 @@
 package com.falsepattern.rple.internal.common.storage;
 
 import com.falsepattern.lumina.api.chunk.LumiSubChunk;
-import com.falsepattern.lumina.api.chunk.LumiSubChunkRoot;
+import com.falsepattern.lumina.api.lighting.LightType;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import net.minecraft.world.chunk.NibbleArray;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.nbt.NBTTagCompound;
+import org.jetbrains.annotations.NotNull;
+
+import java.nio.ByteBuffer;
 
 @Getter
 @Accessors(fluent = true, chain = false)
 public final class RPLESubChunk implements LumiSubChunk {
-    private final LumiSubChunk delegate;
 
-    private final NibbleArray blockLight;
-    @Nullable
-    private final NibbleArray skyLight;
-
-    public RPLESubChunk(LumiSubChunk delegate, NibbleArray blockLight, @Nullable NibbleArray skyLight) {
-        this.delegate = delegate;
-
-        this.blockLight = blockLight;
-        this.skyLight = skyLight;
-    }
-
-    public RPLESubChunk(LumiSubChunk delegate, boolean hasSky) {
-        this.delegate = delegate;
-
-        this.blockLight = new NibbleArray(4096, 4);
-        if (hasSky) {
-            this.skyLight = new NibbleArray(4096, 4);
-        } else {
-            this.skyLight = null;
-        }
+    @Override
+    public @NotNull RPLESubChunkRoot lumi$root() {
+        return null;
     }
 
     @Override
-    public LumiSubChunkRoot subChunkRoot() {
-        return delegate.subChunkRoot();
+    public @NotNull String lumi$subChunkID() {
+        return null;
+    }
+
+    @Override
+    public void lumi$writeToNBT(@NotNull NBTTagCompound output) {
+
+    }
+
+    @Override
+    public void lumi$readFromNBT(@NotNull NBTTagCompound input) {
+
+    }
+
+    @Override
+    public void lumi$writeToPacket(@NotNull ByteBuffer output) {
+
+    }
+
+    @Override
+    public void lumi$readFromPacket(@NotNull ByteBuffer input) {
+
+    }
+
+    @Override
+    public void lumi$setLightValue(@NotNull LightType lightType,
+                                   int subChunkPosX,
+                                   int subChunkPosY,
+                                   int subChunkPosZ,
+                                   int lightValue) {
+
+    }
+
+    @Override
+    public int lumi$getLightValue(@NotNull LightType lightType, int subChunkPosX, int subChunkPosY, int subChunkPosZ) {
+        return 0;
+    }
+
+    @Override
+    public void lumi$setBlockLightValue(int subChunkPosX, int subChunkPosY, int subChunkPosZ, int lightValue) {
+
+    }
+
+    @Override
+    public int lumi$getBlockLightValue(int subChunkPosX, int subChunkPosY, int subChunkPosZ) {
+        return 0;
+    }
+
+    @Override
+    public void lumi$setSkyLightValue(int subChunkPosX, int subChunkPosY, int subChunkPosZ, int lightValue) {
+
+    }
+
+    @Override
+    public int lumi$getSkyLightValue(int subChunkPosX, int subChunkPosY, int subChunkPosZ) {
+        return 0;
     }
 }

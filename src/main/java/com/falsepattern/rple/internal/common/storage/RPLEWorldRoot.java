@@ -11,5 +11,5 @@ import com.falsepattern.lumina.api.world.LumiWorldRoot;
 import com.falsepattern.rple.api.color.ColorChannel;
 
 public interface RPLEWorldRoot extends LumiWorldRoot {
-    RPLEWorld rpleWorld(ColorChannel channel);
+    RPLEWorld rple$world(ColorChannel channel);
 }

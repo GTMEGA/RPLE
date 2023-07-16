@@ -32,7 +32,7 @@ import java.util.List;
 // TODO: [PRE_RELEASE] Created variants of this block should be defined by a load-time configuration file
 @Deprecated
 public class LampBlock extends Block implements ColoredLightBlock {
-    private static final String GLOW_RESOURCE = Tags.MODID + ":glow";
+    private static final String GLOW_RESOURCE = Tags.MOD_ID + ":glow";
     public static final int POWERED_BIT = 0b0010;
     public static final int INVERTED_BIT = 0b0001;
 
@@ -52,8 +52,8 @@ public class LampBlock extends Block implements ColoredLightBlock {
 
     @Override
     public void registerBlockIcons(@NotNull IIconRegister register) {
-        blockIcon = register.registerIcon(Tags.MODID + ":lamp/off/" + getTextureName());
-        poweredIcon = register.registerIcon(Tags.MODID + ":lamp/on/" + getTextureName());
+        blockIcon = register.registerIcon(Tags.MOD_ID + ":lamp/off/" + getTextureName());
+        poweredIcon = register.registerIcon(Tags.MOD_ID + ":lamp/on/" + getTextureName());
         glowIcon = new ClampedIcon(register.registerIcon(GLOW_RESOURCE));
     }
 

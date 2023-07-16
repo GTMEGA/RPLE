@@ -11,7 +11,7 @@ import com.falsepattern.lib.config.Config;
 import com.falsepattern.lib.config.ConfigurationManager;
 import com.falsepattern.rple.internal.Tags;
 
-@Config(modid = Tags.MODID)
+@Config(modid = Tags.MOD_ID)
 public class RPLEConfig {
     @Config.Comment("Set this to true if you want to enable the debug lamps (no crafting recipes, only available through\n" +
                     "creative mode or NEI.)")

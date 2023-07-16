@@ -8,15 +8,10 @@
 package com.falsepattern.rple.internal;
 
 
-import com.falsepattern.chunk.api.ChunkDataRegistry;
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.lumina.api.LumiWorldProviderRegistry;
-import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.client.render.LampRenderer;
 import com.falsepattern.rple.internal.common.block.LampBlock;
 import com.falsepattern.rple.internal.common.block.LampItemBlock;
-import com.falsepattern.rple.internal.common.storage.ColoredDataManager;
-import com.falsepattern.rple.internal.common.storage.RPLEWorldProvider;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -26,14 +21,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.Getter;
 import lombok.val;
 
-import java.io.IOException;
-
 import static com.falsepattern.rple.internal.client.lightmap.LightMapPipeline.lightMapPipeline;
 import static com.falsepattern.rple.internal.common.block.BlockColorLoader.blockColorLoader;
+import static com.falsepattern.rple.internal.event.LumiEventHandler.lumiEventHandler;
 
-@Mod(modid = Tags.MODID,
+@Mod(modid = Tags.MOD_ID,
      version = Tags.VERSION,
-     name = Tags.MODNAME,
+     name = Tags.MOD_NAME,
      acceptedMinecraftVersions = "[1.7.10]",
      dependencies = "required-after:falsepatternlib@[0.11,);" +
                     "required-after:chunkapi@[0.2,);" +
@@ -65,10 +59,11 @@ public class RPLE {
     private static int rpleEdgeTexVIndexShader;
 
     @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) throws IOException {
-        LumiWorldProviderRegistry.hijack();
-        int[] noShaderBuf = new int[4];
-        int[] shaderBuf = new int[4];
+    public void preInit(FMLPreInitializationEvent event) {
+        lumiEventHandler().registerEventHandler();
+
+        val noShaderBuf = new int[4];
+        val shaderBuf = new int[4];
         VertexAPI.allocateExtraVertexSlots(4, noShaderBuf, shaderBuf);
         greenIndexNoShader = noShaderBuf[0];
         blueIndexNoShader = noShaderBuf[1];
@@ -80,7 +75,7 @@ public class RPLE {
         rpleEdgeTexVIndexShader = shaderBuf[3];
 
         val lamp = new LampBlock();
-        lamp.setBlockName(Tags.MODID + ".lamp." + "blue").setBlockTextureName("blue");
+        lamp.setBlockName(Tags.MOD_ID + ".lamp." + "blue").setBlockTextureName("blue");
         GameRegistry.registerBlock(lamp, LampItemBlock.class, "lamp." + "blue");
 
         //TODO: [PRE-RELEASE] Fix these values
@@ -103,23 +98,12 @@ public class RPLE {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        ChunkDataRegistry.registerDataManager(new ColoredDataManager(ColorChannel.RED_CHANNEL));
-        ChunkDataRegistry.registerDataManager(new ColoredDataManager(ColorChannel.GREEN_CHANNEL));
-        ChunkDataRegistry.registerDataManager(new ColoredDataManager(ColorChannel.BLUE_CHANNEL));
-
-        LumiWorldProviderRegistry.registerWorldProvider(new RPLEWorldProvider(ColorChannel.RED_CHANNEL));
-        LumiWorldProviderRegistry.registerWorldProvider(new RPLEWorldProvider(ColorChannel.GREEN_CHANNEL));
-        LumiWorldProviderRegistry.registerWorldProvider(new RPLEWorldProvider(ColorChannel.BLUE_CHANNEL));
-
         RenderingRegistry.registerBlockHandler(new LampRenderer());
+        lightMapPipeline().registerLightMaps();
+        blockColorLoader().registerBlockColors();
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        ChunkDataRegistry.disableDataManager("minecraft", "blocklight");
-        ChunkDataRegistry.disableDataManager("minecraft", "skylight");
-
-        lightMapPipeline().registerLightMaps();
-        blockColorLoader().registerBlockColors();
     }
 }

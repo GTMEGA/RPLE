@@ -32,7 +32,7 @@ public abstract class RenderHaloMixin {
         GL11.glColor4f(1, 1, 1, 1);
         OpenGlHelperPacked.setLightMapTextureCoordsPacked(BrightnessUtil.monochromeBrightnessToPackedLong(BrightnessUtil.lightLevelsToBrightness(15, 15)));
         oldTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-        CCRenderState.changeTexture(glowTex == null ? glowTex = new ResourceLocation(Tags.MODID, "textures/blocks/glow_solid.png") : glowTex);
+        CCRenderState.changeTexture(glowTex == null ? glowTex = new ResourceLocation(Tags.MOD_ID, "textures/blocks/glow_solid.png") : glowTex);
     }
     @Inject(method = "restoreRenderState()V",
             at = @At("RETURN"),

@@ -11,5 +11,5 @@ import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
 import com.falsepattern.rple.api.color.ColorChannel;
 
 public interface RPLEChunkRoot extends LumiChunkRoot {
-    RPLEChunk rpleChunk(ColorChannel channel);
+    RPLEChunk rple$chunk(ColorChannel channel);
 }

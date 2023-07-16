@@ -7,7 +7,6 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
-import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.common.storage.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.block.Block;
@@ -38,12 +37,17 @@ public class BlockLightUtil {
             rpleWorldRoot = (RPLEWorldRoot) (((ChunkCache) world).worldObj);
         }
 
-        val red = rpleWorldRoot.rpleWorld(RED_CHANNEL)
-                               .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minRedBrightness);
-        val green = rpleWorldRoot.rpleWorld(ColorChannel.GREEN_CHANNEL)
-                                 .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minGreenBrightness);
-        val blue = rpleWorldRoot.rpleWorld(ColorChannel.BLUE_CHANNEL)
-                                .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minBlueBrightness);
+//        val red = rpleWorldRoot.rple$world(RED_CHANNEL)
+//                               .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minRedBrightness);
+//        val green = rpleWorldRoot.rple$world(ColorChannel.GREEN_CHANNEL)
+//                                 .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minGreenBrightness);
+//        val blue = rpleWorldRoot.rple$world(BLUE_CHANNEL)
+//                                .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minBlueBrightness);
+
+        //TODO: important, disabled for now
+        val red = 0;
+        val green = 0;
+        val blue = 0;
 
         return CookieMonster.packedLongToCookie(BrightnessUtil.brightnessesToPackedLong(red, green, blue));
     }

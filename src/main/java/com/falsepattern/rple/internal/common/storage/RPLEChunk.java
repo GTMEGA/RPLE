@@ -8,159 +8,213 @@
 package com.falsepattern.rple.internal.common.storage;
 
 import com.falsepattern.lumina.api.chunk.LumiChunk;
-import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
-import com.falsepattern.lumina.api.engine.LumiLightingEngine;
-import com.falsepattern.lumina.api.world.LumiWorld;
-import com.falsepattern.rple.api.color.ColorChannel;
-import lombok.val;
-import net.minecraft.world.EnumSkyBlock;
-import net.minecraft.world.chunk.Chunk;
+import com.falsepattern.lumina.api.lighting.LightType;
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.ByteBuffer;
+
 public final class RPLEChunk implements LumiChunk {
-    private final LumiChunk delegate;
-    private final RPLEWorld world;
-    private final ColorChannel channel;
-
-    private final int[] skylightColumnHeightArray;
-    private final boolean[] outdatedSkylightColumns;
-
-    private int minSkylightColumnHeight;
-    private short @Nullable [] neighborLightChecks;
-    private boolean lightInitialized;
-
-    private LumiLightingEngine lightingEngine;
-
-    public RPLEChunk(LumiChunk delegate,
-                     RPLEWorld world,
-                     int[] skylightColumnHeightArray,
-                     boolean[] outdatedSkylightColumns) {
-        this.delegate = delegate;
-        this.world = world;
-        this.channel = world.channel();
-
-        this.skylightColumnHeightArray = skylightColumnHeightArray;
-        this.outdatedSkylightColumns = outdatedSkylightColumns;
-
-        this.minSkylightColumnHeight = Integer.MAX_VALUE;
-        this.neighborLightChecks = null;
-        this.lightInitialized = false;
-
-        this.lightingEngine = null;
-    }
-
-    public RPLEChunk(LumiChunk delegate,RPLEWorld world) {
-        this.delegate = delegate;
-        this.world = world;
-        this.channel = world.channel();
-
-        this.skylightColumnHeightArray = new int[256];
-        this.outdatedSkylightColumns = new boolean[256];
-
-        this.minSkylightColumnHeight = Integer.MAX_VALUE;
-        this.neighborLightChecks = null;
-        this.lightInitialized = false;
-
-        this.lightingEngine = null;
+    @Override
+    public @NotNull RPLEChunkRoot lumi$root() {
+        return null;
     }
 
     @Override
-    public int chunkPosX() {
-        return delegate.chunkPosX();
+    public @NotNull RPLEWorld lumi$world() {
+        return null;
     }
 
     @Override
-    public int chunkPosZ() {
-        return delegate.chunkPosZ();
+    public @NotNull String lumi$chunkID() {
+        return null;
     }
 
     @Override
-    public @Nullable RPLESubChunk subChunk(int index) {
-        val subChunk = delegate.subChunk(index);
-        if (subChunk == null)
-            return null;
-
-        val rpleSubChunk = (RPLESubChunkRoot) subChunk;
-        return rpleSubChunk.rpleSubChunk(channel);
+    public void lumi$writeToNBT(@NotNull NBTTagCompound output) {
     }
 
     @Override
-    public LumiWorld lumiWorld() {
-        return world;
+    public void lumi$readFromNBT(@NotNull NBTTagCompound input) {
     }
 
     @Override
-    public void minSkylightColumnHeight(int minSkylightColumnHeight) {
-        this.minSkylightColumnHeight = minSkylightColumnHeight;
+    public void lumi$writeToPacket(@NotNull ByteBuffer output) {
     }
 
     @Override
-    public int minSkylightColumnHeight() {
-        return minSkylightColumnHeight;
+    public void lumi$readFromPacket(@NotNull ByteBuffer input) {
     }
 
     @Override
-    public int[] skylightColumnHeightArray() {
-        return skylightColumnHeightArray;
+    public @Nullable RPLESubChunk lumi$getSubChunkIfPrepared(int chunkPosY) {
+        return null;
     }
 
     @Override
-    public void neighborLightChecks(short[] neighborLightChecks) {
-        this.neighborLightChecks = neighborLightChecks;
+    public @NotNull RPLESubChunk lumi$getSubChunk(int chunkPosY) {
+        return null;
     }
 
     @Override
-    public short[] neighborLightChecks() {
-        return neighborLightChecks;
+    public int lumi$chunkPosX() {
+        return 0;
     }
 
     @Override
-    public void lightInitialized(boolean lightInitialized) {
-        this.lightInitialized = lightInitialized;
+    public int lumi$chunkPosZ() {
+        return 0;
     }
 
     @Override
-    public boolean lightInitialized() {
-        return lightInitialized;
+    public void lumi$queuedRandomLightUpdates(int remainingRandomLightUpdates) {
+
     }
 
     @Override
-    public boolean[] outdatedSkylightColumns() {
-        return outdatedSkylightColumns;
+    public int lumi$queuedRandomLightUpdates() {
+        return 0;
     }
 
     @Override
-    public LumiChunkRoot chunkRoot() {
-        return delegate.chunkRoot();
+    public int lumi$getBrightnessAndLightValueMax(@NotNull LightType lightType,
+                                                  int subChunkPosX,
+                                                  int posY,
+                                                  int subChunkPosZ) {
+        return 0;
     }
 
     @Override
-    public LumiLightingEngine lightingEngine() {
-        if (lightingEngine == null) {
-            lightingEngine = world.lightingEngine();
-            if (lightingEngine == null)
-                throw new IllegalStateException(); // TODO: [PRE_RELEASE] Can we avoid the throw here somehow?
-        }
-        return lightingEngine;
+    public int lumi$getBrightnessAndBlockLightValueMax(int subChunkPosX, int posY, int subChunkPosZ) {
+        return 0;
     }
 
-    public int getSavedLightValue(EnumSkyBlock lightType, int subChunkPosX, int posY, int subChunkPosZ) {
-        val subChunk = subChunk(posY >> 4);
+    @Override
+    public int lumi$getLightValueMax(int subChunkPosX, int posY, int subChunkPosZ) {
+        return 0;
+    }
 
-        if (subChunk == null) {
-            if (((Chunk)delegate).canBlockSeeTheSky(subChunkPosX, posY, subChunkPosZ))
-                return lightType.defaultLightValue;
-            return 0;
-        }
+    @Override
+    public void lumi$setLightValue(@NotNull LightType lightType,
+                                   int subChunkPosX,
+                                   int posY,
+                                   int subChunkPosZ,
+                                   int lightValue) {
 
-        if (lightType == EnumSkyBlock.Sky) {
-            if (world.worldRoot().hasSkyLight())
-                return subChunk.skyLight().get(subChunkPosX, posY & 15, subChunkPosZ);
-            return 0;
-        }
+    }
 
-        if (lightType == EnumSkyBlock.Block)
-            return subChunk.blockLight().get(subChunkPosX, posY & 15, subChunkPosZ);
-        return lightType.defaultLightValue;
+    @Override
+    public int lumi$getLightValue(@NotNull LightType lightType, int subChunkPosX, int posY, int subChunkPosZ) {
+        return 0;
+    }
+
+    @Override
+    public void lumi$setBlockLightValue(int subChunkPosX, int posY, int subChunkPosZ, int lightValue) {
+
+    }
+
+    @Override
+    public int lumi$getBlockLightValue(int subChunkPosX, int posY, int subChunkPosZ) {
+        return 0;
+    }
+
+    @Override
+    public void lumi$setSkyLightValue(int subChunkPosX, int posY, int subChunkPosZ, int lightValue) {
+
+    }
+
+    @Override
+    public int lumi$getSkyLightValue(int subChunkPosX, int posY, int subChunkPosZ) {
+        return 0;
+    }
+
+    @Override
+    public int lumi$getBlockBrightness(int subChunkPosX, int posY, int subChunkPosZ) {
+        return 0;
+    }
+
+    @Override
+    public int lumi$getBlockOpacity(int subChunkPosX, int posY, int subChunkPosZ) {
+        return 0;
+    }
+
+    @Override
+    public int lumi$getBlockBrightness(@NotNull Block block,
+                                       int blockMeta,
+                                       int subChunkPosX,
+                                       int posY,
+                                       int subChunkPosZ) {
+        return 0;
+    }
+
+    @Override
+    public int lumi$getBlockOpacity(@NotNull Block block,
+                                    int blockMeta,
+                                    int subChunkPosX,
+                                    int posY,
+                                    int subChunkPosZ) {
+        return 0;
+    }
+
+    @Override
+    public boolean lumi$canBlockSeeSky(int subChunkPosX, int posY, int subChunkPosZ) {
+        return false;
+    }
+
+    @Override
+    public void lumi$skyLightHeight(int subChunkPosX, int subChunkPosZ, int skyLightHeight) {
+
+    }
+
+    @Override
+    public int lumi$skyLightHeight(int subChunkPosX, int subChunkPosZ) {
+        return 0;
+    }
+
+    @Override
+    public void lumi$minSkyLightHeight(int minSkyLightPosY) {
+
+    }
+
+    @Override
+    public int lumi$minSkyLightHeight() {
+        return 0;
+    }
+
+    @Override
+    public void lumi$resetSkyLightHeightMap() {
+
+    }
+
+    @Override
+    public void lumi$isHeightOutdated(int subChunkPosX, int subChunkPosZ, boolean isHeightOutdated) {
+
+    }
+
+    @Override
+    public boolean lumi$isHeightOutdated(int subChunkPosX, int subChunkPosZ) {
+        return false;
+    }
+
+    @Override
+    public void lumi$resetOutdatedHeightFlags() {
+
+    }
+
+    @Override
+    public void lumi$isLightingInitialized(boolean lightingInitialized) {
+
+    }
+
+    @Override
+    public boolean lumi$isLightingInitialized() {
+        return false;
+    }
+
+    @Override
+    public void lumi$resetLighting() {
+
     }
 }
