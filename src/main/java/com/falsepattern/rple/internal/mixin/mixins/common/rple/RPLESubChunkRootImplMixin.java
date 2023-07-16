@@ -9,14 +9,17 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
 import com.falsepattern.lumina.api.chunk.LumiSubChunk;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.common.storage.RPLESubChunk;
-import com.falsepattern.rple.internal.common.storage.RPLESubChunkRoot;
+import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunk;
+import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunkRoot;
+import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunkWrapper;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@Unique
 @Mixin(ExtendedBlockStorage.class)
 public abstract class RPLESubChunkRootImplMixin implements LumiSubChunk, RPLESubChunkRoot {
     private RPLESubChunk rple$redChannel = null;
@@ -27,9 +30,9 @@ public abstract class RPLESubChunkRootImplMixin implements LumiSubChunk, RPLESub
             at = @At("RETURN"),
             require = 1)
     private void rpleSubChunkRootInit(int posY, boolean hasSky, CallbackInfo ci) {
-        this.rple$redChannel = new RPLESubChunk();
-        this.rple$greenChannel = new RPLESubChunk();
-        this.rple$blueChannel = new RPLESubChunk();
+        this.rple$redChannel = new RPLESubChunkWrapper();
+        this.rple$greenChannel = new RPLESubChunkWrapper();
+        this.rple$blueChannel = new RPLESubChunkWrapper();
     }
 
     @Override

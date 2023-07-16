@@ -9,14 +9,17 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.common.storage.RPLEWorld;
-import com.falsepattern.rple.internal.common.storage.RPLEWorldRoot;
+import com.falsepattern.rple.internal.common.storage.world.RPLEWorld;
+import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
+import com.falsepattern.rple.internal.common.storage.world.RPLEWorldWrapper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 
+@Unique
 @Mixin(World.class)
 public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld, RPLEWorldRoot {
     private RPLEWorld rple$redChannel = null;
@@ -27,9 +30,9 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
             at = @At("RETURN"),
             require = 2)
     private void rpleWorldInit() {
-        this.rple$redChannel = new RPLEWorld();
-        this.rple$greenChannel = new RPLEWorld();
-        this.rple$blueChannel = new RPLEWorld();
+        this.rple$redChannel = new RPLEWorldWrapper();
+        this.rple$greenChannel = new RPLEWorldWrapper();
+        this.rple$blueChannel = new RPLEWorldWrapper();
     }
 
     @Override

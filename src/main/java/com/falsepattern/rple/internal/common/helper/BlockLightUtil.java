@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
-import com.falsepattern.rple.internal.common.storage.RPLEWorldRoot;
+import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.ChunkCache;
@@ -48,6 +48,8 @@ public class BlockLightUtil {
         val red = 0;
         val green = 0;
         val blue = 0;
+
+        //getLightBrightnessForSkyBlocksWorld should be called getBrightnessForTessellator
 
         return CookieMonster.packedLongToCookie(BrightnessUtil.brightnessesToPackedLong(red, green, blue));
     }

@@ -9,13 +9,16 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
 import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.common.storage.RPLEChunk;
-import com.falsepattern.rple.internal.common.storage.RPLEChunkRoot;
+import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunk;
+import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunkRoot;
+import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunkWrapper;
 import net.minecraft.world.chunk.Chunk;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 
+@Unique
 @Mixin(Chunk.class)
 public abstract class RPLEChunkRootImplMixin implements LumiChunk, RPLEChunkRoot {
     private RPLEChunk redChannel = null;
@@ -26,9 +29,9 @@ public abstract class RPLEChunkRootImplMixin implements LumiChunk, RPLEChunkRoot
             at = @At("RETURN"),
             require = 1)
     private void rpleChunkRootInit() {
-        this.redChannel = new RPLEChunk();
-        this.greenChannel = new RPLEChunk();
-        this.blueChannel = new RPLEChunk();
+        this.redChannel = new RPLEChunkWrapper();
+        this.greenChannel = new RPLEChunkWrapper();
+        this.blueChannel = new RPLEChunkWrapper();
     }
 
     @Override

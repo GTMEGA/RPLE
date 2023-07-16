@@ -1,15 +1,30 @@
 /*
  * Copyright (c) 2023 FalsePattern, Ven
- * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
- * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+ * All Rights Reserved
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.falsepattern.rple.internal.common.storage;
+package com.falsepattern.rple.internal.common.storage.world;
 
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
-import com.falsepattern.lumina.api.world.LumiWorld;
+import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunkWrapper;
+import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunkWrapper;
 import lombok.experimental.Accessors;
 import net.minecraft.block.Block;
 import net.minecraft.world.chunk.Chunk;
@@ -19,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 
 @Accessors(fluent = true, chain = false)
-public final class RPLEWorld implements LumiWorld {
+public final class RPLEWorldWrapper implements RPLEWorld {
     @Override
     public @NotNull RPLEWorldRoot lumi$root() {
         return null;
@@ -31,22 +46,22 @@ public final class RPLEWorld implements LumiWorld {
     }
 
     @Override
-    public @NotNull RPLEChunk lumi$wrap(@NotNull Chunk chunkBase) {
+    public @NotNull RPLEChunkWrapper lumi$wrap(@NotNull Chunk chunkBase) {
         return null;
     }
 
     @Override
-    public @NotNull RPLESubChunk lumi$wrap(@NotNull ExtendedBlockStorage subChunkBase) {
+    public @NotNull RPLESubChunkWrapper lumi$wrap(@NotNull ExtendedBlockStorage subChunkBase) {
         return null;
     }
 
     @Override
-    public @Nullable RPLEChunk lumi$getChunkFromBlockPosIfExists(int posX, int posZ) {
+    public @Nullable RPLEChunkWrapper lumi$getChunkFromBlockPosIfExists(int posX, int posZ) {
         return null;
     }
 
     @Override
-    public @Nullable RPLEChunk lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ) {
+    public @Nullable RPLEChunkWrapper lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ) {
         return null;
     }
 
