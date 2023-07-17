@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.mixin.mixins.common.projredillum;
+package com.falsepattern.rple.internal.mixin.mixins.common.projectred;
 
 import mrtjp.projectred.illumination.TileLamp;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,20 +13,19 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Pseudo
-@Mixin(value = TileLamp.class,
-       remap = false)
+@Mixin(value = TileLamp.class, remap = false)
 public abstract class TileLampMixin {
-    @Shadow
-    public abstract boolean powered();
-
     @Shadow
     public abstract boolean inverted();
 
     @Shadow
-    public abstract int getColor();
+    public abstract boolean powered();
 
     @Shadow
     public abstract int getLightValue();
+
+    @Shadow
+    public abstract int getColor();
 
 // TODO: [PRE_RELEASE] Fluid translucency tweaks belong in FalseTweaks
 

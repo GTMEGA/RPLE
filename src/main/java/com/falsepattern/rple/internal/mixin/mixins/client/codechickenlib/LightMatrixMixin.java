@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.mixin.mixins.client.cclib;
+package com.falsepattern.rple.internal.mixin.mixins.client.codechickenlib;
 
 import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.lighting.LC;
@@ -16,8 +16,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(value = LightMatrix.class,
-       remap = false)
+@Mixin(value = LightMatrix.class, remap = false)
 public abstract class LightMatrixMixin {
 
     @Shadow public abstract float[] ao(int side);

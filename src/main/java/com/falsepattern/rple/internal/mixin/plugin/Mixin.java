@@ -16,60 +16,87 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.falsepattern.lib.mixin.IMixin.PredicateHelpers.*;
+import static com.falsepattern.lib.mixin.IMixin.Side.CLIENT;
+import static com.falsepattern.lib.mixin.IMixin.Side.COMMON;
 import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.*;
 
 @RequiredArgsConstructor
 public enum Mixin implements IMixin {
-    // @formatter:off
-    common_BlockMixin(Side.COMMON, always(), "BlockMixin"),
-    common_lumina_WorldMixin(Side.COMMON, always(), "lumina.WorldMixin"),
-    common_lumina_ChunkMixin(Side.COMMON, always(), "lumina.ChunkMixin"),
-    common_lumina_EBSMixin(Side.COMMON, always(), "lumina.EBSMixin"),
+    // region Colorization Hooks
+    common_BlockMixin(COMMON, always(), "BlockMixin"),
 
-    common_mrtjpcore_InstancedBlockMixin(Side.COMMON, require(MRTJPCORE), "mrtjpcore.InstancedBlockMixin"),
-    common_projredillum_TileLampMixin(Side.COMMON, require(PROJECTRED_ILLUMINATION).or(require(PROJECTRED_COMBINEDJAR)), "projredillum.TileLampMixin"),
+    client_BlockFluidMixin(CLIENT, always(), "BlockFluidMixin"),
+    client_BlockLiquidMixin(CLIENT, always(), "BlockLiquidMixin"),
+    client_BlockMixin(CLIENT, always(), "BlockMixin"),
+    client_ChunkCacheMixin(CLIENT, always(), "ChunkCacheMixin"),
+    client_EntityMixin(CLIENT, always(), "EntityMixin"),
+    client_EntityRendererMixin(CLIENT, always(), "EntityRendererMixin"),
+    client_OpenGLHelperMixin(CLIENT, always(), "OpenGLHelperMixin"),
+    client_RenderBlocksMixin(CLIENT, always(), "RenderBlocksMixin"),
+    client_TessellatorMixin(CLIENT, always(), "TessellatorMixin"),
+    client_WorldMixin(CLIENT, always(), "WorldMixin"),
 
-    common_ae2_BlockCableBusMixin(Side.COMMON, require(AE2), "ae2.BlockCableBusMixin"),
-    common_ae2_CableBusContainerMixin(Side.COMMON, require(AE2), "ae2.CableBusContainerMixin"),
+    client_Tessellator_NonOptiFineMixin(CLIENT, avoid(OPTIFINE), "Tessellator_NonOptiFineMixin"),
+    // endregion
 
-    client_BlockFluidMixin(Side.CLIENT, always(), "BlockFluidMixin"),
-    client_BlockLiquidMixin(Side.CLIENT, always(), "BlockLiquidMixin"),
-    client_BlockMixin(Side.CLIENT, always(), "BlockMixin"),
-    client_ChunkCacheMixin(Side.CLIENT, always(), "ChunkCacheMixin"),
-    client_EntityMixin(Side.CLIENT, always(), "EntityMixin"),
-    client_EntityRendererMixin(Side.CLIENT, always(), "EntityRendererMixin"),
-    client_OpenGLHelperMixin(Side.CLIENT, always(), "OpenGLHelperMixin"),
-    client_RenderBlocksMixin(Side.CLIENT, always(), "RenderBlocksMixin"),
-    client_TessellatorMixin(Side.CLIENT, always(), "TessellatorMixin"),
-    client_Tessellator_NonOptiFineMixin(Side.CLIENT, avoid(OPTIFINE), "Tessellator_NonOptiFineMixin"),
-    client_WorldMixin(Side.CLIENT, always(), "WorldMixin"),
+    // region Right Proper Lighting Engine Implementation
+    common_rple_WorldMixin(COMMON, always(), "rple.RPLEWorldRootImplMixin"),
+    common_rple_ChunkMixin(COMMON, always(), "rple.RPLEChunkRootImplMixin"),
+    common_rple_EBSMixin(COMMON, always(), "rple.RPLESubChunkRootImplMixin"),
+    // endregion
 
-    client_ShadersMixin(Side.CLIENT, require(OPTIFINE), "optifine.ShadersMixin"),
-    client_ShaderTessMixin(Side.CLIENT, require(OPTIFINE), "optifine.ShaderTessMixin"),
-    client_OptiFineTessellatorMixin(Side.CLIENT, require(OPTIFINE), "optifine.OptiFineTessellatorMixin"),
+    // region OptiFine Compatibility
+    client_optifine_ShadersMixin(CLIENT, require(OPTIFINE), "optifine.ShadersMixin"),
+    client_optifine_ShaderTessMixin(CLIENT, require(OPTIFINE), "optifine.ShaderTessMixin"),
+    client_optifine_OptiFineTessellatorMixin(CLIENT, require(OPTIFINE), "optifine.OptiFineTessellatorMixin"),
+    // endregion
 
-    client_RenderBlocksCTMMixin(Side.CLIENT, require(CHISEL), "chisel.RenderBlocksCTMMixin"),
-    client_RenderBlocksEldritchMixin(Side.CLIENT, require(CHISEL), "chisel.RenderBlocksEldritchMixin"),
+    // region Chisel Compatibility
+    client_chisel_RenderBlocksCTMMixin(CLIENT, require(CHISEL), "chisel.RenderBlocksCTMMixin"),
+    client_chisel_RenderBlocksEldritchMixin(CLIENT, require(CHISEL), "chisel.RenderBlocksEldritchMixin"),
+    // endregion
 
-    client_projredcore_RenderHaloMixin(Side.CLIENT, require(PROJECTRED_CORE).or(require(PROJECTRED_COMBINEDJAR)), "projredcore.RenderHaloMixin"),
+    // region Carpenter's Blocks Compatibility
+    client_carpentersblocks_LightingHelperMixin(CLIENT, require(CARPENTERS_BLOCKS), "carpentersblocks.LightingHelperMixin"),
+    // endregion
 
-    client_cclib_CCRenderStateMixin(Side.CLIENT, require(CCLIB), "cclib.CCRenderStateMixin"),
-    client_cclib_LightMatrixMixin(Side.CLIENT, require(CCLIB), "cclib.LightMatrixMixin"),
+    // region ArchitectureCraft Compatibility
+    client_architecturecraft_Vector3Mixin(CLIENT, require(ARCHITECTURE_CRAFT), "architecturecraft.Vector3Mixin"),
+    client_architecturecraft_BaseWorldRenderTargetMixin(CLIENT, require(ARCHITECTURE_CRAFT), "architecturecraft.BaseWorldRenderTargetMixin"),
+    // endregion
 
-    client_enderio_ConduitBundleRendererMixin(Side.CLIENT, require(ENDER_IO), "enderio.ConduitBundleRendererMixin"),
-    client_enderio_DefaultConduitRendererMixin(Side.CLIENT, require(ENDER_IO), "enderio.DefaultConduitRendererMixin"),
+    // region Project Red Compatibility
+    common_projectred_TileLampMixin(COMMON, projectRedLampsFilter(), "projectred.TileLampMixin"),
 
-    client_carpentersblocks_LightingHelperMixin(Side.CLIENT, require(CARPENTERS_BLOCKS), "carpentersblocks.LightingHelperMixin"),
+    client_projectred_RenderHaloMixin(CLIENT, projectRedLampsFilter(), "projectred.RenderHaloMixin"),
+    // endregion
 
-    client_architecturecraft_Vector3Mixin(Side.CLIENT, require(ARCHITECTURECRAFT), "architecturecraft.Vector3Mixin"),
-    client_architecturecraft_BaseWorldRenderTargetMixin(Side.CLIENT, require(ARCHITECTURECRAFT), "architecturecraft.BaseWorldRenderTargetMixin"),
+    // region Applied Energistics 2 Compatibility
+    common_appliedenergistics2_BlockCableBusMixin(COMMON, require(APPLIED_ENERGISTICS_2), "appliedenergistics2.BlockCableBusMixin"),
+    common_appliedenergistics2_CableBusContainerMixin(COMMON, require(APPLIED_ENERGISTICS_2), "appliedenergistics2.CableBusContainerMixin"),
 
-    client_ae2_RenderBlocksWorkaroundMixin(Side.CLIENT, require(AE2), "ae2.RenderBlocksWorkaroundMixin"),
+    client_appliedenergistics2_RenderBlocksWorkaroundMixin(CLIENT, require(APPLIED_ENERGISTICS_2), "ae2.RenderBlocksWorkaroundMixin"),
+    // endregion
 
-    client_storagedrawers_RenderUtilMixin(Side.CLIENT, require(STORAGE_DRAWERS), "storagedrawers.RenderUtilMixin"),
-    client_storagedrawers_RenderHelperAOMixin(Side.CLIENT, require(STORAGE_DRAWERS), "storagedrawers.RenderHelperAOMixin"),
+    // region Ender IO Compatibility
+    client_enderio_ConduitBundleRendererMixin(CLIENT, require(ENDER_IO), "enderio.ConduitBundleRendererMixin"),
+    client_enderio_DefaultConduitRendererMixin(CLIENT, require(ENDER_IO), "enderio.DefaultConduitRendererMixin"),
+    // endregion
+
+    // region Storage Drawers Compatibility
+    client_storagedrawers_RenderUtilMixin(CLIENT, require(STORAGE_DRAWERS), "storagedrawers.RenderUtilMixin"),
+    client_storagedrawers_RenderHelperAOMixin(CLIENT, require(STORAGE_DRAWERS), "storagedrawers.RenderHelperAOMixin"),
+    // endregion
+
+    // region CodeChickenLib Compatibility
+    client_codechickenlib_CCRenderStateMixin(CLIENT, require(CODE_CHICKEN_LIB), "codechickenlib.CCRenderStateMixin"),
+    client_codechickenlib_LightMatrixMixin(CLIENT, require(CODE_CHICKEN_LIB), "codechickenlib.LightMatrixMixin"),
+    // endregion
+
+    // region MrTJPCore Compatibility
+    common_mrtjpcore_InstancedBlockMixin(COMMON, require(MR_TJP_CORE), "mrtjpcore.InstancedBlockMixin"),
+    // endregion
     ;
-    // @formatter:on
 
     @Getter
     private final Side side;
@@ -77,5 +104,9 @@ public enum Mixin implements IMixin {
     private final Predicate<List<ITargetedMod>> filter;
     @Getter
     private final String mixin;
+
+    private static Predicate<List<ITargetedMod>> projectRedLampsFilter() {
+        return require(PROJECT_RED_COMBINED_JAR).or(require(PROJECT_RED_CORE).and(require(PROJECT_RED_ILLUMINATION)));
+    }
 }
 

@@ -13,25 +13,29 @@ def deobfCurse(curseDep) {
 }
 
 dependencies {
-    compileOnly("org.projectlombok:lombok:1.18.26") {
-        transitive = false
-    }
-    annotationProcessor("org.projectlombok:lombok:1.18.26")
+    // FalsePattern Lib
+    implementation("com.falsepattern:falsepatternlib-mc1.7.10:0.11.4:dev")
 
-    implementation("com.falsepattern:falsepatternlib-mc1.7.10:0.11.3:dev")
+    // LUMINA
+    implementation("com.falsepattern:lumina-mc1.7.10:73e4c0f:dev")
 
-    implementation("com.falsepattern:lumina-mc1.7.10:50d94d6:dev")
+    // FalseTweaks
+    implementation("com.falsepattern:falsetweaks-mc1.7.10:2.5.7:dev")
 
-    implementation("com.falsepattern:falsetweaks-mc1.7.10:2.5.2:dev")
-
-    implementation("com.falsepattern:chunkapi-mc1.7.10:0.3.0:dev")
-
+    // JetBrains Annotations
     compileOnly("org.jetbrains:annotations:24.0.1")
 
+    // Lombok
+    compileOnly("org.projectlombok:lombok:1.18.28")
+    annotationProcessor("org.projectlombok:lombok:1.18.28")
+
+    // OptiFine
     compileOnly(deobfMaven("https://mvn.falsepattern.com/stripped/", "optifine:shadersmod-stripped:1.7.10-hd_u7"))
 
+    // Chisel
     compileOnly("team.chisel:chisel-mc1.7.10:2.9.21-mega:dev")
 
+    // CodeChickenLib
     compileOnly("codechicken:codechickenlib-mc1.7.10:1.2.0-mega:dev")
 
     // MRTJPCore 1.1.0.33-universal

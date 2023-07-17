@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.mixin.mixins.common.ae2;
+package com.falsepattern.rple.internal.mixin.mixins.common.appliedenergistics2;
 
 import appeng.api.util.AEColor;
 import appeng.helpers.AEMultiTile;

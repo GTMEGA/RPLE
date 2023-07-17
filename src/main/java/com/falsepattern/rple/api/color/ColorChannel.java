@@ -12,6 +12,12 @@ import com.falsepattern.rple.api.RPLEColorAPI;
 public enum ColorChannel {
     RED_CHANNEL, GREEN_CHANNEL, BLUE_CHANNEL;
 
+    private final String name;
+
+    ColorChannel() {
+        this.name = name().split("_")[0].toLowerCase();
+    }
+
     public int componentFromColor(RPLEColor color) {
         final int component;
         switch (this) {
@@ -27,5 +33,11 @@ public enum ColorChannel {
                 break;
         }
         return RPLEColorAPI.clampColorComponent(component);
+    }
+
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

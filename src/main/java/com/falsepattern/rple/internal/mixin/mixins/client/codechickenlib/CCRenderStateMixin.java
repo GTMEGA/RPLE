@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.mixin.mixins.client.cclib;
+package com.falsepattern.rple.internal.mixin.mixins.client.codechickenlib;
 
 import codechicken.lib.render.CCRenderState;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
@@ -14,15 +14,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(value = CCRenderState.class,
-       remap = false)
+@Mixin(value = CCRenderState.class, remap = false)
 public abstract class CCRenderStateMixin {
+    @Shadow
+    public static int brightness;
 
-    @Shadow public static void setBrightness(int b) {
-
+    @Shadow
+    public static void setBrightness(int b) {
     }
-
-    @Shadow public static int brightness;
 
     /**
      * @author FalsePattern

@@ -18,18 +18,18 @@ import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.startsWit
 
 @RequiredArgsConstructor
 public enum TargetedMod implements ITargetedMod {
-    AE2("Applied Energistics 2", false, startsWith("appliedenergistics2-")),
-    ARCHITECTURECRAFT("ArchitectureCraft", false, startsWith("architecturecraft-")),
     OPTIFINE("OptiFine", false, startsWith("optifine")),
     CHISEL("Chisel", false, startsWith("chisel")),
-    CCLIB("CodeChickenLib", false, startsWith("codechickenlib")),
-    PROJECTRED_CORE("ProjectRed Core", false, startsWith("projectred").and(contains("base"))),
-    PROJECTRED_ILLUMINATION("ProjectRed Illumination", false, startsWith("projectred").and(contains("lighting"))),
-    PROJECTRED_COMBINEDJAR("ProjectRed Combined Jar", false, ((Predicate<String>) (str) -> str.matches("projectred-\\d+\\.\\d+\\.\\d+")).or((str) -> str.matches("projectred-\\d+\\.\\d+\\.\\d+pre\\d+\\.\\d+"))),
-    MRTJPCORE("MRTJPCore", false, startsWith("mrtjpcore")),
+    CARPENTERS_BLOCKS("Carpenter's Blocks", false, str -> str.matches("carpenter'?s( |-|_|%20)?blocks.*")),
+    ARCHITECTURE_CRAFT("ArchitectureCraft", false, startsWith("architecturecraft-")),
+    PROJECT_RED_CORE("ProjectRed Core", false, startsWith("projectred").and(contains("base"))),
+    PROJECT_RED_ILLUMINATION("ProjectRed Illumination", false, startsWith("projectred").and(contains("lighting"))),
+    PROJECT_RED_COMBINED_JAR("ProjectRed Combined Jar", false, projectRedCombinedJarCondition()),
+    APPLIED_ENERGISTICS_2("Applied Energistics 2", false, startsWith("appliedenergistics2-")),
     ENDER_IO("Ender IO", false, startsWith("enderio")),
-    CARPENTERS_BLOCKS("Carpenter's Blocks", false, (str) -> str.matches("carpenter'?s( |-|_|%20)?blocks.*")),
     STORAGE_DRAWERS("Storage Drawers", false, startsWith("storagedrawers-")),
+    CODE_CHICKEN_LIB("CodeChickenLib", false, startsWith("codechickenlib")),
+    MR_TJP_CORE("MrTJPCore", false, startsWith("mrtjpcore")),
     ;
 
     @Getter
@@ -38,4 +38,9 @@ public enum TargetedMod implements ITargetedMod {
     private final boolean loadInDevelopment;
     @Getter
     private final Predicate<String> condition;
+
+    private static Predicate<String> projectRedCombinedJarCondition() {
+        return ((Predicate<String>) str -> str.matches("projectred-\\d+\\.\\d+\\.\\d+"))
+                .or(str -> str.matches("projectred-\\d+\\.\\d+\\.\\d+pre\\d+\\.\\d+"));
+    }
 }

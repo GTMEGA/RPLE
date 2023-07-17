@@ -22,6 +22,8 @@
 package com.falsepattern.rple.internal.common.storage.world;
 
 import com.falsepattern.lumina.api.world.LumiWorld;
+import com.falsepattern.rple.api.color.ColorChannel;
 
 public interface RPLEWorld extends LumiWorld {
+    ColorChannel rple$channel();
 }

@@ -21,9 +21,9 @@
 
 package com.falsepattern.rple.internal.common.storage.world;
 
+import com.falsepattern.lumina.api.LumiAPI;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
-import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.block.ColoredLightBlock;
 import com.falsepattern.rple.api.block.ColoredTranslucentBlock;
 import com.falsepattern.rple.api.color.ColorChannel;
@@ -34,6 +34,7 @@ import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunk;
 import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunkRoot;
 import lombok.val;
 import net.minecraft.block.Block;
+import net.minecraft.profiler.Profiler;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -44,20 +45,19 @@ import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
 import static com.falsepattern.rple.api.RPLEColorAPI.invertColorComponent;
 
-
-public final class RPLEWorldWrapper implements RPLEWorld {
+public final class RPLEWorldContainer implements RPLEWorld {
     private final ColorChannel channel;
     private final String worldID;
     private final World worldBase;
     private final RPLEWorldRoot worldRoot;
     private final LumiLightingEngine lightingEngine;
 
-    public RPLEWorldWrapper(ColorChannel channel, World worldBase, RPLEWorldRoot worldRoot, LumiWorld lumiWorld) {
+    public RPLEWorldContainer(ColorChannel channel, World worldBase, RPLEWorldRoot worldRoot, Profiler profiler) {
         this.channel = channel;
         this.worldID = Tags.MOD_ID + "_" + channel;
         this.worldBase = worldBase;
         this.worldRoot = worldRoot;
-        this.lightingEngine = lumiWorld.lumi$lightingEngine();
+        this.lightingEngine = LumiAPI.provideLightingEngine(this, profiler);
     }
 
     @Override
@@ -249,7 +249,6 @@ public final class RPLEWorldWrapper implements RPLEWorld {
     }
 
     @Override
-    @SuppressWarnings("CastToIncompatibleInterface")
     public int lumi$getBlockOpacity(@NotNull Block blockBase, int blockMeta, int posX, int posY, int posZ) {
         val block = (ColoredTranslucentBlock) blockBase;
         val translucency = block.getColoredTranslucency(worldBase, blockMeta, posX, posY, posZ);
