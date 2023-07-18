@@ -34,15 +34,29 @@ import static com.falsepattern.rple.api.RPLEColorAPI.invertColorComponent;
 public final class RPLEWorldContainer implements RPLEWorld {
     private final ColorChannel channel;
     private final String worldID;
-    private final World worldBase;
-    private final RPLEWorldRoot worldRoot;
+    private final World base;
+    private final RPLEWorldRoot root;
+
     private final LumiLightingEngine lightingEngine;
 
-    public RPLEWorldContainer(ColorChannel channel, World worldBase, RPLEWorldRoot worldRoot, Profiler profiler) {
+    public RPLEWorldContainer(ColorChannel channel,
+                              World base,
+                              RPLEWorldRoot root,
+                              LumiLightingEngine lightingEngine) {
         this.channel = channel;
-        this.worldID = Tags.MOD_ID + "_" + channel;
-        this.worldBase = worldBase;
-        this.worldRoot = worldRoot;
+        this.worldID = Tags.MOD_ID + "_" + channel + "_world";
+        this.base = base;
+        this.root = root;
+
+        this.lightingEngine = lightingEngine;
+    }
+
+    public RPLEWorldContainer(ColorChannel channel, World base, RPLEWorldRoot root, Profiler profiler) {
+        this.channel = channel;
+        this.worldID = Tags.MOD_ID + "_" + channel + "_world";
+        this.base = base;
+        this.root = root;
+
         this.lightingEngine = LumiAPI.provideLightingEngine(this, profiler);
     }
 
@@ -53,7 +67,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
 
     @Override
     public @NotNull RPLEWorldRoot lumi$root() {
-        return worldRoot;
+        return root;
     }
 
     @Override
@@ -78,7 +92,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     @Override
     @SuppressWarnings("InstanceofIncompatibleInterface")
     public @Nullable RPLEChunk lumi$getChunkFromBlockPosIfExists(int posX, int posZ) {
-        val chunkBase = worldBase.getChunkFromBlockCoords(posX, posZ);
+        val chunkBase = base.getChunkFromBlockCoords(posX, posZ);
         if (!(chunkBase instanceof RPLEChunkRoot))
             return null;
         val chunkRoot = (RPLEChunkRoot) chunkBase;
@@ -88,7 +102,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     @Override
     @SuppressWarnings("InstanceofIncompatibleInterface")
     public @Nullable RPLEChunk lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ) {
-        val chunkBase = worldBase.getChunkFromChunkCoords(chunkPosX, chunkPosZ);
+        val chunkBase = base.getChunkFromChunkCoords(chunkPosX, chunkPosZ);
         if (!(chunkBase instanceof RPLEChunkRoot))
             return null;
         val chunkRoot = (RPLEChunkRoot) chunkBase;
@@ -217,27 +231,27 @@ public final class RPLEWorldContainer implements RPLEWorld {
 
     @Override
     public int lumi$getBlockBrightness(int posX, int posY, int posZ) {
-        val block = worldRoot.lumi$getBlock(posX, posY, posZ);
-        return block.getLightValue(worldBase, posX, posY, posZ);
+        val block = root.lumi$getBlock(posX, posY, posZ);
+        return block.getLightValue(base, posX, posY, posZ);
     }
 
     @Override
     public int lumi$getBlockOpacity(int posX, int posY, int posZ) {
-        val block = worldRoot.lumi$getBlock(posX, posY, posZ);
-        return block.getLightOpacity(worldBase, posX, posY, posZ);
+        val block = root.lumi$getBlock(posX, posY, posZ);
+        return block.getLightOpacity(base, posX, posY, posZ);
     }
 
     @Override
     public int lumi$getBlockBrightness(@NotNull Block blockBase, int blockMeta, int posX, int posY, int posZ) {
         val block = (ColoredLightBlock) blockBase;
-        val brightness = block.getColoredBrightness(worldBase, blockMeta, posX, posY, posZ);
+        val brightness = block.getColoredBrightness(base, blockMeta, posX, posY, posZ);
         return channel.componentFromColor(brightness);
     }
 
     @Override
     public int lumi$getBlockOpacity(@NotNull Block blockBase, int blockMeta, int posX, int posY, int posZ) {
         val block = (ColoredTranslucentBlock) blockBase;
-        val translucency = block.getColoredTranslucency(worldBase, blockMeta, posX, posY, posZ);
+        val translucency = block.getColoredTranslucency(base, blockMeta, posX, posY, posZ);
         return invertColorComponent(channel.componentFromColor(translucency));
     }
 }

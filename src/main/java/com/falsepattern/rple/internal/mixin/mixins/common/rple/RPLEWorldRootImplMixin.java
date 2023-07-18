@@ -12,7 +12,6 @@ import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.common.storage.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.storage.world.RPLEWorldContainer;
 import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
-import com.falsepattern.rple.internal.common.storage.world.RPLEWorldWrapper;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -42,8 +41,8 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
             remap = false,
             require = 1)
     @Dynamic(LUMI_WORLD_BASE_INIT_MIXIN_VALUE)
-    private void lumiWorldInit(CallbackInfo ci) {
-        this.rple$redChannel = new RPLEWorldWrapper(RED_CHANNEL, thiz(), this, this);
+    private void rpleWorldInit(CallbackInfo ci) {
+        this.rple$redChannel = new RPLEWorldContainer(RED_CHANNEL, thiz(), this, lumi$lightingEngine());
         this.rple$greenChannel = new RPLEWorldContainer(GREEN_CHANNEL, thiz(), this, theProfiler);
         this.rple$blueChannel = new RPLEWorldContainer(BLUE_CHANNEL, thiz(), this, theProfiler);
     }

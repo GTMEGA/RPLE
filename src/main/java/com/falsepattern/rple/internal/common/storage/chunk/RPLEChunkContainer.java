@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 
-public final class RPLEChunkWrapper implements RPLEChunk {
+public final class RPLEChunkContainer implements RPLEChunk {
     @Override
     public @NotNull RPLEChunkRoot lumi$root() {
         return null;
