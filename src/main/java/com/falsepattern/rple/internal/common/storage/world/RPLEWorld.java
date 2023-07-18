@@ -9,7 +9,28 @@ package com.falsepattern.rple.internal.common.storage.world;
 
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.color.ColorChannel;
+import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunk;
+import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunk;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface RPLEWorld extends LumiWorld {
     ColorChannel rple$channel();
+
+    @Override
+    @NotNull RPLEWorldRoot lumi$root();
+
+    @Override
+    @NotNull RPLEChunk lumi$wrap(@NotNull Chunk chunkBase);
+
+    @Override
+    @NotNull RPLESubChunk lumi$wrap(@NotNull ExtendedBlockStorage subChunkBase);
+
+    @Override
+    @Nullable RPLEChunk lumi$getChunkFromBlockPosIfExists(int posX, int posZ);
+
+    @Override
+    @Nullable RPLEChunk lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ);
 }
