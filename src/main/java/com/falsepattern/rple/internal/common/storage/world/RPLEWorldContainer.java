@@ -14,22 +14,26 @@ import com.falsepattern.rple.api.block.ColoredLightBlock;
 import com.falsepattern.rple.api.block.ColoredTranslucentBlock;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
+import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunk;
 import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunkRoot;
 import lombok.val;
+import lombok.var;
 import net.minecraft.block.Block;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
 import static com.falsepattern.rple.api.RPLEColorAPI.invertColorComponent;
+import static net.minecraftforge.common.util.ForgeDirection.*;
 
 public final class RPLEWorldContainer implements RPLEWorld {
     private final ColorChannel channel;
@@ -241,5 +245,47 @@ public final class RPLEWorldContainer implements RPLEWorld {
         val block = (ColoredTranslucentBlock) blockBase;
         val translucency = block.getColoredTranslucency(base, blockMeta, posX, posY, posZ);
         return invertColorComponent(channel.componentFromColor(translucency));
+    }
+
+    @Override
+    public int getBrightnessForTessellator(int posX, int posY, int posZ, int minBlockLightValue) {
+        var blockLightValue = getLightValueForRender(BLOCK_LIGHT_TYPE, posX, posY, posZ);
+        blockLightValue = Math.max(blockLightValue, minBlockLightValue);
+        val skyLightValue = getLightValueForRender(SKY_LIGHT_TYPE, posX, posY, posZ);
+        return BrightnessUtil.lightLevelsToBrightnessForTessellator(blockLightValue, skyLightValue);
+    }
+
+    private int getLightValueForRender(LightType lightType, int posX, int posY, int posZ) {
+        if (lightType == SKY_LIGHT_TYPE && !root.lumi$hasSky())
+            return 0;
+
+        if (posY < 0) {
+            posY = 0;
+        } else if (posY > 255) {
+            return lightType.defaultLightValue();
+        }
+        if (posX < -30000000 || posX >= 30000000)
+            return lightType.defaultLightValue();
+        if (posZ < -30000000 || posZ >= 30000000)
+            return lightType.defaultLightValue();
+
+        val block = root.lumi$getBlock(posX, posY, posZ);
+        if (block.getUseNeighborBrightness()) {
+            var lightValue = 0;
+            lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, UP));
+            lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, NORTH));
+            lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, SOUTH));
+            lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, WEST));
+            lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, EAST));
+            return lightValue;
+        }
+        return lumi$getBrightnessAndLightValueMax(lightType, posX, posY, posZ);
+    }
+
+    private int getNeighborLightValue(LightType lightType, int posX, int posY, int posZ, ForgeDirection direction) {
+        posX += direction.offsetX;
+        posY += direction.offsetY;
+        posZ += direction.offsetZ;
+        return lumi$getBrightnessAndLightValueMax(lightType, posX, posY, posZ);
     }
 }

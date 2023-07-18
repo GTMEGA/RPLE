@@ -38,7 +38,7 @@ public class CookieMonster {
     private static final int ZERO_MASK = ~(PARITY_BIT | INDEX_MASK | COOKIE_BIT);
 
     private static final long BROKEN_WARN_COLOR = BrightnessUtil.brightnessesToPackedLong(
-            BrightnessUtil.lightLevelsToBrightness(0xF, 0xF), 0, 0);
+            BrightnessUtil.lightLevelsToBrightnessForTessellator(0xF, 0xF), 0, 0);
 
     private static final CircularBuffer lightValues = new CircularBuffer(NUM_INDICES);
     private static final AtomicBoolean warnedBefore = new AtomicBoolean(false);

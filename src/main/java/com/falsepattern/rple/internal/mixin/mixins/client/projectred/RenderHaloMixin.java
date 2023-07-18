@@ -30,7 +30,7 @@ public abstract class RenderHaloMixin {
     private void prepareFixColor(CallbackInfo ci) {
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glColor4f(1, 1, 1, 1);
-        OpenGlHelperPacked.setLightMapTextureCoordsPacked(BrightnessUtil.monochromeBrightnessToPackedLong(BrightnessUtil.lightLevelsToBrightness(15, 15)));
+        OpenGlHelperPacked.setLightMapTextureCoordsPacked(BrightnessUtil.monochromeBrightnessToPackedLong(BrightnessUtil.lightLevelsToBrightnessForTessellator(15, 15)));
         oldTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         CCRenderState.changeTexture(glowTex == null ? glowTex = new ResourceLocation(Tags.MOD_ID, "textures/blocks/glow_solid.png") : glowTex);
     }

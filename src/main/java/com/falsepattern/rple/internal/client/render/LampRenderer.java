@@ -62,7 +62,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
             val r = 0;
             val g = 0;
             val b = 0;
-            tessellator.setBrightness(BrightnessUtil.lightLevelsToBrightness(15, 15));
+            tessellator.setBrightness(BrightnessUtil.lightLevelsToBrightnessForTessellator(15, 15));
             tessellator.setColorRGBA(r, g, b, 128);
             drawGlowCube(tessellator, 0, 0, 0, NULL, lamp.getGlowIcon());
         }
@@ -113,7 +113,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         val g = 0;
         val b = 0;
 
-        tessellator.setBrightness(BrightnessUtil.lightLevelsToBrightness(15, 15));
+        tessellator.setBrightness(BrightnessUtil.lightLevelsToBrightnessForTessellator(15, 15));
         tessellator.setColorOpaque(r, g, b);
         drawGlowCube(tessellator, x, y, z, neighbors, lamp.getGlowIcon());
         return true;

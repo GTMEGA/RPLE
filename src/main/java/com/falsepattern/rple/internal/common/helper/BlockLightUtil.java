@@ -7,9 +7,12 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
+import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.block.Block;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 import static com.falsepattern.rple.api.RPLEBlockAPI.getColoredBrightnessSafe;
 import static com.falsepattern.rple.api.color.ColorChannel.*;
@@ -23,30 +26,23 @@ public class BlockLightUtil {
      */
     public static int getRGBBrightnessAt(IBlockAccess world, int posX, int posY, int posZ, int minBlockLight) {
         val packedMinBrightness = CookieMonster.cookieToPackedLong(minBlockLight);
-        val minRedBrightness = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessRed(packedMinBrightness));
-        val minGreenBrightness = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessGreen(packedMinBrightness));
-        val minBlueBrightness = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessBlue(packedMinBrightness));
+        val minRedBlockLightValue = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessRed(packedMinBrightness));
+        val minGreenBlockLightValue = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessGreen(packedMinBrightness));
+        val minBlueBlockLightValue = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessBlue(packedMinBrightness));
 
-//        final RPLEWorldRoot rpleWorldRoot;
-//        if (world instanceof World) {
-//            rpleWorldRoot = (RPLEWorldRoot) world;
-//        } else {
-//            rpleWorldRoot = (RPLEWorldRoot) (((ChunkCache) world).worldObj);
-//        }
+        final RPLEWorldRoot rpleWorldRoot;
+        if (world instanceof World) {
+            rpleWorldRoot = (RPLEWorldRoot) world;
+        } else {
+            rpleWorldRoot = (RPLEWorldRoot) (((ChunkCache) world).worldObj);
+        }
 
-//        val red = rpleWorldRoot.rple$world(RED_CHANNEL)
-//                               .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minRedBrightness);
-//        val green = rpleWorldRoot.rple$world(ColorChannel.GREEN_CHANNEL)
-//                                 .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minGreenBrightness);
-//        val blue = rpleWorldRoot.rple$world(BLUE_CHANNEL)
-//                                .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minBlueBrightness);
-
-        //TODO: important, disabled for now
-        val red = 0;
-        val green = 0;
-        val blue = 0;
-
-        //getLightBrightnessForSkyBlocksWorld should be called getBrightnessForTessellator
+        val red = rpleWorldRoot.rple$world(RED_CHANNEL)
+                               .getBrightnessForTessellator(posX, posY, posZ, minRedBlockLightValue);
+        val green = rpleWorldRoot.rple$world(GREEN_CHANNEL)
+                                 .getBrightnessForTessellator(posX, posY, posZ, minGreenBlockLightValue);
+        val blue = rpleWorldRoot.rple$world(BLUE_CHANNEL)
+                                .getBrightnessForTessellator(posX, posY, posZ, minBlueBlockLightValue);
 
         return CookieMonster.packedLongToCookie(BrightnessUtil.brightnessesToPackedLong(red, green, blue));
     }
@@ -75,9 +71,9 @@ public class BlockLightUtil {
     }
 
     public static int createCompactRGBLightValue(int r, int g, int b) {
-        val R = BrightnessUtil.lightLevelsToBrightness(r, 0);
-        val G = BrightnessUtil.lightLevelsToBrightness(g, 0);
-        val B = BrightnessUtil.lightLevelsToBrightness(b, 0);
+        val R = BrightnessUtil.lightLevelsToBrightnessForTessellator(r, 0);
+        val G = BrightnessUtil.lightLevelsToBrightnessForTessellator(g, 0);
+        val B = BrightnessUtil.lightLevelsToBrightnessForTessellator(b, 0);
         val packed = BrightnessUtil.brightnessesToPackedLong(R, G, B);
         return CookieMonster.packedLongToCookie(packed);
     }

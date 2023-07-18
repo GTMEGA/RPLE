@@ -18,8 +18,8 @@ public class BrightnessUtil {
     //Shared with CookieMonster.
     static final int BRIGHTNESS_MASK = BLOCKLIGHT_MASK | SKYLIGHT_MASK;
 
-    private static final int BLOCKLIGHT_BRIGHTNESS_OFFSET = 4;
-    private static final int SKYLIGHT_BRIGHTNESS_OFFSET = 20;
+    private static final int BLOCK_LIGHT_BRIGHTNESS_OFFSET = 4;
+    private static final int SKY_LIGHT_BRIGHTNESS_OFFSET = 20;
 
     private static final int BLOCKLIGHT_BRIGHTNESS_OFFSET_RENDER = 0;
     private static final int SKYLIGHT_BRIGHTNESS_OFFSET_RENDER = 16;
@@ -37,22 +37,23 @@ public class BrightnessUtil {
     /**
      * Packs two 0-15 values into a vanilla-style brightness value.
      */
-    public static int lightLevelsToBrightness(int block, int sky) {
-        return (sky & 0xF) << SKYLIGHT_BRIGHTNESS_OFFSET | (block & 0xF) << BLOCKLIGHT_BRIGHTNESS_OFFSET;
+    public static int lightLevelsToBrightnessForTessellator(int blockLightValue, int skyLightValue) {
+        return (blockLightValue & 0xF) << BLOCK_LIGHT_BRIGHTNESS_OFFSET |
+               (skyLightValue & 0xF) << SKY_LIGHT_BRIGHTNESS_OFFSET;
     }
 
     /**
      * The 0-15 light level inside the packed brightness.
      */
     public static int getBlocklightFromBrightness(int brightness) {
-        return (brightness & BLOCKLIGHT_MASK) >>> BLOCKLIGHT_BRIGHTNESS_OFFSET;
+        return (brightness & BLOCKLIGHT_MASK) >>> BLOCK_LIGHT_BRIGHTNESS_OFFSET;
     }
 
     /**
      * The 0-15 light level inside the packed brightness.
      */
     public static int getSkylightFromBrightness(int brightness) {
-        return (brightness & SKYLIGHT_MASK) >>> SKYLIGHT_BRIGHTNESS_OFFSET;
+        return (brightness & SKYLIGHT_MASK) >>> SKY_LIGHT_BRIGHTNESS_OFFSET;
     }
 
     /**

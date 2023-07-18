@@ -33,4 +33,6 @@ public interface RPLEWorld extends LumiWorld {
 
     @Override
     @Nullable RPLEChunk lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ);
+
+    int getBrightnessForTessellator(int posX, int posY, int posZ, int minBlueBrightness);
 }
