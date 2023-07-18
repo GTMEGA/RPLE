@@ -7,12 +7,9 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
-import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.block.Block;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import static com.falsepattern.rple.api.RPLEBlockAPI.getColoredBrightnessSafe;
 import static com.falsepattern.rple.api.color.ColorChannel.*;
@@ -30,12 +27,12 @@ public class BlockLightUtil {
         val minGreenBrightness = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessGreen(packedMinBrightness));
         val minBlueBrightness = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessBlue(packedMinBrightness));
 
-        final RPLEWorldRoot rpleWorldRoot;
-        if (world instanceof World) {
-            rpleWorldRoot = (RPLEWorldRoot) world;
-        } else {
-            rpleWorldRoot = (RPLEWorldRoot) (((ChunkCache) world).worldObj);
-        }
+//        final RPLEWorldRoot rpleWorldRoot;
+//        if (world instanceof World) {
+//            rpleWorldRoot = (RPLEWorldRoot) world;
+//        } else {
+//            rpleWorldRoot = (RPLEWorldRoot) (((ChunkCache) world).worldObj);
+//        }
 
 //        val red = rpleWorldRoot.rple$world(RED_CHANNEL)
 //                               .getLightBrightnessForSkyBlocksWorld(world, posX, posY, posZ, minRedBrightness);

@@ -39,18 +39,6 @@ public final class RPLEWorldContainer implements RPLEWorld {
 
     private final LumiLightingEngine lightingEngine;
 
-    public RPLEWorldContainer(ColorChannel channel,
-                              World base,
-                              RPLEWorldRoot root,
-                              LumiLightingEngine lightingEngine) {
-        this.channel = channel;
-        this.worldID = Tags.MOD_ID + "_" + channel + "_world";
-        this.base = base;
-        this.root = root;
-
-        this.lightingEngine = lightingEngine;
-    }
-
     public RPLEWorldContainer(ColorChannel channel, World base, RPLEWorldRoot root, Profiler profiler) {
         this.channel = channel;
         this.worldID = Tags.MOD_ID + "_" + channel + "_world";

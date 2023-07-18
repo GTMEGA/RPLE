@@ -17,7 +17,7 @@ dependencies {
     implementation("com.falsepattern:falsepatternlib-mc1.7.10:0.11.4:dev")
 
     // LUMINA
-    implementation("com.falsepattern:lumina-mc1.7.10:070a73a:dev")
+    implementation("com.falsepattern:lumina-mc1.7.10:d85d1b1:dev")
 
     // FalseTweaks
     implementation("com.falsepattern:falsetweaks-mc1.7.10:2.5.7:dev")

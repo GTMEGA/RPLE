@@ -7,6 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
+import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.common.storage.world.RPLEWorld;
@@ -15,6 +16,7 @@ import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,6 +34,9 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
     @Shadow
     public Profiler theProfiler;
 
+    @Nullable
+    private LumiLightingEngine lumi$lightingEngine;
+
     private RPLEWorld rple$redChannel;
     private RPLEWorld rple$greenChannel;
     private RPLEWorld rple$blueChannel;
@@ -42,7 +47,9 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
             require = 1)
     @Dynamic(LUMI_WORLD_BASE_INIT_MIXIN_VALUE)
     private void rpleWorldInit(CallbackInfo ci) {
-        this.rple$redChannel = new RPLEWorldContainer(RED_CHANNEL, thiz(), this, lumi$lightingEngine());
+        this.lumi$lightingEngine = null;
+
+        this.rple$redChannel = new RPLEWorldContainer(RED_CHANNEL, thiz(), this, theProfiler);
         this.rple$greenChannel = new RPLEWorldContainer(GREEN_CHANNEL, thiz(), this, theProfiler);
         this.rple$blueChannel = new RPLEWorldContainer(BLUE_CHANNEL, thiz(), this, theProfiler);
     }
