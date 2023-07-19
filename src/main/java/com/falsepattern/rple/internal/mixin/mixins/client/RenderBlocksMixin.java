@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.common.helper.BlockLightUtil;
+import com.falsepattern.rple.api.RPLERenderAPI;
 import com.falsepattern.rple.internal.common.helper.CookieWrappers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -78,7 +78,7 @@ public abstract class RenderBlocksMixin {
               remap = false,
               require = 3)
     private int grabDefaultLight(Block block, IBlockAccess world, int posX, int posY, int posZ) {
-        return BlockLightUtil.getCompactRGBLightValue(world, block, meta, posX, posY, posZ);
+        return RPLERenderAPI.getBlockBrightnessForTessellator(world, block, meta, posX, posY, posZ);
     }
 
     /**

@@ -7,7 +7,6 @@
 
 package com.falsepattern.rple.api;
 
-import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
 import lombok.experimental.UtilityClass;
@@ -18,30 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 @UtilityClass
 public final class RPLEWorldAPI {
-    public static int getRGBBrightnessForTessellator(IBlockAccess world, int posX, int posY, int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
-        if (worldRoot == null)
-            return 0;
-
-        return 0;
-    }
-
-    public static int getRGBBrightnessForTessellator(IBlockAccess world,
-                                                     LightType lightType,
-                                                     int posX,
-                                                     int posY,
-                                                     int posZ) {
-        return 0;
-    }
-
-    public static int getMaxBrightnessForTessellator() {
-        return 0;
-    }
-
-    public static int getBrightnessForTessellator(ColorChannel channel) {
-        return 0;
-    }
-
     public static int getMaxBrightness() {
         return 0;
     }

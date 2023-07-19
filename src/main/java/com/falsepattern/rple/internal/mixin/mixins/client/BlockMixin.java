@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.common.helper.BlockLightUtil;
+import com.falsepattern.rple.api.RPLERenderAPI;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.var;
@@ -29,7 +29,7 @@ public abstract class BlockMixin {
         var block = world.getBlock(posX, posY, posZ);
         var blockMeta = world.getBlockMetadata(posX, posY, posZ);
 
-        var compactRGBLightValue = BlockLightUtil.getCompactRGBLightValue(world, block, blockMeta, posX, posY, posZ);
+        var compactRGBLightValue = RPLERenderAPI.getBlockBrightnessForTessellator(world, block, blockMeta, posX, posY, posZ);
         var brightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, compactRGBLightValue);
 
         if (brightness == 0 && block instanceof BlockSlab) {
@@ -38,7 +38,7 @@ public abstract class BlockMixin {
             block = world.getBlock(posX, posY, posZ);
             blockMeta = world.getBlockMetadata(posX, posY, posZ);
 
-            compactRGBLightValue = BlockLightUtil.getCompactRGBLightValue(world, block, blockMeta, posX, posY, posZ);
+            compactRGBLightValue = RPLERenderAPI.getBlockBrightnessForTessellator(world, block, blockMeta, posX, posY, posZ);
             brightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, compactRGBLightValue);
         }
 
