@@ -57,13 +57,15 @@ public final class RPLERenderAPI {
                 .rple$getChannelBrightnessForTessellator(GREEN_CHANNEL, posX, posY, posZ, minGreenBlockLight);
         val blueBrightness = worldRoot
                 .rple$getChannelBrightnessForTessellator(BLUE_CHANNEL, posX, posY, posZ, minBlueBlockLight);
-        val packedBrightness = BrightnessUtil.brightnessesToPackedLong(redBrightness, greenBrightness, blueBrightness);
+        val packedBrightness = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
+                                                                                                greenBrightness,
+                                                                                                blueBrightness);
         return CookieMonster.packedLongToCookie(packedBrightness);
     }
 
     public static int getChannelLightValueForTessellator(@NotNull IBlockAccess world,
                                                          @NotNull ColorChannel channel,
-                                                         LightType lightType,
+                                                         @NotNull LightType lightType,
                                                          int posX,
                                                          int posY,
                                                          int posZ) {
@@ -163,7 +165,9 @@ public final class RPLERenderAPI {
         val redBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(redBlockLight, redSkyLight);
         val greenBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(greenBlockLight, greenSkyLight);
         val blueBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(blueBlockLight, blueSkyLight);
-        val packedBrightness = BrightnessUtil.brightnessesToPackedLong(redBrightness, greenBrightness, blueBrightness);
+        val packedBrightness = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
+                                                                                                greenBrightness,
+                                                                                                blueBrightness);
         return CookieMonster.packedLongToCookie(packedBrightness);
     }
 

@@ -8,6 +8,7 @@
 package com.falsepattern.rple.internal.common.helper;
 
 import com.falsepattern.rple.internal.Common;
+import com.falsepattern.rple.internal.collection.CircularLongBuffer;
 import com.falsepattern.rple.internal.mixin.mixins.client.TessellatorMixin;
 import lombok.val;
 import lombok.var;
@@ -25,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Note: Cookies should be treated as opaque blobs. Do not try to unpack them manually, always go through the cookie
  * manager! Additionally, they should not be saved anywhere, as they expire very quickly.
  */
-public class CookieMonster {
+public final class CookieMonster {
     // Cookie format (bits):
     // 0100 0000 IIII IIII IIII IIII 0000 000P
     // I - index bits
@@ -37,10 +38,12 @@ public class CookieMonster {
     private static final int COOKIE_BIT = 0x40000000;
     private static final int ZERO_MASK = ~(PARITY_BIT | INDEX_MASK | COOKIE_BIT);
 
-    private static final long BROKEN_WARN_COLOR = BrightnessUtil.brightnessesToPackedLong(
+    private static final int BRIGHTNESS_MASK = 0x00FF00FF;
+
+    private static final long BROKEN_WARN_COLOR = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(
             BrightnessUtil.lightLevelsToBrightnessForTessellator(0xF, 0xF), 0, 0);
 
-    private static final CircularBuffer lightValues = new CircularBuffer(NUM_INDICES);
+    private static final CircularLongBuffer lightValues = new CircularLongBuffer(NUM_INDICES);
     private static final AtomicBoolean warnedBefore = new AtomicBoolean(false);
 
     /**
@@ -60,13 +63,13 @@ public class CookieMonster {
      * and log an error (first time only).
      */
     public static long cookieToPackedLong(int cookie) {
-        switch (CookieMonster.inspectValue(cookie)) {
+        switch (inspectValue(cookie)) {
             case COOKIE: {
                 return lightValues.get((cookie & INDEX_MASK) >>> INDEX_SHIFT);
             }
             case VANILLA: {
                 // Vanilla fake-pack
-                return BrightnessUtil.brightnessesToPackedLong(cookie, cookie, cookie);
+                return BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(cookie, cookie, cookie);
             }
             default: {
                 if (!warnedBefore.get()) {
@@ -90,7 +93,7 @@ public class CookieMonster {
     public static IntType inspectValue(int potentialCookie) {
         if ((potentialCookie & COOKIE_BIT) != 0 && parity(potentialCookie) == 0 && (potentialCookie & ZERO_MASK) == 0) {
             return IntType.COOKIE;
-        } else if ((potentialCookie & BrightnessUtil.BRIGHTNESS_MASK) == potentialCookie) {
+        } else if ((potentialCookie & BRIGHTNESS_MASK) == potentialCookie) {
             return IntType.VANILLA;
         } else {
             return IntType.BROKEN;

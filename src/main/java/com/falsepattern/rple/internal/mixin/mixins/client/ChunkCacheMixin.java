@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.api.RPLERenderAPI;
+import com.falsepattern.rple.internal.mixin.hook.ColoredLightingHooks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.world.ChunkCache;
@@ -30,6 +30,6 @@ public abstract class ChunkCacheMixin implements IBlockAccess {
     @SideOnly(Side.CLIENT)
     @Overwrite
     public int getLightBrightnessForSkyBlocks(int x, int y, int z, int minBlockLight) {
-        return RPLERenderAPI.getRGBBrightnessForTessellator(worldObj, x, y, z, minBlockLight);
+        return ColoredLightingHooks.getRGBBrightnessForTessellator(worldObj, x, y, z, minBlockLight);
     }
 }

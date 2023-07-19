@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.api.RPLERenderAPI;
+import com.falsepattern.rple.internal.mixin.hook.ColoredLightingHooks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.world.IBlockAccess;
@@ -15,17 +15,16 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-//TODO test class
 @Mixin(World.class)
 public abstract class WorldMixin implements IBlockAccess {
     /**
      * @author FalsePattern
-     * @reason test
+     * @reason Colorize
      */
-    @SideOnly(Side.CLIENT)
     @Overwrite
-    public int getLightBrightnessForSkyBlocks(int posX, int posY, int posZ, int minBlockLight) {
-        return RPLERenderAPI.getRGBBrightnessForTessellator(thiz(), posX, posY, posZ, minBlockLight);
+    @SideOnly(Side.CLIENT)
+    public int getLightBrightnessForSkyBlocks(int posX, int posY, int posZ, int cookieMinBlockLight) {
+        return ColoredLightingHooks.getRGBBrightnessForTessellator(thiz(), posX, posY, posZ, cookieMinBlockLight);
     }
 
     private World thiz() {

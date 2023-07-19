@@ -123,7 +123,7 @@ public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
             val red = scalarsToBrightness(bR, sR);
             val green = scalarsToBrightness(bG, sG);
             val blue = scalarsToBrightness(bB, sB);
-            val packed = BrightnessUtil.brightnessesToPackedLong(red, green, blue);
+            val packed = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(red, green, blue);
             brightnessCookie = CookieMonster.packedLongToCookie(packed);
         } else {
             brightnessCookie = this.block.getMixedBrightnessForBlock(this.world, this.blockPos.x, this.blockPos.y, this.blockPos.z);
@@ -133,11 +133,11 @@ public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
     }
 
     private static double scalarBlock(int brightness) {
-        return BrightnessUtil.getBlocklightChannelFromBrightnessRender(brightness) / 240.0;
+        return BrightnessUtil.getBlockLightChannelFromBrightnessRender(brightness) / 240.0;
     }
 
     private static double scalarSky(int brightness) {
-        return BrightnessUtil.getSkylightChannelFromBrightnessRender(brightness) / 240.0;
+        return BrightnessUtil.getSkyLightChannelFromBrightnessRender(brightness) / 240.0;
     }
 
     private static int scalarsToBrightness(double block, double sky) {

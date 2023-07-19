@@ -13,10 +13,8 @@ import lombok.val;
  * Utility class for managing minecraft brightness values, and packed long RGB versions of these brightness values.
  */
 public class BrightnessUtil {
-    private static final int BLOCKLIGHT_MASK = 0x000000FF;
+    private static final int BLOCK_LIGHT_MASK = 0x000000FF;
     private static final int SKYLIGHT_MASK = 0x00FF0000;
-    //Shared with CookieMonster.
-    static final int BRIGHTNESS_MASK = BLOCKLIGHT_MASK | SKYLIGHT_MASK;
 
     private static final int BLOCK_LIGHT_BRIGHTNESS_OFFSET = 4;
     private static final int SKY_LIGHT_BRIGHTNESS_OFFSET = 20;
@@ -24,9 +22,9 @@ public class BrightnessUtil {
     private static final int BLOCKLIGHT_BRIGHTNESS_OFFSET_RENDER = 0;
     private static final int SKYLIGHT_BRIGHTNESS_OFFSET_RENDER = 16;
 
-    private static final int COMPRESSED_BLOCKLIGHT_MASK = 0x000000FF;
-    private static final int COMPRESSED_SKYLIGHT_MASK = 0x0000FF00;
-    private static final int COMPRESSED_BRIGHTNESS_MASK = COMPRESSED_BLOCKLIGHT_MASK | COMPRESSED_SKYLIGHT_MASK;
+    private static final int COMPRESSED_BLOCK_LIGHT_MASK = 0x000000FF;
+    private static final int COMPRESSED_SKY_LIGHT_MASK = 0x0000FF00;
+    private static final int COMPRESSED_BRIGHTNESS_MASK = COMPRESSED_BLOCK_LIGHT_MASK | COMPRESSED_SKY_LIGHT_MASK;
 
     // Long format (hex):
     // 0000 RRrr GGgg BBbb
@@ -45,8 +43,8 @@ public class BrightnessUtil {
     /**
      * The 0-15 light level inside the packed brightness.
      */
-    public static int getBlocklightFromBrightness(int brightness) {
-        return (brightness & BLOCKLIGHT_MASK) >>> BLOCK_LIGHT_BRIGHTNESS_OFFSET;
+    public static int getBlockLightFromBrightness(int brightness) {
+        return (brightness & BLOCK_LIGHT_MASK) >>> BLOCK_LIGHT_BRIGHTNESS_OFFSET;
     }
 
     /**
@@ -66,40 +64,40 @@ public class BrightnessUtil {
     /**
      * The raw render-specific brightness value inside the packed brightness.
      */
-    public static int getBlocklightChannelFromBrightnessRender(int brightness) {
-        return (brightness & BLOCKLIGHT_MASK) >>> BLOCKLIGHT_BRIGHTNESS_OFFSET_RENDER;
+    public static int getBlockLightChannelFromBrightnessRender(int brightness) {
+        return (brightness & BLOCK_LIGHT_MASK) >>> BLOCKLIGHT_BRIGHTNESS_OFFSET_RENDER;
     }
 
     /**
      * The raw render-specific brightness value inside the packed brightness.
      */
-    public static int getSkylightChannelFromBrightnessRender(int brightness) {
+    public static int getSkyLightChannelFromBrightnessRender(int brightness) {
         return (brightness & SKYLIGHT_MASK) >>> SKYLIGHT_BRIGHTNESS_OFFSET_RENDER;
     }
 
-    public static long brightnessesToPackedLong(int red, int green, int blue) {
-        return (long) compressBrightness(red) << PACKED_RED_OFFSET |
-               (long) compressBrightness(green) << PACKED_GREEN_OFFSET |
-               (long) compressBrightness(blue) << PACKED_BLUE_OFFSET;
+    public static long packedBrightnessFromTessellatorBrightnessChannels(int red, int green, int blue) {
+        return (long) packTessellatorBrightness(red) << PACKED_RED_OFFSET |
+               (long) packTessellatorBrightness(green) << PACKED_GREEN_OFFSET |
+               (long) packTessellatorBrightness(blue) << PACKED_BLUE_OFFSET;
     }
 
     public static long monochromeBrightnessToPackedLong(int brightness) {
-        val compressed = (long) compressBrightness(brightness);
+        val compressed = (long) packTessellatorBrightness(brightness);
         return compressed << PACKED_RED_OFFSET |
                compressed << PACKED_GREEN_OFFSET |
                compressed << PACKED_BLUE_OFFSET;
     }
 
     public static int getBrightnessRed(long packed) {
-        return decompressBrightness((int)((packed >>> PACKED_RED_OFFSET) & COMPRESSED_BRIGHTNESS_MASK));
+        return unpackTessellatorBrightness((int) ((packed >>> PACKED_RED_OFFSET) & COMPRESSED_BRIGHTNESS_MASK));
     }
 
     public static int getBrightnessGreen(long packed) {
-        return decompressBrightness((int)((packed >>> PACKED_GREEN_OFFSET) & COMPRESSED_BRIGHTNESS_MASK));
+        return unpackTessellatorBrightness((int) ((packed >>> PACKED_GREEN_OFFSET) & COMPRESSED_BRIGHTNESS_MASK));
     }
 
     public static int getBrightnessBlue(long packed) {
-        return decompressBrightness((int)((packed >>> PACKED_BLUE_OFFSET) & COMPRESSED_BRIGHTNESS_MASK));
+        return unpackTessellatorBrightness((int) ((packed >>> PACKED_BLUE_OFFSET) & COMPRESSED_BRIGHTNESS_MASK));
     }
 
     /**
@@ -110,8 +108,8 @@ public class BrightnessUtil {
         val redCompressed = (int) ((packed >>> PACKED_RED_OFFSET) & COMPRESSED_BRIGHTNESS_MASK);
         val greenCompressed = (int) ((packed >>> PACKED_GREEN_OFFSET) & COMPRESSED_BRIGHTNESS_MASK);
         val blueCompressed = (int) ((packed >>> PACKED_BLUE_OFFSET) & COMPRESSED_BRIGHTNESS_MASK);
-        return decompressBrightness(max3(redCompressed, greenCompressed, blueCompressed, COMPRESSED_SKYLIGHT_MASK) |
-                                    max3(redCompressed, greenCompressed, blueCompressed, COMPRESSED_BLOCKLIGHT_MASK));
+        return unpackTessellatorBrightness(max3(redCompressed, greenCompressed, blueCompressed, COMPRESSED_SKY_LIGHT_MASK) |
+                                           max3(redCompressed, greenCompressed, blueCompressed, COMPRESSED_BLOCK_LIGHT_MASK));
     }
 
     /**
@@ -121,7 +119,7 @@ public class BrightnessUtil {
         //Optimized algorithm, given that internally we have a tightly packed sequence of identical elements.
         long result = 0L;
         for (int i = 0; i <= 40; i += 8) {
-            val mask = (0xFFL << i);
+            val mask = 0xFFL << i;
             val a = packedA & mask;
             val b = packedB & mask;
             result |= Math.max(a, b);
@@ -143,7 +141,12 @@ public class BrightnessUtil {
         return (((long) (a + b)) & 0xFF) << offset;
     }
 
-    public static long mixAOBrightness(long packedTL, long packedBL, long packedBR, long packedTR, double lerpTB, double lerpLR) {
+    public static long mixAOBrightness(long packedTL,
+                                       long packedBL,
+                                       long packedBR,
+                                       long packedTR,
+                                       double lerpTB,
+                                       double lerpLR) {
         val lTL = (1.0 - lerpTB) * (1.0 - lerpLR);
         val lTR = (1.0 - lerpTB) * lerpLR;
         val lBL = lerpTB * (1.0 - lerpLR);
@@ -151,7 +154,14 @@ public class BrightnessUtil {
         return mixAOBrightness(packedTL, packedTR, packedBL, packedBR, lTL, lTR, lBL, lBR);
     }
 
-    public static long mixAOBrightness(long packedA, long packedB, long packedC, long packedD, double aMul, double bMul, double cMul, double dMul) {
+    public static long mixAOBrightness(long packedA,
+                                       long packedB,
+                                       long packedC,
+                                       long packedD,
+                                       double aMul,
+                                       double bMul,
+                                       double cMul,
+                                       double dMul) {
         long packedResult = 0;
         for (int i = 0; i <= 40; i += 8) {
             packedResult |= mixAoBrightnessChannel(packedA, packedB, packedC, packedD, aMul, bMul, cMul, dMul, i);
@@ -265,27 +275,37 @@ public class BrightnessUtil {
         if (count != 0) {
             light /= count;
         }
-        return (long)((int)light & 0xFF) << shift;
+        return (long) ((int) light & 0xFF) << shift;
     }
 
     private static int max3(int red, int green, int blue, int mask) {
         return Math.max(Math.max(red & mask, green & mask), blue & mask);
     }
 
-    private static int compressBrightness(int brightness) {
-        return ((brightness & SKYLIGHT_MASK) >>> 8) | (brightness & BLOCKLIGHT_MASK);
+    private static int packTessellatorBrightness(int tessellatorBrightness) {
+        return ((tessellatorBrightness & SKYLIGHT_MASK) >>> 8) |
+               (tessellatorBrightness & BLOCK_LIGHT_MASK);
     }
 
-    private static int decompressBrightness(int compressedBrightness) {
-        return ((compressedBrightness & COMPRESSED_SKYLIGHT_MASK) << 8) | (compressedBrightness & COMPRESSED_BLOCKLIGHT_MASK);
+    private static int unpackTessellatorBrightness(int packedTessellatorBrightness) {
+        return ((packedTessellatorBrightness & COMPRESSED_SKY_LIGHT_MASK) << 8) |
+               (packedTessellatorBrightness & COMPRESSED_BLOCK_LIGHT_MASK);
     }
 
-    private static long mixAoBrightnessChannel(long a, long b, long c, long d, double aMul, double bMul, double cMul, double dMul, int channel) {
+    private static long mixAoBrightnessChannel(long a,
+                                               long b,
+                                               long c,
+                                               long d,
+                                               double aMul,
+                                               double bMul,
+                                               double cMul,
+                                               double dMul,
+                                               int channel) {
         val fA = unit(a, channel) * aMul;
         val fB = unit(b, channel) * bMul;
         val fC = unit(c, channel) * cMul;
         val fD = unit(d, channel) * dMul;
-        return (long)((int)(fA + fB + fC + fD) & 0xFF) << channel;
+        return (long) ((int) (fA + fB + fC + fD) & 0xFF) << channel;
     }
 
     private static int unit(long val, int channel) {
