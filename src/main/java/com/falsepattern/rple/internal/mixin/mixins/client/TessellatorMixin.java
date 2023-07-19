@@ -9,7 +9,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.rple.internal.Common;
-import com.falsepattern.rple.internal.RPLE;
+import com.falsepattern.rple.internal.client.render.VertexConstants;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
 import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorJunction;
@@ -42,9 +42,9 @@ public abstract class TessellatorMixin implements ITessellatorJunction {
               require = 1)
     private boolean enable(Tessellator tess) {
         if (hasBrightness) {
-            enableLightMapTexture(tess, RPLE.getRedIndexNoShader() * 2, Common.RED_LIGHT_MAP_TEXTURE_UNIT);
-            enableLightMapTexture(tess, RPLE.getGreenIndexNoShader() * 2, Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
-            enableLightMapTexture(tess, RPLE.getBlueIndexNoShader() * 2, Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
+            enableLightMapTexture(tess, VertexConstants.getRedIndexNoShader() * 2, Common.RED_LIGHT_MAP_TEXTURE_UNIT);
+            enableLightMapTexture(tess, VertexConstants.getGreenIndexNoShader() * 2, Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
+            enableLightMapTexture(tess, VertexConstants.getBlueIndexNoShader() * 2, Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
         }
         return false;
     }
@@ -71,9 +71,9 @@ public abstract class TessellatorMixin implements ITessellatorJunction {
               require = 1)
     private boolean customColor(Tessellator instance) {
         if (hasBrightness) {
-            rawBuffer[rawBufferIndex + RPLE.getRedIndexNoShader()] = BrightnessUtil.getBrightnessRed(brightness);
-            rawBuffer[rawBufferIndex + RPLE.getGreenIndexNoShader()] = BrightnessUtil.getBrightnessGreen(brightness);
-            rawBuffer[rawBufferIndex + RPLE.getBlueIndexNoShader()] = BrightnessUtil.getBrightnessBlue(brightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getRedIndexNoShader()] = BrightnessUtil.getBrightnessRed(brightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getGreenIndexNoShader()] = BrightnessUtil.getBrightnessGreen(brightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getBlueIndexNoShader()] = BrightnessUtil.getBrightnessBlue(brightness);
         }
         return false;
     }

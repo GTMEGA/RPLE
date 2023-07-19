@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.extension;
 
-import com.falsepattern.rple.internal.RPLE;
+import com.falsepattern.rple.internal.client.render.VertexConstants;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -120,11 +120,11 @@ public final class ShaderVertex {
         output[MID_TEXTURE_U_STRIDE_OFFSET + index] = Float.floatToRawIntBits(midTextureU);
         output[MID_TEXTURE_V_STRIDE_OFFSET + index] = Float.floatToRawIntBits(midTextureV);
 
-        output[RPLE.getGreenIndexShader() + index] = greenLightMapUV;
-        output[RPLE.getBlueIndexShader() + index] = blueLightMapUV;
+        output[VertexConstants.getGreenIndexShader() + index] = greenLightMapUV;
+        output[VertexConstants.getBlueIndexShader() + index] = blueLightMapUV;
 
-        output[RPLE.getRpleEdgeTexUIndexShader() + index] = Float.floatToRawIntBits(edgeTextureU);
-        output[RPLE.getRpleEdgeTexVIndexShader() + index] = Float.floatToRawIntBits(edgeTextureV);
+        output[VertexConstants.getRpleEdgeTexUIndexShader() + index] = Float.floatToRawIntBits(edgeTextureU);
+        output[VertexConstants.getRpleEdgeTexVIndexShader() + index] = Float.floatToRawIntBits(edgeTextureV);
 
         clear();
     }

@@ -9,8 +9,8 @@ package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.rple.RPLEShaders;
-import com.falsepattern.rple.internal.RPLE;
 import com.falsepattern.rple.internal.client.lightmap.LightMapHook;
+import com.falsepattern.rple.internal.client.render.VertexConstants;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.mixin.extension.ShaderVertex;
 import com.falsepattern.rple.internal.mixin.interfaces.IOptiFineTessellatorMixin;
@@ -108,7 +108,11 @@ public abstract class ShaderTessMixin {
         stride = VertexAPI.recomputeVertexInfo(18, Float.BYTES);
         ARBVertexShader.glVertexAttribPointerARB(index, size, normalized, stride, buffer);
         if (RPLEShaders.useRPLEEdgeTexCoordAttrib) {
-            ARBVertexShader.glVertexAttribPointerARB(RPLEShaders.edgeTexCoordAttrib, 2, false, stride, (FloatBuffer) buffer.position(RPLE.getRpleEdgeTexUIndexShader()));
+            ARBVertexShader.glVertexAttribPointerARB(RPLEShaders.edgeTexCoordAttrib,
+                                                     2,
+                                                     false,
+                                                     stride,
+                                                     (FloatBuffer) buffer.position(VertexConstants.getRpleEdgeTexUIndexShader()));
             ARBVertexShader.glEnableVertexAttribArrayARB(RPLEShaders.edgeTexCoordAttrib);
         }
     }
@@ -135,9 +139,9 @@ public abstract class ShaderTessMixin {
         val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).hasBrightness();
 
         if (hasBrightness) {
-            enableLightMapTexture(tessellator, RPLE.getRedIndexShader() * 2, LightMapHook.RED_LIGHT_MAP.textureUnit);
-            enableLightMapTexture(tessellator, RPLE.getGreenIndexShader() * 2, LightMapHook.GREEN_LIGHT_MAP.textureUnit);
-            enableLightMapTexture(tessellator, RPLE.getBlueIndexShader() * 2, LightMapHook.BLUE_LIGHT_MAP.textureUnit);
+            enableLightMapTexture(tessellator, VertexConstants.getRedIndexShader() * 2, LightMapHook.RED_LIGHT_MAP.textureUnit);
+            enableLightMapTexture(tessellator, VertexConstants.getGreenIndexShader() * 2, LightMapHook.GREEN_LIGHT_MAP.textureUnit);
+            enableLightMapTexture(tessellator, VertexConstants.getBlueIndexShader() * 2, LightMapHook.BLUE_LIGHT_MAP.textureUnit);
         }
 
         return false;
