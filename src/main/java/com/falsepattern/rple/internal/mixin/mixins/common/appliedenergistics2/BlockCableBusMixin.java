@@ -19,7 +19,7 @@ public abstract class BlockCableBusMixin {
     @Shadow
     protected abstract ICableBusContainer cb(IBlockAccess w, int x, int y, int z);
 
-    // TODO: [PRE_RELEASE] Fluid translucency tweaks belong in FalseTweaks
+    // TODO: [PRE_RELEASE] Fix patch
 //    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
 //        val thiz = (Block) (Object) this;
 //        Block block = world.getBlock(x, y, z);

@@ -24,13 +24,64 @@ package com.falsepattern.rple.internal.mixin.hook;
 import com.falsepattern.rple.api.RPLERenderAPI;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
+import com.falsepattern.rple.internal.common.helper.CookieWrappers;
+import com.falsepattern.rple.internal.common.helper.EntityHelper;
 import lombok.experimental.UtilityClass;
 import lombok.val;
-import net.minecraft.world.World;
+import lombok.var;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.IBlockAccess;
 
 @UtilityClass
 public final class ColoredLightingHooks {
-    public static int getRGBBrightnessForTessellator(World world,
+    public static int getEntityRGBBrightnessForTessellator(Entity entity,
+                                                           IBlockAccess world,
+                                                           int posX,
+                                                           int posY,
+                                                           int posZ,
+                                                           int cookieMinBlockLight) {
+        var brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, cookieMinBlockLight);
+        if (EntityHelper.isOnBlockList(entity.getClass())) {
+            val packedBrightness = CookieMonster.cookieToPackedLong(brightness);
+            brightness = BrightnessUtil.getBrightestChannelFromPacked(packedBrightness);
+        }
+        return brightness;
+    }
+
+    public static int getBlockRGBBrightnessForTessellator(IBlockAccess world,
+                                                          int posX,
+                                                          int posY,
+                                                          int posZ) {
+        var block = world.getBlock(posX, posY, posZ);
+        var blockMeta = world.getBlockMetadata(posX, posY, posZ);
+
+        var brightness = RPLERenderAPI.getBlockBrightnessForTessellator(world, block, blockMeta, posX, posY, posZ);
+        brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, brightness);
+
+        if (brightness == 0 && block instanceof BlockSlab) {
+            --posY;
+
+            block = world.getBlock(posX, posY, posZ);
+            blockMeta = world.getBlockMetadata(posX, posY, posZ);
+
+            brightness = RPLERenderAPI.getBlockBrightnessForTessellator(world, block, blockMeta, posX, posY, posZ);
+            brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, brightness);
+        }
+
+        return brightness;
+    }
+
+    public static int getBlockFluidRGBBrightnessForTessellator(IBlockAccess world,
+                                                               int posX,
+                                                               int posY,
+                                                               int posZ) {
+        val brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, 0);
+        val topBrightness = getRGBBrightnessForTessellator(world, posX, posY + 1, posZ, 0);
+        return CookieWrappers.packedMax(brightness, topBrightness);
+    }
+
+    public static int getRGBBrightnessForTessellator(IBlockAccess world,
                                                      int posX,
                                                      int posY,
                                                      int posZ,

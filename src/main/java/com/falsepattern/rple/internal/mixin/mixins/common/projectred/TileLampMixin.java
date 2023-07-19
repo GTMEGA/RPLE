@@ -27,7 +27,7 @@ public abstract class TileLampMixin {
     @Shadow
     public abstract int getColor();
 
-// TODO: [PRE_RELEASE] Fluid translucency tweaks belong in FalseTweaks
+// TODO: [PRE_RELEASE] Fix please
 
 //    @Override
 //    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {

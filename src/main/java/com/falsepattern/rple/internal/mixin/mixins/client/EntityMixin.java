@@ -7,9 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
-import com.falsepattern.rple.internal.common.helper.CookieMonster;
-import com.falsepattern.rple.internal.common.helper.EntityHelper;
+import com.falsepattern.rple.internal.mixin.hook.ColoredLightingHooks;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,20 +16,24 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
-
     /**
      * @author FalsePattern
-     * @reason Fix with colors
+     * @reason Colorize
      */
     @Redirect(method = "getBrightnessForRender",
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/world/World;getLightBrightnessForSkyBlocks(IIII)I"),
               require = 1)
-    private int getBrightnessForRender(World instance, int x, int y, int z, int min) {
-        int result = instance.getLightBrightnessForSkyBlocks(x, y, z, 0);
-        if (EntityHelper.isOnBlockList(getClass())) {
-            result = BrightnessUtil.getBrightestChannelFromPacked(CookieMonster.cookieToPackedLong(result));
-        }
-        return result;
+    private int getBrightnessForRender(World world, int posX, int posY, int posZ, int cookieMinBlockLight) {
+        return ColoredLightingHooks.getEntityRGBBrightnessForTessellator(thiz(),
+                                                                         world,
+                                                                         posX,
+                                                                         posY,
+                                                                         posZ,
+                                                                         cookieMinBlockLight);
+    }
+
+    private Entity thiz() {
+        return (Entity) (Object) this;
     }
 }

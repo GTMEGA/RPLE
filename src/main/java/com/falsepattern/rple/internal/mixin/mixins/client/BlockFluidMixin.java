@@ -7,7 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.common.helper.CookieWrappers;
+import com.falsepattern.rple.internal.mixin.hook.ColoredLightingHooks;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.BlockFluidBase;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,9 +22,8 @@ public abstract class BlockFluidMixin {
      * @reason Colorize
      */
     @Overwrite
-    public int getMixedBrightnessForBlock(IBlockAccess world, int x, int y, int z) {
-        int lightThis     = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
-        int lightUp       = world.getLightBrightnessForSkyBlocks(x, y + 1, z, 0);
-        return CookieWrappers.packedMax(lightThis, lightUp);
+    @SideOnly(Side.CLIENT)
+    public int getMixedBrightnessForBlock(IBlockAccess world, int posX, int posY, int posZ) {
+        return ColoredLightingHooks.getBlockFluidRGBBrightnessForTessellator(world, posX, posY, posZ);
     }
 }

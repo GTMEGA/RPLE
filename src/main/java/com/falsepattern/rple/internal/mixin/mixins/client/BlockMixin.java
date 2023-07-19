@@ -7,12 +7,10 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.api.RPLERenderAPI;
+import com.falsepattern.rple.internal.mixin.hook.ColoredLightingHooks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import lombok.var;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -23,25 +21,9 @@ public abstract class BlockMixin {
      * @author FalsePattern
      * @reason Colorize
      */
-    @SideOnly(Side.CLIENT)
     @Overwrite
+    @SideOnly(Side.CLIENT)
     public int getMixedBrightnessForBlock(IBlockAccess world, int posX, int posY, int posZ) {
-        var block = world.getBlock(posX, posY, posZ);
-        var blockMeta = world.getBlockMetadata(posX, posY, posZ);
-
-        var compactRGBLightValue = RPLERenderAPI.getBlockBrightnessForTessellator(world, block, blockMeta, posX, posY, posZ);
-        var brightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, compactRGBLightValue);
-
-        if (brightness == 0 && block instanceof BlockSlab) {
-            --posY;
-
-            block = world.getBlock(posX, posY, posZ);
-            blockMeta = world.getBlockMetadata(posX, posY, posZ);
-
-            compactRGBLightValue = RPLERenderAPI.getBlockBrightnessForTessellator(world, block, blockMeta, posX, posY, posZ);
-            brightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, compactRGBLightValue);
-        }
-
-        return brightness;
+        return ColoredLightingHooks.getBlockRGBBrightnessForTessellator(world, posX, posY, posZ);
     }
 }
