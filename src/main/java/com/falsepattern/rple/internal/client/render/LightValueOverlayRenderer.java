@@ -31,6 +31,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
+import java.awt.*;
+
 import static net.minecraft.client.Minecraft.getMinecraft;
 
 public final class LightValueOverlayRenderer {
@@ -50,6 +52,18 @@ public final class LightValueOverlayRenderer {
 
     private static final float VALUE_WIDTH = 1F / (float) GRID_WIDTH;
     private static final float VALUE_HEIGHT = 1F / (float) GRID_HEIGHT;
+
+    private static final Color RED_BLOCK_LIGHT_COLOR = new Color(0xBD0000);
+    private static final Color GREEN_BLOCK_LIGHT_COLOR = new Color(0x19C400);
+    private static final Color BLUE_BLOCK_LIGHT_COLOR = new Color(0x002DD0);
+
+    private static final Color RED_SKY_LIGHT_COLOR = new Color(0xFF5353);
+    private static final Color GREEN_SKY_LIGHT_COLOR = new Color(0x7DFF42);
+    private static final Color BLUE_SKY_LIGHT_COLOR = new Color(0x00FFD9);
+
+    private static final Color MIXED_BLOCK_LIGHT_COLOR = new Color(0xACFFF8);
+    private static final Color MIXED_SKY_LIGHT_COLOR = new Color(0xE0C43B);
+    private static final Color MIXED_ALL_LIGHT_COLOR = new Color(0xFEF9D6);
 
     private static final ResourceLocation LIGHT_VALUE_ATLAS_TEXTURE =
             new ResourceLocation(Tags.MOD_ID, "textures/overlays/light_value_atlas.png");
@@ -81,12 +95,18 @@ public final class LightValueOverlayRenderer {
         RenderUtil.setGLTranslationRelativeToPlayer();
 
         tess.startDrawing(GL11.GL_QUADS);
-        for (int y = 0; y < 3; y++) {
-            for (int x = 0; x < 3; x++) {
-                val lightValue = x + (y * GRID_HEIGHT);
-                drawNumber(tess, basePosX, basePosY, basePosZ, x, y, lightValue);
-            }
-        }
+        drawNumber(tess, basePosX, basePosY, basePosZ, 0, 0, RED_BLOCK_LIGHT_COLOR, 0);
+        drawNumber(tess, basePosX, basePosY, basePosZ, 0, 1, GREEN_BLOCK_LIGHT_COLOR, 1);
+        drawNumber(tess, basePosX, basePosY, basePosZ, 0, 2, BLUE_BLOCK_LIGHT_COLOR, 2);
+
+        drawNumber(tess, basePosX, basePosY, basePosZ, 1, 0, RED_SKY_LIGHT_COLOR, 3);
+        drawNumber(tess, basePosX, basePosY, basePosZ, 1, 1, GREEN_SKY_LIGHT_COLOR, 4);
+        drawNumber(tess, basePosX, basePosY, basePosZ, 1, 2, BLUE_SKY_LIGHT_COLOR, 5);
+
+        drawNumber(tess, basePosX, basePosY, basePosZ, 2, 0, MIXED_BLOCK_LIGHT_COLOR, 6);
+        drawNumber(tess, basePosX, basePosY, basePosZ, 2, 1, MIXED_SKY_LIGHT_COLOR, 7);
+        drawNumber(tess, basePosX, basePosY, basePosZ, 2, 2, MIXED_ALL_LIGHT_COLOR, 8);
+
         tess.draw();
 
         GL11.glPopMatrix();
@@ -99,6 +119,7 @@ public final class LightValueOverlayRenderer {
                                    float posZ,
                                    int gridX,
                                    int gridY,
+                                   Color color,
                                    int value) {
         gridX = MathUtil.clamp(gridX, 0, GRID_WIDTH - 1);
         gridY = MathUtil.clamp(gridY, 0, GRID_HEIGHT - 1);
@@ -120,6 +141,8 @@ public final class LightValueOverlayRenderer {
 
         val maxTextureU = minTextureU + ICON_WIDTH;
         val maxTextureV = minTextureV + ICON_HEIGHT;
+
+        tess.setColorRGBA(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 
         tess.addVertexWithUV(minPosX, maxPosY, maxPosZ, minTextureU, maxTextureV);
         tess.addVertexWithUV(maxPosX, maxPosY, maxPosZ, maxTextureU, maxTextureV);
