@@ -9,6 +9,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.client.lightmap.LightMapHook;
+import com.falsepattern.rple.internal.client.render.LightValueOverlayRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -25,23 +26,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
 public abstract class EntityRendererMixin implements IResourceManagerReloadListener {
+    @Final
+    @Shadow
+    private DynamicTexture lightmapTexture;
+    @Final
+    @Shadow
+    private ResourceLocation locationLightMap;
+    @Final
+    @Shadow
+    private int[] lightmapColors;
+
     @Shadow
     private boolean lightmapUpdateNeeded;
 
-    @Shadow
-    @Final
-    private DynamicTexture lightmapTexture;
-
-    @Shadow
-    @Final
-    private ResourceLocation locationLightMap;
-
-    @Shadow
-    @Final
-    private int[] lightmapColors;
-
     @Inject(method = "<init>",
-            at = @At(value = "RETURN"),
+            at = @At("RETURN"),
             require = 1)
     private void setupColorLightMaps(Minecraft minecraft, IResourceManager p_i45076_2_, CallbackInfo ci) {
         Common.RED_LIGHT_MAP_TEXTURE_UNIT = OpenGlHelper.lightmapTexUnit;
@@ -53,7 +52,7 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
     }
 
     @Inject(method = "enableLightmap",
-            at = @At(value = "HEAD"),
+            at = @At("HEAD"),
             cancellable = true,
             require = 1)
     private void enableLightMaps(double p_78463_1_, CallbackInfo ci) {
@@ -63,7 +62,7 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
     }
 
     @Inject(method = "updateLightmap",
-            at = @At(value = "HEAD"),
+            at = @At("HEAD"),
             cancellable = true,
             require = 1)
     private void updateLightMap(float partialTickTime, CallbackInfo ci) {
@@ -71,5 +70,15 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
         lightmapUpdateNeeded = false;
         // TODO: This is not compatible with the OptiFine `CustomColorizer`
         ci.cancel();
+    }
+
+    @Inject(method = "renderWorld",
+            at = @At(value = "CONSTANT",
+                     args = "stringValue=destroyProgress",
+                     shift = At.Shift.BY,
+                     by = -3),
+            require = 1)
+    private void renderLightValueOverlay(float partialTickTime, long expectedFrameDoneTimeNs, CallbackInfo ci) {
+        LightValueOverlayRenderer.renderLightValueOverlay();
     }
 }
