@@ -107,10 +107,10 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public int lumi$getBrightnessAndLightValueMax(@NotNull LightType lightType, int posX, int posY, int posZ) {
+    public int lumi$getBrightness(@NotNull LightType lightType, int posX, int posY, int posZ) {
         switch (lightType) {
             case BLOCK_LIGHT_TYPE:
-                return lumi$getBrightnessAndBlockLightValueMax(posX, posY, posZ);
+                return lumi$getBrightness(posX, posY, posZ);
             case SKY_LIGHT_TYPE:
                 return lumi$getSkyLightValue(posX, posY, posZ);
             default:
@@ -119,24 +119,24 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public int lumi$getBrightnessAndBlockLightValueMax(int posX, int posY, int posZ) {
+    public int lumi$getBrightness(int posX, int posY, int posZ) {
         val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
         if (chunk != null) {
             val subChunkPosX = posX & 15;
             val subChunkPosZ = posZ & 15;
-            return chunk.lumi$getBrightnessAndBlockLightValueMax(subChunkPosX, posY, subChunkPosZ);
+            return chunk.lumi$getBrightness(subChunkPosX, posY, subChunkPosZ);
         }
         val blockBrightness = lumi$getBlockBrightness(posX, posY, posZ);
         return Math.max(blockBrightness, BLOCK_LIGHT_TYPE.defaultLightValue());
     }
 
     @Override
-    public int lumi$getLightValueMax(int posX, int posY, int posZ) {
+    public int lumi$getLightValue(int posX, int posY, int posZ) {
         val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
         if (chunk != null) {
             val subChunkPosX = posX & 15;
             val subChunkPosZ = posZ & 15;
-            return chunk.lumi$getLightValueMax(subChunkPosX, posY, subChunkPosZ);
+            return chunk.lumi$getLightValue(subChunkPosX, posY, subChunkPosZ);
         }
         return LightType.maxBaseLightValue();
     }
@@ -248,14 +248,15 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public int getBrightnessForTessellator(int posX, int posY, int posZ, int minBlockLightValue) {
-        var blockLightValue = getLightValueForRender(BLOCK_LIGHT_TYPE, posX, posY, posZ);
-        blockLightValue = Math.max(blockLightValue, minBlockLightValue);
-        val skyLightValue = getLightValueForRender(SKY_LIGHT_TYPE, posX, posY, posZ);
+    public int rple$getChannelBrightnessForTessellator(int posX, int posY, int posZ, int minBlockLight) {
+        var blockLightValue = rple$getChannelLightValueForRender(BLOCK_LIGHT_TYPE, posX, posY, posZ);
+        blockLightValue = Math.max(blockLightValue, minBlockLight);
+        val skyLightValue = rple$getChannelLightValueForRender(SKY_LIGHT_TYPE, posX, posY, posZ);
         return BrightnessUtil.lightLevelsToBrightnessForTessellator(blockLightValue, skyLightValue);
     }
 
-    private int getLightValueForRender(LightType lightType, int posX, int posY, int posZ) {
+    @Override
+    public int rple$getChannelLightValueForRender(LightType lightType, int posX, int posY, int posZ) {
         if (lightType == SKY_LIGHT_TYPE && !root.lumi$hasSky())
             return 0;
 
@@ -279,13 +280,13 @@ public final class RPLEWorldContainer implements RPLEWorld {
             lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, EAST));
             return lightValue;
         }
-        return lumi$getBrightnessAndLightValueMax(lightType, posX, posY, posZ);
+        return lumi$getBrightness(lightType, posX, posY, posZ);
     }
 
     private int getNeighborLightValue(LightType lightType, int posX, int posY, int posZ, ForgeDirection direction) {
         posX += direction.offsetX;
         posY += direction.offsetY;
         posZ += direction.offsetZ;
-        return lumi$getBrightnessAndLightValueMax(lightType, posX, posY, posZ);
+        return lumi$getBrightness(lightType, posX, posY, posZ);
     }
 }

@@ -181,13 +181,13 @@ public final class RPLEChunkContainer implements RPLEChunk {
     }
 
     @Override
-    public int lumi$getBrightnessAndLightValueMax(@NotNull LightType lightType,
-                                                  int subChunkPosX,
-                                                  int posY,
-                                                  int subChunkPosZ) {
+    public int lumi$getBrightness(@NotNull LightType lightType,
+                                  int subChunkPosX,
+                                  int posY,
+                                  int subChunkPosZ) {
         switch (lightType) {
             case BLOCK_LIGHT_TYPE:
-                return lumi$getBrightnessAndBlockLightValueMax(subChunkPosX, posY, subChunkPosZ);
+                return lumi$getBrightness(subChunkPosX, posY, subChunkPosZ);
             case SKY_LIGHT_TYPE:
                 return lumi$getSkyLightValue(subChunkPosX, posY, subChunkPosZ);
             default:
@@ -196,14 +196,14 @@ public final class RPLEChunkContainer implements RPLEChunk {
     }
 
     @Override
-    public int lumi$getBrightnessAndBlockLightValueMax(int subChunkPosX, int posY, int subChunkPosZ) {
+    public int lumi$getBrightness(int subChunkPosX, int posY, int subChunkPosZ) {
         val blockBrightness = lumi$getBlockBrightness(subChunkPosX, posY, subChunkPosZ);
         val blockLightValue = lumi$getBlockLightValue(subChunkPosX, posY, subChunkPosZ);
         return Math.max(blockBrightness, blockLightValue);
     }
 
     @Override
-    public int lumi$getLightValueMax(int subChunkPosX, int posY, int subChunkPosZ) {
+    public int lumi$getLightValue(int subChunkPosX, int posY, int subChunkPosZ) {
         val blockLightValue = lumi$getBlockLightValue(subChunkPosX, posY, subChunkPosZ);
         val skyLightValue = lumi$getSkyLightValue(subChunkPosX, posY, subChunkPosZ);
         return Math.max(blockLightValue, skyLightValue);

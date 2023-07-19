@@ -7,6 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
+import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.color.ColorChannel;
@@ -35,6 +36,7 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
     public Profiler theProfiler;
 
     @Nullable
+    @SuppressWarnings("unused")
     private LumiLightingEngine lumi$lightingEngine;
 
     private RPLEWorld rple$redChannel;
@@ -65,6 +67,24 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
             case BLUE_CHANNEL:
                 return rple$blueChannel;
         }
+    }
+
+    @Override
+    public int rple$getChannelBrightnessForTessellator(ColorChannel channel,
+                                                       int posX,
+                                                       int posY,
+                                                       int posZ,
+                                                       int minBlockLight) {
+        return rple$world(channel).rple$getChannelBrightnessForTessellator(posX, posY, posZ, minBlockLight);
+    }
+
+    @Override
+    public int rple$getChannelLightValueForTessellator(ColorChannel channel,
+                                                       LightType lightType,
+                                                       int posX,
+                                                       int posY,
+                                                       int posZ) {
+        return rple$world(channel).rple$getChannelLightValueForRender(lightType, posX, posY, posZ);
     }
 
     private World thiz() {

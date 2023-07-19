@@ -7,6 +7,7 @@
 
 package com.falsepattern.rple.internal.common.storage.world;
 
+import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunk;
@@ -34,5 +35,7 @@ public interface RPLEWorld extends LumiWorld {
     @Override
     @Nullable RPLEChunk lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ);
 
-    int getBrightnessForTessellator(int posX, int posY, int posZ, int minBlueBrightness);
+    int rple$getChannelBrightnessForTessellator(int posX, int posY, int posZ, int minBlockLight);
+
+    int rple$getChannelLightValueForRender(LightType lightType, int posX, int posY, int posZ);
 }

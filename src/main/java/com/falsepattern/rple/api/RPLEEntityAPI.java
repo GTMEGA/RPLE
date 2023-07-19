@@ -7,19 +7,9 @@
 
 package com.falsepattern.rple.api;
 
-import com.falsepattern.rple.internal.common.helper.EntityHelper;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class RPLEEntityAPI {
-    /**
-     * By default, any entity that overrides getBrightnessForRender will get a vanilla-style light value from Entity.getBrightnessForRender.
-     * You can use this to remove this blocking logic from specific classes. Note: make sure all your superclasses
-     * also behave correctly with colored lights!
-     *
-     * @param entityClassName The fully qualified class name
-     */
-    public static void permit(String entityClassName) {
-        EntityHelper.permit(entityClassName);
-    }
+
 }

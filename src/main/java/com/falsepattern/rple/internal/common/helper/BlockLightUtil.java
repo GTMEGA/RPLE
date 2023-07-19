@@ -7,12 +7,9 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
-import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.block.Block;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import static com.falsepattern.rple.api.RPLEBlockAPI.getColoredBrightnessSafe;
 import static com.falsepattern.rple.api.color.ColorChannel.*;
@@ -21,32 +18,6 @@ import static com.falsepattern.rple.api.color.ColorChannel.*;
  * Shared logic used by multiple mixins, couldn't find a better place for these.
  */
 public class BlockLightUtil {
-    /**
-     * The method that makes all of this work. Replaces the regular brightness logic with our custom packed/cookie system.
-     */
-    public static int getRGBBrightnessAt(IBlockAccess world, int posX, int posY, int posZ, int minBlockLight) {
-        val packedMinBrightness = CookieMonster.cookieToPackedLong(minBlockLight);
-        val minRedBlockLightValue = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessRed(packedMinBrightness));
-        val minGreenBlockLightValue = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessGreen(packedMinBrightness));
-        val minBlueBlockLightValue = BrightnessUtil.getBlocklightFromBrightness(BrightnessUtil.getBrightnessBlue(packedMinBrightness));
-
-        final RPLEWorldRoot rpleWorldRoot;
-        if (world instanceof World) {
-            rpleWorldRoot = (RPLEWorldRoot) world;
-        } else {
-            rpleWorldRoot = (RPLEWorldRoot) (((ChunkCache) world).worldObj);
-        }
-
-        val red = rpleWorldRoot.rple$world(RED_CHANNEL)
-                               .getBrightnessForTessellator(posX, posY, posZ, minRedBlockLightValue);
-        val green = rpleWorldRoot.rple$world(GREEN_CHANNEL)
-                                 .getBrightnessForTessellator(posX, posY, posZ, minGreenBlockLightValue);
-        val blue = rpleWorldRoot.rple$world(BLUE_CHANNEL)
-                                .getBrightnessForTessellator(posX, posY, posZ, minBlueBlockLightValue);
-
-        return CookieMonster.packedLongToCookie(BrightnessUtil.brightnessesToPackedLong(red, green, blue));
-    }
-
     public static int getCompactRGBLightValue(IBlockAccess world,
                                               Block block,
                                               int blockMeta,

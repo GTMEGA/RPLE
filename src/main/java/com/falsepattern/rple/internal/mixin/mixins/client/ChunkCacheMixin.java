@@ -7,17 +7,21 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.common.helper.BlockLightUtil;
+import com.falsepattern.rple.api.RPLERenderAPI;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 //TODO test class
 @Mixin(ChunkCache.class)
 public abstract class ChunkCacheMixin implements IBlockAccess {
+    @Shadow
+    public World worldObj;
 
     /**
      * @author FalsePattern
@@ -26,6 +30,6 @@ public abstract class ChunkCacheMixin implements IBlockAccess {
     @SideOnly(Side.CLIENT)
     @Overwrite
     public int getLightBrightnessForSkyBlocks(int x, int y, int z, int minBlockLight) {
-        return BlockLightUtil.getRGBBrightnessAt(this, x, y, z, minBlockLight);
+        return RPLERenderAPI.getRGBBrightnessForTessellator(worldObj, x, y, z, minBlockLight);
     }
 }

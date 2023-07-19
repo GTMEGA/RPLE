@@ -7,9 +7,130 @@
 
 package com.falsepattern.rple.api;
 
+import com.falsepattern.lumina.api.lighting.LightType;
+import com.falsepattern.rple.api.color.ColorChannel;
+import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
+import com.falsepattern.rple.internal.common.helper.CookieMonster;
+import com.falsepattern.rple.internal.common.helper.EntityHelper;
 import lombok.experimental.UtilityClass;
+import lombok.val;
+import net.minecraft.entity.Entity;
+import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
+
+import static com.falsepattern.rple.api.RPLEColorAPI.COLOR_MIN;
+import static com.falsepattern.rple.api.RPLEColorAPI.errorColor;
+import static com.falsepattern.rple.api.RPLEWorldAPI.getWorldRootFromBlockAccess;
+import static com.falsepattern.rple.api.color.ColorChannel.*;
 
 @UtilityClass
 public final class RPLERenderAPI {
+    public static int getRGBBrightnessForTessellator(@NotNull IBlockAccess world, int posX, int posY, int posZ) {
+        return getRGBBrightnessForTessellator(world, posX, posY, posZ, 0);
+    }
 
+    public static int getRGBBrightnessForTessellator(@NotNull IBlockAccess world,
+                                                     int posX,
+                                                     int posY,
+                                                     int posZ,
+                                                     int minBlockLight) {
+        return getRGBBrightnessForTessellator(world, posX, posY, posZ, minBlockLight, minBlockLight, minBlockLight);
+    }
+
+    public static int getRGBBrightnessForTessellator(@NotNull IBlockAccess world,
+                                                     int posX,
+                                                     int posY,
+                                                     int posZ,
+                                                     int minRedBlockLight,
+                                                     int minGreenBlockLight,
+                                                     int minBlueBlockLight) {
+        val worldRoot = getWorldRootFromBlockAccess(world);
+        if (worldRoot == null)
+            return errorBrightnessForTessellator();
+        val redBrightness = worldRoot
+                .rple$getChannelBrightnessForTessellator(RED_CHANNEL, posX, posY, posZ, minRedBlockLight);
+        val greenBrightness = worldRoot
+                .rple$getChannelBrightnessForTessellator(GREEN_CHANNEL, posX, posY, posZ, minGreenBlockLight);
+        val blueBrightness = worldRoot
+                .rple$getChannelBrightnessForTessellator(BLUE_CHANNEL, posX, posY, posZ, minBlueBlockLight);
+        val packedBrightness = BrightnessUtil.brightnessesToPackedLong(redBrightness, greenBrightness, blueBrightness);
+        return CookieMonster.packedLongToCookie(packedBrightness);
+    }
+
+    public static int getChannelLightValueForTessellator(@NotNull IBlockAccess world,
+                                                         @NotNull ColorChannel channel,
+                                                         LightType lightType,
+                                                         int posX,
+                                                         int posY,
+                                                         int posZ) {
+        val worldRoot = getWorldRootFromBlockAccess(world);
+        if (worldRoot == null)
+            return errorBrightnessForTessellator();
+        return worldRoot.rple$getChannelLightValueForTessellator(channel, lightType, posX, posY, posZ);
+    }
+
+    public static int errorBrightnessForTessellator() {
+        val color = errorColor();
+        return createRGBBrightnessForTessellator(color.red(), color.green(), color.blue());
+    }
+
+    public static int createRGBBrightnessForTessellator(int redLightValue, int greenLightValue, int blueLightValue) {
+        return createRGBBrightnessForTessellator(redLightValue,
+                                                 greenLightValue,
+                                                 blueLightValue,
+                                                 redLightValue,
+                                                 greenLightValue,
+                                                 blueLightValue);
+    }
+
+    public static int createRGBBrightnessForTessellator(LightType lightType,
+                                                        int redLightValue,
+                                                        int greenLightValue,
+                                                        int blueLightValue) {
+        switch (lightType) {
+            default:
+            case BLOCK_LIGHT_TYPE:
+                return createRGBBrightnessForTessellator(redLightValue,
+                                                         greenLightValue,
+                                                         blueLightValue,
+                                                         COLOR_MIN,
+                                                         COLOR_MIN,
+                                                         COLOR_MIN);
+            case SKY_LIGHT_TYPE:
+                return createRGBBrightnessForTessellator(COLOR_MIN,
+                                                         COLOR_MIN,
+                                                         COLOR_MIN,
+                                                         redLightValue,
+                                                         greenLightValue,
+                                                         blueLightValue);
+        }
+    }
+
+    public static int createRGBBrightnessForTessellator(int redBlockLight,
+                                                        int greenBlockLight,
+                                                        int blueBlockLight,
+                                                        int redSkyLight,
+                                                        int greenSkyLight,
+                                                        int blueSkyLight) {
+        val redBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(redBlockLight, redSkyLight);
+        val greenBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(greenBlockLight, greenSkyLight);
+        val blueBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(blueBlockLight, blueSkyLight);
+        val packedBrightness = BrightnessUtil.brightnessesToPackedLong(redBrightness, greenBrightness, blueBrightness);
+        return CookieMonster.packedLongToCookie(packedBrightness);
+    }
+
+    public static void permit(Class<? extends Entity> entityClass) {
+        EntityHelper.permit(entityClass);
+    }
+
+    /**
+     * By default, any entity that overrides getBrightnessForRender will get a vanilla-style light value from Entity.getBrightnessForRender.
+     * You can use this to remove this blocking logic from specific classes. Note: make sure all your superclasses
+     * also behave correctly with colored lights!
+     *
+     * @param entityClassName The fully qualified class name
+     */
+    public static void permit(String entityClassName) {
+        EntityHelper.permit(entityClassName);
+    }
 }

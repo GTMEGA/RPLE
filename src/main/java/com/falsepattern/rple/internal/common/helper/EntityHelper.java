@@ -34,6 +34,10 @@ public final class EntityHelper {
         return found;
     }
 
+    public static void permit(Class<? extends Entity> klass) {
+        PERMITTED.add(klass.getName());
+    }
+
     public static void permit(String klass) {
         PERMITTED.add(klass);
     }

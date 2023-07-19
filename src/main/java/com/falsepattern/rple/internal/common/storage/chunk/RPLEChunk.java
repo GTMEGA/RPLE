@@ -17,10 +17,10 @@ public interface RPLEChunk extends LumiChunk {
     ColorChannel rple$channel();
 
     @Override
-    public @NotNull RPLEChunkRoot lumi$root();
+    @NotNull RPLEChunkRoot lumi$root();
 
     @Override
-    public @NotNull RPLEWorld lumi$world();
+    @NotNull RPLEWorld lumi$world();
 
     @Override
     @Nullable RPLESubChunk lumi$getSubChunkIfPrepared(int chunkPosY);

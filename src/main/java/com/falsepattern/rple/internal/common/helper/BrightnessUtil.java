@@ -143,8 +143,6 @@ public class BrightnessUtil {
         return (((long) (a + b)) & 0xFF) << offset;
     }
 
-
-
     public static long mixAOBrightness(long packedTL, long packedBL, long packedBR, long packedTR, double lerpTB, double lerpLR) {
         val lTL = (1.0 - lerpTB) * (1.0 - lerpLR);
         val lTR = (1.0 - lerpTB) * lerpLR;

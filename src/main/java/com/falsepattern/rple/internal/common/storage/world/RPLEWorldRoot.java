@@ -7,9 +7,14 @@
 
 package com.falsepattern.rple.internal.common.storage.world;
 
+import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorldRoot;
 import com.falsepattern.rple.api.color.ColorChannel;
 
 public interface RPLEWorldRoot extends LumiWorldRoot {
     RPLEWorld rple$world(ColorChannel channel);
+
+    int rple$getChannelBrightnessForTessellator(ColorChannel channel, int posX, int posY, int posZ, int minBlockLight);
+
+    int rple$getChannelLightValueForTessellator(ColorChannel channel, LightType lightType, int posX, int posY, int posZ);
 }

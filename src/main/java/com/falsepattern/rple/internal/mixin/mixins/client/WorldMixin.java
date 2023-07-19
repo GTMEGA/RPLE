@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.common.helper.BlockLightUtil;
+import com.falsepattern.rple.api.RPLERenderAPI;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.world.IBlockAccess;
@@ -24,7 +24,11 @@ public abstract class WorldMixin implements IBlockAccess {
      */
     @SideOnly(Side.CLIENT)
     @Overwrite
-    public int getLightBrightnessForSkyBlocks(int x, int y, int z, int minBlockLight) {
-        return BlockLightUtil.getRGBBrightnessAt(this, x, y, z, minBlockLight);
+    public int getLightBrightnessForSkyBlocks(int posX, int posY, int posZ, int minBlockLight) {
+        return RPLERenderAPI.getRGBBrightnessForTessellator(thiz(), posX, posY, posZ, minBlockLight);
+    }
+
+    private World thiz() {
+        return (World) (Object) this;
     }
 }
