@@ -119,6 +119,7 @@ public final class HexColor implements RPLEColor {
     }
 
     @Override
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     public boolean equals(Object obj) {
         return RPLEColorAPI.colorEquals(this, obj);
     }

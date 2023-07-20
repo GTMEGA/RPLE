@@ -71,6 +71,20 @@ public final class ColorPalette {
     }
 
     @Override
+    public int hashCode() {
+        return colors.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ColorPalette))
+            return false;
+
+        val other = (ColorPalette) obj;
+        return colors.equals(other.colors);
+    }
+
+    @Override
     public String toString() {
         val sb = new StringBuilder();
         for (val color : colors.entrySet()) {

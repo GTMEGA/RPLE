@@ -7,8 +7,11 @@
 
 package com.falsepattern.rple.internal.config.container;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.experimental.Accessors;
+import lombok.val;
+import lombok.var;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +21,6 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @Accessors(fluent = true, chain = false)
-@EqualsAndHashCode
 @AllArgsConstructor(access = PRIVATE)
 public final class BlockReference implements Comparable<BlockReference> {
     public static final String INVALID_BLOCK_DOMAIN = "invalid_domain";
@@ -94,6 +96,27 @@ public final class BlockReference implements Comparable<BlockReference> {
             return 1;
 
         return this.meta.compareTo(otherBlock.meta);
+    }
+
+    @Override
+    public int hashCode() {
+        var hashCode = domain.hashCode();
+        hashCode = (31 * hashCode) + name.hashCode();
+        if (meta != null)
+            hashCode = (31 * hashCode) + meta.hashCode();
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof BlockReference))
+            return false;
+
+        val otherBlock = (BlockReference) obj;
+
+        return this.domain.equals(otherBlock.domain) &&
+               this.name.equals(otherBlock.name) &&
+               this.meta().equals(otherBlock.meta());
     }
 
     @Override

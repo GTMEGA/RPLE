@@ -8,7 +8,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.NoArgsConstructor;
 import lombok.val;
 
-import static com.falsepattern.rple.internal.common.block.BlockColorLoader.blockColorLoader;
+import static com.falsepattern.rple.internal.common.block.BlockColorManager.blockColorManager;
 import static com.falsepattern.rple.internal.event.LumiEventHandler.lumiEventHandler;
 
 @NoArgsConstructor
@@ -38,7 +38,7 @@ public abstract class CommonProxy {
     }
 
     public void init(FMLInitializationEvent evt) {
-        blockColorLoader().registerBlockColors();
+        blockColorManager().registerBlockColors();
     }
 
     public void postInit(FMLPostInitializationEvent evt) {

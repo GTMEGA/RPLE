@@ -24,8 +24,16 @@ import java.util.Arrays;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
+import static com.falsepattern.rple.internal.Tags.MOD_ID;
+import static com.falsepattern.rple.internal.Tags.VERSION;
+import static com.falsepattern.rple.internal.common.block.BlockColorManager.blockColorManager;
 
 public final class RPLEChunkContainer implements RPLEChunk {
+    private static final String VERSION_NBT_TAG_NAME = MOD_ID + "_version";
+    private static final String VERSION_NBT_TAG_VALUE = VERSION;
+
+    private static final String BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME = "block_color_config_hash";
+
     private final ColorChannel channel;
     private final String chunkID;
     private final RPLEWorld world;
@@ -97,6 +105,8 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
     @Override
     public void lumi$writeToNBT(@NotNull NBTTagCompound output) {
+        output.setString(VERSION_NBT_TAG_NAME, VERSION_NBT_TAG_VALUE);
+        output.setString(BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME, blockColorManager().configHashCode());
         output.setIntArray(SKY_LIGHT_HEIGHT_MAP_NBT_TAG_NAME, skyLightHeightMap);
         output.setBoolean(IS_LIGHT_INITIALIZED_NBT_TAG_NAME, isLightingInitialized);
     }
@@ -106,6 +116,12 @@ public final class RPLEChunkContainer implements RPLEChunk {
         isLightingInitialized = false;
         skyLightHeightMapValidCheck:
         {
+            val version = input.getString(VERSION_NBT_TAG_NAME);
+            if (!VERSION_NBT_TAG_VALUE.equals(version))
+                break skyLightHeightMapValidCheck;
+            val configHashCode = input.getString(BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME);
+            if (!blockColorManager().configHashCode().equals(configHashCode))
+                break skyLightHeightMapValidCheck;
             if (!input.hasKey(IS_LIGHT_INITIALIZED_NBT_TAG_NAME, 1))
                 break skyLightHeightMapValidCheck;
             val isLightInitializedInput = input.getBoolean(IS_LIGHT_INITIALIZED_NBT_TAG_NAME);

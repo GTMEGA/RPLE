@@ -30,11 +30,19 @@ public interface RPLEBlock {
 
     @NotNull RPLEColor rple$getColoredBrightness(int blockMeta);
 
-    @NotNull RPLEColor rple$getColoredBrightness(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
+    @NotNull RPLEColor rple$getColoredBrightness(@NotNull IBlockAccess world,
+                                                 int blockMeta,
+                                                 int posX,
+                                                 int posY,
+                                                 int posZ);
 
     @NotNull RPLEColor rple$getColoredTranslucency();
 
     @NotNull RPLEColor rple$getColoredTranslucency(int blockMeta);
 
-    @NotNull RPLEColor rple$getColoredTranslucency(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
+    @NotNull RPLEColor rple$getColoredTranslucency(@NotNull IBlockAccess world,
+                                                   int blockMeta,
+                                                   int posX,
+                                                   int posY,
+                                                   int posZ);
 }

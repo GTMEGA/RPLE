@@ -14,7 +14,9 @@ import com.falsepattern.rple.internal.config.container.BlockColorConfig;
 import com.falsepattern.rple.internal.config.container.BlockReference;
 import com.falsepattern.rple.internal.mixin.interfaces.RPLEBlockInit;
 import cpw.mods.fml.common.registry.GameRegistry;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.val;
 import net.minecraft.block.Block;
 import org.apache.logging.log4j.Logger;
@@ -32,17 +34,20 @@ import static com.falsepattern.rple.internal.config.ColorConfigHandler.saveGener
 import static com.falsepattern.rple.internal.event.EventPoster.postBlockColorRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
 
+@Accessors(fluent = true, chain = false)
 @NoArgsConstructor(access = PRIVATE)
-public final class BlockColorLoader implements RPLEBlockColorRegistry {
-    private static final Logger LOG = createLogger("Block Color Loader");
+public final class BlockColorManager implements RPLEBlockColorRegistry {
+    private static final Logger LOG = createLogger("Block Color Manager");
 
-    private static final BlockColorLoader INSTANCE = new BlockColorLoader();
+    private static final BlockColorManager INSTANCE = new BlockColorManager();
 
     private BlockColorConfig config;
+    @Getter
+    private String configHashCode = "";
 
     private boolean registryLocked = false;
 
-    public static BlockColorLoader blockColorLoader() {
+    public static BlockColorManager blockColorManager() {
         return INSTANCE;
     }
 
@@ -122,6 +127,7 @@ public final class BlockColorLoader implements RPLEBlockColorRegistry {
 
         colouredBlocks.values().forEach(ColoredBlockedReference::apply);
 
+        configHashCode = "0x" + String.format("%08x", config.hashCode()).toUpperCase();
         registryLocked = true;
     }
 

@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
+import lombok.var;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -87,5 +88,24 @@ public final class BlockColorConfig {
         palette.reset();
         brightness.clear();
         translucency.clear();
+    }
+
+    @Override
+    public int hashCode() {
+        var hashCode = palette.hashCode();
+        hashCode = (31 * hashCode) + brightness.hashCode();
+        hashCode = (31 * hashCode) + translucency.hashCode();
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof BlockColorConfig))
+            return false;
+
+        val other = (BlockColorConfig) obj;
+        return palette.equals(other.palette) &&
+               brightness.equals(other.brightness) &&
+               translucency.equals(other.translucency);
     }
 }

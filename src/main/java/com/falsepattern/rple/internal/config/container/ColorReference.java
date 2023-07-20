@@ -104,6 +104,16 @@ public final class ColorReference {
     }
 
     @Override
+    public int hashCode() {
+        if (uniqueColor != null)
+            return uniqueColor.hashCode();
+        if (paletteColorName != null)
+            return paletteColorName.hashCode();
+
+        return INVALID_COLOR.hashCode();
+    }
+
+    @Override
     public String toString() {
         if (uniqueColor != null)
             return uniqueColor.toString();

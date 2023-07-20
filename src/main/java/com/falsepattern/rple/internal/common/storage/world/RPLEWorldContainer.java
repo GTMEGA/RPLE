@@ -228,6 +228,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
+    @SuppressWarnings("CastToIncompatibleInterface")
     public int lumi$getBlockBrightness(@NotNull Block blockBase, int blockMeta, int posX, int posY, int posZ) {
         val block = (RPLEBlock) blockBase;
         val brightness = block.rple$getColoredBrightness(base, blockMeta, posX, posY, posZ);
@@ -235,6 +236,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
+    @SuppressWarnings("CastToIncompatibleInterface")
     public int lumi$getBlockOpacity(@NotNull Block blockBase, int blockMeta, int posX, int posY, int posZ) {
         val block = (RPLEBlock) blockBase;
         val translucency = block.rple$getColoredTranslucency(base, blockMeta, posX, posY, posZ);

@@ -9,7 +9,6 @@ package com.falsepattern.rple.internal.common.storage.chunk;
 
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.Tags;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -20,9 +19,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 
+import static com.falsepattern.rple.internal.Tags.MOD_ID;
+import static com.falsepattern.rple.internal.Tags.VERSION;
+import static com.falsepattern.rple.internal.common.block.BlockColorManager.blockColorManager;
+
 @Getter
 @Accessors(fluent = true, chain = false)
 public final class RPLESubChunkContainer implements RPLESubChunk {
+    private static final String VERSION_NBT_TAG_NAME = MOD_ID + "_version";
+    private static final String VERSION_NBT_TAG_VALUE = VERSION;
+
+    private static final String BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME = "block_color_config_hash";
+
     private final ColorChannel channel;
     private final String subChunkID;
     private final RPLESubChunkRoot root;
@@ -37,7 +45,7 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
                                  @Nullable
                                  NibbleArray skyLight) {
         this.channel = channel;
-        this.subChunkID = Tags.MOD_ID + "_" + channel + "_sub_chunk";
+        this.subChunkID = MOD_ID + "_" + channel + "_sub_chunk";
         this.root = root;
 
         this.blockLight = blockLight;
@@ -46,7 +54,7 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
 
     public RPLESubChunkContainer(ColorChannel channel, RPLESubChunkRoot root, boolean hasSky) {
         this.channel = channel;
-        this.subChunkID = Tags.MOD_ID + "_" + channel + "_sub_chunk";
+        this.subChunkID = MOD_ID + "_" + channel + "_sub_chunk";
         this.root = root;
 
         this.blockLight = new NibbleArray(4096, 4);
@@ -69,6 +77,8 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
 
     @Override
     public void lumi$writeToNBT(@NotNull NBTTagCompound output) {
+        output.setString(VERSION_NBT_TAG_NAME, VERSION_NBT_TAG_VALUE);
+        output.setString(BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME, blockColorManager().configHashCode());
         output.setByteArray(BLOCK_LIGHT_NBT_TAG_NAME, blockLight.data);
         if (skyLight != null)
             output.setByteArray(SKY_LIGHT_NBT_TAG_NAME, skyLight.data);
@@ -76,6 +86,13 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
 
     @Override
     public void lumi$readFromNBT(@NotNull NBTTagCompound input) {
+        val version = input.getString(VERSION_NBT_TAG_NAME);
+        if (!VERSION_NBT_TAG_VALUE.equals(version))
+            return;
+        val configHashCode = input.getString(BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME);
+        if (!blockColorManager().configHashCode().equals(configHashCode))
+            return;
+
         if (input.hasKey(BLOCK_LIGHT_NBT_TAG_NAME, 7)) {
             val blockLightBytes = input.getByteArray(BLOCK_LIGHT_NBT_TAG_NAME);
             if (blockLightBytes.length == 2048)
