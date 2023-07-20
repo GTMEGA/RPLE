@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common;
 
-import com.falsepattern.rple.api.block.BlockColorRegistry;
+import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
 import com.falsepattern.rple.api.color.LightLevelColor;
 import com.falsepattern.rple.api.lightmap.LightMapRegistry;
 import com.falsepattern.rple.api.lightmap.vanilla.BossColorModifierMask;
@@ -35,7 +35,7 @@ public final class RPLEDefaultValues {
             config.addPaletteColor(color);
     }
 
-    public static void registerDefaultBlockBrightnessColors(BlockColorRegistry registry) {
+    public static void registerDefaultBlockBrightnessColors(RPLEBlockColorRegistry registry) {
         registry.colorizeBlock(fire).brightness(0xEC0).apply();
         registry.colorizeBlock(lava).brightness(0xF90).apply();
         registry.colorizeBlock(flowing_lava).brightness(0xF90).apply();
@@ -390,7 +390,7 @@ public final class RPLEDefaultValues {
         registry.colorizeBlock("TMechworks:Dynamo").brightness(0xFFF).apply();
     }
 
-    public static void registerDefaultBlockTranslucencyColors(BlockColorRegistry registry) {
+    public static void registerDefaultBlockTranslucencyColors(RPLEBlockColorRegistry registry) {
         registry.colorizeBlock(stained_glass, 0).translucency(WHITE).apply();
         registry.colorizeBlock(stained_glass, 1).translucency(ORANGE).apply();
         registry.colorizeBlock(stained_glass, 2).translucency(MAGENTA).apply();

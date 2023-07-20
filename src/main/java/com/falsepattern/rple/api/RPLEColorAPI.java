@@ -8,29 +8,24 @@
 package com.falsepattern.rple.api;
 
 import com.falsepattern.lib.util.MathUtil;
-import com.falsepattern.rple.api.color.DefaultColor;
 import com.falsepattern.rple.api.color.ErrorColor;
 import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.api.color.RPLENamedColor;
-import lombok.experimental.UtilityClass;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-@UtilityClass
+@SuppressWarnings("unused")
 public final class RPLEColorAPI {
     public static final int COLOR_MIN = 0;
     public static final int COLOR_MAX = 15;
 
-    @Deprecated
-    public static RPLEColor vanillaBlockMetaColor(int meta) {
-        if (meta < COLOR_MIN || meta > COLOR_MAX)
-            return errorColor();
-
-        return DefaultColor.values()[meta];
+    private RPLEColorAPI() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    public static RPLEColor errorColor() {
+    public static @NotNull RPLEColor errorColor() {
         return ErrorColor.errorColor();
     }
 
@@ -42,22 +37,19 @@ public final class RPLEColorAPI {
         return COLOR_MAX - clampColorComponent(component);
     }
 
-    public static int minColorComponent(RPLEColor color) {
+    public static int minColorComponent(@NotNull RPLEColor color) {
         return Math.min(color.red(), Math.min(color.green(), color.blue()));
     }
 
-    public static int maxColorComponent(RPLEColor color) {
+    public static int maxColorComponent(@NotNull RPLEColor color) {
         return Math.max(color.red(), Math.max(color.green(), color.blue()));
     }
 
-    public static int colorHashCode(RPLEColor colour) {
-        if (colour == null)
-            return 0;
-
+    public static int colorHashCode(@NotNull RPLEColor colour) {
         return (colour.red() << 8) | (colour.green() << 4) | colour.blue();
     }
 
-    public static boolean colorEquals(Object valueA, Object valueB) {
+    public static boolean colorEquals(@NotNull Object valueA, @NotNull Object valueB) {
         if (!(valueA instanceof RPLEColor))
             return false;
         if (!(valueB instanceof RPLEColor))
@@ -76,7 +68,7 @@ public final class RPLEColorAPI {
         return true;
     }
 
-    public static boolean namedColorEquals(Object valueA, Object valueB) {
+    public static boolean namedColorEquals(@NotNull Object valueA, @NotNull Object valueB) {
         if (!(valueA instanceof RPLENamedColor))
             return false;
         if (!(valueB instanceof RPLENamedColor))

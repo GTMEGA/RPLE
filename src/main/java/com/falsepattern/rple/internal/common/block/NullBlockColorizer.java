@@ -11,6 +11,7 @@ import com.falsepattern.rple.api.block.RPLEBlockColorizer;
 import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.api.color.RPLENamedColor;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -28,12 +29,12 @@ public final class NullBlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public RPLEBlockColorizer brightness(RPLEColor color) {
+    public RPLEBlockColorizer brightness(@NotNull RPLEColor color) {
         return this;
     }
 
     @Override
-    public RPLEBlockColorizer brightness(RPLENamedColor color) {
+    public RPLEBlockColorizer brightness(@NotNull RPLENamedColor color) {
         return this;
     }
 
@@ -43,12 +44,12 @@ public final class NullBlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public RPLEBlockColorizer translucency(RPLEColor color) {
+    public RPLEBlockColorizer translucency(@NotNull RPLEColor color) {
         return this;
     }
 
     @Override
-    public RPLEBlockColorizer translucency(RPLENamedColor color) {
+    public RPLEBlockColorizer translucency(@NotNull RPLENamedColor color) {
         return this;
     }
 

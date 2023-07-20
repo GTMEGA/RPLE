@@ -7,8 +7,10 @@
 
 package com.falsepattern.rple.api.color;
 
-public interface RPLENamedColor extends RPLEColor {
-    String colorDomain();
+import org.jetbrains.annotations.NotNull;
 
-    String colorName();
+public interface RPLENamedColor extends RPLEColor {
+    @NotNull String colorDomain();
+
+    @NotNull String colorName();
 }

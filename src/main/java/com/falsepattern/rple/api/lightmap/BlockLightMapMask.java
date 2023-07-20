@@ -7,7 +7,9 @@
 
 package com.falsepattern.rple.api.lightmap;
 
+import org.jetbrains.annotations.NotNull;
+
 @FunctionalInterface
 public interface BlockLightMapMask extends LightMapProvider {
-    boolean generateBlockLightMapMask(LightMapStrip output, float partialTick);
+    boolean generateBlockLightMapMask(@NotNull LightMapStrip output, float partialTick);
 }

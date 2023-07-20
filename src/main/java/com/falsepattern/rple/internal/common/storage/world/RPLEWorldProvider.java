@@ -10,22 +10,29 @@ package com.falsepattern.rple.internal.common.storage.world;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.lumina.api.world.LumiWorldProvider;
 import com.falsepattern.rple.api.color.ColorChannel;
-import lombok.AllArgsConstructor;
+import com.falsepattern.rple.internal.Tags;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import lombok.val;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.falsepattern.rple.api.color.ColorChannel.*;
-import static lombok.AccessLevel.PRIVATE;
 
-@AllArgsConstructor(access = PRIVATE)
+@Accessors(fluent = true, chain = false)
 public final class RPLEWorldProvider implements LumiWorldProvider {
     private final ColorChannel channel;
+    @Getter
+    private final String worldProviderID;
 
     private static final RPLEWorldProvider RED_CHANNEL_INSTANCE = new RPLEWorldProvider(RED_CHANNEL);
     private static final RPLEWorldProvider GREEN_CHANNEL_INSTANCE = new RPLEWorldProvider(GREEN_CHANNEL);
     private static final RPLEWorldProvider BLUE_CHANNEL_INSTANCE = new RPLEWorldProvider(BLUE_CHANNEL);
+
+    private RPLEWorldProvider(ColorChannel channel) {
+        this.channel = channel;
+        this.worldProviderID = Tags.MOD_ID + "_" + channel + "_world_provider";
+    }
 
     public static RPLEWorldProvider redRPLEWorldProvider() {
         return RED_CHANNEL_INSTANCE;
@@ -40,7 +47,10 @@ public final class RPLEWorldProvider implements LumiWorldProvider {
     }
 
     @Override
-    public @Nullable LumiWorld provideWorld(@NotNull World worldBase) {
+    @SuppressWarnings("InstanceofIncompatibleInterface")
+    public @Nullable LumiWorld provideWorld(@Nullable World worldBase) {
+        if (!(worldBase instanceof RPLEWorldRoot))
+            return null;
         val worldRoot = (RPLEWorldRoot) worldBase;
         return worldRoot.rple$world(channel);
     }

@@ -9,7 +9,6 @@ package com.falsepattern.rple.internal.common.storage.world;
 
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorld;
-import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunk;
 import net.minecraft.world.chunk.Chunk;
@@ -18,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface RPLEWorld extends LumiWorld {
-    ColorChannel rple$channel();
-
     @Override
     @NotNull RPLEWorldRoot lumi$root();
 

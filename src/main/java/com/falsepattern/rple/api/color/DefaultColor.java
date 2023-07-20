@@ -9,6 +9,7 @@ package com.falsepattern.rple.api.color;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 @Accessors(fluent = true, chain = false)
@@ -69,7 +70,7 @@ public enum DefaultColor implements RPLENamedColor {
     }
 
     @Override
-    public String colorDomain() {
+    public @NotNull String colorDomain() {
         return DEFAULT_COLOR_DOMAIN;
     }
 }

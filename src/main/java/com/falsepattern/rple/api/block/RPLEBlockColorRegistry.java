@@ -8,11 +8,12 @@
 package com.falsepattern.rple.api.block;
 
 import net.minecraft.block.Block;
+import org.jetbrains.annotations.NotNull;
 
-public interface BlockColorRegistry {
-    RPLEBlockColorizer colorizeBlock(Block block);
+public interface RPLEBlockColorRegistry {
+    RPLEBlockColorizer colorizeBlock(@NotNull Block block);
 
-    RPLEBlockColorizer colorizeBlock(Block block, int blockMeta);
+    RPLEBlockColorizer colorizeBlock(@NotNull Block block, int blockMeta);
 
-    RPLEBlockColorizer colorizeBlock(String blockID);
+    RPLEBlockColorizer colorizeBlock(@NotNull String blockID);
 }

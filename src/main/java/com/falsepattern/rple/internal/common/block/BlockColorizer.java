@@ -16,6 +16,7 @@ import com.falsepattern.rple.internal.config.container.HexColor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -77,7 +78,7 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public RPLEBlockColorizer brightness(RPLEColor color) {
+    public RPLEBlockColorizer brightness(@NotNull RPLEColor color) {
         resetBrightness();
         if (color != null)
             this.brightness = new ColorReference(new HexColor(color));
@@ -85,7 +86,7 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public RPLEBlockColorizer brightness(RPLENamedColor color) {
+    public RPLEBlockColorizer brightness(@NotNull RPLENamedColor color) {
         resetBrightness();
         if (color != null) {
             this.brightness = new ColorReference(color);
@@ -102,7 +103,7 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public RPLEBlockColorizer translucency(RPLEColor color) {
+    public RPLEBlockColorizer translucency(@NotNull RPLEColor color) {
         resetTranslucency();
         if (color != null)
             this.translucency = new ColorReference(new HexColor(color));
@@ -110,7 +111,7 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public RPLEBlockColorizer translucency(RPLENamedColor color) {
+    public RPLEBlockColorizer translucency(@NotNull RPLENamedColor color) {
         resetTranslucency();
         if (color != null) {
             this.translucency = new ColorReference(color);

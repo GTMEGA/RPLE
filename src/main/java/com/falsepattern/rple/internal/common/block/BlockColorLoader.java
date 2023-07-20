@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.block;
 
-import com.falsepattern.rple.api.block.BlockColorRegistry;
+import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
 import com.falsepattern.rple.api.block.RPLEBlockColorizer;
 import com.falsepattern.rple.api.color.RPLENamedColor;
 import com.falsepattern.rple.internal.Tags;
@@ -20,6 +20,7 @@ import lombok.val;
 import net.minecraft.block.Block;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -33,7 +34,7 @@ import static com.falsepattern.rple.internal.event.EventPoster.postBlockColorReg
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public final class BlockColorLoader implements BlockColorRegistry {
+public final class BlockColorLoader implements RPLEBlockColorRegistry {
     private static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME + "|" + "Block Color Loader");
 
     private static final BlockColorLoader INSTANCE = new BlockColorLoader();
@@ -126,7 +127,7 @@ public final class BlockColorLoader implements BlockColorRegistry {
     }
 
     @Override
-    public RPLEBlockColorizer colorizeBlock(Block block) {
+    public RPLEBlockColorizer colorizeBlock(@NotNull Block block) {
         if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
             return nullBlockColorizer();
@@ -140,7 +141,7 @@ public final class BlockColorLoader implements BlockColorRegistry {
     }
 
     @Override
-    public RPLEBlockColorizer colorizeBlock(Block block, int blockMeta) {
+    public RPLEBlockColorizer colorizeBlock(@NotNull Block block, int blockMeta) {
         if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
             return nullBlockColorizer();
@@ -154,7 +155,7 @@ public final class BlockColorLoader implements BlockColorRegistry {
     }
 
     @Override
-    public RPLEBlockColorizer colorizeBlock(String blockID) {
+    public RPLEBlockColorizer colorizeBlock(@NotNull String blockID) {
         if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
             return nullBlockColorizer();

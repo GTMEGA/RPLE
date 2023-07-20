@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.event;
 
-import com.falsepattern.rple.api.block.BlockColorRegistry;
+import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
 import com.falsepattern.rple.api.event.BlockColorRegistrationEvent;
 import com.falsepattern.rple.api.event.LightMapRegistrationEvent;
 import com.falsepattern.rple.api.lightmap.LightMapRegistry;
@@ -23,7 +23,7 @@ public final class EventPoster {
         fmlCommonBus().post(evt);
     }
 
-    public static void postBlockColorRegistrationEvent(BlockColorRegistry registry) {
+    public static void postBlockColorRegistrationEvent(RPLEBlockColorRegistry registry) {
         val evt = new BlockColorRegistrationEvent(registry);
         fmlCommonBus().post(evt);
     }

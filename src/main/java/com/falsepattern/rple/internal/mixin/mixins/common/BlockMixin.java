@@ -17,6 +17,7 @@ import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -184,7 +185,7 @@ public abstract class BlockMixin implements IColoredBlockMixin {
     }
 
     @Override
-    public RPLEColor getColoredTranslucency(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+    public RPLEColor getColoredTranslucency(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
         val metaTranslucency = lookupMetaTranslucency(blockMeta);
         if (metaTranslucency != null)
             return metaTranslucency;

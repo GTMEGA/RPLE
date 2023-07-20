@@ -11,6 +11,7 @@ import com.falsepattern.rple.api.RPLEColorAPI;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 @Accessors(fluent = true, chain = false)
@@ -52,16 +53,16 @@ public enum LightLevelColor implements RPLENamedColor {
     }
 
     @Override
-    public String colorDomain() {
+    public @NotNull String colorDomain() {
         return LIGHT_LEVEL_COLOR_DOMAIN;
     }
 
-    public static LightLevelColor fromVanillaLightValue(int vanillaLightValue) {
+    public static @NotNull LightLevelColor fromVanillaLightValue(int vanillaLightValue) {
         val ordinal = RPLEColorAPI.clampColorComponent(vanillaLightValue);
         return values()[ordinal];
     }
 
-    public static LightLevelColor fromVanillaLightOpacity(int vanillaLightOpacity) {
+    public static @NotNull LightLevelColor fromVanillaLightOpacity(int vanillaLightOpacity) {
         val ordinal = RPLEColorAPI.invertColorComponent(vanillaLightOpacity);
         return values()[ordinal];
     }

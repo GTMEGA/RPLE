@@ -8,14 +8,11 @@
 package com.falsepattern.rple.internal.common.storage.chunk;
 
 import com.falsepattern.lumina.api.chunk.LumiChunk;
-import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.common.storage.world.RPLEWorld;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface RPLEChunk extends LumiChunk {
-    ColorChannel rple$channel();
-
     @Override
     @NotNull RPLEChunkRoot lumi$root();
 

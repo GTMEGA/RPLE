@@ -11,16 +11,17 @@ import com.falsepattern.rple.api.lightmap.LightMapMask;
 import com.falsepattern.rple.api.lightmap.LightMapStrip;
 import lombok.val;
 import net.minecraft.client.Minecraft;
+import org.jetbrains.annotations.NotNull;
 
 public class BossColorModifierMask implements LightMapMask {
     @Override
-    public boolean generateBlockLightMapMask(LightMapStrip output, float partialTick) {
+    public boolean generateBlockLightMapMask(@NotNull LightMapStrip output, float partialTick) {
         generateBossColorModifierMask(output, partialTick);
         return true;
     }
 
     @Override
-    public boolean generateSkyLightMapMask(LightMapStrip output, float partialTick) {
+    public boolean generateSkyLightMapMask(@NotNull LightMapStrip output, float partialTick) {
         generateBossColorModifierMask(output, partialTick);
         return true;
     }

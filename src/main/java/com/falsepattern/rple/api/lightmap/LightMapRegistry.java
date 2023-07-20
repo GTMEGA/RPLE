@@ -7,19 +7,20 @@
 
 package com.falsepattern.rple.api.lightmap;
 
-//TODO: remove the default methods
+import org.jetbrains.annotations.NotNull;
+
 public interface LightMapRegistry {
-    void registerLightMapGenerator(LightMapGenerator generator, int priority);
+    void registerLightMapGenerator(@NotNull LightMapGenerator generator, int priority);
 
-    void registerLightMapBase(LightMapBase base, int priority);
+    void registerLightMapBase(@NotNull LightMapBase base, int priority);
 
-    void registerBlockLightMapBase(BlockLightMapBase blockBase, int priority);
+    void registerBlockLightMapBase(@NotNull BlockLightMapBase blockBase, int priority);
 
-    void registerSkyLightMapBase(SkyLightMapBase skyBase, int priority);
+    void registerSkyLightMapBase(@NotNull SkyLightMapBase skyBase, int priority);
 
-    void registerLightMapMask(LightMapMask mask);
+    void registerLightMapMask(@NotNull LightMapMask mask);
 
-    void registerBlockLightMapMask(BlockLightMapMask blockMask);
+    void registerBlockLightMapMask(@NotNull BlockLightMapMask blockMask);
 
-    void registerSkyLightMapMask(SkyLightMapMask skyMask);
+    void registerSkyLightMapMask(@NotNull SkyLightMapMask skyMask);
 }

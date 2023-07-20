@@ -7,47 +7,48 @@
 
 package com.falsepattern.rple.api.lightmap;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
 public interface LightMapStrip {
     int LIGHT_MAP_STRIP_LENGTH = 16;
     int LIGHT_MAP_STRIP_LIMIT = LIGHT_MAP_STRIP_LENGTH - 1;
 
-    float[] lightMapRedData();
+    float @NotNull [] lightMapRedData();
 
-    float[] lightMapGreenData();
+    float @NotNull [] lightMapGreenData();
 
-    float[] lightMapBlueData();
+    float @NotNull [] lightMapBlueData();
 
-    LightMapStrip setLightMap(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float brightness);
+    @NotNull LightMapStrip setLightMap(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float brightness);
 
-    LightMapStrip setLightMapRGB(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float red, float green, float blue);
+    @NotNull LightMapStrip setLightMapRGB(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float red, float green, float blue);
 
-    LightMapStrip setLightMapRed(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float red);
+    @NotNull LightMapStrip setLightMapRed(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float red);
 
-    LightMapStrip setLightMapGreen(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float green);
+    @NotNull LightMapStrip setLightMapGreen(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float green);
 
-    LightMapStrip setLightMapBlue(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float blue);
+    @NotNull LightMapStrip setLightMapBlue(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float blue);
 
-    LightMapStrip fillLightMap(float brightness);
+    @NotNull LightMapStrip fillLightMap(float brightness);
 
-    LightMapStrip fillLightMapRGB(float red, float green, float blue);
+    @NotNull LightMapStrip fillLightMapRGB(float red, float green, float blue);
 
-    LightMapStrip fillLightMapRed(float red);
+    @NotNull LightMapStrip fillLightMapRed(float red);
 
-    LightMapStrip fillLightMapGreen(float green);
+    @NotNull LightMapStrip fillLightMapGreen(float green);
 
-    LightMapStrip fillLightMapBlue(float blue);
+    @NotNull LightMapStrip fillLightMapBlue(float blue);
 
-    LightMapStrip setLightMap(LightMapStrip strip);
+    @NotNull LightMapStrip setLightMap(@NotNull LightMapStrip strip);
 
-    LightMapStrip addLightMap(LightMapStrip strip);
+    @NotNull LightMapStrip addLightMap(@NotNull LightMapStrip strip);
 
-    LightMapStrip subLightMap(LightMapStrip strip);
+    @NotNull LightMapStrip subLightMap(@NotNull LightMapStrip strip);
 
-    LightMapStrip multLightMap(LightMapStrip strip);
+    @NotNull LightMapStrip multLightMap(@NotNull LightMapStrip strip);
 
-    LightMapStrip divLightMap(LightMapStrip strip);
+    @NotNull LightMapStrip divLightMap(@NotNull LightMapStrip strip);
 
-    LightMapStrip resetLightMap();
+    @NotNull LightMapStrip resetLightMap();
 }

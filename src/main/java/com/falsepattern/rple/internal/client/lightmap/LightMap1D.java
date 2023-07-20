@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
 import lombok.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
@@ -34,7 +35,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public LightMapStrip setLightMap(int index, float brightness) {
+    public @NotNull LightMapStrip setLightMap(int index, float brightness) {
         lightMapRedData[index] = brightness;
         lightMapGreenData[index] = brightness;
         lightMapBlueData[index] = brightness;
@@ -43,25 +44,25 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public LightMapStrip setLightMapRed(int index, float red) {
+    public @NotNull LightMapStrip setLightMapRed(int index, float red) {
         lightMapRedData[index] = red;
         return this;
     }
 
     @Override
-    public LightMapStrip setLightMapGreen(int index, float green) {
+    public @NotNull LightMapStrip setLightMapGreen(int index, float green) {
         lightMapGreenData[index] = green;
         return this;
     }
 
     @Override
-    public LightMapStrip setLightMapBlue(int index, float blue) {
+    public @NotNull LightMapStrip setLightMapBlue(int index, float blue) {
         lightMapBlueData[index] = blue;
         return this;
     }
 
     @Override
-    public LightMapStrip setLightMapRGB(int index, float red, float green, float blue) {
+    public @NotNull LightMapStrip setLightMapRGB(int index, float red, float green, float blue) {
         lightMapRedData[index] = red;
         lightMapGreenData[index] = green;
         lightMapBlueData[index] = blue;
@@ -70,7 +71,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public LightMapStrip fillLightMap(float brightness) {
+    public @NotNull LightMapStrip fillLightMap(float brightness) {
         Arrays.fill(lightMapRedData, brightness);
         Arrays.fill(lightMapGreenData, brightness);
         Arrays.fill(lightMapBlueData, brightness);
@@ -79,7 +80,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public LightMapStrip fillLightMapRGB(float red, float green, float blue) {
+    public @NotNull LightMapStrip fillLightMapRGB(float red, float green, float blue) {
         Arrays.fill(lightMapRedData, red);
         Arrays.fill(lightMapGreenData, green);
         Arrays.fill(lightMapBlueData, blue);
@@ -88,27 +89,27 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public LightMapStrip fillLightMapRed(float red) {
+    public @NotNull LightMapStrip fillLightMapRed(float red) {
         Arrays.fill(lightMapRedData, red);
 
         return this;
     }
 
     @Override
-    public LightMapStrip fillLightMapGreen(float green) {
+    public @NotNull LightMapStrip fillLightMapGreen(float green) {
         Arrays.fill(lightMapGreenData, green);
 
         return this;
     }
 
     @Override
-    public LightMapStrip fillLightMapBlue(float blue) {
+    public @NotNull LightMapStrip fillLightMapBlue(float blue) {
         Arrays.fill(lightMapBlueData, blue);
         return this;
     }
 
     @Override
-    public LightMapStrip setLightMap(LightMapStrip strip) {
+    public @NotNull LightMapStrip setLightMap(@NotNull LightMapStrip strip) {
         val otherLightMapRed = strip.lightMapRedData();
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
@@ -123,7 +124,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public LightMapStrip addLightMap(LightMapStrip strip) {
+    public @NotNull LightMapStrip addLightMap(@NotNull LightMapStrip strip) {
         val otherLightMapRed = strip.lightMapRedData();
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
@@ -138,7 +139,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public LightMapStrip subLightMap(LightMapStrip strip) {
+    public @NotNull LightMapStrip subLightMap(@NotNull LightMapStrip strip) {
         val otherLightMapRed = strip.lightMapRedData();
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
@@ -153,7 +154,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public LightMapStrip multLightMap(LightMapStrip strip) {
+    public @NotNull LightMapStrip multLightMap(@NotNull LightMapStrip strip) {
         val otherLightMapRed = strip.lightMapRedData();
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
@@ -168,7 +169,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public LightMapStrip divLightMap(LightMapStrip strip) {
+    public @NotNull LightMapStrip divLightMap(@NotNull LightMapStrip strip) {
         val otherLightMapRed = strip.lightMapRedData();
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
@@ -183,7 +184,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public LightMapStrip resetLightMap() {
+    public @NotNull LightMapStrip resetLightMap() {
         Arrays.fill(lightMapRedData, 1F);
         Arrays.fill(lightMapGreenData, 1F);
         Arrays.fill(lightMapBlueData, 1F);

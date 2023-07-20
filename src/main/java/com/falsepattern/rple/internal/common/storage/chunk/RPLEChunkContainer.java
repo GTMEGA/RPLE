@@ -81,11 +81,6 @@ public final class RPLEChunkContainer implements RPLEChunk {
     }
 
     @Override
-    public ColorChannel rple$channel() {
-        return channel;
-    }
-
-    @Override
     public @NotNull RPLEChunkRoot lumi$root() {
         return root;
     }

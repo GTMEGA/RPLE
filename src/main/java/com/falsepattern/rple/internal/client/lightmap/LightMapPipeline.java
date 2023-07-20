@@ -58,7 +58,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     // region Registration
 
     @Override
-    public void registerLightMapGenerator(LightMapGenerator generator, int priority) {
+    public void registerLightMapGenerator(@NotNull LightMapGenerator generator, int priority) {
         if (!registerLightMapProvider(generator))
             return;
 
@@ -69,7 +69,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerLightMapBase(LightMapBase base, int priority) {
+    public void registerLightMapBase(@NotNull LightMapBase base, int priority) {
         if (!registerLightMapProvider(base))
             return;
 
@@ -78,7 +78,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerBlockLightMapBase(BlockLightMapBase blockBase, int priority) {
+    public void registerBlockLightMapBase(@NotNull BlockLightMapBase blockBase, int priority) {
         if (!registerLightMapProvider(blockBase))
             return;
 
@@ -86,7 +86,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerSkyLightMapBase(SkyLightMapBase skyBase, int priority) {
+    public void registerSkyLightMapBase(@NotNull SkyLightMapBase skyBase, int priority) {
         if (!registerLightMapProvider(skyBase))
             return;
 
@@ -94,7 +94,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerLightMapMask(LightMapMask mask) {
+    public void registerLightMapMask(@NotNull LightMapMask mask) {
         if (!registerLightMapProvider(mask))
             return;
 
@@ -103,7 +103,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerBlockLightMapMask(BlockLightMapMask blockMask) {
+    public void registerBlockLightMapMask(@NotNull BlockLightMapMask blockMask) {
         if (!registerLightMapProvider(blockMask))
             return;
 
@@ -111,7 +111,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerSkyLightMapMask(SkyLightMapMask skyMask) {
+    public void registerSkyLightMapMask(@NotNull SkyLightMapMask skyMask) {
         if (!registerLightMapProvider(skyMask))
             return;
 

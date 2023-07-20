@@ -9,6 +9,7 @@ package com.falsepattern.rple.api.color;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -16,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 public final class ErrorColor implements RPLENamedColor {
     private static final ErrorColor INSTANCE = new ErrorColor();
 
-    public static RPLENamedColor errorColor() {
+    public static @NotNull RPLENamedColor errorColor() {
         return INSTANCE;
     }
 
@@ -36,12 +37,12 @@ public final class ErrorColor implements RPLENamedColor {
     }
 
     @Override
-    public String colorDomain() {
+    public @NotNull String colorDomain() {
         return "invalid_domain";
     }
 
     @Override
-    public String colorName() {
+    public @NotNull String colorName() {
         return "invalid_name";
     }
 }

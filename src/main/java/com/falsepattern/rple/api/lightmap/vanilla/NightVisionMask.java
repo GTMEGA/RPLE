@@ -14,15 +14,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.MathHelper;
+import org.jetbrains.annotations.NotNull;
 
 public class NightVisionMask implements LightMapMask {
     @Override
-    public boolean generateBlockLightMapMask(LightMapStrip output, float partialTick) {
+    public boolean generateBlockLightMapMask(@NotNull LightMapStrip output, float partialTick) {
         return generateNightVisionMask(output, partialTick);
     }
 
     @Override
-    public boolean generateSkyLightMapMask(LightMapStrip output, float partialTick) {
+    public boolean generateSkyLightMapMask(@NotNull LightMapStrip output, float partialTick) {
         return generateNightVisionMask(output, partialTick);
     }
 

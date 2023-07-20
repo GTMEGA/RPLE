@@ -7,15 +7,17 @@
 
 package com.falsepattern.rple.api.event;
 
-import com.falsepattern.rple.api.block.BlockColorRegistry;
+import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
 import cpw.mods.fml.common.eventhandler.Event;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
-@Getter
-@Accessors(fluent = true, chain = false)
-@AllArgsConstructor
 public final class BlockColorRegistrationEvent extends Event {
-    private final BlockColorRegistry registry;
+    private final RPLEBlockColorRegistry registry;
+
+    public BlockColorRegistrationEvent(RPLEBlockColorRegistry registry) {
+        this.registry = registry;
+    }
+
+    public RPLEBlockColorRegistry registry() {
+        return this.registry;
+    }
 }

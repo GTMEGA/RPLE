@@ -9,11 +9,12 @@ package com.falsepattern.rple.api.block;
 
 import com.falsepattern.rple.api.color.RPLEColor;
 import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
 
-public interface ColoredTranslucentBlock {
-    RPLEColor getColoredTranslucency();
+public interface RPLEBlockBrightness {
+    RPLEColor getColoredBrightness();
 
-    RPLEColor getColoredTranslucency(int blockMeta);
+    RPLEColor getColoredBrightness(int blockMeta);
 
-    RPLEColor getColoredTranslucency(IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
+    RPLEColor getColoredBrightness(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
 }

@@ -7,7 +7,9 @@
 
 package com.falsepattern.rple.api.lightmap;
 
+import org.jetbrains.annotations.NotNull;
+
 @FunctionalInterface
 public interface SkyLightMapMask extends LightMapProvider {
-    boolean generateSkyLightMapMask(LightMapStrip output, float partialTick);
+    boolean generateSkyLightMapMask(@NotNull LightMapStrip output, float partialTick);
 }

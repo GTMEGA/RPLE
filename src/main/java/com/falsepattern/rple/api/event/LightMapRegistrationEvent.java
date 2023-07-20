@@ -9,14 +9,16 @@ package com.falsepattern.rple.api.event;
 
 import com.falsepattern.rple.api.lightmap.LightMapRegistry;
 import cpw.mods.fml.common.eventhandler.Event;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 
-@Getter
-@Accessors(fluent = true, chain = false)
-@AllArgsConstructor
 public final class LightMapRegistrationEvent extends Event {
     private final LightMapRegistry registry;
+
+    public LightMapRegistrationEvent(LightMapRegistry registry) {
+        this.registry = registry;
+    }
+
+    public LightMapRegistry registry() {
+        return this.registry;
+    }
 }

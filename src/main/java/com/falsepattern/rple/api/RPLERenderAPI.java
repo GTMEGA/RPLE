@@ -171,7 +171,7 @@ public final class RPLERenderAPI {
         return CookieMonster.packedLongToCookie(packedBrightness);
     }
 
-    public static void permit(Class<? extends Entity> entityClass) {
+    public static void permit(@NotNull Class<? extends Entity> entityClass) {
         EntityHelper.permit(entityClass);
     }
 
@@ -182,7 +182,7 @@ public final class RPLERenderAPI {
      *
      * @param entityClassName The fully qualified class name
      */
-    public static void permit(String entityClassName) {
+    public static void permit(@NotNull String entityClassName) {
         EntityHelper.permit(entityClassName);
     }
 }

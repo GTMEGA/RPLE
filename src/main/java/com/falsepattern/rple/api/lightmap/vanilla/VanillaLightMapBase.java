@@ -12,6 +12,7 @@ import com.falsepattern.rple.api.lightmap.LightMapStrip;
 import lombok.val;
 import lombok.var;
 import net.minecraft.client.Minecraft;
+import org.jetbrains.annotations.NotNull;
 
 import static com.falsepattern.rple.api.lightmap.LightMapStrip.LIGHT_MAP_STRIP_LENGTH;
 
@@ -19,7 +20,7 @@ public class VanillaLightMapBase implements LightMapBase {
     protected static final int END_DIMENSION_ID = 1;
 
     @Override
-    public boolean generateBlockLightMapBase(LightMapStrip output, float partialTick) {
+    public boolean generateBlockLightMapBase(@NotNull LightMapStrip output, float partialTick) {
         val worldProvider = Minecraft.getMinecraft().theWorld.provider;
 
         for (var i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
@@ -31,7 +32,7 @@ public class VanillaLightMapBase implements LightMapBase {
     }
 
     @Override
-    public boolean generateSkyLightMapBase(LightMapStrip output, float partialTick) {
+    public boolean generateSkyLightMapBase(@NotNull LightMapStrip output, float partialTick) {
         val world = Minecraft.getMinecraft().theWorld;
         val worldProvider = world.provider;
 
