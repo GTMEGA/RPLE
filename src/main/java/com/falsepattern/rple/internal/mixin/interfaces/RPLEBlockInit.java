@@ -7,12 +7,10 @@
 
 package com.falsepattern.rple.internal.mixin.interfaces;
 
-import com.falsepattern.rple.api.block.RPLEBlockBrightness;
-import com.falsepattern.rple.api.block.RPLEBlockTranslucency;
 import com.falsepattern.rple.api.color.RPLEColor;
 import org.jetbrains.annotations.Nullable;
 
-public interface IBlockMixin extends RPLEBlockBrightness, RPLEBlockTranslucency {
+public interface RPLEBlockInit {
     void rple$initBaseColoredBrightness(@Nullable RPLEColor baseColoredBrightness);
 
     void rple$initBaseColoredTranslucency(@Nullable RPLEColor baseColoredTranslucency);

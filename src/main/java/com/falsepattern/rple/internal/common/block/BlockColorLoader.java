@@ -12,7 +12,7 @@ import com.falsepattern.rple.api.block.RPLEBlockColorizer;
 import com.falsepattern.rple.api.color.RPLENamedColor;
 import com.falsepattern.rple.internal.config.container.BlockColorConfig;
 import com.falsepattern.rple.internal.config.container.BlockReference;
-import com.falsepattern.rple.internal.mixin.interfaces.IBlockMixin;
+import com.falsepattern.rple.internal.mixin.interfaces.RPLEBlockInit;
 import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.NoArgsConstructor;
 import lombok.val;
@@ -74,7 +74,7 @@ public final class BlockColorLoader implements RPLEBlockColorRegistry {
         val blockBrightnessMap = config.brightness();
         val blockTranslucencyMap = config.translucency();
 
-        val colouredBlocks = new IdentityHashMap<IBlockMixin, ColoredBlockedReference>();
+        val colouredBlocks = new IdentityHashMap<RPLEBlockInit, ColoredBlockedReference>();
 
         for (val blockBrightness : blockBrightnessMap.entrySet()) {
             val blockReference = blockBrightness.getKey();
@@ -126,7 +126,7 @@ public final class BlockColorLoader implements RPLEBlockColorRegistry {
     }
 
     @Override
-    public RPLEBlockColorizer colorizeBlock(@NotNull Block block) {
+    public @NotNull RPLEBlockColorizer colorizeBlock(@NotNull Block block) {
         if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
             return nullBlockColorizer();
@@ -140,7 +140,7 @@ public final class BlockColorLoader implements RPLEBlockColorRegistry {
     }
 
     @Override
-    public RPLEBlockColorizer colorizeBlock(@NotNull Block block, int blockMeta) {
+    public @NotNull RPLEBlockColorizer colorizeBlock(@NotNull Block block, int blockMeta) {
         if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
             return nullBlockColorizer();
@@ -154,7 +154,7 @@ public final class BlockColorLoader implements RPLEBlockColorRegistry {
     }
 
     @Override
-    public RPLEBlockColorizer colorizeBlock(@NotNull String blockID) {
+    public @NotNull RPLEBlockColorizer colorizeBlock(@NotNull String blockID) {
         if (registryLocked) {
             LOG.error("Block cannot be colorized after post init", new Throwable());
             return nullBlockColorizer();
@@ -195,7 +195,7 @@ public final class BlockColorLoader implements RPLEBlockColorRegistry {
         return blockDomain + ":" + blockName;
     }
 
-    private @Nullable IBlockMixin blockFromBlockReference(BlockReference blockReference) {
+    private @Nullable RPLEBlockInit blockFromBlockReference(BlockReference blockReference) {
         if (blockReference == null)
             return null;
 
@@ -205,8 +205,8 @@ public final class BlockColorLoader implements RPLEBlockColorRegistry {
             return null;
 
         val block = GameRegistry.findBlock(blockDomain, blockName);
-        if (block instanceof IBlockMixin)
-            return (IBlockMixin) block;
+        if (block instanceof RPLEBlockInit)
+            return (RPLEBlockInit) block;
         return null;
     }
 

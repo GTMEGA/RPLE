@@ -8,9 +8,12 @@
 package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
+import com.falsepattern.rple.api.block.RPLEBlock;
+import com.falsepattern.rple.api.block.RPLEBlockBrightness;
+import com.falsepattern.rple.api.block.RPLEBlockTranslucency;
 import com.falsepattern.rple.api.color.LightValueColor;
 import com.falsepattern.rple.api.color.RPLEColor;
-import com.falsepattern.rple.internal.mixin.interfaces.IBlockMixin;
+import com.falsepattern.rple.internal.mixin.interfaces.RPLEBlockInit;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -27,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Unique
 @Mixin(Block.class)
-public abstract class BlockMixin implements IBlockMixin {
+public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
     @Shadow
     public abstract int getLightValue();
 
@@ -41,24 +44,24 @@ public abstract class BlockMixin implements IBlockMixin {
     public abstract int getLightOpacity(IBlockAccess world, int posX, int posY, int posZ);
 
     @Nullable
-    private RPLEColor baseColoredBrightness = null;
+    private RPLEColor rple$baseColoredBrightness = null;
     @Nullable
-    private RPLEColor baseColoredTranslucency = null;
+    private RPLEColor rple$baseColoredTranslucency = null;
 
     @Nullable
-    private RPLEColor @Nullable [] metaColoredBrightness = null;
+    private RPLEColor @Nullable [] rple$metaColoredBrightness = null;
     @Nullable
-    private RPLEColor @Nullable [] metaColoredTranslucency = null;
+    private RPLEColor @Nullable [] rple$metaColoredTranslucency = null;
 
-    private ThreadLocal<Boolean> passBaseBrightness = new ThreadLocal<>();
-    private ThreadLocal<Boolean> passBaseOpacity = new ThreadLocal<>();
+    private ThreadLocal<Boolean> rple$passBaseBrightness = new ThreadLocal<>();
+    private ThreadLocal<Boolean> rple$passBaseOpacity = new ThreadLocal<>();
 
     @Inject(method = "<init>",
             at = @At("RETURN"),
             require = 1)
     private void initThreadLocals(Material material, CallbackInfo ci) {
-        passBaseBrightness = ThreadLocal.withInitial(() -> false);
-        passBaseOpacity = ThreadLocal.withInitial(() -> false);
+        rple$passBaseBrightness = ThreadLocal.withInitial(() -> false);
+        rple$passBaseOpacity = ThreadLocal.withInitial(() -> false);
     }
 
     @Inject(method = "getLightValue()I",
@@ -66,14 +69,12 @@ public abstract class BlockMixin implements IBlockMixin {
             cancellable = true,
             require = 1)
     private void rpleLightValue(CallbackInfoReturnable<Integer> cir) {
-        if (passBaseBrightness.get())
+        if (rple$passBaseBrightness.get())
             return;
 
-        val color = getColoredBrightness();
+        val color = rple$getColoredBrightness();
         val lightValue = RPLEColorAPI.maxColorComponent(color);
-
         cir.setReturnValue(lightValue);
-        cir.cancel();
     }
 
     @Inject(method = "getLightValue(Lnet/minecraft/world/IBlockAccess;III)I",
@@ -86,15 +87,13 @@ public abstract class BlockMixin implements IBlockMixin {
                                 int posY,
                                 int posZ,
                                 CallbackInfoReturnable<Integer> cir) {
-        if (passBaseBrightness.get())
+        if (rple$passBaseBrightness.get())
             return;
 
         val blockMeta = world.getBlockMetadata(posX, posY, posZ);
-        val color = getColoredBrightness(world, blockMeta, posX, posY, posZ);
+        val color = rple$getColoredBrightness(world, blockMeta, posX, posY, posZ);
         val lightValue = RPLEColorAPI.maxColorComponent(color);
-
         cir.setReturnValue(lightValue);
-        cir.cancel();
     }
 
     @Inject(method = "getLightOpacity()I",
@@ -102,12 +101,11 @@ public abstract class BlockMixin implements IBlockMixin {
             cancellable = true,
             require = 1)
     private void rpleLightOpacity(CallbackInfoReturnable<Integer> cir) {
-        if (passBaseOpacity.get())
+        if (rple$passBaseOpacity.get())
             return;
 
-        val color = getColoredTranslucency();
+        val color = rple$getColoredTranslucency();
         val lightOpacity = RPLEColorAPI.invertColorComponent(RPLEColorAPI.maxColorComponent(color));
-
         cir.setReturnValue(lightOpacity);
     }
 
@@ -121,146 +119,232 @@ public abstract class BlockMixin implements IBlockMixin {
                                   int posY,
                                   int posZ,
                                   CallbackInfoReturnable<Integer> cir) {
-        if (passBaseOpacity.get())
+        if (rple$passBaseOpacity.get())
             return;
 
         val blockMeta = world.getBlockMetadata(posX, posY, posZ);
-        val color = getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+        val color = rple$getColoredTranslucency(world, blockMeta, posX, posY, posZ);
         val lightOpacity = RPLEColorAPI.invertColorComponent(RPLEColorAPI.maxColorComponent(color));
-
         cir.setReturnValue(lightOpacity);
-        cir.cancel();
     }
 
     @Override
-    public RPLEColor getColoredBrightness() {
-        return getColoredBrightness(0);
-    }
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
+    public @NotNull RPLEColor rple$getColoredBrightness() {
+        if (this instanceof RPLEBlockBrightness) {
+            val block = (RPLEBlockBrightness) this;
+            try {
+                val customBrightness = block.getColoredBrightness();
+                if (customBrightness != null)
+                    return customBrightness;
+            } catch (Exception ignored) {
+            }
+        }
 
-    @Override
-    public RPLEColor getColoredBrightness(int blockMeta) {
-        val metaBrightness = lookupMetaBrightness(blockMeta);
+        val metaBrightness = lookupMetaBrightness();
         if (metaBrightness != null)
             return metaBrightness;
 
-        if (baseColoredBrightness != null)
-            return baseColoredBrightness;
+        if (rple$baseColoredBrightness != null)
+            return rple$baseColoredBrightness;
 
         return fallbackBrightness();
     }
 
     @Override
-    public RPLEColor getColoredBrightness(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
+    public @NotNull RPLEColor rple$getColoredBrightness(int blockMeta) {
+        if (this instanceof RPLEBlockBrightness) {
+            val block = (RPLEBlockBrightness) this;
+            try {
+                val customBrightness = block.getColoredBrightness(blockMeta);
+                if (customBrightness != null)
+                    return customBrightness;
+            } catch (Exception ignored) {
+            }
+        }
+
         val metaBrightness = lookupMetaBrightness(blockMeta);
         if (metaBrightness != null)
             return metaBrightness;
+        return fallbackBrightness();
+    }
 
-        if (baseColoredBrightness != null)
-            return baseColoredBrightness;
+    @Override
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
+    public @NotNull RPLEColor rple$getColoredBrightness(@NotNull IBlockAccess world,
+                                                        int blockMeta,
+                                                        int posX,
+                                                        int posY,
+                                                        int posZ) {
+        if (this instanceof RPLEBlockBrightness) {
+            val block = (RPLEBlockBrightness) this;
+            try {
+                val customBrightness = block.getColoredBrightness(world, blockMeta, posX, posY, posZ);
+                if (customBrightness != null)
+                    return customBrightness;
+            } catch (Exception ignored) {
+            }
+        }
 
+        val metaBrightness = lookupMetaBrightness(blockMeta);
+        if (metaBrightness != null)
+            return metaBrightness;
         return fallbackBrightness(world, posX, posY, posZ);
     }
 
     @Override
-    public RPLEColor getColoredTranslucency() {
-        return getColoredTranslucency(0);
-    }
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
+    public @NotNull RPLEColor rple$getColoredTranslucency() {
+        if (this instanceof RPLEBlockTranslucency) {
+            val block = (RPLEBlockTranslucency) this;
+            try {
+                val customTranslucency = block.getColoredTranslucency();
+                if (customTranslucency != null)
+                    return customTranslucency;
+            } catch (Exception ignored) {
+            }
+        }
 
-    @Override
-    public RPLEColor getColoredTranslucency(int blockMeta) {
-        val metaTranslucency = lookupMetaTranslucency(blockMeta);
+        val metaTranslucency = lookupMetaTranslucency();
         if (metaTranslucency != null)
             return metaTranslucency;
 
-        if (baseColoredTranslucency != null)
-            return baseColoredTranslucency;
+        if (rple$baseColoredTranslucency != null)
+            return rple$baseColoredTranslucency;
 
         return fallbackTranslucency();
     }
 
     @Override
-    public RPLEColor getColoredTranslucency(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
+    public @NotNull RPLEColor rple$getColoredTranslucency(int blockMeta) {
+        if (this instanceof RPLEBlockTranslucency) {
+            val block = (RPLEBlockTranslucency) this;
+            try {
+                val customTranslucency = block.getColoredTranslucency(blockMeta);
+                if (customTranslucency != null)
+                    return customTranslucency;
+            } catch (Exception ignored) {
+            }
+        }
+
         val metaTranslucency = lookupMetaTranslucency(blockMeta);
         if (metaTranslucency != null)
             return metaTranslucency;
 
-        if (baseColoredTranslucency != null)
-            return baseColoredTranslucency;
+        if (rple$baseColoredTranslucency != null)
+            return rple$baseColoredTranslucency;
+
+        return fallbackTranslucency();
+    }
+
+    @Override
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
+    public @NotNull RPLEColor rple$getColoredTranslucency(@NotNull IBlockAccess world,
+                                                          int blockMeta,
+                                                          int posX,
+                                                          int posY,
+                                                          int posZ) {
+        if (this instanceof RPLEBlockTranslucency) {
+            val block = (RPLEBlockTranslucency) this;
+            try {
+                val customTranslucency = block.getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+                if (customTranslucency != null)
+                    return customTranslucency;
+            } catch (Exception ignored) {
+            }
+        }
+
+        val metaTranslucency = lookupMetaTranslucency(blockMeta);
+        if (metaTranslucency != null)
+            return metaTranslucency;
+
+        if (rple$baseColoredTranslucency != null)
+            return rple$baseColoredTranslucency;
 
         return fallbackTranslucency(world, posX, posY, posZ);
     }
 
     @Override
     public void rple$initBaseColoredBrightness(@Nullable RPLEColor baseColoredBrightness) {
-        this.baseColoredBrightness = baseColoredBrightness;
+        this.rple$baseColoredBrightness = baseColoredBrightness;
     }
 
     @Override
     public void rple$initBaseColoredTranslucency(@Nullable RPLEColor baseColoredTranslucency) {
-        this.baseColoredTranslucency = baseColoredTranslucency;
+        this.rple$baseColoredTranslucency = baseColoredTranslucency;
     }
 
     @Override
     public void rple$initMetaColoredBrightness(@Nullable RPLEColor @Nullable [] metaColoredBrightness) {
-        this.metaColoredBrightness = metaColoredBrightness;
+        this.rple$metaColoredBrightness = metaColoredBrightness;
     }
 
     @Override
     public void rple$initMetaColoredTranslucency(@Nullable RPLEColor @Nullable [] metaColoredTranslucency) {
-        this.metaColoredTranslucency = metaColoredTranslucency;
+        this.rple$metaColoredTranslucency = metaColoredTranslucency;
+    }
+
+    private @Nullable RPLEColor lookupMetaBrightness() {
+        return lookupMetaBrightness(0);
     }
 
     private @Nullable RPLEColor lookupMetaBrightness(int blockMeta) {
         if (blockMeta < 0)
-            return null;
-        if (metaColoredBrightness == null)
-            return null;
-        if (blockMeta >= metaColoredBrightness.length)
-            return null;
+            return rple$baseColoredBrightness;
+        if (rple$metaColoredBrightness == null)
+            return rple$baseColoredBrightness;
+        if (blockMeta >= rple$metaColoredBrightness.length)
+            return rple$baseColoredBrightness;
+        val metaBrightness = rple$metaColoredBrightness[blockMeta];
+        if (metaBrightness != null)
+            return metaBrightness;
+        return rple$baseColoredBrightness;
+    }
 
-        return metaColoredBrightness[blockMeta];
+    private @Nullable RPLEColor lookupMetaTranslucency() {
+        return lookupMetaTranslucency(0);
     }
 
     private @Nullable RPLEColor lookupMetaTranslucency(int blockMeta) {
         if (blockMeta < 0)
             return null;
-        if (metaColoredTranslucency == null)
+        if (rple$metaColoredTranslucency == null)
             return null;
-        if (blockMeta >= metaColoredTranslucency.length)
+        if (blockMeta >= rple$metaColoredTranslucency.length)
             return null;
-
-        return metaColoredTranslucency[blockMeta];
+        val metaTranslucency = rple$metaColoredTranslucency[blockMeta];
+        if (metaTranslucency != null)
+            return metaTranslucency;
+        return rple$baseColoredTranslucency;
     }
 
     private RPLEColor fallbackBrightness() {
-        passBaseBrightness.set(true);
+        rple$passBaseBrightness.set(true);
         val color = LightValueColor.fromVanillaLightValue(getLightValue());
-        passBaseBrightness.set(false);
+        rple$passBaseBrightness.set(false);
         return color;
     }
 
     private RPLEColor fallbackBrightness(IBlockAccess world, int posX, int posY, int posZ) {
-        passBaseBrightness.set(true);
+        rple$passBaseBrightness.set(true);
         val color = LightValueColor.fromVanillaLightValue(getLightValue(world, posX, posY, posZ));
-        passBaseBrightness.set(false);
+        rple$passBaseBrightness.set(false);
         return color;
     }
 
     private RPLEColor fallbackTranslucency() {
-        passBaseOpacity.set(true);
+        rple$passBaseOpacity.set(true);
         val color = LightValueColor.fromVanillaLightOpacity(getLightOpacity());
-        passBaseOpacity.set(false);
+        rple$passBaseOpacity.set(false);
         return color;
     }
 
     private RPLEColor fallbackTranslucency(IBlockAccess world, int posX, int posY, int posZ) {
-        passBaseOpacity.set(true);
+        rple$passBaseOpacity.set(true);
         val color = LightValueColor.fromVanillaLightOpacity(getLightOpacity(world, posX, posY, posZ));
-        passBaseOpacity.set(false);
+        rple$passBaseOpacity.set(false);
         return color;
-    }
-
-    private Block thiz() {
-        return (Block) (Object) this;
     }
 }

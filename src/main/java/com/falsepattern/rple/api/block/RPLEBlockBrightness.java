@@ -12,9 +12,9 @@ import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 
 public interface RPLEBlockBrightness {
-    RPLEColor getColoredBrightness();
+    @NotNull RPLEColor getColoredBrightness();
 
-    RPLEColor getColoredBrightness(int blockMeta);
+    @NotNull RPLEColor getColoredBrightness(int blockMeta);
 
-    RPLEColor getColoredBrightness(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
+    @NotNull RPLEColor getColoredBrightness(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
 }

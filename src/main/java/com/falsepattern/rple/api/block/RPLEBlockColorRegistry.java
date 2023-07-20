@@ -11,9 +11,9 @@ import net.minecraft.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public interface RPLEBlockColorRegistry {
-    RPLEBlockColorizer colorizeBlock(@NotNull Block block);
+    @NotNull RPLEBlockColorizer colorizeBlock(@NotNull Block block);
 
-    RPLEBlockColorizer colorizeBlock(@NotNull Block block, int blockMeta);
+    @NotNull RPLEBlockColorizer colorizeBlock(@NotNull Block block, int blockMeta);
 
-    RPLEBlockColorizer colorizeBlock(@NotNull String blockID);
+    @NotNull RPLEBlockColorizer colorizeBlock(@NotNull String blockID);
 }

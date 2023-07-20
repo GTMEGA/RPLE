@@ -28,10 +28,11 @@ public final class Compat {
 
     private static class ShadersCompat {
         public static void toggleLightMap(boolean state) {
-            if (state)
+            if (state) {
                 Shaders.enableLightmap();
-            else
+            } else {
                 Shaders.disableLightmap();
+            }
         }
 
         public static void setActiveTexture(int texture) {

@@ -10,8 +10,7 @@ package com.falsepattern.rple.internal.common.storage.world;
 import com.falsepattern.lumina.api.LumiAPI;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
-import com.falsepattern.rple.api.block.RPLEBlockBrightness;
-import com.falsepattern.rple.api.block.RPLEBlockTranslucency;
+import com.falsepattern.rple.api.block.RPLEBlock;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
@@ -230,15 +229,15 @@ public final class RPLEWorldContainer implements RPLEWorld {
 
     @Override
     public int lumi$getBlockBrightness(@NotNull Block blockBase, int blockMeta, int posX, int posY, int posZ) {
-        val block = (RPLEBlockBrightness) blockBase;
-        val brightness = block.getColoredBrightness(base, blockMeta, posX, posY, posZ);
+        val block = (RPLEBlock) blockBase;
+        val brightness = block.rple$getColoredBrightness(base, blockMeta, posX, posY, posZ);
         return channel.componentFromColor(brightness);
     }
 
     @Override
     public int lumi$getBlockOpacity(@NotNull Block blockBase, int blockMeta, int posX, int posY, int posZ) {
-        val block = (RPLEBlockTranslucency) blockBase;
-        val translucency = block.getColoredTranslucency(base, blockMeta, posX, posY, posZ);
+        val block = (RPLEBlock) blockBase;
+        val translucency = block.rple$getColoredTranslucency(base, blockMeta, posX, posY, posZ);
         return invertColorComponent(channel.componentFromColor(translucency));
     }
 

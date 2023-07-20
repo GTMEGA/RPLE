@@ -134,7 +134,7 @@ public class LampBlock extends Block implements RPLEBlockBrightness {
     }
 
     @Override
-    public RPLEColor getColoredBrightness(IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+    public RPLEColor getColoredBrightness(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
         return DefaultColor.BLUE;
     }
 }

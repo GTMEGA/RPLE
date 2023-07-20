@@ -12,17 +12,17 @@ import com.falsepattern.rple.api.color.RPLENamedColor;
 import org.jetbrains.annotations.NotNull;
 
 public interface RPLEBlockColorizer {
-    RPLEBlockColorizer brightness(int color);
+    @NotNull RPLEBlockColorizer brightness(int color);
 
-    RPLEBlockColorizer brightness(@NotNull RPLEColor color);
+    @NotNull RPLEBlockColorizer brightness(@NotNull RPLEColor color);
 
-    RPLEBlockColorizer brightness(@NotNull RPLENamedColor color);
+    @NotNull RPLEBlockColorizer brightness(@NotNull RPLENamedColor color);
 
-    RPLEBlockColorizer translucency(int color);
+    @NotNull RPLEBlockColorizer translucency(int color);
 
-    RPLEBlockColorizer translucency(@NotNull RPLEColor color);
+    @NotNull RPLEBlockColorizer translucency(@NotNull RPLEColor color);
 
-    RPLEBlockColorizer translucency(@NotNull RPLENamedColor color);
+    @NotNull RPLEBlockColorizer translucency(@NotNull RPLENamedColor color);
 
     void apply();
 }
