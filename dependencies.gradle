@@ -17,8 +17,8 @@ dependencies {
     implementation("com.falsepattern:falsepatternlib-mc1.7.10:0.12.0-pre1:dev")
 
     // LUMINA
-    compileOnly("com.falsepattern:lumina-mc1.7.10:c2f4949:api")
-    runtimeOnly("com.falsepattern:lumina-mc1.7.10:c2f4949:dev")
+    compileOnly("com.falsepattern:lumina-mc1.7.10:0f1cce3:api")
+    runtimeOnly("com.falsepattern:lumina-mc1.7.10:0f1cce3:dev")
 
     // FalseTweaks
     implementation("com.falsepattern:falsetweaks-mc1.7.10:2.5.7:dev")

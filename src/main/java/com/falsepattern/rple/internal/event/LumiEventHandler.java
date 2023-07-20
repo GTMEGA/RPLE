@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.event;
 
-import com.falsepattern.lumina.api.event.LumiWorldRegistrationEvent;
+import com.falsepattern.lumina.api.event.LumiWorldProviderRegistrationEvent;
 import com.falsepattern.rple.internal.Tags;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventBus;
@@ -43,7 +43,7 @@ public final class LumiEventHandler {
     }
 
     @SubscribeEvent
-    public void lumiWorldRegistration(LumiWorldRegistrationEvent evt) {
+    public void lumiWorldRegistration(LumiWorldProviderRegistrationEvent evt) {
         val registry = evt.registry();
         registry.hijackDefaultWorldProviders(Tags.MOD_NAME);
         registry.registerWorldProvider(redRPLEWorldProvider());
