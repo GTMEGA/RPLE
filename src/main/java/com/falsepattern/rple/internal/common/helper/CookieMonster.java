@@ -7,15 +7,15 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
-import com.falsepattern.rple.Tags;
 import com.falsepattern.rple.internal.collection.CircularLongBuffer;
 import com.falsepattern.rple.internal.mixin.mixins.client.TessellatorMixin;
 import lombok.val;
 import lombok.var;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
 
 /**
  * All parts of Minecraft's rendering internals expect light levels an int, but we can only fit our data into longs.
@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * manager! Additionally, they should not be saved anywhere, as they expire very quickly.
  */
 public final class CookieMonster {
-    private static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME + "|Cookie Monster");
+    private static final Logger LOG = createLogger("Cookie Monster");
 
     // Cookie format (bits):
     // 0100 0000 IIII IIII IIII IIII 0000 000P

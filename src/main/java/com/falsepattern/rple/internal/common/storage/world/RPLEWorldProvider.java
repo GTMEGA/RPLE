@@ -9,8 +9,8 @@ package com.falsepattern.rple.internal.common.storage.world;
 
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.lumina.api.world.LumiWorldProvider;
-import com.falsepattern.rple.Tags;
 import com.falsepattern.rple.api.color.ColorChannel;
+import com.falsepattern.rple.internal.Tags;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;

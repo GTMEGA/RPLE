@@ -7,7 +7,6 @@
 
 package com.falsepattern.rple.internal.common.block;
 
-import com.falsepattern.rple.Tags;
 import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
 import com.falsepattern.rple.api.block.RPLEBlockColorizer;
 import com.falsepattern.rple.api.color.RPLENamedColor;
@@ -18,7 +17,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.NoArgsConstructor;
 import lombok.val;
 import net.minecraft.block.Block;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.IdentityHashMap;
 
+import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
 import static com.falsepattern.rple.internal.common.RPLEDefaultValues.*;
 import static com.falsepattern.rple.internal.common.block.NullBlockColorizer.nullBlockColorizer;
 import static com.falsepattern.rple.internal.config.ColorConfigHandler.loadCustomConfig;
@@ -35,7 +34,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class BlockColorLoader implements RPLEBlockColorRegistry {
-    private static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME + "|" + "Block Color Loader");
+    private static final Logger LOG = createLogger("Block Color Loader");
 
     private static final BlockColorLoader INSTANCE = new BlockColorLoader();
 

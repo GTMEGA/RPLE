@@ -19,7 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.falsepattern.rple;
+package com.falsepattern.rple.internal;
 
 import lombok.experimental.UtilityClass;
 
@@ -36,9 +36,7 @@ public final class Tags {
                                               "required-after:lumina;" +
                                               "required-after:falsetweaks@[2.4,)";
 
-    public static final String INTERNAL_GROUP_NAME = GROUP_NAME + ".internal";
-
-    public static final String PROXY_GROUP_NAME = INTERNAL_GROUP_NAME + ".proxy";
+    public static final String PROXY_GROUP_NAME = GROUP_NAME + ".proxy";
     public static final String CLIENT_PROXY_CLASS_NAME = PROXY_GROUP_NAME + ".ClientProxy";
     public static final String SERVER_PROXY_CLASS_NAME = PROXY_GROUP_NAME + ".ServerProxy";
 }

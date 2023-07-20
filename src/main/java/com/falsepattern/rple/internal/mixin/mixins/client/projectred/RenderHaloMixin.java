@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.projectred;
 
 import codechicken.lib.render.CCRenderState;
-import com.falsepattern.rple.Tags;
+import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.mixin.helpers.OpenGlHelperPacked;
 import lombok.val;

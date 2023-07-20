@@ -7,25 +7,24 @@
 
 package com.falsepattern.rple.internal.client.lightmap;
 
-import com.falsepattern.rple.Tags;
 import com.falsepattern.rple.api.lightmap.*;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
 import static com.falsepattern.rple.internal.common.RPLEDefaultValues.registerDefaultLightMaps;
 import static com.falsepattern.rple.internal.event.EventPoster.postLightMapRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class LightMapPipeline implements LightMapRegistry {
-    private static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME + "|" + "Light Map Pipeline");
+    private static final Logger LOG = createLogger("Light Map Pipeline");
 
     private static final LightMapPipeline INSTANCE = new LightMapPipeline();
 

@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.config;
 
 import com.falsepattern.lib.util.FileUtil;
-import com.falsepattern.rple.Tags;
+import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.config.adapter.BlockReferenceJSONAdapter;
 import com.falsepattern.rple.internal.config.adapter.ColorReferenceJSONAdapter;
 import com.falsepattern.rple.internal.config.adapter.HexColorJSONAdapter;

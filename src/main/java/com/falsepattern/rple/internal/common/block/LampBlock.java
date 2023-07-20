@@ -7,10 +7,10 @@
 
 package com.falsepattern.rple.internal.common.block;
 
-import com.falsepattern.rple.Tags;
 import com.falsepattern.rple.api.block.RPLEBlockBrightness;
 import com.falsepattern.rple.api.color.DefaultColor;
 import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.client.render.ClampedIcon;
 import com.falsepattern.rple.internal.client.render.LampRenderer;
 import lombok.val;

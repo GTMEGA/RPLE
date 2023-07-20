@@ -7,18 +7,18 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
-import com.falsepattern.rple.Tags;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import net.minecraft.entity.Entity;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
+import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
+
 @UtilityClass
 public final class EntityHelper {
-    public static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME + "|Entity Helper");
+    public static final Logger LOG = createLogger("Entity Helper");
 
     private static final Set<String> PERMITTED = new HashSet<>();
     private static final Map<Class<?>, Boolean> BLOCK_LIST_CACHE = new HashMap<>();

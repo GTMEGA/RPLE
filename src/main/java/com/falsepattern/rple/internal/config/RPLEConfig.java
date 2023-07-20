@@ -9,7 +9,7 @@ package com.falsepattern.rple.internal.config;
 
 import com.falsepattern.lib.config.Config;
 import com.falsepattern.lib.config.ConfigurationManager;
-import com.falsepattern.rple.Tags;
+import com.falsepattern.rple.internal.Tags;
 
 @Config(modid = Tags.MOD_ID)
 public class RPLEConfig {

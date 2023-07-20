@@ -19,7 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.falsepattern.rple;
+package com.falsepattern.rple.internal;
 
 
 import com.falsepattern.rple.internal.proxy.CommonProxy;
@@ -27,8 +27,10 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import static com.falsepattern.rple.Tags.*;
+import static com.falsepattern.rple.internal.Tags.*;
 
 @Mod(modid = MOD_ID,
      version = VERSION,
@@ -39,6 +41,10 @@ import static com.falsepattern.rple.Tags.*;
 public final class RightProperLightingEngine {
     @SidedProxy(clientSide = CLIENT_PROXY_CLASS_NAME, serverSide = SERVER_PROXY_CLASS_NAME)
     public static CommonProxy PROXY;
+
+    public static Logger createLogger(String name) {
+        return LogManager.getLogger(MOD_NAME + "|" + name);
+    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent evt) {

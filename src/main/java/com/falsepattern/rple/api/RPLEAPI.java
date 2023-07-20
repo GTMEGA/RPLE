@@ -21,13 +21,15 @@
 
 package com.falsepattern.rple.api;
 
-public final class RPLEShadersAPI {
-    public static final String RED_LIGHT_MAP_UNIFORM_NAME = "redLightMap";
-    public static final String GREEN_LIGHT_MAP_UNIFORM_NAME = "greenLightMap";
-    public static final String BLUE_LIGHT_MAP_UNIFORM_NAME = "blueLightMap";
+import static com.falsepattern.rple.internal.Tags.*;
 
-    public static final String EDGE_TEX_COORD_ATTRIB_NAME = "rple_edgeTexCoord";
-    public static final int edgeTexCoordAttrib = 13;
-    public static boolean useRPLEEdgeTexCoordAttrib = false;
-    public static boolean progUseRPLEEdgeTexCoordAttrib = false;
+@SuppressWarnings("unused")
+public final class RPLEAPI {
+    public static final String RPLE_MOD_ID = MOD_ID;
+    public static final String RPLE_MOD_NAME = MOD_NAME;
+    public static final String RPLE_VERSION = VERSION;
+
+    private RPLEAPI() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 }

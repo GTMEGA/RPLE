@@ -8,21 +8,21 @@
 package com.falsepattern.rple.internal.event;
 
 import com.falsepattern.lumina.api.event.LumiWorldRegistrationEvent;
-import com.falsepattern.rple.Tags;
+import com.falsepattern.rple.internal.Tags;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventBus;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import lombok.NoArgsConstructor;
 import lombok.val;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
 import static com.falsepattern.rple.internal.common.storage.world.RPLEWorldProvider.*;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class LumiEventHandler {
-    private static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME + "|Lumi Event Handler");
+    private static final Logger LOG = createLogger("Lumi Event Handler");
 
     private static final LumiEventHandler INSTANCE = new LumiEventHandler();
 
