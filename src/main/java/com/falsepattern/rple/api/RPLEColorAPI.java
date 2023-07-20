@@ -37,11 +37,19 @@ public final class RPLEColorAPI {
     }
 
     public static int minColorComponent(@NotNull RPLEColor color) {
-        return Math.min(color.red(), Math.min(color.green(), color.blue()));
+        return minColorComponent(color.red(), color.green(), color.blue());
     }
 
     public static int maxColorComponent(@NotNull RPLEColor color) {
-        return Math.max(color.red(), Math.max(color.green(), color.blue()));
+        return maxColorComponent(color.red(), color.green(), color.blue());
+    }
+
+    public static int minColorComponent(int red, int green, int blue) {
+        return Math.min(red, Math.min(green, blue));
+    }
+
+    public static int maxColorComponent(int red, int green, int blue) {
+        return Math.max(red, Math.max(green, blue));
     }
 
     public static int colorHashCode(@NotNull RPLEColor colour) {

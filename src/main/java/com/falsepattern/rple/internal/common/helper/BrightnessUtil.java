@@ -7,12 +7,14 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
+import lombok.experimental.UtilityClass;
 import lombok.val;
 
 /**
  * Utility class for managing minecraft brightness values, and packed long RGB versions of these brightness values.
  */
-public class BrightnessUtil {
+@UtilityClass
+public final class BrightnessUtil {
     private static final int BLOCK_LIGHT_MASK = 0x000000FF;
     private static final int SKYLIGHT_MASK = 0x00FF0000;
 

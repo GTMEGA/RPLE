@@ -106,10 +106,9 @@ public abstract class BlockMixin implements IBlockMixin {
             return;
 
         val color = getColoredTranslucency();
-        val lightValue = RPLEColorAPI.invertColorComponent(RPLEColorAPI.minColorComponent(color));
+        val lightOpacity = RPLEColorAPI.invertColorComponent(RPLEColorAPI.maxColorComponent(color));
 
-        cir.setReturnValue(lightValue);
-        cir.cancel();
+        cir.setReturnValue(lightOpacity);
     }
 
     @Inject(method = "getLightOpacity(Lnet/minecraft/world/IBlockAccess;III)I",

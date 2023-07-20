@@ -25,7 +25,6 @@ import com.falsepattern.falsetweaks.Compat;
 import com.falsepattern.lib.util.MathUtil;
 import com.falsepattern.lib.util.RenderUtil;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -37,6 +36,7 @@ import org.lwjgl.opengl.GL14;
 
 import java.awt.*;
 
+import static com.falsepattern.rple.api.RPLEWorldAPI.*;
 import static com.falsepattern.rple.api.color.ColorChannel.*;
 import static net.minecraft.client.Minecraft.getMinecraft;
 
@@ -57,15 +57,15 @@ public final class LightValueOverlayRenderer {
     private static final Color GREEN_SKY_LIGHT_COLOR = new Color(0x7DFF42);
     private static final Color BLUE_SKY_LIGHT_COLOR = new Color(0x00FFD9);
 
-    private static final Color MIXED_BLOCK_LIGHT_COLOR = new Color(0xACFFF8);
-    private static final Color MIXED_SKY_LIGHT_COLOR = new Color(0xE0C43B);
-    private static final Color MIXED_ALL_LIGHT_COLOR = new Color(0xFEF9D6);
+    private static final Color MIXED_BLOCK_LIGHT_COLOR = new Color(0xE0C43B);
+    private static final Color MIXED_SKY_LIGHT_COLOR = new Color(0xACFFF8);
+    private static final Color MIXED_ALL_LIGHT_COLOR = new Color(0xE094FF);
 
     private static final ResourceLocation LIGHT_VALUE_ATLAS_TEXTURE =
             new ResourceLocation(Tags.MOD_ID, "textures/overlays/light_value_atlas.png");
 
-    private static final int HORIZONTAL_DRAW_RANGE = 10;
-    private static final int VERTICAL_DRAW_RANGE = 10;
+    private static final int HORIZONTAL_DRAW_RANGE = 30;
+    private static final int VERTICAL_DRAW_RANGE = 20;
 
     public static void renderLightValueOverlay() {
         val minecraft = getMinecraft();
@@ -132,28 +132,26 @@ public final class LightValueOverlayRenderer {
 
         drawOutline(tess, posX, posY, posZ);
 
-        val worldRoot = (RPLEWorldRoot) world;
-        val redWorld = worldRoot.rple$world(RED_CHANNEL);
-        val greenWorld = worldRoot.rple$world(GREEN_CHANNEL);
-        val blueWorld = worldRoot.rple$world(BLUE_CHANNEL);
+        val redBlockLight = getChannelBlockLightValue(world, RED_CHANNEL, posX, posY, posZ);
+        drawNumber(tess, posX, posY, posZ, 0, 0, RED_BLOCK_LIGHT_COLOR, redBlockLight);
+        val greenBlockLight = getChannelBlockLightValue(world, GREEN_CHANNEL, posX, posY, posZ);
+        drawNumber(tess, posX, posY, posZ, 0, 1, GREEN_BLOCK_LIGHT_COLOR, greenBlockLight);
+        val blueBlockLight = getChannelBlockLightValue(world, BLUE_CHANNEL, posX, posY, posZ);
+        drawNumber(tess, posX, posY, posZ, 0, 2, BLUE_BLOCK_LIGHT_COLOR, blueBlockLight);
 
-        val redBlockLightValue = redWorld.lumi$getBlockLightValue(posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 0, 0, RED_BLOCK_LIGHT_COLOR, redBlockLightValue);
-        val greenBlockLightValue = greenWorld.lumi$getBlockLightValue(posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 0, 1, GREEN_BLOCK_LIGHT_COLOR, greenBlockLightValue);
-        val blueBlockLightValue = blueWorld.lumi$getBlockLightValue(posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 0, 2, BLUE_BLOCK_LIGHT_COLOR, blueBlockLightValue);
+        val redSkyLight = getChannelSkyLightValue(world, RED_CHANNEL, posX, posY, posZ);
+        drawNumber(tess, posX, posY, posZ, 1, 0, RED_SKY_LIGHT_COLOR, redSkyLight);
+        val greenSkyLight = getChannelSkyLightValue(world, GREEN_CHANNEL, posX, posY, posZ);
+        drawNumber(tess, posX, posY, posZ, 1, 1, GREEN_SKY_LIGHT_COLOR, greenSkyLight);
+        val blueSkyLight = getChannelSkyLightValue(world, BLUE_CHANNEL, posX, posY, posZ);
+        drawNumber(tess, posX, posY, posZ, 1, 2, BLUE_SKY_LIGHT_COLOR, blueSkyLight);
 
-        val redSkyLightValue = redWorld.lumi$getSkyLightValue(posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 1, 0, RED_SKY_LIGHT_COLOR, redSkyLightValue);
-        val greenSkyLightValue = greenWorld.lumi$getSkyLightValue(posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 1, 1, GREEN_SKY_LIGHT_COLOR, greenSkyLightValue);
-        val blueSkyLightValue = blueWorld.lumi$getSkyLightValue(posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 1, 2, BLUE_SKY_LIGHT_COLOR, blueSkyLightValue);
-
-//        drawNumber(tess, posX, posY, posZ, 2, 0, MIXED_BLOCK_LIGHT_COLOR, 6);
-//        drawNumber(tess, posX, posY, posZ, 2, 1, MIXED_SKY_LIGHT_COLOR, 7);
-//        drawNumber(tess, posX, posY, posZ, 2, 2, MIXED_ALL_LIGHT_COLOR, 8);
+        val greyscaleBlockLight = getGreyscaleBlockLightValue(world, posX, posY, posZ);
+        drawNumber(tess, posX, posY, posZ, 2, 0, MIXED_BLOCK_LIGHT_COLOR, greyscaleBlockLight);
+        val greyscaleSkyLight = getGreyscaleSkyLightValue(world, posX, posY, posZ);
+        drawNumber(tess, posX, posY, posZ, 2, 1, MIXED_SKY_LIGHT_COLOR, greyscaleSkyLight);
+        val greyscaleLightValue = getGreyscaleLightValue(world, posX, posY, posZ);
+        drawNumber(tess, posX, posY, posZ, 2, 2, MIXED_ALL_LIGHT_COLOR, greyscaleLightValue);
     }
 
     private static void drawOutline(Tessellator tess, float posX, float posY, float posZ) {

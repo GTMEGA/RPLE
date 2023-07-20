@@ -7,9 +7,11 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
+import lombok.experimental.UtilityClass;
 import lombok.val;
 
-public class CookieWrappers {
+@UtilityClass
+public final class CookieWrappers {
     /**
      * Convenience method, identical to {@link BrightnessUtil#packedMax(long, long)}, but automatically decodes and
      * encodes the input/output into cookies.
