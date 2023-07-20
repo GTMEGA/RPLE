@@ -9,14 +9,16 @@ package com.falsepattern.rple.api;
 
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
-import lombok.experimental.UtilityClass;
-import lombok.val;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-@UtilityClass
 public final class RPLEWorldAPI {
+    private RPLEWorldAPI() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
     public static int getMaxBrightness() {
         return 0;
     }
@@ -39,8 +41,8 @@ public final class RPLEWorldAPI {
         if (blockAccess instanceof RPLEWorldRoot)
             return (RPLEWorldRoot) blockAccess;
         if (blockAccess instanceof ChunkCache) {
-            val chunkCache = (ChunkCache) blockAccess;
-            val worldBase = chunkCache.worldObj;
+            final ChunkCache chunkCache = (ChunkCache) blockAccess;
+            final World worldBase = chunkCache.worldObj;
             if (worldBase instanceof RPLEWorldRoot)
                 return (RPLEWorldRoot) worldBase;
         }

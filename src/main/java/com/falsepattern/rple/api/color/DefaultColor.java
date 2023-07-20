@@ -7,12 +7,8 @@
 
 package com.falsepattern.rple.api.color;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
-@Getter
-@Accessors(fluent = true, chain = false)
 public enum DefaultColor implements RPLENamedColor {
     // @formatter:off
     WHITE          (15, 15, 15),
@@ -69,8 +65,24 @@ public enum DefaultColor implements RPLENamedColor {
         this.colorName = name().toLowerCase();
     }
 
+    public @NotNull String colorName() {
+        return colorName;
+    }
+
     @Override
     public @NotNull String colorDomain() {
         return DEFAULT_COLOR_DOMAIN;
+    }
+
+    public int red() {
+        return red;
+    }
+
+    public int green() {
+        return green;
+    }
+
+    public int blue() {
+        return blue;
     }
 }

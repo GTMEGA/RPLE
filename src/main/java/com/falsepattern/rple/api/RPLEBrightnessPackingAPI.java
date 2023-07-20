@@ -22,10 +22,13 @@
 package com.falsepattern.rple.api;
 
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
+@SuppressWarnings("unused")
 public final class RPLEBrightnessPackingAPI {
+    private RPLEBrightnessPackingAPI() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
     public static int tessellatorBrightnessFromPackedBrightness(long packedBrightness) {
         return CookieMonster.packedLongToCookie(packedBrightness);
     }

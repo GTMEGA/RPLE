@@ -8,13 +8,8 @@
 package com.falsepattern.rple.api.color;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
-@Getter
-@Accessors(fluent = true, chain = false)
-@AllArgsConstructor
 public class CustomNamedColor implements RPLENamedColor {
     protected final int red;
     protected final int green;
@@ -23,12 +18,41 @@ public class CustomNamedColor implements RPLENamedColor {
     protected final String colorDomain;
     protected final String colorName;
 
+    public CustomNamedColor(int red, int green, int blue, String colorDomain, String colorName) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        this.colorDomain = colorDomain;
+        this.colorName = colorName;
+    }
+
+    public @NotNull String colorDomain() {
+        return colorDomain;
+    }
+
+    public @NotNull String colorName() {
+        return colorName;
+    }
+
+    public int red() {
+        return red;
+    }
+
+    public int green() {
+        return green;
+    }
+
+    public int blue() {
+        return blue;
+    }
+
     @Override
     public int hashCode() {
         return RPLEColorAPI.colorHashCode(this);
     }
 
     @Override
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     public boolean equals(Object obj) {
         return RPLEColorAPI.namedColorEquals(this, obj);
     }

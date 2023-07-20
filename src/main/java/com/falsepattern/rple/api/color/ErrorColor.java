@@ -8,17 +8,26 @@
 package com.falsepattern.rple.api.color;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import static lombok.AccessLevel.PRIVATE;
-
-@NoArgsConstructor(access = PRIVATE)
 public final class ErrorColor implements RPLENamedColor {
     private static final ErrorColor INSTANCE = new ErrorColor();
 
+    private ErrorColor() {
+    }
+
     public static @NotNull RPLENamedColor errorColor() {
         return INSTANCE;
+    }
+
+    @Override
+    public @NotNull String colorDomain() {
+        return "invalid_domain";
+    }
+
+    @Override
+    public @NotNull String colorName() {
+        return "invalid_name";
     }
 
     @Override
@@ -34,15 +43,5 @@ public final class ErrorColor implements RPLENamedColor {
     @Override
     public int blue() {
         return RPLEColorAPI.COLOR_MIN;
-    }
-
-    @Override
-    public @NotNull String colorDomain() {
-        return "invalid_domain";
-    }
-
-    @Override
-    public @NotNull String colorName() {
-        return "invalid_name";
     }
 }

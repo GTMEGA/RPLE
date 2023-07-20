@@ -13,8 +13,7 @@ import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
 import com.falsepattern.rple.internal.common.helper.EntityHelper;
-import lombok.experimental.UtilityClass;
-import lombok.val;
+import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.IBlockAccess;
@@ -27,8 +26,11 @@ import static com.falsepattern.rple.api.RPLEColorAPI.errorColor;
 import static com.falsepattern.rple.api.RPLEWorldAPI.getWorldRootFromBlockAccess;
 import static com.falsepattern.rple.api.color.ColorChannel.*;
 
-@UtilityClass
 public final class RPLERenderAPI {
+    private RPLERenderAPI() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
     public static int getRGBBrightnessForTessellator(@NotNull IBlockAccess world, int posX, int posY, int posZ) {
         return getRGBBrightnessForTessellator(world, posX, posY, posZ, 0);
     }
@@ -48,18 +50,18 @@ public final class RPLERenderAPI {
                                                      int minRedBlockLight,
                                                      int minGreenBlockLight,
                                                      int minBlueBlockLight) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        final RPLEWorldRoot worldRoot = getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return errorBrightnessForTessellator();
-        val redBrightness = worldRoot
+        final int redBrightness = worldRoot
                 .rple$getChannelBrightnessForTessellator(RED_CHANNEL, posX, posY, posZ, minRedBlockLight);
-        val greenBrightness = worldRoot
+        final int greenBrightness = worldRoot
                 .rple$getChannelBrightnessForTessellator(GREEN_CHANNEL, posX, posY, posZ, minGreenBlockLight);
-        val blueBrightness = worldRoot
+        final int blueBrightness = worldRoot
                 .rple$getChannelBrightnessForTessellator(BLUE_CHANNEL, posX, posY, posZ, minBlueBlockLight);
-        val packedBrightness = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
-                                                                                                greenBrightness,
-                                                                                                blueBrightness);
+        final long packedBrightness = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
+                                                                                                       greenBrightness,
+                                                                                                       blueBrightness);
         return CookieMonster.packedLongToCookie(packedBrightness);
     }
 
@@ -69,7 +71,7 @@ public final class RPLERenderAPI {
                                                          int posX,
                                                          int posY,
                                                          int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        final RPLEWorldRoot worldRoot = getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return errorBrightnessForTessellator();
         return worldRoot.rple$getChannelLightValueForTessellator(channel, lightType, posX, posY, posZ);
@@ -81,22 +83,22 @@ public final class RPLERenderAPI {
                                                        int posX,
                                                        int posY,
                                                        int posZ) {
-        val blockBrightnessColor = getBlockColoredBrightness(world, block, blockMeta, posX, posY, posZ);
+        final RPLEColor blockBrightnessColor = getBlockColoredBrightness(world, block, blockMeta, posX, posY, posZ);
         return createRGBBrightnessForTessellator(BLOCK_LIGHT_TYPE, blockBrightnessColor);
     }
 
     public static int errorBrightnessForTessellator() {
-        val lightValueColor = errorColor();
-        val redLightValue = RED_CHANNEL.componentFromColor(lightValueColor);
-        val greenLightValue = GREEN_CHANNEL.componentFromColor(lightValueColor);
-        val blueLightValue = BLUE_CHANNEL.componentFromColor(lightValueColor);
+        final RPLEColor lightValueColor = errorColor();
+        final int redLightValue = RED_CHANNEL.componentFromColor(lightValueColor);
+        final int greenLightValue = GREEN_CHANNEL.componentFromColor(lightValueColor);
+        final int blueLightValue = BLUE_CHANNEL.componentFromColor(lightValueColor);
         return createRGBBrightnessForTessellator(redLightValue, greenLightValue, blueLightValue);
     }
 
     public static int createRGBBrightnessForTessellator(@NotNull RPLEColor lightValueColor) {
-        val redLightValue = RED_CHANNEL.componentFromColor(lightValueColor);
-        val greenLightValue = GREEN_CHANNEL.componentFromColor(lightValueColor);
-        val blueLightValue = BLUE_CHANNEL.componentFromColor(lightValueColor);
+        final int redLightValue = RED_CHANNEL.componentFromColor(lightValueColor);
+        final int greenLightValue = GREEN_CHANNEL.componentFromColor(lightValueColor);
+        final int blueLightValue = BLUE_CHANNEL.componentFromColor(lightValueColor);
         return createRGBBrightnessForTessellator(redLightValue, greenLightValue, blueLightValue);
     }
 
@@ -111,9 +113,9 @@ public final class RPLERenderAPI {
 
     public static int createRGBBrightnessForTessellator(@NotNull LightType lightType,
                                                         @NotNull RPLEColor lightValueColor) {
-        val redLightValue = RED_CHANNEL.componentFromColor(lightValueColor);
-        val greenLightValue = GREEN_CHANNEL.componentFromColor(lightValueColor);
-        val blueLightValue = BLUE_CHANNEL.componentFromColor(lightValueColor);
+        final int redLightValue = RED_CHANNEL.componentFromColor(lightValueColor);
+        final int greenLightValue = GREEN_CHANNEL.componentFromColor(lightValueColor);
+        final int blueLightValue = BLUE_CHANNEL.componentFromColor(lightValueColor);
         return createRGBBrightnessForTessellator(lightType, redLightValue, greenLightValue, blueLightValue);
     }
 
@@ -142,12 +144,12 @@ public final class RPLERenderAPI {
 
     public static int createRGBBrightnessForTessellator(@NotNull RPLEColor blockLightColor,
                                                         @NotNull RPLEColor skyLightColor) {
-        val redBlockLight = RED_CHANNEL.componentFromColor(blockLightColor);
-        val greenBlockLight = GREEN_CHANNEL.componentFromColor(blockLightColor);
-        val blueBlockLight = BLUE_CHANNEL.componentFromColor(blockLightColor);
-        val redSkyLight = RED_CHANNEL.componentFromColor(skyLightColor);
-        val greenSkyLight = GREEN_CHANNEL.componentFromColor(skyLightColor);
-        val blueSkyLight = BLUE_CHANNEL.componentFromColor(skyLightColor);
+        final int redBlockLight = RED_CHANNEL.componentFromColor(blockLightColor);
+        final int greenBlockLight = GREEN_CHANNEL.componentFromColor(blockLightColor);
+        final int blueBlockLight = BLUE_CHANNEL.componentFromColor(blockLightColor);
+        final int redSkyLight = RED_CHANNEL.componentFromColor(skyLightColor);
+        final int greenSkyLight = GREEN_CHANNEL.componentFromColor(skyLightColor);
+        final int blueSkyLight = BLUE_CHANNEL.componentFromColor(skyLightColor);
         return createRGBBrightnessForTessellator(redBlockLight,
                                                  greenBlockLight,
                                                  blueBlockLight,
@@ -162,12 +164,12 @@ public final class RPLERenderAPI {
                                                         int redSkyLight,
                                                         int greenSkyLight,
                                                         int blueSkyLight) {
-        val redBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(redBlockLight, redSkyLight);
-        val greenBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(greenBlockLight, greenSkyLight);
-        val blueBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(blueBlockLight, blueSkyLight);
-        val packedBrightness = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
-                                                                                                greenBrightness,
-                                                                                                blueBrightness);
+        final int redBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(redBlockLight, redSkyLight);
+        final int greenBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(greenBlockLight, greenSkyLight);
+        final int blueBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(blueBlockLight, blueSkyLight);
+        final long packedBrightness = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
+                                                                                                       greenBrightness,
+                                                                                                       blueBrightness);
         return CookieMonster.packedLongToCookie(packedBrightness);
     }
 

@@ -10,7 +10,6 @@ package com.falsepattern.rple.api;
 import com.falsepattern.rple.api.block.RPLEBlockBrightness;
 import com.falsepattern.rple.api.block.RPLEBlockTranslucency;
 import com.falsepattern.rple.api.color.RPLEColor;
-import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
@@ -25,12 +24,12 @@ public final class RPLEBlockAPI {
     }
 
     public static @NotNull RPLEColor getBlockColoredBrightness(@NotNull Block block) {
-        val colouredLightBlock = colouredLightBlockFromBlock(block);
+        final RPLEBlockBrightness colouredLightBlock = colouredLightBlockFromBlock(block);
         if (colouredLightBlock == null)
             return errorColor();
 
         try {
-            val color = colouredLightBlock.getColoredBrightness();
+            final RPLEColor color = colouredLightBlock.getColoredBrightness();
             if (color != null)
                 return color;
         } catch (Exception ignored) {
@@ -40,12 +39,12 @@ public final class RPLEBlockAPI {
     }
 
     public static @NotNull RPLEColor getBlockColoredBrightness(@NotNull Block block, int blockMeta) {
-        val colouredLightBlock = colouredLightBlockFromBlock(block);
+        final RPLEBlockBrightness colouredLightBlock = colouredLightBlockFromBlock(block);
         if (colouredLightBlock == null)
             return errorColor();
 
         try {
-            val color = colouredLightBlock.getColoredBrightness(blockMeta);
+            final RPLEColor color = colouredLightBlock.getColoredBrightness(blockMeta);
             if (color != null)
                 return color;
         } catch (Exception ignored) {
@@ -60,12 +59,12 @@ public final class RPLEBlockAPI {
                                                                int posX,
                                                                int posY,
                                                                int posZ) {
-        val colouredLightBlock = colouredLightBlockFromBlock(block);
+        final RPLEBlockBrightness colouredLightBlock = colouredLightBlockFromBlock(block);
         if (colouredLightBlock == null)
             return errorColor();
 
         try {
-            val color = colouredLightBlock.getColoredBrightness(world, blockMeta, posX, posY, posZ);
+            final RPLEColor color = colouredLightBlock.getColoredBrightness(world, blockMeta, posX, posY, posZ);
             if (color != null)
                 return color;
         } catch (Exception ignored) {
@@ -75,12 +74,12 @@ public final class RPLEBlockAPI {
     }
 
     public static @NotNull RPLEColor getBlockColoredTranslucency(@NotNull Block block) {
-        val colouredLightBlock = colouredTranslucentBlockFromBlock(block);
+        final RPLEBlockTranslucency colouredLightBlock = colouredTranslucentBlockFromBlock(block);
         if (colouredLightBlock == null)
             return errorColor();
 
         try {
-            val color = colouredLightBlock.getColoredTranslucency();
+            final RPLEColor color = colouredLightBlock.getColoredTranslucency();
             if (color != null)
                 return color;
         } catch (Exception ignored) {
@@ -90,12 +89,12 @@ public final class RPLEBlockAPI {
     }
 
     public static @NotNull RPLEColor getBlockColoredTranslucency(@NotNull Block block, int blockMeta) {
-        val colouredLightBlock = colouredTranslucentBlockFromBlock(block);
+        final RPLEBlockTranslucency colouredLightBlock = colouredTranslucentBlockFromBlock(block);
         if (colouredLightBlock == null)
             return errorColor();
 
         try {
-            val color = colouredLightBlock.getColoredTranslucency(blockMeta);
+            final RPLEColor color = colouredLightBlock.getColoredTranslucency(blockMeta);
             if (color != null)
                 return color;
         } catch (Exception ignored) {
@@ -110,12 +109,12 @@ public final class RPLEBlockAPI {
                                                                  int posX,
                                                                  int posY,
                                                                  int posZ) {
-        val colouredLightBlock = colouredTranslucentBlockFromBlock(block);
+        final RPLEBlockTranslucency colouredLightBlock = colouredTranslucentBlockFromBlock(block);
         if (colouredLightBlock == null)
             return errorColor();
 
         try {
-            val color = colouredLightBlock.getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+            final RPLEColor color = colouredLightBlock.getColoredTranslucency(world, blockMeta, posX, posY, posZ);
             if (color != null)
                 return color;
         } catch (Exception ignored) {

@@ -11,7 +11,6 @@ import com.falsepattern.lib.util.MathUtil;
 import com.falsepattern.rple.api.color.ErrorColor;
 import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.api.color.RPLENamedColor;
-import lombok.val;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -55,8 +54,8 @@ public final class RPLEColorAPI {
         if (!(valueB instanceof RPLEColor))
             return false;
 
-        val colorA = (RPLEColor) valueA;
-        val colorB = (RPLEColor) valueB;
+        final RPLEColor colorA = (RPLEColor) valueA;
+        final RPLEColor colorB = (RPLEColor) valueB;
 
         if (colorA.red() != colorB.red())
             return false;
@@ -74,8 +73,8 @@ public final class RPLEColorAPI {
         if (!(valueB instanceof RPLENamedColor))
             return false;
 
-        val colorA = (RPLENamedColor) valueA;
-        val colorB = (RPLENamedColor) valueB;
+        final RPLENamedColor colorA = (RPLENamedColor) valueA;
+        final RPLENamedColor colorB = (RPLENamedColor) valueB;
 
         if (colorA.red() != colorB.red())
             return false;

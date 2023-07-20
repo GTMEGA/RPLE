@@ -10,7 +10,6 @@ package com.falsepattern.rple.api.event;
 import com.falsepattern.rple.api.lightmap.LightMapRegistry;
 import cpw.mods.fml.common.eventhandler.Event;
 
-
 public final class LightMapRegistrationEvent extends Event {
     private final LightMapRegistry registry;
 

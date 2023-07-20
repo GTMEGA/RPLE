@@ -9,9 +9,9 @@ package com.falsepattern.rple.api.lightmap.vanilla;
 
 import com.falsepattern.rple.api.lightmap.LightMapBase;
 import com.falsepattern.rple.api.lightmap.LightMapStrip;
-import lombok.val;
-import lombok.var;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.world.WorldProvider;
 import org.jetbrains.annotations.NotNull;
 
 import static com.falsepattern.rple.api.lightmap.LightMapStrip.LIGHT_MAP_STRIP_LENGTH;
@@ -21,10 +21,10 @@ public class VanillaLightMapBase implements LightMapBase {
 
     @Override
     public boolean generateBlockLightMapBase(@NotNull LightMapStrip output, float partialTick) {
-        val worldProvider = Minecraft.getMinecraft().theWorld.provider;
+        final WorldProvider worldProvider = Minecraft.getMinecraft().theWorld.provider;
 
-        for (var i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
-            val brightness = worldProvider.lightBrightnessTable[i];
+        for (int i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
+            final float brightness = worldProvider.lightBrightnessTable[i];
             output.setLightMap(i, brightness);
         }
 
@@ -33,17 +33,17 @@ public class VanillaLightMapBase implements LightMapBase {
 
     @Override
     public boolean generateSkyLightMapBase(@NotNull LightMapStrip output, float partialTick) {
-        val world = Minecraft.getMinecraft().theWorld;
-        val worldProvider = world.provider;
+        final WorldClient world = Minecraft.getMinecraft().theWorld;
+        final WorldProvider worldProvider = world.provider;
 
         if (worldProvider.dimensionId == END_DIMENSION_ID) {
             output.fillLightMap(0.22F);
             return true;
         }
 
-        val brightness = world.getSunBrightness(1F);
-        for (var i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
-            var blue = 0F;
+        final float brightness = world.getSunBrightness(1F);
+        for (int i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
+            float blue = 0F;
 
             if (world.lastLightningBolt > 0) {
                 blue = world.provider.lightBrightnessTable[i];
@@ -51,8 +51,8 @@ public class VanillaLightMapBase implements LightMapBase {
                 blue = world.provider.lightBrightnessTable[i] * (brightness * 0.95F + 0.05F);
             }
 
-            val red = blue * (brightness * 0.65F + 0.35F);
-            val green = blue * (brightness * 0.65F + 0.35F);
+            final float red = blue * (brightness * 0.65F + 0.35F);
+            final float green = blue * (brightness * 0.65F + 0.35F);
 
             output.setLightMapRGB(i, red, green, blue);
         }

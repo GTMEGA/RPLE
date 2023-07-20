@@ -7,13 +7,13 @@
 
 package com.falsepattern.rple.api.lightmap.vanilla;
 
+import com.falsepattern.lib.util.MathUtil;
 import com.falsepattern.rple.api.lightmap.LightMapMask;
 import com.falsepattern.rple.api.lightmap.LightMapStrip;
-import lombok.val;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class NightVisionMask implements LightMapMask {
@@ -28,11 +28,11 @@ public class NightVisionMask implements LightMapMask {
     }
 
     protected boolean generateNightVisionMask(LightMapStrip output, float partialTick) {
-        val player = Minecraft.getMinecraft().thePlayer;
+        final EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
         if (!player.isPotionActive(Potion.nightVision))
             return false;
 
-        val amplitude = nightVisionIntensity(player, partialTick);
+        final float amplitude = nightVisionIntensity(player, partialTick);
         output.fillLightMap(amplitude);
 
         return true;
@@ -43,7 +43,9 @@ public class NightVisionMask implements LightMapMask {
     }
 
     protected float nightVisionBrightness(EntityPlayer player, float partialTick) {
-        val duration = player.getActivePotionEffect(Potion.nightVision).getDuration();
-        return duration > 200 ? 1.0F : 0.7F + MathHelper.sin(((float) duration - partialTick) * (float) Math.PI * 0.2F) * 0.3F;
+        final float duration = (float) player.getActivePotionEffect(Potion.nightVision).getDuration();
+        if (duration > 200F)
+            return 1.0F;
+        return 0.7F + MathUtil.sin((duration - partialTick) * (float) Math.PI * 0.2F) * 0.3F;
     }
 }

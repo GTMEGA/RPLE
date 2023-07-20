@@ -9,8 +9,8 @@ package com.falsepattern.rple.api.lightmap.vanilla;
 
 import com.falsepattern.rple.api.lightmap.LightMapMask;
 import com.falsepattern.rple.api.lightmap.LightMapStrip;
-import lombok.val;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.EntityRenderer;
 import org.jetbrains.annotations.NotNull;
 
 public class BossColorModifierMask implements LightMapMask {
@@ -27,16 +27,16 @@ public class BossColorModifierMask implements LightMapMask {
     }
 
     protected void generateBossColorModifierMask(LightMapStrip output, float partialTick) {
-        val intensity = bossColorModifierIntensity(partialTick);
-        val red = (1F - intensity) + 0.7F * intensity;
-        val green = (1F - intensity) + 0.6F * intensity;
-        val blue = (1F - intensity) + 0.6F * intensity;
+        final float intensity = bossColorModifierIntensity(partialTick);
+        final float red = (1F - intensity) + 0.7F * intensity;
+        final float green = (1F - intensity) + 0.6F * intensity;
+        final float blue = (1F - intensity) + 0.6F * intensity;
 
         output.fillLightMapRGB(red, green, blue);
     }
 
     protected float bossColorModifierIntensity(float partialTick) {
-        val entityRenderer = Minecraft.getMinecraft().entityRenderer;
+        final EntityRenderer entityRenderer = Minecraft.getMinecraft().entityRenderer;
         return entityRenderer.bossColorModifierPrev +
                (entityRenderer.bossColorModifier - entityRenderer.bossColorModifierPrev) * partialTick;
     }

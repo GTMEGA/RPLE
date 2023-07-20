@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.common;
 
 import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
-import com.falsepattern.rple.api.color.LightLevelColor;
+import com.falsepattern.rple.api.color.LightValueColor;
 import com.falsepattern.rple.api.lightmap.LightMapRegistry;
 import com.falsepattern.rple.api.lightmap.vanilla.BossColorModifierMask;
 import com.falsepattern.rple.api.lightmap.vanilla.NightVisionMask;
@@ -31,7 +31,7 @@ public final class RPLEDefaultValues {
     public static void preloadDefaultColorPalette(BlockColorConfig config) {
         for (val color : values())
             config.addPaletteColor(color);
-        for (val color : LightLevelColor.values())
+        for (val color : LightValueColor.values())
             config.addPaletteColor(color);
     }
 

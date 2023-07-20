@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
-import com.falsepattern.rple.api.color.LightLevelColor;
+import com.falsepattern.rple.api.color.LightValueColor;
 import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.internal.mixin.interfaces.IColoredBlockMixin;
 import lombok.Setter;
@@ -220,28 +220,28 @@ public abstract class BlockMixin implements IColoredBlockMixin {
 
     private RPLEColor fallbackBrightness() {
         passBaseBrightness.set(true);
-        val color = LightLevelColor.fromVanillaLightValue(getLightValue());
+        val color = LightValueColor.fromVanillaLightValue(getLightValue());
         passBaseBrightness.set(false);
         return color;
     }
 
     private RPLEColor fallbackBrightness(IBlockAccess world, int posX, int posY, int posZ) {
         passBaseBrightness.set(true);
-        val color = LightLevelColor.fromVanillaLightValue(getLightValue(world, posX, posY, posZ));
+        val color = LightValueColor.fromVanillaLightValue(getLightValue(world, posX, posY, posZ));
         passBaseBrightness.set(false);
         return color;
     }
 
     private RPLEColor fallbackTranslucency() {
         passBaseOpacity.set(true);
-        val color = LightLevelColor.fromVanillaLightOpacity(getLightOpacity());
+        val color = LightValueColor.fromVanillaLightOpacity(getLightOpacity());
         passBaseOpacity.set(false);
         return color;
     }
 
     private RPLEColor fallbackTranslucency(IBlockAccess world, int posX, int posY, int posZ) {
         passBaseOpacity.set(true);
-        val color = LightLevelColor.fromVanillaLightOpacity(getLightOpacity(world, posX, posY, posZ));
+        val color = LightValueColor.fromVanillaLightOpacity(getLightOpacity(world, posX, posY, posZ));
         passBaseOpacity.set(false);
         return color;
     }

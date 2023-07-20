@@ -8,17 +8,29 @@
 package com.falsepattern.rple.api.color;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
-@Getter
-@Accessors(fluent = true, chain = false)
-@AllArgsConstructor
 public class CustomColor implements RPLEColor {
     protected final int red;
     protected final int green;
     protected final int blue;
+
+    public CustomColor(int red, int green, int blue) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+    }
+
+    public int red() {
+        return red;
+    }
+
+    public int green() {
+        return green;
+    }
+
+    public int blue() {
+        return blue;
+    }
 
     @Override
     public int hashCode() {
@@ -26,6 +38,7 @@ public class CustomColor implements RPLEColor {
     }
 
     @Override
+    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     public boolean equals(Object obj) {
         return RPLEColorAPI.colorEquals(this, obj);
     }
