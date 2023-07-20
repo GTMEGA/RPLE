@@ -42,7 +42,7 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
     @Inject(method = "<init>",
             at = @At("RETURN"),
             require = 1)
-    private void setupColorLightMaps(Minecraft minecraft, IResourceManager p_i45076_2_, CallbackInfo ci) {
+    private void setupColorLightMaps(Minecraft minecraft, IResourceManager resourceManager, CallbackInfo ci) {
         Common.RED_LIGHT_MAP_TEXTURE_UNIT = OpenGlHelper.lightmapTexUnit;
         LightMapHook.init(new LightMapHook(lightmapTexture,
                                            locationLightMap,
@@ -57,7 +57,6 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
             require = 1)
     private void enableLightMaps(double p_78463_1_, CallbackInfo ci) {
         LightMapHook.enableReconfigureAll();
-
         ci.cancel();
     }
 

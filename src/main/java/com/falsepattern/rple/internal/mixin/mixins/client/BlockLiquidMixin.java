@@ -21,8 +21,8 @@ public abstract class BlockLiquidMixin {
      * @author FalsePattern
      * @reason Colorize
      */
-    @SideOnly(Side.CLIENT)
     @Overwrite
+    @SideOnly(Side.CLIENT)
     public int getMixedBrightnessForBlock(IBlockAccess world, int posX, int posY, int posZ) {
         return ColoredLightingHooks.getBlockFluidRGBBrightnessForTessellator(world, posX, posY, posZ);
     }

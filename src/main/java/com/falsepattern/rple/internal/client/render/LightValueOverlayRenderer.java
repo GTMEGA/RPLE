@@ -24,7 +24,7 @@ package com.falsepattern.rple.internal.client.render;
 import com.falsepattern.falsetweaks.Compat;
 import com.falsepattern.lib.util.MathUtil;
 import com.falsepattern.lib.util.RenderUtil;
-import com.falsepattern.rple.internal.Tags;
+import com.falsepattern.rple.Tags;
 import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
 import lombok.Getter;
 import lombok.experimental.Accessors;

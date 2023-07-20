@@ -8,28 +8,19 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.rple.internal.mixin.interfaces.IOptiFineTessellatorMixin;
-import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorJunction;
+import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorMixin;
 import net.minecraft.client.renderer.Tessellator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import shadersmod.client.ShadersTess;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
+@Unique
 @Mixin(Tessellator.class)
-public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMixin, ITessellatorJunction {
-    /**
-     * NOTE: OptiFine changes the buffer fields in the {@link Tessellator} from static to class fields.
-     */
-    @Shadow(aliases = "field_78394_d")
-    private ByteBuffer byteBuffer;
-    @Shadow(aliases = "field_147568_c")
-    private IntBuffer intBuffer;
-    @Shadow(aliases = "field_147566_d")
-    private FloatBuffer floatBuffer;
+public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMixin, ITessellatorMixin {
+
     @Shadow(aliases = "field_147567_e")
     private ShortBuffer shortBuffer;
 
@@ -66,161 +57,126 @@ public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMi
     private boolean hasBrightness;
     @Shadow
     private boolean hasNormals;
-
-    // region Accessors
-    @Override
-    public ByteBuffer byteBuffer() {
-        return byteBuffer;
-    }
-
-    @Override
-    public IntBuffer intBuffer() {
-        return intBuffer;
-    }
-
-    @Override
-    public FloatBuffer floatBuffer() {
-        return floatBuffer;
-    }
-
-    @Override
-    public ShortBuffer shortBuffer() {
-        return shortBuffer;
-    }
-
-    @Override
-    public void rawBuffer(int[] rawBuffer) {
-        this.rawBuffer = rawBuffer;
-    }
-
-    @Override
-    public int[] rawBuffer() {
-        return rawBuffer;
-    }
-
-    @Override
-    public int bufferSize() {
-        return bufferSize;
-    }
-
-    @Override
-    public void bufferSize(int bufferSize) {
-        this.bufferSize = bufferSize;
-    }
-
-    @Override
-    public void incrementRawBufferIndex(int increment) {
-        rawBufferIndex += increment;
-    }
-
-    @Override
-    public int rawBufferIndex() {
-        return rawBufferIndex;
-    }
-
-    @Override
-    public int drawMode() {
-        return drawMode;
-    }
+    @Shadow
+    private int brightness;
 
     @Shadow
     public abstract int draw();
 
+    // region Accessors
     @Override
-    public int v$draw() {
+    public void rple$rawBuffer(int[] rawBuffer) {
+        this.rawBuffer = rawBuffer;
+    }
+
+    @Override
+    public int[] rple$rawBuffer() {
+        return rawBuffer;
+    }
+
+    @Override
+    public int rple$bufferSize() {
+        return bufferSize;
+    }
+
+    @Override
+    public void rple$bufferSize(int bufferSize) {
+        this.bufferSize = bufferSize;
+    }
+
+    @Override
+    public void rple$incrementRawBufferIndex(int increment) {
+        rawBufferIndex += increment;
+    }
+
+    @Override
+    public int rple$rawBufferIndex() {
+        return rawBufferIndex;
+    }
+
+    @Override
+    public int rple$drawMode() {
+        return drawMode;
+    }
+
+    @Override
+    public int rple$draw() {
         return draw();
     }
 
     @Override
-    public void isDrawing(boolean isDrawing) {
+    public void rple$isDrawing(boolean isDrawing) {
         this.isDrawing = isDrawing;
     }
 
     @Override
-    public boolean isDrawing() {
-        return isDrawing;
-    }
-
-    @Override
-    public void incrementAddedVertices(int increment) {
+    public void rple$incrementAddedVertices(int increment) {
         addedVertices += increment;
     }
 
     @Override
-    public int addedVertices() {
+    public int rple$addedVertices() {
         return addedVertices;
     }
 
     @Override
-    public void incrementVertexCount(int increment) {
+    public void rple$incrementVertexCount(int increment) {
         vertexCount += increment;
     }
 
     @Override
-    public int vertexCount() {
-        return vertexCount;
-    }
-
-    @Override
-    public double posXOffset() {
+    public double rple$posXOffset() {
         return xOffset;
     }
 
     @Override
-    public double posYOffset() {
+    public double rple$posYOffset() {
         return yOffset;
     }
 
     @Override
-    public double posZOffset() {
+    public double rple$posZOffset() {
         return zOffset;
     }
 
     @Override
-    public double textureU() {
+    public double rple$textureU() {
         return textureU;
     }
 
     @Override
-    public double textureV() {
+    public double rple$textureV() {
         return textureV;
     }
 
     @Override
-    public int color() {
+    public int rple$color() {
         return color;
     }
 
     @Override
-    public void hasBrightness(boolean hasBrightness) {
-        this.hasBrightness = hasBrightness;
-    }
-
-    @Override
-    public boolean hasBrightness() {
+    public boolean rple$hasBrightness() {
         return hasBrightness;
     }
 
     @Override
-    public void hasNormals(boolean hasNormals) {
+    public long rple$brightness() {
+        return brightness;
+    }
+
+    @Override
+    public void rple$hasNormals(boolean hasNormals) {
         this.hasNormals = hasNormals;
     }
 
     @Override
-    public boolean hasNormals() {
-        return hasNormals;
-    }
-
-    @Override
-    public ShadersTess shaderTessellator() {
+    public ShadersTess rple$shaderTessellator() {
         return shadersTess;
     }
 
-    // endregion
-
-
     @Override
-    public ShortBuffer RPLEgetShortBuffer() {
+    public ShortBuffer rple$shortBuffer() {
         return shortBuffer;
     }
+    // endregion
 }

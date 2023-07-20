@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
-import com.falsepattern.rple.RPLEShaders;
+import com.falsepattern.rple.api.RPLEShadersAPI;
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
@@ -26,40 +26,38 @@ import shadersmod.client.ShaderLine;
 import shadersmod.client.ShaderParser;
 import shadersmod.client.Shaders;
 
-@Mixin(value = Shaders.class,
-       remap = false)
+@Mixin(value = Shaders.class, remap = false)
 public abstract class ShadersMixin {
+    @Shadow
+    public static int checkGLError(String location) {return 0;}
 
     @Shadow
-    public static void setProgramUniform1i(String name, int value) {
-    }
-
-    @Shadow
-    public static int checkGLError(String location) {
-        return 0;
-    }
+    public static void setProgramUniform1i(String name, int value) {}
 
     @Inject(method = "setProgramUniform1i",
             at = @At("HEAD"),
             require = 1)
     private static void setProgramUniform1iHijack(String name, int value, CallbackInfo ci) {
         if ("lightmap".equals(name)) {
-            setProgramUniform1i(Common.RED_LIGHT_MAP_UNIFORM_NAME, Common.RED_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
-            setProgramUniform1i(Common.GREEN_LIGHT_MAP_UNIFORM_NAME, Common.GREEN_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
-            setProgramUniform1i(Common.BLUE_LIGHT_MAP_UNIFORM_NAME, Common.BLUE_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
+            setProgramUniform1i(RPLEShadersAPI.RED_LIGHT_MAP_UNIFORM_NAME,
+                                Common.RED_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
+            setProgramUniform1i(RPLEShadersAPI.GREEN_LIGHT_MAP_UNIFORM_NAME,
+                                Common.GREEN_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
+            setProgramUniform1i(RPLEShadersAPI.BLUE_LIGHT_MAP_UNIFORM_NAME,
+                                Common.BLUE_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
         }
     }
 
     @Redirect(method = "createVertShader",
-            at = @At(value = "INVOKE",
-                     target = "Lshadersmod/client/ShaderParser;parseLine(Ljava/lang/String;)Lshadersmod/client/ShaderLine;"),
-            require = 1)
+              at = @At(value = "INVOKE",
+                       target = "Lshadersmod/client/ShaderParser;parseLine(Ljava/lang/String;)Lshadersmod/client/ShaderLine;"),
+              require = 1)
     private static ShaderLine parseLineHook(String line) {
         val sl = ShaderParser.parseLine(line);
         if (sl != null) {
-            if (sl.isAttribute(RPLEShaders.EDGE_TEX_COORD_ATTRIB_NAME)) {
-                RPLEShaders.useRPLEEdgeTexCoordAttrib = true;
-                RPLEShaders.progUseRPLEEdgeTexCoordAttrib = true;
+            if (sl.isAttribute(RPLEShadersAPI.EDGE_TEX_COORD_ATTRIB_NAME)) {
+                RPLEShadersAPI.useRPLEEdgeTexCoordAttrib = true;
+                RPLEShadersAPI.progUseRPLEEdgeTexCoordAttrib = true;
             }
         }
         return sl;
@@ -70,7 +68,7 @@ public abstract class ShadersMixin {
                      target = "Lshadersmod/client/Shaders;useMidTexCoordAttrib:Z"),
             require = 1)
     private static void initHook(CallbackInfo ci) {
-        RPLEShaders.useRPLEEdgeTexCoordAttrib = false;
+        RPLEShadersAPI.useRPLEEdgeTexCoordAttrib = false;
     }
 
     @Inject(method = "setupProgram",
@@ -78,8 +76,11 @@ public abstract class ShadersMixin {
                      target = "Lshadersmod/client/Shaders;progUseMidTexCoordAttrib:Z",
                      ordinal = 0),
             require = 1)
-    private static void setupResetHook(int program, String vShaderPath, String fShaderPath, CallbackInfoReturnable<Integer> cir) {
-        RPLEShaders.progUseRPLEEdgeTexCoordAttrib = false;
+    private static void setupResetHook(int program,
+                                       String vShaderPath,
+                                       String fShaderPath,
+                                       CallbackInfoReturnable<Integer> cir) {
+        RPLEShadersAPI.progUseRPLEEdgeTexCoordAttrib = false;
     }
 
     @Inject(method = "setupProgram",
@@ -87,10 +88,18 @@ public abstract class ShadersMixin {
                      target = "Lorg/lwjgl/opengl/ARBShaderObjects;glLinkProgramARB(I)V"),
             locals = LocalCapture.CAPTURE_FAILHARD,
             require = 1)
-    private static void setupAttribLocation(int program, String vShaderPath, String fShaderPath, CallbackInfoReturnable<Integer> cir, int programid, int vShader, int fShader) {
-        if (RPLEShaders.progUseRPLEEdgeTexCoordAttrib) {
-            ARBVertexShader.glBindAttribLocationARB(programid, RPLEShaders.edgeTexCoordAttrib, RPLEShaders.EDGE_TEX_COORD_ATTRIB_NAME);
-            checkGLError(RPLEShaders.EDGE_TEX_COORD_ATTRIB_NAME);
+    private static void setupAttribLocation(int program,
+                                            String vShaderPath,
+                                            String fShaderPath,
+                                            CallbackInfoReturnable<Integer> cir,
+                                            int programid,
+                                            int vShader,
+                                            int fShader) {
+        if (RPLEShadersAPI.progUseRPLEEdgeTexCoordAttrib) {
+            ARBVertexShader.glBindAttribLocationARB(programid,
+                                                    RPLEShadersAPI.edgeTexCoordAttrib,
+                                                    RPLEShadersAPI.EDGE_TEX_COORD_ATTRIB_NAME);
+            checkGLError(RPLEShadersAPI.EDGE_TEX_COORD_ATTRIB_NAME);
         }
     }
 

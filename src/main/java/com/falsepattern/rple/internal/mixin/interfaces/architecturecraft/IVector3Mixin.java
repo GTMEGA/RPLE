@@ -8,7 +8,9 @@
 package com.falsepattern.rple.internal.mixin.interfaces.architecturecraft;
 
 public interface IVector3Mixin {
-    double x();
-    double y();
-    double z();
+    double rple$posX();
+
+    double rple$posY();
+
+    double rple$posZ();
 }

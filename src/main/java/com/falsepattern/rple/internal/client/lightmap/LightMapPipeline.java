@@ -7,8 +7,8 @@
 
 package com.falsepattern.rple.internal.client.lightmap;
 
+import com.falsepattern.rple.Tags;
 import com.falsepattern.rple.api.lightmap.*;
-import com.falsepattern.rple.internal.Tags;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;

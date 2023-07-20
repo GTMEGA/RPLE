@@ -10,9 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.common;
 import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.color.LightValueColor;
 import com.falsepattern.rple.api.color.RPLEColor;
-import com.falsepattern.rple.internal.mixin.interfaces.IColoredBlockMixin;
-import lombok.Setter;
-import lombok.experimental.Accessors;
+import com.falsepattern.rple.internal.mixin.interfaces.IBlockMixin;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -21,37 +19,34 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Accessors(fluent = true, chain = false)
+@Unique
 @Mixin(Block.class)
-public abstract class BlockMixin implements IColoredBlockMixin {
+public abstract class BlockMixin implements IBlockMixin {
     @Shadow
     public abstract int getLightValue();
 
     @Shadow(remap = false)
-    public abstract int getLightValue(IBlockAccess world, int x, int y, int z);
+    public abstract int getLightValue(IBlockAccess world, int posX, int posY, int posZ);
 
     @Shadow
     public abstract int getLightOpacity();
 
     @Shadow(remap = false)
-    public abstract int getLightOpacity(IBlockAccess world, int x, int y, int z);
+    public abstract int getLightOpacity(IBlockAccess world, int posX, int posY, int posZ);
 
-    @Setter
     @Nullable
     private RPLEColor baseColoredBrightness = null;
-    @Setter
     @Nullable
     private RPLEColor baseColoredTranslucency = null;
 
-    @Setter
     @Nullable
     private RPLEColor @Nullable [] metaColoredBrightness = null;
-    @Setter
     @Nullable
     private RPLEColor @Nullable [] metaColoredTranslucency = null;
 
@@ -194,6 +189,26 @@ public abstract class BlockMixin implements IColoredBlockMixin {
             return baseColoredTranslucency;
 
         return fallbackTranslucency(world, posX, posY, posZ);
+    }
+
+    @Override
+    public void rple$initBaseColoredBrightness(@Nullable RPLEColor baseColoredBrightness) {
+        this.baseColoredBrightness = baseColoredBrightness;
+    }
+
+    @Override
+    public void rple$initBaseColoredTranslucency(@Nullable RPLEColor baseColoredTranslucency) {
+        this.baseColoredTranslucency = baseColoredTranslucency;
+    }
+
+    @Override
+    public void rple$initMetaColoredBrightness(@Nullable RPLEColor @Nullable [] metaColoredBrightness) {
+        this.metaColoredBrightness = metaColoredBrightness;
+    }
+
+    @Override
+    public void rple$initMetaColoredTranslucency(@Nullable RPLEColor @Nullable [] metaColoredTranslucency) {
+        this.metaColoredTranslucency = metaColoredTranslucency;
     }
 
     private @Nullable RPLEColor lookupMetaBrightness(int blockMeta) {

@@ -10,7 +10,7 @@ package com.falsepattern.rple.internal.mixin.plugin;
 import com.falsepattern.lib.mixin.IMixin;
 import com.falsepattern.lib.mixin.IMixinPlugin;
 import com.falsepattern.lib.mixin.ITargetedMod;
-import com.falsepattern.rple.internal.Tags;
+import com.falsepattern.rple.Tags;
 import lombok.Getter;
 import org.apache.logging.log4j.Logger;
 

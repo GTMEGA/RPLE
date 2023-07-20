@@ -12,7 +12,7 @@ import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
-import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorJunction;
+import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorMixin;
 import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -25,12 +25,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Tessellator.class)
-public abstract class TessellatorMixin implements ITessellatorJunction {
-    @Shadow private boolean hasBrightness;
+public abstract class TessellatorMixin implements ITessellatorMixin {
+    @Shadow
+    private boolean hasBrightness;
 
-    @Shadow private int[] rawBuffer;
+    @Shadow
+    private int[] rawBuffer;
 
-    @Shadow private int rawBufferIndex;
+    @Shadow
+    private int rawBufferIndex;
 
     private long brightness;
 
@@ -89,7 +92,7 @@ public abstract class TessellatorMixin implements ITessellatorJunction {
     }
 
     private static void enableLightMapTexture(Tessellator tess, int position, int unit) {
-        val shortBuffer = ((ITessellatorJunction)tess).RPLEgetShortBuffer();
+        val shortBuffer = ((ITessellatorMixin) tess).rple$shortBuffer();
         OpenGlHelper.setClientActiveTexture(unit);
         shortBuffer.position(position);
         GL11.glTexCoordPointer(2, VertexAPI.recomputeVertexInfo(8, 4), shortBuffer);
@@ -104,7 +107,7 @@ public abstract class TessellatorMixin implements ITessellatorJunction {
     }
 
     @Override
-    public long brightness() {
+    public long rple$brightness() {
         return brightness;
     }
 }

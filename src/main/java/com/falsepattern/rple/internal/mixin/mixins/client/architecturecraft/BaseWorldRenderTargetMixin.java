@@ -13,6 +13,7 @@ import com.falsepattern.rple.internal.common.helper.CookieMonster;
 import com.falsepattern.rple.internal.mixin.interfaces.architecturecraft.IVector3Mixin;
 import gcewing.architecture.*;
 import lombok.val;
+import lombok.var;
 import net.minecraft.block.Block;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -20,20 +21,20 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(value = BaseWorldRenderTarget.class,
-       remap = false)
+@Mixin(value = BaseWorldRenderTarget.class, remap = false)
 public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
+    @Shadow
+    protected IBlockAccess world;
+    @Shadow
+    protected BlockPos blockPos;
+    @Shadow
+    protected Block block;
 
-    @Shadow protected abstract void setLight(float v, int i);
+    @Shadow
+    protected abstract void setLight(float v, int i);
 
-    @Shadow protected Block block;
-
-    @Shadow protected IBlockAccess world;
-
-    @Shadow protected BlockPos blockPos;
-
-    public BaseWorldRenderTargetMixin(double v, double v1, double v2, IIcon iIcon) {
-        super(v, v1, v2, iIcon);
+    public BaseWorldRenderTargetMixin(double posX, double posY, double posZ, IIcon iIcon) {
+        super(posX, posY, posZ, iIcon);
     }
 
     /**
@@ -41,50 +42,51 @@ public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
      * @reason Colorize
      */
     @Overwrite
+    @SuppressWarnings("CastToIncompatibleInterface")
     protected void aoLightVertex(Vector3 rawPos) {
         val vertexPos = (IVector3Mixin) rawPos;
         val normal = (IVector3Mixin) this.normal;
-        double bR = 0.0;
-        double bG = 0.0;
-        double bB = 0.0;
-        double sR = 0.0;
-        double sG = 0.0;
-        double sB = 0.0;
-        double ao = 0.0;
-        double totalMultiplier = 0.0;
-        double offsetX = vertexPos.x() + 0.5 * normal.x();
-        double offsetY = vertexPos.y() + 0.5 * normal.y();
-        double offsetZ = vertexPos.z() + 0.5 * normal.z();
+        var bR = 0.0;
+        var bG = 0.0;
+        var bB = 0.0;
+        var sR = 0.0;
+        var sG = 0.0;
+        var sB = 0.0;
+        var ao = 0.0;
+        var totalMultiplier = 0.0;
+        val offsetX = vertexPos.rple$posX() + 0.5 * normal.rple$posX();
+        val offsetY = vertexPos.rple$posY() + 0.5 * normal.rple$posY();
+        val offsetZ = vertexPos.rple$posZ() + 0.5 * normal.rple$posZ();
 
-        for(int X = -1; X <= 1; X += 2) {
-            for(int Y = -1; Y <= 1; Y += 2) {
-                for(int Z = -1; Z <= 1; Z += 2) {
-                    int x = BaseUtils.ifloor(offsetX + 0.5 * (double)X);
-                    int y = BaseUtils.ifloor(offsetY + 0.5 * (double)Y);
-                    int z = BaseUtils.ifloor(offsetZ + 0.5 * (double)Z);
-                    BlockPos pos = new BlockPos(x, y, z);
-                    double dX = X < 0 ? (double)(x + 1) - (offsetX - 0.5) : offsetX + 0.5 - (double)x;
-                    double dY = Y < 0 ? (double)(y + 1) - (offsetY - 0.5) : offsetY + 0.5 - (double)y;
-                    double dZ = Z < 0 ? (double)(z + 1) - (offsetZ - 0.5) : offsetZ + 0.5 - (double)z;
-                    double lightMultiplier = dX * dY * dZ;
+        for (var X = -1; X <= 1; X += 2) {
+            for (var Y = -1; Y <= 1; Y += 2) {
+                for (var Z = -1; Z <= 1; Z += 2) {
+                    val x = BaseUtils.ifloor(offsetX + 0.5 * (double) X);
+                    val y = BaseUtils.ifloor(offsetY + 0.5 * (double) Y);
+                    val z = BaseUtils.ifloor(offsetZ + 0.5 * (double) Z);
+                    val pos = new BlockPos(x, y, z);
+                    val dX = X < 0 ? (double) (x + 1) - (offsetX - 0.5) : offsetX + 0.5 - (double) x;
+                    val dY = Y < 0 ? (double) (y + 1) - (offsetY - 0.5) : offsetY + 0.5 - (double) y;
+                    val dZ = Z < 0 ? (double) (z + 1) - (offsetZ - 0.5) : offsetZ + 0.5 - (double) z;
+                    val lightMultiplier = dX * dY * dZ;
                     if (lightMultiplier > 0.0) {
-                        int brightnessCookie;
+                        final int brightnessCookie;
                         try {
-                            brightnessCookie = this.block.getMixedBrightnessForBlock(this.world, pos.x, pos.y, pos.z);
+                            brightnessCookie = block.getMixedBrightnessForBlock(world, pos.x, pos.y, pos.z);
                         } catch (RuntimeException var38) {
                             System.out.printf("BaseWorldRenderTarget.aoLightVertex: getMixedBrightnessForBlock(%s) with weight %s for block at %s: %s\n", pos, lightMultiplier, this.blockPos, var38);
                             System.out.printf("BaseWorldRenderTarget.aoLightVertex: v = %s n = %s\n", vertexPos, normal);
                             throw var38;
                         }
 
-                        float aoRaw;
-                        if (!pos.equals(this.blockPos)) {
-                            aoRaw = this.world.getBlock(pos.x, pos.y, pos.z).getAmbientOcclusionLightValue();
-                        } else {
+                        final float aoRaw;
+                        if (pos.equals(blockPos)) {
                             aoRaw = 1.0F;
+                        } else {
+                            aoRaw = world.getBlock(pos.x, pos.y, pos.z).getAmbientOcclusionLightValue();
                         }
 
-                        long brightness = CookieMonster.cookieToPackedLong(brightnessCookie);
+                        val brightness = CookieMonster.cookieToPackedLong(brightnessCookie);
 
                         if (brightness != 0) {
                             val r = BrightnessUtil.getBrightnessRed(brightness);
@@ -105,13 +107,13 @@ public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
                             totalMultiplier += lightMultiplier;
                         }
 
-                        ao += lightMultiplier * (double)aoRaw;
+                        ao += lightMultiplier * (double) aoRaw;
                     }
                 }
             }
         }
 
-        int brightnessCookie;
+        final int brightnessCookie;
         if (totalMultiplier > 0.0) {
             val inverseMul = 1.0 / totalMultiplier;
             bR *= inverseMul;
@@ -126,10 +128,10 @@ public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
             val packed = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(red, green, blue);
             brightnessCookie = CookieMonster.packedLongToCookie(packed);
         } else {
-            brightnessCookie = this.block.getMixedBrightnessForBlock(this.world, this.blockPos.x, this.blockPos.y, this.blockPos.z);
+            brightnessCookie = block.getMixedBrightnessForBlock(world, blockPos.x, blockPos.y, blockPos.z);
         }
 
-        this.setLight(this.shade * (float)ao, brightnessCookie);
+        setLight(shade * (float) ao, brightnessCookie);
     }
 
     private static double scalarBlock(int brightness) {
@@ -143,8 +145,8 @@ public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
     private static int scalarsToBrightness(double block, double sky) {
         block = MathUtil.clamp(block, 0, 1) * 240;
         sky = MathUtil.clamp(sky, 0, 1) * 240;
-        val iBlock = (int)block;
-        val iSky = (int)sky;
+        val iBlock = (int) block;
+        val iSky = (int) sky;
         return BrightnessUtil.channelsToBrightnessRender(iBlock, iSky);
     }
 }

@@ -7,13 +7,13 @@
 
 package com.falsepattern.rple.internal.common.block;
 
+import com.falsepattern.rple.Tags;
 import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
 import com.falsepattern.rple.api.block.RPLEBlockColorizer;
 import com.falsepattern.rple.api.color.RPLENamedColor;
-import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.config.container.BlockColorConfig;
 import com.falsepattern.rple.internal.config.container.BlockReference;
-import com.falsepattern.rple.internal.mixin.interfaces.IColoredBlockMixin;
+import com.falsepattern.rple.internal.mixin.interfaces.IBlockMixin;
 import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.NoArgsConstructor;
 import lombok.val;
@@ -75,7 +75,7 @@ public final class BlockColorLoader implements RPLEBlockColorRegistry {
         val blockBrightnessMap = config.brightness();
         val blockTranslucencyMap = config.translucency();
 
-        val colouredBlocks = new IdentityHashMap<IColoredBlockMixin, ColoredBlockedReference>();
+        val colouredBlocks = new IdentityHashMap<IBlockMixin, ColoredBlockedReference>();
 
         for (val blockBrightness : blockBrightnessMap.entrySet()) {
             val blockReference = blockBrightness.getKey();
@@ -196,7 +196,7 @@ public final class BlockColorLoader implements RPLEBlockColorRegistry {
         return blockDomain + ":" + blockName;
     }
 
-    private @Nullable IColoredBlockMixin blockFromBlockReference(BlockReference blockReference) {
+    private @Nullable IBlockMixin blockFromBlockReference(BlockReference blockReference) {
         if (blockReference == null)
             return null;
 
@@ -206,8 +206,8 @@ public final class BlockColorLoader implements RPLEBlockColorRegistry {
             return null;
 
         val block = GameRegistry.findBlock(blockDomain, blockName);
-        if (block instanceof IColoredBlockMixin)
-            return (IColoredBlockMixin) block;
+        if (block instanceof IBlockMixin)
+            return (IBlockMixin) block;
         return null;
     }
 

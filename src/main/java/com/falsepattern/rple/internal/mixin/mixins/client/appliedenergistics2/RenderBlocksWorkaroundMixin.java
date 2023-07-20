@@ -9,6 +9,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client.appliedenergistics2;
 
 import appeng.client.render.RenderBlocksWorkaround;
 import com.falsepattern.rple.internal.common.helper.CookieWrappers;
+import lombok.val;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,25 +19,53 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(value = RenderBlocksWorkaround.class,
        remap = false)
 public abstract class RenderBlocksWorkaroundMixin extends RenderBlocks {
-    @Shadow protected abstract float getOpacity();
+    @Shadow
+    protected abstract float getOpacity();
 
     /**
      * @author FalsePattern
      * @reason Colorize
      */
     @Overwrite
-    private void partialLightingColoring(double u, double v) {
-        float r = (float) uvMix(colorRedTopLeft, colorRedTopRight, colorRedBottomLeft, colorRedBottomRight, u, v);
-        float g = (float) uvMix(colorGreenTopLeft, colorGreenTopRight, colorGreenBottomLeft, colorGreenBottomRight, u, v);
-        float b = (float) uvMix(colorBlueTopLeft, colorBlueTopRight, colorBlueBottomLeft, colorBlueBottomRight, u, v);
-        int out = CookieWrappers.mixAOBrightness(brightnessTopLeft, brightnessTopRight, brightnessBottomLeft, brightnessBottomRight, u * v, (1.0 - u) * v, u * (1.0 - v), (1.0 - u) * (1.0 - v));
-        Tessellator.instance.setColorRGBA_F(r, g, b, this.getOpacity());
+    private void partialLightingColoring(double textureU, double textureV) {
+        val r = uvMix(colorRedTopLeft,
+                      colorRedTopRight,
+                      colorRedBottomLeft,
+                      colorRedBottomRight,
+                      textureU,
+                      textureV);
+        val g = uvMix(colorGreenTopLeft,
+                      colorGreenTopRight,
+                      colorGreenBottomLeft,
+                      colorGreenBottomRight,
+                      textureU,
+                      textureV);
+        val b = uvMix(colorBlueTopLeft,
+                      colorBlueTopRight,
+                      colorBlueBottomLeft,
+                      colorBlueBottomRight,
+                      textureU,
+                      textureV);
+        val out = CookieWrappers.mixAOBrightness(brightnessTopLeft,
+                                                 brightnessTopRight,
+                                                 brightnessBottomLeft,
+                                                 brightnessBottomRight,
+                                                 textureU * textureV,
+                                                 (1D - textureU) * textureV,
+                                                 textureU * (1D - textureV),
+                                                 (1D - textureU) * (1D - textureV));
+        Tessellator.instance.setColorRGBA_F(r, g, b, getOpacity());
         Tessellator.instance.setBrightness(out);
     }
 
-    private static double uvMix(double topLeft, double topRight, double bottomLeft, double bottomRight, double u, double v) {
-        double top = topLeft * u + topRight * (1.0 - u);
-        double bottom = bottomLeft * u + bottomRight * (1.0 - u);
-        return top * v + bottom * (1.0 - v);
+    private static float uvMix(double topLeft,
+                               double topRight,
+                               double bottomLeft,
+                               double bottomRight,
+                               double textureU,
+                               double textureV) {
+        val top = topLeft * textureU + topRight * (1D - textureU);
+        val bottom = bottomLeft * textureU + bottomRight * (1D - textureU);
+        return (float) (top * textureV + bottom * (1D - textureV));
     }
 }

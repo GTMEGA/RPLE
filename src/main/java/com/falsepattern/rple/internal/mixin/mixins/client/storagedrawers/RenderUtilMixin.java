@@ -20,7 +20,12 @@ public abstract class RenderUtilMixin {
      * @reason Colorize
      */
     @Overwrite
-    public static int mixAOBrightness(int brightTL, int brightBL, int brightBR, int brightTR, double lerpTB, double lerpLR) {
+    public static int mixAOBrightness(int brightTL,
+                                      int brightBL,
+                                      int brightBR,
+                                      int brightTR,
+                                      double lerpTB,
+                                      double lerpLR) {
         return CookieWrappers.mixAOBrightness(brightTL, brightBL, brightBR, brightTR, lerpTB, lerpLR);
     }
 

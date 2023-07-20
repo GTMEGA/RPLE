@@ -8,28 +8,29 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.codechickenlib;
 
 import codechicken.lib.colour.ColourRGBA;
-import codechicken.lib.lighting.LC;
 import codechicken.lib.lighting.LightMatrix;
 import codechicken.lib.render.CCRenderState;
 import com.falsepattern.rple.internal.common.helper.CookieWrappers;
+import lombok.val;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(value = LightMatrix.class, remap = false)
 public abstract class LightMatrixMixin {
+    @Shadow
+    public abstract int[] brightness(int side);
 
-    @Shadow public abstract float[] ao(int side);
-
-    @Shadow public abstract int[] brightness(int side);
+    @Shadow
+    public abstract float[] ao(int side);
 
     /**
      * @author FalsePattern
      * @reason Colorize
      */
     @Overwrite
-    public static int interpBrightness(int a, int b, int c, int d) {
-        return CookieWrappers.average(true, a, b, c, d);
+    public static int interpBrightness(int brightnessA, int brightnessB, int brightnessC, int brightnessD) {
+        return CookieWrappers.average(true, brightnessA, brightnessB, brightnessC, brightnessD);
     }
 
     /**
@@ -38,10 +39,10 @@ public abstract class LightMatrixMixin {
      */
     @Overwrite
     public void operate() {
-        LC lc = CCRenderState.lc;
-        float[] a = ao(lc.side);
-        float f = (a[0] * lc.fa + a[1] * lc.fb + a[2] * lc.fc + a[3] * lc.fd);
-        int[] b = brightness(lc.side);
+        val lc = CCRenderState.lc;
+        val a = ao(lc.side);
+        val f = (a[0] * lc.fa) + (a[1] * lc.fb) + (a[2] * lc.fc) + (a[3] * lc.fd);
+        val b = brightness(lc.side);
         CCRenderState.setColour(ColourRGBA.multiplyC(CCRenderState.colour, f));
         CCRenderState.setBrightness(CookieWrappers.mixAOBrightness(b[0], b[1], b[2], b[3], lc.fa, lc.fb, lc.fc, lc.fd));
     }

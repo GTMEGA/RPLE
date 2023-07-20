@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorJunction;
+import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorMixin;
 import net.minecraft.client.renderer.Tessellator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,12 +15,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.nio.ShortBuffer;
 
 @Mixin(Tessellator.class)
-public abstract class Tessellator_NonOptiFineMixin implements ITessellatorJunction {
+public abstract class Tessellator_NonOptiFineMixin implements ITessellatorMixin {
     @Shadow
     private static ShortBuffer shortBuffer;
 
     @Override
-    public ShortBuffer RPLEgetShortBuffer() {
+    public ShortBuffer rple$shortBuffer() {
         return shortBuffer;
     }
 }

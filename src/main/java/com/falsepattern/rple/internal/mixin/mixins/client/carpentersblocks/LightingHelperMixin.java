@@ -19,7 +19,7 @@ public abstract class LightingHelperMixin {
      * @reason Colorize
      */
     @Overwrite
-    public static int getAverageBrightness(int brightness1, int brightness2) {
-        return CookieWrappers.average(false, brightness1, brightness2);
+    public static int getAverageBrightness(int brightnessA, int brightnessB) {
+        return CookieWrappers.average(false, brightnessA, brightnessB);
     }
 }

@@ -17,17 +17,22 @@ import team.chisel.ctmlib.RenderBlocksCTM;
 public abstract class RenderBlocksCTMMixin extends RenderBlocks {
     /**
      * @author Ven
-     * @reason Cookie Support
+     * @reason Colorize
      */
     @Overwrite(remap = false)
-    private int avg(int... vals) {
-        switch (vals.length) {
+    @SuppressWarnings("OverwriteModifiers")
+    private int avg(int... brightnessValues) {
+        switch (brightnessValues.length) {
             case 2:
-                return CookieWrappers.average(false, vals[0], vals[1]);
+                return CookieWrappers.average(false, brightnessValues[0], brightnessValues[1]);
             case 4:
-                return CookieWrappers.average(false, vals[0], vals[1], vals[2], vals[3]);
+                return CookieWrappers.average(false,
+                                              brightnessValues[0],
+                                              brightnessValues[1],
+                                              brightnessValues[2],
+                                              brightnessValues[3]);
             default:
-                return CookieWrappers.average(false, vals);
+                return CookieWrappers.average(false, brightnessValues);
         }
     }
 }

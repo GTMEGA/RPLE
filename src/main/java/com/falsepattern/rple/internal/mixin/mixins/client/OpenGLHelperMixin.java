@@ -11,6 +11,7 @@ import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
 import com.falsepattern.rple.internal.mixin.helpers.OpenGlHelperPacked;
+import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;
 import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.GL11;
@@ -24,41 +25,60 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(OpenGlHelper.class)
 public abstract class OpenGLHelperMixin {
-    @Shadow public static int lightmapTexUnit;
+    @Shadow
+    public static int lightmapTexUnit;
+    @Shadow
+    private static boolean field_153215_z;
 
     @Shadow
-    public static void setLightmapTextureCoords(int p_77475_0_, float p_77475_1_, float p_77475_2_) {
-    }
-
-    @Shadow private static boolean field_153215_z;
+    public static void setLightmapTextureCoords(int textureUnit, float textureU, float textureV) {}
 
     @Inject(method = "setLightmapTextureCoords",
-            at = @At(value = "HEAD"),
+            at = @At("HEAD"),
             cancellable = true,
             require = 1)
-    private static void onSet(int texture, float u, float v, CallbackInfo ci) {
-        int value = (int)(u) | ((int)(v) << 16);
-        if (CookieMonster.inspectValue(value) == CookieMonster.IntType.COOKIE) {
-            long packed = CookieMonster.cookieToPackedLong(value);
-            OpenGlHelperPacked.setLightMapTextureCoordsPacked(packed);
+    private static void onSet(int textureUnit, float textureU, float textureV, CallbackInfo ci) {
+        val brightness = (int) textureU | ((int) textureV << 16);
+        if (CookieMonster.inspectValue(brightness) == CookieMonster.IntType.COOKIE) {
+            val packedBrightness = CookieMonster.cookieToPackedLong(brightness);
+            OpenGlHelperPacked.setLightMapTextureCoordsPacked(packedBrightness);
             ci.cancel();
-        } else {
-            if (texture == lightmapTexUnit) {
-                if (lightmapTexUnit != Common.RED_LIGHT_MAP_TEXTURE_UNIT) {
-                    setLightmapTextureCoords(Common.RED_LIGHT_MAP_TEXTURE_UNIT, u, v);
-                }
-                setLightmapTextureCoords(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, u, v);
-                setLightmapTextureCoords(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, u, v);
-            }
+        }
+        if (textureUnit == lightmapTexUnit) {
+            if (lightmapTexUnit != Common.RED_LIGHT_MAP_TEXTURE_UNIT)
+                setLightmapTextureCoords(Common.RED_LIGHT_MAP_TEXTURE_UNIT, textureU, textureV);
+            setLightmapTextureCoords(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, textureU, textureV);
+            setLightmapTextureCoords(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, textureU, textureV);
         }
     }
 
-    private static void doSetActiveTexture(int texture) {
-        if (field_153215_z) {
-            ARBMultitexture.glActiveTextureARB(texture);
-        } else {
-            GL13.glActiveTexture(texture);
+    /**
+     * @author FalsePattern
+     * @reason Colorize
+     */
+    @Overwrite
+    public static void setActiveTexture(int texture) {
+        val lastTexture = GL11.glGetInteger(field_153215_z ?
+                                            ARBMultitexture.GL_ACTIVE_TEXTURE_ARB : GL13.GL_ACTIVE_TEXTURE);
+        if (lastTexture == lightmapTexUnit && texture != lightmapTexUnit) {
+            val isTexture2DEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
+            toggleTexture(isTexture2DEnabled);
+            if (Compat.shadersEnabled()) {
+                Compat.toggleLightMapShaders(isTexture2DEnabled);
+                doSetActiveTexture(Common.GREEN_LIGHT_MAP_SHADER_TEXTURE_UNIT);
+                toggleTexture(isTexture2DEnabled);
+                doSetActiveTexture(Common.BLUE_LIGHT_MAP_SHADER_TEXTURE_UNIT);
+                toggleTexture(isTexture2DEnabled);
+            } else {
+                doSetActiveTexture(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
+                toggleTexture(isTexture2DEnabled);
+                doSetActiveTexture(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
+                toggleTexture(isTexture2DEnabled);
+            }
         }
+        if (Compat.shadersEnabled())
+            Compat.optiFineSetActiveTexture(texture);
+        doSetActiveTexture(texture);
     }
 
     private static void toggleTexture(boolean state) {
@@ -69,32 +89,11 @@ public abstract class OpenGLHelperMixin {
         }
     }
 
-    /**
-     * @author FalsePattern
-     * @reason general lightmap enable/disable solution
-     */
-    @Overwrite
-    public static void setActiveTexture(int texture) {
-        int prevTexture = GL11.glGetInteger(field_153215_z ? ARBMultitexture.GL_ACTIVE_TEXTURE_ARB : GL13.GL_ACTIVE_TEXTURE);
-        if (prevTexture == lightmapTexUnit && texture != lightmapTexUnit) {
-            boolean prevTexState = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
-            toggleTexture(prevTexState);
-            if (Compat.shadersEnabled()) {
-                Compat.toggleLightMapShaders(prevTexState);
-                doSetActiveTexture(Common.GREEN_LIGHT_MAP_SHADER_TEXTURE_UNIT);
-                toggleTexture(prevTexState);
-                doSetActiveTexture(Common.BLUE_LIGHT_MAP_SHADER_TEXTURE_UNIT);
-                toggleTexture(prevTexState);
-            } else {
-                doSetActiveTexture(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
-                toggleTexture(prevTexState);
-                doSetActiveTexture(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
-                toggleTexture(prevTexState);
-            }
+    private static void doSetActiveTexture(int texture) {
+        if (field_153215_z) {
+            ARBMultitexture.glActiveTextureARB(texture);
+        } else {
+            GL13.glActiveTexture(texture);
         }
-        if (Compat.shadersEnabled()) {
-            Compat.optiFineSetActiveTexture(texture);
-        }
-        doSetActiveTexture(texture);
     }
 }

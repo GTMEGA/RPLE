@@ -7,11 +7,13 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
-import com.falsepattern.rple.internal.Common;
+import com.falsepattern.rple.Tags;
 import com.falsepattern.rple.internal.collection.CircularLongBuffer;
 import com.falsepattern.rple.internal.mixin.mixins.client.TessellatorMixin;
 import lombok.val;
 import lombok.var;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -27,6 +29,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * manager! Additionally, they should not be saved anywhere, as they expire very quickly.
  */
 public final class CookieMonster {
+    private static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME + "|Cookie Monster");
+
     // Cookie format (bits):
     // 0100 0000 IIII IIII IIII IIII 0000 000P
     // I - index bits
@@ -40,18 +44,29 @@ public final class CookieMonster {
 
     private static final int BRIGHTNESS_MASK = 0x00FF00FF;
 
-    private static final long BROKEN_WARN_COLOR = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(
-            BrightnessUtil.lightLevelsToBrightnessForTessellator(0xF, 0xF), 0, 0);
+    private static final long BROKEN_WARN_COLOR;
 
-    private static final CircularLongBuffer lightValues = new CircularLongBuffer(NUM_INDICES);
-    private static final AtomicBoolean warnedBefore = new AtomicBoolean(false);
+    static {
+        val redBrightness = BrightnessUtil
+                .lightLevelsToBrightnessForTessellator(0xF, 0xF);
+        val greenBrightness = BrightnessUtil
+                .lightLevelsToBrightnessForTessellator(0x0, 0x0);
+        val blueBrightness = BrightnessUtil
+                .lightLevelsToBrightnessForTessellator(0x0, 0x0);
+        BROKEN_WARN_COLOR = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
+                                                                                             greenBrightness,
+                                                                                             blueBrightness);
+    }
+
+    private static final CircularLongBuffer LIGHT_VALUES = new CircularLongBuffer(NUM_INDICES);
+    private static final AtomicBoolean WARNED_BEFORE = new AtomicBoolean(false);
 
     /**
      * @param packedLong A long value returned by {@link BrightnessUtil}.
      * @return An opaque, temporary cookie representing the given long.
      */
     public static int packedLongToCookie(long packedLong) {
-        val index = lightValues.put(packedLong);
+        val index = LIGHT_VALUES.put(packedLong);
         val cookie = ((index << INDEX_SHIFT) & INDEX_MASK) | COOKIE_BIT;
         return cookie | parity(cookie);
     }
@@ -65,19 +80,19 @@ public final class CookieMonster {
     public static long cookieToPackedLong(int cookie) {
         switch (inspectValue(cookie)) {
             case COOKIE: {
-                return lightValues.get((cookie & INDEX_MASK) >>> INDEX_SHIFT);
+                return LIGHT_VALUES.get((cookie & INDEX_MASK) >>> INDEX_SHIFT);
             }
             case VANILLA: {
                 // Vanilla fake-pack
                 return BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(cookie, cookie, cookie);
             }
             default: {
-                if (!warnedBefore.get()) {
-                    warnedBefore.set(true);
-                    /*
-                    Not throwing an exception here, this is only a graphical bug. Graphical bugs shouldn't cause crashes.
-                     */
-                    Common.LOG.error(new IllegalArgumentException("Illegal brightness value (did it get corrupted?) " + Integer.toHexString(cookie)));
+                if (!WARNED_BEFORE.get()) {
+                    WARNED_BEFORE.set(true);
+                    //  Not throwing an exception here, this is only a graphical bug.
+                    //  Graphical bugs shouldn't cause crashes.
+                    LOG.error(new IllegalArgumentException("Illegal brightness value (did it get corrupted?) " +
+                                                           Integer.toHexString(cookie)));
                 }
                 return BROKEN_WARN_COLOR;
             }
@@ -86,6 +101,7 @@ public final class CookieMonster {
 
     /**
      * Analyzes a potential cookie, and returns the detected type.
+     *
      * @param potentialCookie The cookie to analyze.
      * @return {@link IntType#COOKIE} if it was a correct cookie, {@link IntType#VANILLA} if it was a vanilla minecraft
      * brightness value, and {@link IntType#BROKEN} if it was neither.
@@ -102,6 +118,7 @@ public final class CookieMonster {
 
     /**
      * O(1) parity function taken from Hacker's Delight (ISBN 978-0-321-84268-8).
+     *
      * @return 0 if the number has even bit-parity, 1 if the number has odd bit-parity.
      */
     private static int parity(int x) {

@@ -11,28 +11,30 @@ import com.falsepattern.rple.internal.mixin.interfaces.architecturecraft.IVector
 import gcewing.architecture.Vector3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(value = Vector3.class,
-       remap = false)
+@Unique
+@Mixin(value = Vector3.class, remap = false)
 public abstract class Vector3Mixin implements IVector3Mixin {
-    @Shadow double x;
-
-    @Shadow double y;
-
-    @Shadow double z;
+    @Shadow
+    double x;
+    @Shadow
+    double y;
+    @Shadow
+    double z;
 
     @Override
-    public double x() {
+    public double rple$posX() {
         return x;
     }
 
     @Override
-    public double y() {
+    public double rple$posY() {
         return y;
     }
 
     @Override
-    public double z() {
+    public double rple$posZ() {
         return z;
     }
 }

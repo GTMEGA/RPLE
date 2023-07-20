@@ -9,81 +9,52 @@ package com.falsepattern.rple.internal.mixin.interfaces;
 
 import shadersmod.client.ShadersTess;
 
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 public interface IOptiFineTessellatorMixin {
-    ByteBuffer byteBuffer();
+    ShortBuffer rple$shortBuffer();
 
-    IntBuffer intBuffer();
+    void rple$rawBuffer(int[] rawBuffer);
 
-    FloatBuffer floatBuffer();
+    int[] rple$rawBuffer();
 
-    ShortBuffer shortBuffer();
+    void rple$bufferSize(int rawBufferSize);
 
-    void rawBuffer(int[] rawBuffer);
+    int rple$bufferSize();
 
-    int[] rawBuffer();
+    void rple$incrementRawBufferIndex(int increment);
 
-    void bufferSize(int rawBufferSize);
+    int rple$rawBufferIndex();
 
-    int bufferSize();
+    int rple$drawMode();
 
-    default void incrementRawBufferIndex() {
-        incrementRawBufferIndex(1);
-    }
+    int rple$draw();
 
-    void incrementRawBufferIndex(int increment);
+    void rple$isDrawing(boolean isDrawing);
 
-    int rawBufferIndex();
+    void rple$incrementAddedVertices(int increment);
 
-    int drawMode();
+    int rple$addedVertices();
 
-    int v$draw();
+    void rple$incrementVertexCount(int increment);
 
-    void isDrawing(boolean isDrawing);
+    double rple$posXOffset();
 
-    boolean isDrawing();
+    double rple$posYOffset();
 
-    default void incrementAddedVertices() {
-        incrementAddedVertices(1);
-    }
+    double rple$posZOffset();
 
-    void incrementAddedVertices(int increment);
+    double rple$textureU();
 
-    int addedVertices();
+    double rple$textureV();
 
-    default void incrementVertexCount() {
-        incrementVertexCount(1);
-    }
+    int rple$color();
 
-    void incrementVertexCount(int increment);
+    boolean rple$hasBrightness();
 
-    int vertexCount();
+    long rple$brightness();
 
-    double posXOffset();
+    void rple$hasNormals(boolean hasNormals);
 
-    double posYOffset();
-
-    double posZOffset();
-
-    double textureU();
-
-    double textureV();
-
-    int color();
-
-    void hasBrightness(boolean hasBrightness);
-
-    boolean hasBrightness();
-
-    long brightness();
-
-    void hasNormals(boolean hasNormals);
-
-    boolean hasNormals();
-
-    ShadersTess shaderTessellator();
+    ShadersTess rple$shaderTessellator();
 }

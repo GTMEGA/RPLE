@@ -13,7 +13,7 @@ import appeng.parts.CableBusContainer;
 import appeng.parts.CableBusStorage;
 import appeng.parts.ICableBusContainer;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.mixin.interfaces.ae2.ICableBusContainerMixin;
+import com.falsepattern.rple.internal.mixin.interfaces.appliedenergistics2.ICableBusContainerMixin;
 import lombok.val;
 import lombok.var;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -29,7 +29,7 @@ public abstract class CableBusContainerMixin extends CableBusStorage implements 
     public abstract AEColor getColor();
 
     @Override
-    public int getColoredLightValue(ColorChannel channel) {
+    public int rple$getColoredLightValue(ColorChannel channel) {
         var light = 0;
         for (val direction : ForgeDirection.values()) {
             val part = getPart(direction);

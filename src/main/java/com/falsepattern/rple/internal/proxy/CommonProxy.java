@@ -1,6 +1,6 @@
 package com.falsepattern.rple.internal.proxy;
 
-import com.falsepattern.rple.internal.Tags;
+import com.falsepattern.rple.Tags;
 import com.falsepattern.rple.internal.common.block.LampBlock;
 import com.falsepattern.rple.internal.common.block.LampItemBlock;
 import cpw.mods.fml.common.event.*;

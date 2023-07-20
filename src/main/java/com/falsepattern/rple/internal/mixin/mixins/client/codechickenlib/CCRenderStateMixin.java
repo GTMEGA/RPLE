@@ -20,8 +20,7 @@ public abstract class CCRenderStateMixin {
     public static int brightness;
 
     @Shadow
-    public static void setBrightness(int b) {
-    }
+    public static void setBrightness(int brightness) {}
 
     /**
      * @author FalsePattern

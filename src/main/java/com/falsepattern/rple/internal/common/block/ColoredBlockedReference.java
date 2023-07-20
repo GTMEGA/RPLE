@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.common.block;
 
 import com.falsepattern.rple.api.color.RPLEColor;
-import com.falsepattern.rple.internal.mixin.interfaces.IColoredBlockMixin;
+import com.falsepattern.rple.internal.mixin.interfaces.IBlockMixin;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 @Accessors(fluent = true, chain = false)
 @RequiredArgsConstructor
 public final class ColoredBlockedReference {
-    private final IColoredBlockMixin block;
+    private final IBlockMixin block;
 
     @Setter
     private @Nullable RPLEColor brightness;
@@ -42,10 +42,10 @@ public final class ColoredBlockedReference {
     }
 
     public void apply() {
-        block.baseColoredBrightness(brightness);
-        block.baseColoredTranslucency(translucency);
-        block.metaColoredBrightness(metaColors(metaBrightness));
-        block.metaColoredTranslucency(metaColors(metaTranslucency));
+        block.rple$initBaseColoredBrightness(brightness);
+        block.rple$initBaseColoredTranslucency(translucency);
+        block.rple$initMetaColoredBrightness(metaColors(metaBrightness));
+        block.rple$initMetaColoredTranslucency(metaColors(metaTranslucency));
     }
 
     private @Nullable RPLEColor @Nullable [] metaColors(TIntObjectMap<RPLEColor> metaColorMap) {

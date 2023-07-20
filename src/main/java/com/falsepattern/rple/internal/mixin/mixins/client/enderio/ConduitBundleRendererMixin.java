@@ -8,6 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.enderio;
 
 import com.falsepattern.rple.internal.mixin.extension.EnderIOConduitsBrightnessHolder;
+import com.falsepattern.rple.internal.mixin.hook.ColoredLightingHooks;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import crazypants.enderio.conduit.render.ConduitBundleRenderer;
 import lombok.val;
@@ -18,16 +19,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value = ConduitBundleRenderer.class,
-       remap = false)
-public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler {
+@Mixin(ConduitBundleRenderer.class)
+public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRenderer implements
+                                                                                   ISimpleBlockRenderingHandler {
     @Redirect(method = {"renderWorldBlock", "renderTileEntityAt"},
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/world/World;getLightBrightnessForSkyBlocks(IIII)I"),
-              remap = true,
-              require = 1)
-    public int cacheBrightness(World world, int posX, int posY, int posZ, int min) {
-        val brightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, min);
+              require = 2)
+    public int cacheBrightness(World world, int posX, int posY, int posZ, int minBlockLight) {
+        val brightness = ColoredLightingHooks.getRGBBrightnessForTessellator(world, posX, posY, posZ, minBlockLight);
         EnderIOConduitsBrightnessHolder.setCookieBrightness(brightness);
         return brightness;
     }
@@ -35,7 +35,6 @@ public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRender
     @Redirect(method = "renderConduits",
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V"),
-              remap = true,
               require = 1)
     public void cacheBrightness(Tessellator instance, int oldBrightness) {
         instance.setBrightness(EnderIOConduitsBrightnessHolder.getCookieBrightness());

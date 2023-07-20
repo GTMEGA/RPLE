@@ -5,10 +5,15 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.mixin.interfaces.ae2;
+package com.falsepattern.rple.internal.mixin.interfaces;
 
-import com.falsepattern.rple.api.color.ColorChannel;
+import java.nio.ShortBuffer;
 
-public interface ICableBusContainerMixin {
-    int getColoredLightValue(ColorChannel channel);
+/**
+ * Used for vanilla<->optifine tessellator coupling.
+ */
+public interface ITessellatorMixin {
+    ShortBuffer rple$shortBuffer();
+
+    long rple$brightness();
 }

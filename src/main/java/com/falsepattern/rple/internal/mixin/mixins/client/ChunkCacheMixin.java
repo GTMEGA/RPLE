@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-//TODO test class
 @Mixin(ChunkCache.class)
 public abstract class ChunkCacheMixin implements IBlockAccess {
     @Shadow
@@ -25,11 +24,11 @@ public abstract class ChunkCacheMixin implements IBlockAccess {
 
     /**
      * @author FalsePattern
-     * @reason test
+     * @reason Colorize
      */
     @SideOnly(Side.CLIENT)
     @Overwrite
-    public int getLightBrightnessForSkyBlocks(int x, int y, int z, int minBlockLight) {
-        return ColoredLightingHooks.getRGBBrightnessForTessellator(worldObj, x, y, z, minBlockLight);
+    public int getLightBrightnessForSkyBlocks(int posX, int posY, int posZ, int minBlockLight) {
+        return ColoredLightingHooks.getRGBBrightnessForTessellator(worldObj, posX, posY, posZ, minBlockLight);
     }
 }

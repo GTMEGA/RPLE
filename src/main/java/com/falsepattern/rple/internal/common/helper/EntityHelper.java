@@ -7,15 +7,19 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
-import com.falsepattern.rple.internal.Common;
+import com.falsepattern.rple.Tags;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import net.minecraft.entity.Entity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
 @UtilityClass
 public final class EntityHelper {
+    public static final Logger LOG = LogManager.getLogger(Tags.MOD_NAME + "|Entity Helper");
+
     private static final Set<String> PERMITTED = new HashSet<>();
     private static final Map<Class<?>, Boolean> BLOCK_LIST_CACHE = new HashMap<>();
     private static final String[] GBFR_NAMES = {"func_70070_b", "getBrightnessForRender"};
@@ -60,7 +64,7 @@ public final class EntityHelper {
             }
         } while ((klass = klass.getSuperclass()) != null && klass != Entity.class);
         for (val c : classChain) {
-            Common.LOG.debug("{} colors for {}", blocked ? "Blocking" : "Permitting", c.getName());
+            LOG.debug("{} colors for {}", blocked ? "Blocking" : "Permitting", c.getName());
             BLOCK_LIST_CACHE.put(c, blocked);
         }
         return blocked;

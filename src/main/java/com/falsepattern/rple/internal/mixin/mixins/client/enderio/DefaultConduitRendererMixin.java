@@ -15,14 +15,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value = DefaultConduitRenderer.class,
-       remap = false)
+@Mixin(value = DefaultConduitRenderer.class)
 public abstract class DefaultConduitRendererMixin implements ConduitRenderer {
     @Redirect(method = "renderEntity",
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V"),
-              remap = true,
-              require = 1)
+              require = 2)
     public void cacheBrightness(Tessellator instance, int oldBrightness) {
         instance.setBrightness(EnderIOConduitsBrightnessHolder.getCookieBrightness());
     }

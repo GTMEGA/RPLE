@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.rple.RPLEShaders;
+import com.falsepattern.rple.api.RPLEShadersAPI;
 import com.falsepattern.rple.internal.client.lightmap.LightMapHook;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
@@ -23,6 +23,7 @@ import org.lwjgl.opengl.GL11;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -36,7 +37,8 @@ import java.util.Arrays;
 
 
 @SuppressWarnings("unused")
-@Mixin(value = ShadersTess.class)
+@Unique
+@Mixin(ShadersTess.class)
 public abstract class ShaderTessMixin {
     private static final int MIN_BUFFER_SIZE_INTS = 0x10000;
     private static final int MAX_BUFFER_SIZE_INTS = 0x1000000;
@@ -44,12 +46,12 @@ public abstract class ShaderTessMixin {
     private static final int TRIANGLE_VERTEX_COUNT = 3;
     private static final int QUAD_VERTEX_COUNT = 4;
 
-    private final ShaderVertex vertexA = new ShaderVertex();
-    private final ShaderVertex vertexB = new ShaderVertex();
-    private final ShaderVertex vertexC = new ShaderVertex();
-    private final ShaderVertex vertexD = new ShaderVertex();
+    private final ShaderVertex rple$vertexA = new ShaderVertex();
+    private final ShaderVertex rple$vertexB = new ShaderVertex();
+    private final ShaderVertex rple$vertexC = new ShaderVertex();
+    private final ShaderVertex rple$vertexD = new ShaderVertex();
 
-    private IOptiFineTessellatorMixin tessellator = null;
+    private IOptiFineTessellatorMixin rple$tessellator = null;
 
     //region TODO This stuff belongs in FalseTweaks
 
@@ -107,23 +109,23 @@ public abstract class ShaderTessMixin {
     private static void edgeTexCoordPreDraw(int index, int size, boolean normalized, int stride, FloatBuffer buffer) {
         stride = VertexAPI.recomputeVertexInfo(18, Float.BYTES);
         ARBVertexShader.glVertexAttribPointerARB(index, size, normalized, stride, buffer);
-        if (RPLEShaders.useRPLEEdgeTexCoordAttrib) {
-            ARBVertexShader.glVertexAttribPointerARB(RPLEShaders.edgeTexCoordAttrib,
+        if (RPLEShadersAPI.useRPLEEdgeTexCoordAttrib) {
+            ARBVertexShader.glVertexAttribPointerARB(RPLEShadersAPI.edgeTexCoordAttrib,
                                                      2,
                                                      false,
                                                      stride,
                                                      (FloatBuffer) buffer.position(VertexConstants.getRpleEdgeTexUIndexShader()));
-            ARBVertexShader.glEnableVertexAttribArrayARB(RPLEShaders.edgeTexCoordAttrib);
+            ARBVertexShader.glEnableVertexAttribArrayARB(RPLEShadersAPI.edgeTexCoordAttrib);
         }
     }
 
     @Inject(method = "postDrawArray",
-            at = @At(value = "RETURN"),
+            at = @At("RETURN"),
             remap = false,
             require = 1)
     private static void edgeTexCoordPostDraw(Tessellator tess, CallbackInfo ci) {
-        if (RPLEShaders.useRPLEEdgeTexCoordAttrib && tess.hasTexture) {
-            ARBVertexShader.glDisableVertexAttribArrayARB(RPLEShaders.edgeTexCoordAttrib);
+        if (RPLEShadersAPI.useRPLEEdgeTexCoordAttrib && tess.hasTexture) {
+            ARBVertexShader.glDisableVertexAttribArrayARB(RPLEShadersAPI.edgeTexCoordAttrib);
         }
     }
 
@@ -135,8 +137,9 @@ public abstract class ShaderTessMixin {
                        ordinal = 0),
               remap = false,
               require = 1)
+    @SuppressWarnings("CastToIncompatibleInterface")
     private static boolean enableLightMaps(Tessellator tessellator) {
-        val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).hasBrightness();
+        val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).rple$hasBrightness();
 
         if (hasBrightness) {
             enableLightMapTexture(tessellator, VertexConstants.getRedIndexShader() * 2, LightMapHook.RED_LIGHT_MAP.textureUnit);
@@ -155,8 +158,9 @@ public abstract class ShaderTessMixin {
                        ordinal = 1),
               remap = false,
               require = 1)
+    @SuppressWarnings("CastToIncompatibleInterface")
     private static boolean disableLightMaps(Tessellator tessellator) {
-        val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).hasBrightness();
+        val hasBrightness = ((IOptiFineTessellatorMixin) tessellator).rple$hasBrightness();
 
         if (hasBrightness) {
             disableLightMapTexture(LightMapHook.RED_LIGHT_MAP.textureUnit);
@@ -167,8 +171,9 @@ public abstract class ShaderTessMixin {
         return false;
     }
 
+    @SuppressWarnings("CastToIncompatibleInterface")
     private static void enableLightMapTexture(Tessellator tessellator, int position, int unit) {
-        val shortBuffer = ((IOptiFineTessellatorMixin) tessellator).shortBuffer();
+        val shortBuffer = ((IOptiFineTessellatorMixin) tessellator).rple$shortBuffer();
 
         OpenGlHelper.setClientActiveTexture(unit);
         shortBuffer.position(position);
@@ -188,71 +193,72 @@ public abstract class ShaderTessMixin {
      * @reason Colorize
      */
     @Overwrite(remap = false)
+    @SuppressWarnings("CastToIncompatibleInterface")
     public static void addVertex(Tessellator tessellator, double posX, double posY, double posZ) {
-        val accessibleTessellator = ((IOptiFineTessellatorMixin) tessellator);
-        val shaderTessellator = (ShaderTessMixin) (Object) accessibleTessellator.shaderTessellator();
+        val accessibleTessellator = (IOptiFineTessellatorMixin) tessellator;
+        val shaderTessellator = (ShaderTessMixin) (Object) accessibleTessellator.rple$shaderTessellator();
 
-        val floatPosX = (float) (posX + accessibleTessellator.posXOffset());
-        val floatPosY = (float) (posY + accessibleTessellator.posYOffset());
-        val floatPosZ = (float) (posZ + accessibleTessellator.posZOffset());
+        val floatPosX = (float) (posX + accessibleTessellator.rple$posXOffset());
+        val floatPosY = (float) (posY + accessibleTessellator.rple$posYOffset());
+        val floatPosZ = (float) (posZ + accessibleTessellator.rple$posZOffset());
 
         shaderTessellator.addVertex(accessibleTessellator, floatPosX, floatPosY, floatPosZ);
     }
 
     private void addVertex(IOptiFineTessellatorMixin tessellator, float posX, float posY, float posZ) {
-        this.tessellator = tessellator;
+        this.rple$tessellator = tessellator;
 
-        val drawMode = tessellator.drawMode();
+        val drawMode = tessellator.rple$drawMode();
 
         prepareBuffer(drawMode);
 
         if (drawMode == GL11.GL_TRIANGLES) {
-            val vertexIndex = tessellator.addedVertices() % TRIANGLE_VERTEX_COUNT;
+            val vertexIndex = tessellator.rple$addedVertices() % TRIANGLE_VERTEX_COUNT;
 
             switch (vertexIndex) {
                 case 0:
-                    prepareVertex(vertexA, posX, posY, posZ);
+                    prepareVertex(rple$vertexA, posX, posY, posZ);
                     break;
                 case 1:
-                    prepareVertex(vertexB, posX, posY, posZ);
+                    prepareVertex(rple$vertexB, posX, posY, posZ);
                     break;
                 case 2:
-                    prepareVertex(vertexC, posX, posY, posZ);
+                    prepareVertex(rple$vertexC, posX, posY, posZ);
                 default:
                     addTrianglePrimitive();
             }
 
-            this.tessellator = null;
+            this.rple$tessellator = null;
         } else if (drawMode == GL11.GL_QUADS) {
-            val vertexIndex = tessellator.addedVertices() % QUAD_VERTEX_COUNT;
+            val vertexIndex = tessellator.rple$addedVertices() % QUAD_VERTEX_COUNT;
 
             switch (vertexIndex) {
                 case 0:
-                    prepareVertex(vertexA, posX, posY, posZ);
+                    prepareVertex(rple$vertexA, posX, posY, posZ);
                     break;
                 case 1:
-                    prepareVertex(vertexB, posX, posY, posZ);
+                    prepareVertex(rple$vertexB, posX, posY, posZ);
                     break;
                 case 2:
-                    prepareVertex(vertexC, posX, posY, posZ);
+                    prepareVertex(rple$vertexC, posX, posY, posZ);
                     break;
                 case 3:
-                    prepareVertex(vertexD, posX, posY, posZ);
+                    prepareVertex(rple$vertexD, posX, posY, posZ);
                 default:
                     addQuadPrimitive();
             }
 
-            this.tessellator = null;
+            this.rple$tessellator = null;
         } else {
-            prepareVertex(vertexA, posX, posY, posZ);
-            addVertex(vertexA);
+            prepareVertex(rple$vertexA, posX, posY, posZ);
+            addVertex(rple$vertexA);
         }
     }
 
     private void prepareBuffer(int drawMode) {
-        val bufferSize = tessellator.bufferSize();
+        val bufferSize = rple$tessellator.rple$bufferSize();
 
-        if (tessellator.rawBufferIndex() + requiredSpaceInts() <= bufferSize)
+        if (rple$tessellator.rple$rawBufferIndex() + requiredSpaceInts() <= bufferSize)
             return;
 
         if (bufferSize < MIN_BUFFER_SIZE_INTS) {
@@ -262,9 +268,9 @@ public abstract class ShaderTessMixin {
 
         final int vertexIndex;
         if (drawMode == GL11.GL_TRIANGLES) {
-            vertexIndex = tessellator.addedVertices() % TRIANGLE_VERTEX_COUNT;
+            vertexIndex = rple$tessellator.rple$addedVertices() % TRIANGLE_VERTEX_COUNT;
         } else if (drawMode == GL11.GL_QUADS) {
-            vertexIndex = tessellator.addedVertices() % QUAD_VERTEX_COUNT;
+            vertexIndex = rple$tessellator.rple$addedVertices() % QUAD_VERTEX_COUNT;
         } else {
             vertexIndex = -1;
         }
@@ -277,9 +283,9 @@ public abstract class ShaderTessMixin {
     }
 
     private int requiredSpaceInts() {
-        if (tessellator.drawMode() == GL11.GL_TRIANGLES) {
+        if (rple$tessellator.rple$drawMode() == GL11.GL_TRIANGLES) {
             return VertexAPI.recomputeVertexInfo(18, 3);
-        } else if (tessellator.drawMode() == GL11.GL_QUADS) {
+        } else if (rple$tessellator.rple$drawMode() == GL11.GL_QUADS) {
             return VertexAPI.recomputeVertexInfo(18, 4);
         } else {
             return VertexAPI.recomputeVertexInfo(18, 1);
@@ -287,43 +293,43 @@ public abstract class ShaderTessMixin {
     }
 
     private void initBuffer() {
-        tessellator.rawBuffer(new int[MIN_BUFFER_SIZE_INTS]);
-        tessellator.bufferSize(MIN_BUFFER_SIZE_INTS);
+        rple$tessellator.rple$rawBuffer(new int[MIN_BUFFER_SIZE_INTS]);
+        rple$tessellator.rple$bufferSize(MIN_BUFFER_SIZE_INTS);
     }
 
     private void earlyDraw() {
-        tessellator.v$draw();
-        tessellator.isDrawing(true);
+        rple$tessellator.rple$draw();
+        rple$tessellator.rple$isDrawing(true);
     }
 
     private void extendBuffer() {
-        val newBufferSize = tessellator.bufferSize() * 2;
-        val oldRawBuffer = tessellator.rawBuffer();
+        val newBufferSize = rple$tessellator.rple$bufferSize() * 2;
+        val oldRawBuffer = rple$tessellator.rple$rawBuffer();
         val newRawBuffer = Arrays.copyOf(oldRawBuffer, newBufferSize);
 
-        tessellator.bufferSize(newBufferSize);
-        tessellator.rawBuffer(newRawBuffer);
+        rple$tessellator.rple$bufferSize(newBufferSize);
+        rple$tessellator.rple$rawBuffer(newRawBuffer);
 
-        SMCLog.info("Expand tessellator buffer %d", tessellator.bufferSize());
+        SMCLog.info("Expand tessellator buffer %d", rple$tessellator.rple$bufferSize());
     }
 
     private void prepareVertex(ShaderVertex vertex, float posX, float posY, float posZ) {
-        val brightness = tessellator.brightness();
+        val brightness = rple$tessellator.rple$brightness();
 
         vertex.positionX(posX)
               .positionY(posY)
               .positionZ(posZ)
-              .textureU(tessellator.textureU())
-              .textureV(tessellator.textureV())
-              .colorARGB(tessellator.color())
+              .textureU(rple$tessellator.rple$textureU())
+              .textureV(rple$tessellator.rple$textureV())
+              .colorARGB(rple$tessellator.rple$color())
               .redLightMapUV(BrightnessUtil.getBrightnessRed(brightness))
               .greenLightMapUV(BrightnessUtil.getBrightnessGreen(brightness))
               .blueLightMapUV(BrightnessUtil.getBrightnessBlue(brightness))
               .entityData(Shaders.getEntityData())
               .entityData2(Shaders.getEntityData2());
 
-        tessellator.incrementAddedVertices();
-        tessellator.incrementVertexCount();
+        rple$tessellator.rple$incrementAddedVertices(1);
+        rple$tessellator.rple$incrementVertexCount(1);
     }
 
     private void addTrianglePrimitive() {
@@ -331,9 +337,9 @@ public abstract class ShaderTessMixin {
         calculateTangent();
         calculateTriangleMidAndEdgeTextureUV();
 
-        addVertex(vertexA);
-        addVertex(vertexB);
-        addVertex(vertexC);
+        addVertex(rple$vertexA);
+        addVertex(rple$vertexB);
+        addVertex(rple$vertexC);
     }
 
     private void addQuadPrimitive() {
@@ -341,24 +347,24 @@ public abstract class ShaderTessMixin {
         calculateTangent();
         calculateQuadMidAndEdgeTextureUV();
 
-        addVertex(vertexA);
-        addVertex(vertexB);
-        addVertex(vertexC);
-        addVertex(vertexD);
+        addVertex(rple$vertexA);
+        addVertex(rple$vertexB);
+        addVertex(rple$vertexC);
+        addVertex(rple$vertexD);
     }
 
     private void calculateTriangleNormal() {
-        val aPositionX = vertexA.positionX();
-        val aPositionY = vertexA.positionY();
-        val aPositionZ = vertexA.positionZ();
+        val aPositionX = rple$vertexA.positionX();
+        val aPositionY = rple$vertexA.positionY();
+        val aPositionZ = rple$vertexA.positionZ();
 
-        val bPositionX = vertexB.positionX();
-        val bPositionY = vertexB.positionY();
-        val bPositionZ = vertexB.positionZ();
+        val bPositionX = rple$vertexB.positionX();
+        val bPositionY = rple$vertexB.positionY();
+        val bPositionZ = rple$vertexB.positionZ();
 
-        val cPositionX = vertexC.positionX();
-        val cPositionY = vertexC.positionY();
-        val cPositionZ = vertexC.positionZ();
+        val cPositionX = rple$vertexC.positionX();
+        val cPositionY = rple$vertexC.positionY();
+        val cPositionZ = rple$vertexC.positionZ();
 
         val acDeltaX = cPositionX - aPositionX;
         val acDeltaY = cPositionY - aPositionY;
@@ -377,35 +383,35 @@ public abstract class ShaderTessMixin {
         normalY /= length;
         normalZ /= length;
 
-        vertexA.normalX(normalX)
-               .normalY(normalY)
-               .normalZ(normalZ);
-        vertexB.normalX(normalX)
-               .normalY(normalY)
-               .normalZ(normalZ);
-        vertexC.normalX(normalX)
-               .normalY(normalY)
-               .normalZ(normalZ);
+        rple$vertexA.normalX(normalX)
+                    .normalY(normalY)
+                    .normalZ(normalZ);
+        rple$vertexB.normalX(normalX)
+                    .normalY(normalY)
+                    .normalZ(normalZ);
+        rple$vertexC.normalX(normalX)
+                    .normalY(normalY)
+                    .normalZ(normalZ);
 
-        tessellator.hasNormals(true);
+        rple$tessellator.rple$hasNormals(true);
     }
 
     private void calculateQuadNormal() {
-        val aPositionX = vertexA.positionX();
-        val aPositionY = vertexA.positionY();
-        val aPositionZ = vertexA.positionZ();
+        val aPositionX = rple$vertexA.positionX();
+        val aPositionY = rple$vertexA.positionY();
+        val aPositionZ = rple$vertexA.positionZ();
 
-        val bPositionX = vertexB.positionX();
-        val bPositionY = vertexB.positionY();
-        val bPositionZ = vertexB.positionZ();
+        val bPositionX = rple$vertexB.positionX();
+        val bPositionY = rple$vertexB.positionY();
+        val bPositionZ = rple$vertexB.positionZ();
 
-        val cPositionX = vertexC.positionX();
-        val cPositionY = vertexC.positionY();
-        val cPositionZ = vertexC.positionZ();
+        val cPositionX = rple$vertexC.positionX();
+        val cPositionY = rple$vertexC.positionY();
+        val cPositionZ = rple$vertexC.positionZ();
 
-        val dPositionX = vertexD.positionX();
-        val dPositionY = vertexD.positionY();
-        val dPositionZ = vertexD.positionZ();
+        val dPositionX = rple$vertexD.positionX();
+        val dPositionY = rple$vertexD.positionY();
+        val dPositionZ = rple$vertexD.positionZ();
 
         val acDeltaX = cPositionX - aPositionX;
         val acDeltaY = cPositionY - aPositionY;
@@ -424,47 +430,47 @@ public abstract class ShaderTessMixin {
         normalY /= length;
         normalZ /= length;
 
-        vertexA.normalX(normalX)
-               .normalY(normalY)
-               .normalZ(normalZ);
-        vertexB.normalX(normalX)
-               .normalY(normalY)
-               .normalZ(normalZ);
-        vertexC.normalX(normalX)
-               .normalY(normalY)
-               .normalZ(normalZ);
-        vertexD.normalX(normalX)
-               .normalY(normalY)
-               .normalZ(normalZ);
+        rple$vertexA.normalX(normalX)
+                    .normalY(normalY)
+                    .normalZ(normalZ);
+        rple$vertexB.normalX(normalX)
+                    .normalY(normalY)
+                    .normalZ(normalZ);
+        rple$vertexC.normalX(normalX)
+                    .normalY(normalY)
+                    .normalZ(normalZ);
+        rple$vertexD.normalX(normalX)
+                    .normalY(normalY)
+                    .normalZ(normalZ);
 
-        tessellator.hasNormals(true);
+        rple$tessellator.rple$hasNormals(true);
     }
 
     private void calculateTangent() {
-        val aPositionX = vertexA.positionX();
-        val aPositionY = vertexA.positionY();
-        val aPositionZ = vertexA.positionZ();
+        val aPositionX = rple$vertexA.positionX();
+        val aPositionY = rple$vertexA.positionY();
+        val aPositionZ = rple$vertexA.positionZ();
 
-        val bPositionX = vertexB.positionX();
-        val bPositionY = vertexB.positionY();
-        val bPositionZ = vertexB.positionZ();
+        val bPositionX = rple$vertexB.positionX();
+        val bPositionY = rple$vertexB.positionY();
+        val bPositionZ = rple$vertexB.positionZ();
 
-        val cPositionX = vertexC.positionX();
-        val cPositionY = vertexC.positionY();
-        val cPositionZ = vertexC.positionZ();
+        val cPositionX = rple$vertexC.positionX();
+        val cPositionY = rple$vertexC.positionY();
+        val cPositionZ = rple$vertexC.positionZ();
 
-        val normalX = vertexA.normalX();
-        val normalY = vertexA.normalY();
-        val normalZ = vertexA.normalZ();
+        val normalX = rple$vertexA.normalX();
+        val normalY = rple$vertexA.normalY();
+        val normalZ = rple$vertexA.normalZ();
 
-        val aTextureU = vertexA.textureU();
-        val aTextureV = vertexA.textureV();
+        val aTextureU = rple$vertexA.textureU();
+        val aTextureV = rple$vertexA.textureV();
 
-        val bTextureU = vertexB.textureU();
-        val bTextureV = vertexB.textureV();
+        val bTextureU = rple$vertexB.textureU();
+        val bTextureV = rple$vertexB.textureV();
 
-        val cTextureU = vertexC.textureU();
-        val cTextureV = vertexC.textureV();
+        val cTextureU = rple$vertexC.textureU();
+        val cTextureV = rple$vertexC.textureV();
 
         val abDeltaX = bPositionX - aPositionX;
         val abDeltaY = bPositionY - aPositionY;
@@ -519,36 +525,36 @@ public abstract class ShaderTessMixin {
             tangentW = 1.0F;
         }
 
-        if (tessellator.drawMode() == GL11.GL_TRIANGLES) {
-            vertexA.tangentX(tangentX)
-                   .tangentY(tangentY)
-                   .tangentZ(tangentZ)
-                   .tangentW(tangentW);
-            vertexB.tangentX(tangentX)
-                   .tangentY(tangentY)
-                   .tangentZ(tangentZ)
-                   .tangentW(tangentW);
-            vertexC.tangentX(tangentX)
-                   .tangentY(tangentY)
-                   .tangentZ(tangentZ)
-                   .tangentW(tangentW);
-        } else if (tessellator.drawMode() == GL11.GL_QUADS) {
-            vertexA.tangentX(tangentX)
-                   .tangentY(tangentY)
-                   .tangentZ(tangentZ)
-                   .tangentW(tangentW);
-            vertexB.tangentX(tangentX)
-                   .tangentY(tangentY)
-                   .tangentZ(tangentZ)
-                   .tangentW(tangentW);
-            vertexC.tangentX(tangentX)
-                   .tangentY(tangentY)
-                   .tangentZ(tangentZ)
-                   .tangentW(tangentW);
-            vertexD.tangentX(tangentX)
-                   .tangentY(tangentY)
-                   .tangentZ(tangentZ)
-                   .tangentW(tangentW);
+        if (rple$tessellator.rple$drawMode() == GL11.GL_TRIANGLES) {
+            rple$vertexA.tangentX(tangentX)
+                        .tangentY(tangentY)
+                        .tangentZ(tangentZ)
+                        .tangentW(tangentW);
+            rple$vertexB.tangentX(tangentX)
+                        .tangentY(tangentY)
+                        .tangentZ(tangentZ)
+                        .tangentW(tangentW);
+            rple$vertexC.tangentX(tangentX)
+                        .tangentY(tangentY)
+                        .tangentZ(tangentZ)
+                        .tangentW(tangentW);
+        } else if (rple$tessellator.rple$drawMode() == GL11.GL_QUADS) {
+            rple$vertexA.tangentX(tangentX)
+                        .tangentY(tangentY)
+                        .tangentZ(tangentZ)
+                        .tangentW(tangentW);
+            rple$vertexB.tangentX(tangentX)
+                        .tangentY(tangentY)
+                        .tangentZ(tangentZ)
+                        .tangentW(tangentW);
+            rple$vertexC.tangentX(tangentX)
+                        .tangentY(tangentY)
+                        .tangentZ(tangentZ)
+                        .tangentW(tangentW);
+            rple$vertexD.tangentX(tangentX)
+                        .tangentY(tangentY)
+                        .tangentZ(tangentZ)
+                        .tangentW(tangentW);
         }
     }
 
@@ -557,29 +563,29 @@ public abstract class ShaderTessMixin {
     }
 
     private void calculateTriangleMidAndEdgeTextureUV() {
-        val minU = min(vertexA.textureU(), vertexB.textureU(), vertexC.textureU());
-        val minV = min(vertexA.textureV(), vertexB.textureV(), vertexC.textureV());
-        val maxU = max(vertexA.textureU(), vertexB.textureU(), vertexC.textureU());
-        val maxV = max(vertexA.textureV(), vertexB.textureV(), vertexC.textureV());
+        val minU = min(rple$vertexA.textureU(), rple$vertexB.textureU(), rple$vertexC.textureU());
+        val minV = min(rple$vertexA.textureV(), rple$vertexB.textureV(), rple$vertexC.textureV());
+        val maxU = max(rple$vertexA.textureU(), rple$vertexB.textureU(), rple$vertexC.textureU());
+        val maxV = max(rple$vertexA.textureV(), rple$vertexB.textureV(), rple$vertexC.textureV());
 
-        vertexA.edgeTextureU(minU);
-        vertexB.edgeTextureU(minU);
-        vertexC.edgeTextureU(minU);
+        rple$vertexA.edgeTextureU(minU);
+        rple$vertexB.edgeTextureU(minU);
+        rple$vertexC.edgeTextureU(minU);
 
-        vertexA.edgeTextureV(minV);
-        vertexB.edgeTextureV(minV);
-        vertexC.edgeTextureV(minV);
+        rple$vertexA.edgeTextureV(minV);
+        rple$vertexB.edgeTextureV(minV);
+        rple$vertexC.edgeTextureV(minV);
 
         val midU = (minU + maxU) / 2;
         val midV = (minV + maxV) / 2;
 
-        vertexA.midTextureU(midU);
-        vertexB.midTextureU(midU);
-        vertexC.midTextureU(midU);
+        rple$vertexA.midTextureU(midU);
+        rple$vertexB.midTextureU(midU);
+        rple$vertexC.midTextureU(midU);
 
-        vertexA.midTextureV(midV);
-        vertexB.midTextureV(midV);
-        vertexC.midTextureV(midV);
+        rple$vertexA.midTextureV(midV);
+        rple$vertexB.midTextureV(midV);
+        rple$vertexC.midTextureV(midV);
     }
 
     private static float min(float a, float b, float c) {
@@ -590,33 +596,33 @@ public abstract class ShaderTessMixin {
     }
 
     private void calculateQuadMidAndEdgeTextureUV() {
-        val minU = min(vertexA.textureU(), vertexB.textureU(), vertexC.textureU(), vertexD.textureU());
-        val minV = min(vertexA.textureV(), vertexB.textureV(), vertexC.textureV(), vertexD.textureV());
-        val maxU = max(vertexA.textureU(), vertexB.textureU(), vertexC.textureU(), vertexD.textureU());
-        val maxV = max(vertexA.textureV(), vertexB.textureV(), vertexC.textureV(), vertexD.textureV());
+        val minU = min(rple$vertexA.textureU(), rple$vertexB.textureU(), rple$vertexC.textureU(), rple$vertexD.textureU());
+        val minV = min(rple$vertexA.textureV(), rple$vertexB.textureV(), rple$vertexC.textureV(), rple$vertexD.textureV());
+        val maxU = max(rple$vertexA.textureU(), rple$vertexB.textureU(), rple$vertexC.textureU(), rple$vertexD.textureU());
+        val maxV = max(rple$vertexA.textureV(), rple$vertexB.textureV(), rple$vertexC.textureV(), rple$vertexD.textureV());
 
-        vertexA.edgeTextureU(minU);
-        vertexB.edgeTextureU(minU);
-        vertexC.edgeTextureU(minU);
-        vertexD.edgeTextureU(minU);
+        rple$vertexA.edgeTextureU(minU);
+        rple$vertexB.edgeTextureU(minU);
+        rple$vertexC.edgeTextureU(minU);
+        rple$vertexD.edgeTextureU(minU);
 
-        vertexA.edgeTextureV(minV);
-        vertexB.edgeTextureV(minV);
-        vertexC.edgeTextureV(minV);
-        vertexD.edgeTextureV(minV);
+        rple$vertexA.edgeTextureV(minV);
+        rple$vertexB.edgeTextureV(minV);
+        rple$vertexC.edgeTextureV(minV);
+        rple$vertexD.edgeTextureV(minV);
 
         val midU = (minU + maxU) / 2;
         val midV = (minV + maxV) / 2;
 
-        vertexA.midTextureU(midU);
-        vertexB.midTextureU(midU);
-        vertexC.midTextureU(midU);
-        vertexD.midTextureU(midU);
+        rple$vertexA.midTextureU(midU);
+        rple$vertexB.midTextureU(midU);
+        rple$vertexC.midTextureU(midU);
+        rple$vertexD.midTextureU(midU);
 
-        vertexA.midTextureV(midV);
-        vertexB.midTextureV(midV);
-        vertexC.midTextureV(midV);
-        vertexD.midTextureV(midV);
+        rple$vertexA.midTextureV(midV);
+        rple$vertexB.midTextureV(midV);
+        rple$vertexC.midTextureV(midV);
+        rple$vertexD.midTextureV(midV);
     }
 
     private static float min(float a, float b, float c, float d) {
@@ -627,8 +633,8 @@ public abstract class ShaderTessMixin {
     }
 
     private void addVertex(ShaderVertex vertex) {
-        vertex.toIntArray(tessellator.rawBufferIndex(), tessellator.rawBuffer());
+        vertex.toIntArray(rple$tessellator.rple$rawBufferIndex(), rple$tessellator.rple$rawBuffer());
 
-        tessellator.incrementRawBufferIndex(VertexAPI.recomputeVertexInfo(18, 1));
+        rple$tessellator.rple$incrementRawBufferIndex(VertexAPI.recomputeVertexInfo(18, 1));
     }
 }

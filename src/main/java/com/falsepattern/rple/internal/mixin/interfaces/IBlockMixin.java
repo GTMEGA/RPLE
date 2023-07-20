@@ -12,12 +12,12 @@ import com.falsepattern.rple.api.block.RPLEBlockTranslucency;
 import com.falsepattern.rple.api.color.RPLEColor;
 import org.jetbrains.annotations.Nullable;
 
-public interface IColoredBlockMixin extends RPLEBlockBrightness, RPLEBlockTranslucency {
-    void baseColoredBrightness(@Nullable RPLEColor baseColoredBrightness);
+public interface IBlockMixin extends RPLEBlockBrightness, RPLEBlockTranslucency {
+    void rple$initBaseColoredBrightness(@Nullable RPLEColor baseColoredBrightness);
 
-    void baseColoredTranslucency(@Nullable RPLEColor baseColoredTranslucency);
+    void rple$initBaseColoredTranslucency(@Nullable RPLEColor baseColoredTranslucency);
 
-    void metaColoredBrightness(@Nullable RPLEColor @Nullable [] metaColoredBrightness);
+    void rple$initMetaColoredBrightness(@Nullable RPLEColor @Nullable [] metaColoredBrightness);
 
-    void metaColoredTranslucency(@Nullable RPLEColor @Nullable [] metaColoredTranslucency);
+    void rple$initMetaColoredTranslucency(@Nullable RPLEColor @Nullable [] metaColoredTranslucency);
 }

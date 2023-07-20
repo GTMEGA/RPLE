@@ -12,17 +12,15 @@ import com.jaquadro.minecraft.storagedrawers.util.RenderHelperAO;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-@Mixin(value = RenderHelperAO.class,
-       remap = false)
+@Mixin(value = RenderHelperAO.class, remap = false)
 public abstract class RenderHelperAOMixin {
-
     /**
      * @author FalsePattern
      * @reason Colorize
      */
     @Overwrite
-    public static int getAOBrightness(int com1, int com2, int com3, int base) {
-        return CookieWrappers.average(true, com1, com2, com3, base);
+    public static int getAOBrightness(int brightnessA, int brightnessB, int brightnessC, int brightnessD) {
+        return CookieWrappers.average(true, brightnessA, brightnessB, brightnessC, brightnessD);
     }
 
     /**
@@ -30,7 +28,14 @@ public abstract class RenderHelperAOMixin {
      * @reason Colorize
      */
     @Overwrite
-    public static int mixAOBrightness(int part1, int part2, int part3, int part4, double weight1, double weight2, double weight3, double weight4) {
+    public static int mixAOBrightness(int part1,
+                                      int part2,
+                                      int part3,
+                                      int part4,
+                                      double weight1,
+                                      double weight2,
+                                      double weight3,
+                                      double weight4) {
         return CookieWrappers.mixAOBrightness(part1, part2, part3, part4, weight1, weight2, weight3, weight4);
     }
 
@@ -39,7 +44,12 @@ public abstract class RenderHelperAOMixin {
      * @reason Colorize
      */
     @Overwrite
-    public static int mixAOBrightness(int brightTL, int brightBL, int brightBR, int brightTR, double lerpTB, double lerpLR) {
+    public static int mixAOBrightness(int brightTL,
+                                      int brightBL,
+                                      int brightBR,
+                                      int brightTR,
+                                      double lerpTB,
+                                      double lerpLR) {
         return CookieWrappers.mixAOBrightness(brightTL, brightBL, brightBR, brightTR, lerpTB, lerpLR);
     }
 

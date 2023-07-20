@@ -8,9 +8,10 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.projectred;
 
 import codechicken.lib.render.CCRenderState;
-import com.falsepattern.rple.internal.Tags;
+import com.falsepattern.rple.Tags;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.mixin.helpers.OpenGlHelperPacked;
+import lombok.val;
 import mrtjp.projectred.core.RenderHalo$;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -19,21 +20,29 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = RenderHalo$.class,
-       remap = false)
+@Mixin(value = RenderHalo$.class, remap = false)
 public abstract class RenderHaloMixin {
     private static ResourceLocation glowTex;
     private int oldTexture;
+
     @Inject(method = "prepareRenderState()V",
             at = @At("HEAD"),
             require = 1)
     private void prepareFixColor(CallbackInfo ci) {
+        if (glowTex == null)
+            glowTex = new ResourceLocation(Tags.MOD_ID, "textures/blocks/glow_solid.png");
+
+        val brightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(15, 15);
+        val packedBrightness = BrightnessUtil.monochromeBrightnessToPackedLong(brightness);
+
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glColor4f(1, 1, 1, 1);
-        OpenGlHelperPacked.setLightMapTextureCoordsPacked(BrightnessUtil.monochromeBrightnessToPackedLong(BrightnessUtil.lightLevelsToBrightnessForTessellator(15, 15)));
+
+        OpenGlHelperPacked.setLightMapTextureCoordsPacked(packedBrightness);
         oldTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-        CCRenderState.changeTexture(glowTex == null ? glowTex = new ResourceLocation(Tags.MOD_ID, "textures/blocks/glow_solid.png") : glowTex);
+        CCRenderState.changeTexture(glowTex);
     }
+
     @Inject(method = "restoreRenderState()V",
             at = @At("RETURN"),
             require = 1)
