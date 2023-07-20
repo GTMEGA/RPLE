@@ -29,8 +29,8 @@ import java.util.IdentityHashMap;
 import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
 import static com.falsepattern.rple.internal.common.RPLEDefaultValues.*;
 import static com.falsepattern.rple.internal.common.block.NullBlockColorizer.nullBlockColorizer;
-import static com.falsepattern.rple.internal.config.ColorConfigHandler.loadCustomConfig;
-import static com.falsepattern.rple.internal.config.ColorConfigHandler.saveGeneratedConfig;
+import static com.falsepattern.rple.internal.config.ColorConfigLoader.loadCustomConfig;
+import static com.falsepattern.rple.internal.config.ColorConfigLoader.saveGeneratedConfig;
 import static com.falsepattern.rple.internal.event.EventPoster.postBlockColorRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
 

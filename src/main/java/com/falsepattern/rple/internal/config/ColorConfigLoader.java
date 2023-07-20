@@ -30,7 +30,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 @UtilityClass
-public final class ColorConfigHandler {
+public final class ColorConfigLoader {
     private static final Gson GSON;
 
     private static final Path CONFIG_PATH;

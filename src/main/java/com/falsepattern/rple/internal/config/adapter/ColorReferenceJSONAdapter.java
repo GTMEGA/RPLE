@@ -13,7 +13,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import lombok.NoArgsConstructor;
 
-import static com.falsepattern.rple.internal.config.ColorConfigHandler.colorConfigGSON;
+import static com.falsepattern.rple.internal.config.ColorConfigLoader.colorConfigGSON;
 
 @NoArgsConstructor
 public final class ColorReferenceJSONAdapter extends TypeAdapter<ColorReference> {

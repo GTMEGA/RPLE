@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 
-import static com.falsepattern.rple.internal.config.ColorConfigHandler.colorConfigGSON;
+import static com.falsepattern.rple.internal.config.ColorConfigLoader.colorConfigGSON;
 
 @NoArgsConstructor
 public final class PaletteJSONAdapter extends TypeAdapter<ColorPalette> {
