@@ -10,11 +10,13 @@ package com.falsepattern.rple.internal.mixin.hook;
 import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.RPLERenderAPI;
 import com.falsepattern.rple.api.block.RPLEBlock;
+import com.falsepattern.rple.internal.client.render.EntityColorHandler;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunkRoot;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
 import com.falsepattern.rple.internal.common.helper.CookieWrappers;
-import com.falsepattern.rple.internal.common.helper.EntityHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import lombok.var;
@@ -94,6 +96,7 @@ public final class ColoredLightingHooks {
         return lightOpacityFromColor(color);
     }
 
+    @SideOnly(Side.CLIENT)
     public static int getEntityRGBBrightnessForTessellator(Entity entity,
                                                            IBlockAccess world,
                                                            int posX,
@@ -101,13 +104,14 @@ public final class ColoredLightingHooks {
                                                            int posZ,
                                                            int cookieMinBlockLight) {
         var brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, cookieMinBlockLight);
-        if (EntityHelper.isOnBlockList(entity.getClass())) {
+        if (EntityColorHandler.isOnBlockList(entity.getClass())) {
             val packedBrightness = CookieMonster.cookieToPackedLong(brightness);
             brightness = BrightnessUtil.getBrightestChannelFromPacked(packedBrightness);
         }
         return brightness;
     }
 
+    @SideOnly(Side.CLIENT)
     public static int getBlockRGBBrightnessForTessellator(IBlockAccess world,
                                                           int posX,
                                                           int posY,
@@ -131,6 +135,7 @@ public final class ColoredLightingHooks {
         return brightness;
     }
 
+    @SideOnly(Side.CLIENT)
     public static int getBlockFluidRGBBrightnessForTessellator(IBlockAccess world,
                                                                int posX,
                                                                int posY,
@@ -140,6 +145,7 @@ public final class ColoredLightingHooks {
         return CookieWrappers.packedMax(brightness, topBrightness);
     }
 
+    @SideOnly(Side.CLIENT)
     public static int getRGBBrightnessForTessellator(IBlockAccess world,
                                                      int posX,
                                                      int posY,

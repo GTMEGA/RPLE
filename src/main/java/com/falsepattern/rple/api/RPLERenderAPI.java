@@ -10,9 +10,9 @@ package com.falsepattern.rple.api;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.internal.client.render.EntityColorHandler;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
-import com.falsepattern.rple.internal.common.helper.EntityHelper;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -162,7 +162,7 @@ public final class RPLERenderAPI {
     }
 
     public static void permit(@NotNull Class<? extends Entity> entityClass) {
-        EntityHelper.permit(entityClass);
+        EntityColorHandler.permit(entityClass);
     }
 
     /**
@@ -173,6 +173,6 @@ public final class RPLERenderAPI {
      * @param entityClassName The fully qualified class name
      */
     public static void permit(@NotNull String entityClassName) {
-        EntityHelper.permit(entityClassName);
+        EntityColorHandler.permit(entityClassName);
     }
 }

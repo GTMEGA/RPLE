@@ -26,8 +26,8 @@ public abstract class ChunkCacheMixin implements IBlockAccess {
      * @author FalsePattern
      * @reason Colorize
      */
-    @SideOnly(Side.CLIENT)
     @Overwrite
+    @SideOnly(Side.CLIENT)
     public int getLightBrightnessForSkyBlocks(int posX, int posY, int posZ, int minBlockLight) {
         return ColoredLightingHooks.getRGBBrightnessForTessellator(worldObj, posX, posY, posZ, minBlockLight);
     }

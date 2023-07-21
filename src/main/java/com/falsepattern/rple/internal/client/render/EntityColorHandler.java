@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.helper;
+package com.falsepattern.rple.internal.client.render;
 
 import lombok.experimental.UtilityClass;
 import lombok.val;
@@ -17,26 +17,13 @@ import java.util.*;
 import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
 
 @UtilityClass
-public final class EntityHelper {
-    public static final Logger LOG = createLogger("Entity Helper");
+public final class EntityColorHandler {
+    public static final Logger LOG = createLogger("Entity Color Handler");
 
     private static final Set<String> PERMITTED = new HashSet<>();
     private static final Map<Class<?>, Boolean> BLOCK_LIST_CACHE = new HashMap<>();
     private static final String[] GBFR_NAMES = {"func_70070_b", "getBrightnessForRender"};
     private static final Class<?>[] GBFR_ARGS = {float.class};
-
-    private static boolean hasMethod(Class<?> klass) {
-        boolean found = false;
-        for (val name : GBFR_NAMES) {
-            try {
-                klass.getDeclaredMethod(name, GBFR_ARGS);
-                found = true;
-                break;
-            } catch (Exception ignored) {
-            }
-        }
-        return found;
-    }
 
     public static void permit(Class<? extends Entity> klass) {
         PERMITTED.add(klass.getName());
@@ -68,5 +55,18 @@ public final class EntityHelper {
             BLOCK_LIST_CACHE.put(c, blocked);
         }
         return blocked;
+    }
+
+    private static boolean hasMethod(Class<?> klass) {
+        boolean found = false;
+        for (val name : GBFR_NAMES) {
+            try {
+                klass.getDeclaredMethod(name, GBFR_ARGS);
+                found = true;
+                break;
+            } catch (Exception ignored) {
+            }
+        }
+        return found;
     }
 }
