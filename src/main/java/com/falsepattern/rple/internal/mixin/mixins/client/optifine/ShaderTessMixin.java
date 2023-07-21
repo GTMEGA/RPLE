@@ -591,6 +591,7 @@ public abstract class ShaderTessMixin {
     private static float min(float a, float b, float c) {
         return Math.min(Math.min(a, b), c);
     }
+
     private static float max(float a, float b, float c) {
         return Math.max(Math.max(a, b), c);
     }
@@ -628,6 +629,7 @@ public abstract class ShaderTessMixin {
     private static float min(float a, float b, float c, float d) {
         return Math.min(Math.min(a, b), Math.min(c, d));
     }
+
     private static float max(float a, float b, float c, float d) {
         return Math.max(Math.max(a, b), Math.max(c, d));
     }

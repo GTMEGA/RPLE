@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 
 public class OpenGlHelperPacked {
     public static long prevLightValuePacked;
+
     public static void setLightMapTextureCoordsPacked(long packed) {
         OpenGlHelperPacked.prevLightValuePacked = packed;
         val red = BrightnessUtil.getBrightnessRed(packed);

@@ -8,8 +8,8 @@
 /**
  * This package contains the classes that you will use to interact with RPLE.
  *
- * @since 0.1.0
  * @author FalsePattern
  * @version 0.1.0
+ * @since 0.1.0
  */
 package com.falsepattern.rple.api;

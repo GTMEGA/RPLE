@@ -219,7 +219,7 @@ public final class BrightnessUtil {
             }
             return (long) unitA << shift;
         } else {
-            return (long)((int)((unitA + unitB) / 2f) & 0xFF) << shift;
+            return (long) ((int) ((unitA + unitB) / 2f) & 0xFF) << shift;
         }
     }
 
@@ -230,7 +230,7 @@ public final class BrightnessUtil {
         light += unit(c, shift);
         light += unit(d, shift);
         light /= 4;
-        return (long)((int)light & 0xFF) << shift;
+        return (long) ((int) light & 0xFF) << shift;
     }
 
     private static long getAverageChannelIgnoreZero(long a, long b, long c, long d, int shift) {
@@ -259,7 +259,7 @@ public final class BrightnessUtil {
         if (count != 0) {
             light /= count;
         }
-        return (long)((int)light & 0xFF) << shift;
+        return (long) ((int) light & 0xFF) << shift;
     }
 
     private static long getAverageChannel(long[] packedValues, int n, int shift, boolean ignoreZero) {

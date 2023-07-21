@@ -39,9 +39,9 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
 
     @Redirect(method = "draw",
               at = @At(value = "FIELD",
-                     target = "Lnet/minecraft/client/renderer/Tessellator;hasBrightness:Z",
-                     opcode = Opcodes.GETFIELD,
-                     ordinal = 0),
+                       target = "Lnet/minecraft/client/renderer/Tessellator;hasBrightness:Z",
+                       opcode = Opcodes.GETFIELD,
+                       ordinal = 0),
               require = 1)
     private boolean enable(Tessellator tess) {
         if (hasBrightness) {
@@ -53,11 +53,11 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
     }
 
     @Redirect(method = "draw",
-            at = @At(value = "FIELD",
-                     target = "Lnet/minecraft/client/renderer/Tessellator;hasBrightness:Z",
-                     opcode = Opcodes.GETFIELD,
-                     ordinal = 1),
-            require = 1)
+              at = @At(value = "FIELD",
+                       target = "Lnet/minecraft/client/renderer/Tessellator;hasBrightness:Z",
+                       opcode = Opcodes.GETFIELD,
+                       ordinal = 1),
+              require = 1)
     private boolean disable(Tessellator instance) {
         if (hasBrightness) {
             disableLightMapTexture(Common.RED_LIGHT_MAP_TEXTURE_UNIT);
