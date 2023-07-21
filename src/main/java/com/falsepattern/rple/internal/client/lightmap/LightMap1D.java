@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.client.lightmap;
 
-import com.falsepattern.rple.api.lightmap.LightMapStrip;
+import com.falsepattern.rple.api.lightmap.RPLELightMapStrip;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -21,7 +21,7 @@ import static com.falsepattern.rple.internal.Common.LIGHT_MAP_1D_SIZE;
 @Getter
 @Accessors(fluent = true, chain = true)
 @SuppressWarnings("MismatchedReadAndWriteOfArray")
-public final class LightMap1D implements LightMapStrip {
+public final class LightMap1D implements RPLELightMapStrip {
     private final float[] lightMapRedData;
     private final float[] lightMapGreenData;
     private final float[] lightMapBlueData;
@@ -35,7 +35,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public @NotNull LightMapStrip setLightMap(int index, float brightness) {
+    public @NotNull RPLELightMapStrip setLightMap(int index, float brightness) {
         lightMapRedData[index] = brightness;
         lightMapGreenData[index] = brightness;
         lightMapBlueData[index] = brightness;
@@ -44,25 +44,25 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public @NotNull LightMapStrip setLightMapRed(int index, float red) {
+    public @NotNull RPLELightMapStrip setLightMapRed(int index, float red) {
         lightMapRedData[index] = red;
         return this;
     }
 
     @Override
-    public @NotNull LightMapStrip setLightMapGreen(int index, float green) {
+    public @NotNull RPLELightMapStrip setLightMapGreen(int index, float green) {
         lightMapGreenData[index] = green;
         return this;
     }
 
     @Override
-    public @NotNull LightMapStrip setLightMapBlue(int index, float blue) {
+    public @NotNull RPLELightMapStrip setLightMapBlue(int index, float blue) {
         lightMapBlueData[index] = blue;
         return this;
     }
 
     @Override
-    public @NotNull LightMapStrip setLightMapRGB(int index, float red, float green, float blue) {
+    public @NotNull RPLELightMapStrip setLightMapRGB(int index, float red, float green, float blue) {
         lightMapRedData[index] = red;
         lightMapGreenData[index] = green;
         lightMapBlueData[index] = blue;
@@ -71,7 +71,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public @NotNull LightMapStrip fillLightMap(float brightness) {
+    public @NotNull RPLELightMapStrip fillLightMap(float brightness) {
         Arrays.fill(lightMapRedData, brightness);
         Arrays.fill(lightMapGreenData, brightness);
         Arrays.fill(lightMapBlueData, brightness);
@@ -80,7 +80,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public @NotNull LightMapStrip fillLightMapRGB(float red, float green, float blue) {
+    public @NotNull RPLELightMapStrip fillLightMapRGB(float red, float green, float blue) {
         Arrays.fill(lightMapRedData, red);
         Arrays.fill(lightMapGreenData, green);
         Arrays.fill(lightMapBlueData, blue);
@@ -89,27 +89,27 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public @NotNull LightMapStrip fillLightMapRed(float red) {
+    public @NotNull RPLELightMapStrip fillLightMapRed(float red) {
         Arrays.fill(lightMapRedData, red);
 
         return this;
     }
 
     @Override
-    public @NotNull LightMapStrip fillLightMapGreen(float green) {
+    public @NotNull RPLELightMapStrip fillLightMapGreen(float green) {
         Arrays.fill(lightMapGreenData, green);
 
         return this;
     }
 
     @Override
-    public @NotNull LightMapStrip fillLightMapBlue(float blue) {
+    public @NotNull RPLELightMapStrip fillLightMapBlue(float blue) {
         Arrays.fill(lightMapBlueData, blue);
         return this;
     }
 
     @Override
-    public @NotNull LightMapStrip setLightMap(@NotNull LightMapStrip strip) {
+    public @NotNull RPLELightMapStrip setLightMap(@NotNull RPLELightMapStrip strip) {
         val otherLightMapRed = strip.lightMapRedData();
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
@@ -124,7 +124,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public @NotNull LightMapStrip addLightMap(@NotNull LightMapStrip strip) {
+    public @NotNull RPLELightMapStrip addLightMap(@NotNull RPLELightMapStrip strip) {
         val otherLightMapRed = strip.lightMapRedData();
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
@@ -139,7 +139,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public @NotNull LightMapStrip subLightMap(@NotNull LightMapStrip strip) {
+    public @NotNull RPLELightMapStrip subLightMap(@NotNull RPLELightMapStrip strip) {
         val otherLightMapRed = strip.lightMapRedData();
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
@@ -154,7 +154,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public @NotNull LightMapStrip multLightMap(@NotNull LightMapStrip strip) {
+    public @NotNull RPLELightMapStrip multLightMap(@NotNull RPLELightMapStrip strip) {
         val otherLightMapRed = strip.lightMapRedData();
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
@@ -169,7 +169,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public @NotNull LightMapStrip divLightMap(@NotNull LightMapStrip strip) {
+    public @NotNull RPLELightMapStrip divLightMap(@NotNull RPLELightMapStrip strip) {
         val otherLightMapRed = strip.lightMapRedData();
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
@@ -184,7 +184,7 @@ public final class LightMap1D implements LightMapStrip {
     }
 
     @Override
-    public @NotNull LightMapStrip resetLightMap() {
+    public @NotNull RPLELightMapStrip resetLightMap() {
         Arrays.fill(lightMapRedData, 1F);
         Arrays.fill(lightMapGreenData, 1F);
         Arrays.fill(lightMapBlueData, 1F);

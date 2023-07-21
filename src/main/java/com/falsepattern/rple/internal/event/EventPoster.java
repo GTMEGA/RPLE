@@ -10,7 +10,7 @@ package com.falsepattern.rple.internal.event;
 import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
 import com.falsepattern.rple.api.event.BlockColorRegistrationEvent;
 import com.falsepattern.rple.api.event.LightMapRegistrationEvent;
-import com.falsepattern.rple.api.lightmap.LightMapRegistry;
+import com.falsepattern.rple.api.lightmap.RPLELightMapRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventBus;
 import lombok.experimental.UtilityClass;
@@ -18,7 +18,7 @@ import lombok.val;
 
 @UtilityClass
 public final class EventPoster {
-    public static void postLightMapRegistrationEvent(LightMapRegistry registry) {
+    public static void postLightMapRegistrationEvent(RPLELightMapRegistry registry) {
         val evt = new LightMapRegistrationEvent(registry);
         fmlCommonBus().post(evt);
     }

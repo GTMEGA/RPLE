@@ -7,26 +7,26 @@
 
 package com.falsepattern.rple.api.lightmap.vanilla;
 
-import com.falsepattern.rple.api.lightmap.LightMapMask;
-import com.falsepattern.rple.api.lightmap.LightMapStrip;
+import com.falsepattern.rple.api.lightmap.RPLELightMapMask;
+import com.falsepattern.rple.api.lightmap.RPLELightMapStrip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import org.jetbrains.annotations.NotNull;
 
-public class BossColorModifierMask implements LightMapMask {
+public class BossColorModifierMask implements RPLELightMapMask {
     @Override
-    public boolean generateBlockLightMapMask(@NotNull LightMapStrip output, float partialTick) {
+    public boolean generateBlockLightMapMask(@NotNull RPLELightMapStrip output, float partialTick) {
         generateBossColorModifierMask(output, partialTick);
         return true;
     }
 
     @Override
-    public boolean generateSkyLightMapMask(@NotNull LightMapStrip output, float partialTick) {
+    public boolean generateSkyLightMapMask(@NotNull RPLELightMapStrip output, float partialTick) {
         generateBossColorModifierMask(output, partialTick);
         return true;
     }
 
-    protected void generateBossColorModifierMask(LightMapStrip output, float partialTick) {
+    protected void generateBossColorModifierMask(RPLELightMapStrip output, float partialTick) {
         final float intensity = bossColorModifierIntensity(partialTick);
         final float red = (1F - intensity) + 0.7F * intensity;
         final float green = (1F - intensity) + 0.6F * intensity;

@@ -71,14 +71,14 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public RPLEBlockColorizer brightness(int color) {
+    public @NotNull RPLEBlockColorizer brightness(int color) {
         resetBrightness();
         this.brightness = new ColorReference(new HexColor(color));
         return this;
     }
 
     @Override
-    public RPLEBlockColorizer brightness(@NotNull RPLEColor color) {
+    public @NotNull RPLEBlockColorizer brightness(@NotNull RPLEColor color) {
         resetBrightness();
         if (color != null)
             this.brightness = new ColorReference(new HexColor(color));
@@ -86,7 +86,7 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public RPLEBlockColorizer brightness(@NotNull RPLENamedColor color) {
+    public @NotNull RPLEBlockColorizer brightness(@NotNull RPLENamedColor color) {
         resetBrightness();
         if (color != null) {
             this.brightness = new ColorReference(color);
@@ -96,14 +96,14 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public RPLEBlockColorizer translucency(int color) {
+    public @NotNull RPLEBlockColorizer translucency(int color) {
         resetTranslucency();
         this.translucency = new ColorReference(new HexColor(color));
         return this;
     }
 
     @Override
-    public RPLEBlockColorizer translucency(@NotNull RPLEColor color) {
+    public @NotNull RPLEBlockColorizer translucency(@NotNull RPLEColor color) {
         resetTranslucency();
         if (color != null)
             this.translucency = new ColorReference(new HexColor(color));
@@ -111,7 +111,7 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public RPLEBlockColorizer translucency(@NotNull RPLENamedColor color) {
+    public @NotNull RPLEBlockColorizer translucency(@NotNull RPLENamedColor color) {
         resetTranslucency();
         if (color != null) {
             this.translucency = new ColorReference(color);

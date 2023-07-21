@@ -8,9 +8,9 @@
 package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.api.RPLEColorAPI;
-import com.falsepattern.rple.api.block.RPLEBlock;
-import com.falsepattern.rple.api.block.RPLEBlockBrightness;
-import com.falsepattern.rple.api.block.RPLEBlockTranslucency;
+import com.falsepattern.rple.api.block.RPLEColoredBlockBrightnessProvider;
+import com.falsepattern.rple.api.block.RPLEColoredBlockRoot;
+import com.falsepattern.rple.api.block.RPLEColoredBlockTranslucencyProvider;
 import com.falsepattern.rple.api.color.LightValueColor;
 import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.internal.mixin.interfaces.RPLEBlockInit;
@@ -30,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Unique
 @Mixin(Block.class)
-public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
+public abstract class BlockMixin implements RPLEBlockInit, RPLEColoredBlockRoot {
     @Shadow
     public abstract int getLightValue();
 
@@ -131,10 +131,10 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
     @Override
     @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
     public @NotNull RPLEColor rple$getColoredBrightness() {
-        if (this instanceof RPLEBlockBrightness) {
-            val block = (RPLEBlockBrightness) this;
+        if (this instanceof RPLEColoredBlockBrightnessProvider) {
+            val block = (RPLEColoredBlockBrightnessProvider) this;
             try {
-                val customBrightness = block.getColoredBrightness();
+                val customBrightness = block.rple$getColoredBrightness();
                 if (customBrightness != null)
                     return customBrightness;
             } catch (Exception ignored) {
@@ -151,10 +151,10 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
     @Override
     @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
     public @NotNull RPLEColor rple$getColoredBrightness(int blockMeta) {
-        if (this instanceof RPLEBlockBrightness) {
-            val block = (RPLEBlockBrightness) this;
+        if (this instanceof RPLEColoredBlockBrightnessProvider) {
+            val block = (RPLEColoredBlockBrightnessProvider) this;
             try {
-                val customBrightness = block.getColoredBrightness(blockMeta);
+                val customBrightness = block.rple$getColoredBrightness(blockMeta);
                 if (customBrightness != null)
                     return customBrightness;
             } catch (Exception ignored) {
@@ -193,10 +193,10 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
                                                         int posX,
                                                         int posY,
                                                         int posZ) {
-        if (this instanceof RPLEBlockBrightness) {
-            val block = (RPLEBlockBrightness) this;
+        if (this instanceof RPLEColoredBlockBrightnessProvider) {
+            val block = (RPLEColoredBlockBrightnessProvider) this;
             try {
-                val customBrightness = block.getColoredBrightness(world, blockMeta, posX, posY, posZ);
+                val customBrightness = block.rple$getColoredBrightness(world, blockMeta, posX, posY, posZ);
                 if (customBrightness != null)
                     return customBrightness;
             } catch (Exception ignored) {
@@ -235,10 +235,10 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
     @Override
     @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
     public @NotNull RPLEColor rple$getColoredTranslucency() {
-        if (this instanceof RPLEBlockTranslucency) {
-            val block = (RPLEBlockTranslucency) this;
+        if (this instanceof RPLEColoredBlockTranslucencyProvider) {
+            val block = (RPLEColoredBlockTranslucencyProvider) this;
             try {
-                val customTranslucency = block.getColoredTranslucency();
+                val customTranslucency = block.rple$getColoredTranslucency();
                 if (customTranslucency != null)
                     return customTranslucency;
             } catch (Exception ignored) {
@@ -255,10 +255,10 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
     @Override
     @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
     public @NotNull RPLEColor rple$getColoredTranslucency(int blockMeta) {
-        if (this instanceof RPLEBlockTranslucency) {
-            val block = (RPLEBlockTranslucency) this;
+        if (this instanceof RPLEColoredBlockTranslucencyProvider) {
+            val block = (RPLEColoredBlockTranslucencyProvider) this;
             try {
-                val customTranslucency = block.getColoredTranslucency(blockMeta);
+                val customTranslucency = block.rple$getColoredTranslucency(blockMeta);
                 if (customTranslucency != null)
                     return customTranslucency;
             } catch (Exception ignored) {
@@ -297,10 +297,10 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
                                                           int posX,
                                                           int posY,
                                                           int posZ) {
-        if (this instanceof RPLEBlockTranslucency) {
-            val block = (RPLEBlockTranslucency) this;
+        if (this instanceof RPLEColoredBlockTranslucencyProvider) {
+            val block = (RPLEColoredBlockTranslucencyProvider) this;
             try {
-                val customTranslucency = block.getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+                val customTranslucency = block.rple$getColoredTranslucency(world, blockMeta, posX, posY, posZ);
                 if (customTranslucency != null)
                     return customTranslucency;
             } catch (Exception ignored) {

@@ -23,17 +23,17 @@ import static com.falsepattern.rple.internal.event.EventPoster.postLightMapRegis
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public final class LightMapPipeline implements LightMapRegistry {
+public final class LightMapPipeline implements RPLELightMapRegistry {
     private static final Logger LOG = createLogger("Light Map Pipeline");
 
     private static final LightMapPipeline INSTANCE = new LightMapPipeline();
 
-    private final Set<LightMapProvider> lightMapProviders = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Set<RPLELightMapProvider> lightMapProviders = Collections.newSetFromMap(new IdentityHashMap<>());
 
-    private final Set<PriorityPair<BlockLightMapBase>> blockBases = new TreeSet<>();
-    private final Set<PriorityPair<SkyLightMapBase>> skyBases = new TreeSet<>();
-    private final List<BlockLightMapMask> blockMasks = new ArrayList<>();
-    private final List<SkyLightMapMask> skyMasks = new ArrayList<>();
+    private final Set<PriorityPair<RPLEBlockLightMapBase>> blockBases = new TreeSet<>();
+    private final Set<PriorityPair<RPLESkyLightMapBase>> skyBases = new TreeSet<>();
+    private final List<RPLEBlockLightMapMask> blockMasks = new ArrayList<>();
+    private final List<RPLESkyLightMapMask> skyMasks = new ArrayList<>();
 
     private final LightMap2D mixedLightMap = new LightMap2D();
     private final LightMap1D tempStrip = new LightMap1D();
@@ -57,7 +57,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     // region Registration
 
     @Override
-    public void registerLightMapGenerator(@NotNull LightMapGenerator generator, int priority) {
+    public void registerLightMapGenerator(@NotNull RPLELightMapGenerator generator, int priority) {
         if (!registerLightMapProvider(generator))
             return;
 
@@ -68,7 +68,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerLightMapBase(@NotNull LightMapBase base, int priority) {
+    public void registerLightMapBase(@NotNull RPLELightMapBase base, int priority) {
         if (!registerLightMapProvider(base))
             return;
 
@@ -77,7 +77,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerBlockLightMapBase(@NotNull BlockLightMapBase blockBase, int priority) {
+    public void registerBlockLightMapBase(@NotNull RPLEBlockLightMapBase blockBase, int priority) {
         if (!registerLightMapProvider(blockBase))
             return;
 
@@ -85,7 +85,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerSkyLightMapBase(@NotNull SkyLightMapBase skyBase, int priority) {
+    public void registerSkyLightMapBase(@NotNull RPLESkyLightMapBase skyBase, int priority) {
         if (!registerLightMapProvider(skyBase))
             return;
 
@@ -93,7 +93,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerLightMapMask(@NotNull LightMapMask mask) {
+    public void registerLightMapMask(@NotNull RPLELightMapMask mask) {
         if (!registerLightMapProvider(mask))
             return;
 
@@ -102,7 +102,7 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerBlockLightMapMask(@NotNull BlockLightMapMask blockMask) {
+    public void registerBlockLightMapMask(@NotNull RPLEBlockLightMapMask blockMask) {
         if (!registerLightMapProvider(blockMask))
             return;
 
@@ -110,14 +110,14 @@ public final class LightMapPipeline implements LightMapRegistry {
     }
 
     @Override
-    public void registerSkyLightMapMask(@NotNull SkyLightMapMask skyMask) {
+    public void registerSkyLightMapMask(@NotNull RPLESkyLightMapMask skyMask) {
         if (!registerLightMapProvider(skyMask))
             return;
 
         skyMasks.add(skyMask);
     }
 
-    private boolean registerLightMapProvider(LightMapProvider provider) {
+    private boolean registerLightMapProvider(RPLELightMapProvider provider) {
         if (registryLocked) {
             LOG.error("Failed to register light map provider after post init", new Throwable());
             return false;

@@ -7,20 +7,20 @@
 
 package com.falsepattern.rple.api.lightmap.vanilla;
 
-import com.falsepattern.rple.api.lightmap.LightMapBase;
-import com.falsepattern.rple.api.lightmap.LightMapStrip;
+import com.falsepattern.rple.api.lightmap.RPLELightMapBase;
+import com.falsepattern.rple.api.lightmap.RPLELightMapStrip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.world.WorldProvider;
 import org.jetbrains.annotations.NotNull;
 
-import static com.falsepattern.rple.api.lightmap.LightMapStrip.LIGHT_MAP_STRIP_LENGTH;
+import static com.falsepattern.rple.api.lightmap.RPLELightMapStrip.LIGHT_MAP_STRIP_LENGTH;
 
-public class VanillaLightMapBase implements LightMapBase {
+public class VanillaLightMapBase implements RPLELightMapBase {
     protected static final int END_DIMENSION_ID = 1;
 
     @Override
-    public boolean generateBlockLightMapBase(@NotNull LightMapStrip output, float partialTick) {
+    public boolean generateBlockLightMapBase(@NotNull RPLELightMapStrip output, float partialTick) {
         final WorldProvider worldProvider = Minecraft.getMinecraft().theWorld.provider;
 
         for (int i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
@@ -32,7 +32,7 @@ public class VanillaLightMapBase implements LightMapBase {
     }
 
     @Override
-    public boolean generateSkyLightMapBase(@NotNull LightMapStrip output, float partialTick) {
+    public boolean generateSkyLightMapBase(@NotNull RPLELightMapStrip output, float partialTick) {
         final WorldClient world = Minecraft.getMinecraft().theWorld;
         final WorldProvider worldProvider = world.provider;
 

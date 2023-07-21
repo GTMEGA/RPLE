@@ -10,6 +10,6 @@ package com.falsepattern.rple.api.lightmap;
 import org.jetbrains.annotations.NotNull;
 
 @FunctionalInterface
-public interface BlockLightMapMask extends LightMapProvider {
-    boolean generateBlockLightMapMask(@NotNull LightMapStrip output, float partialTick);
+public interface RPLEBlockLightMapMask extends RPLELightMapProvider {
+    boolean generateBlockLightMapMask(@NotNull RPLELightMapStrip output, float partialTick);
 }

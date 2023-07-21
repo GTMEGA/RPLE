@@ -8,26 +8,26 @@
 package com.falsepattern.rple.api.lightmap.vanilla;
 
 import com.falsepattern.lib.util.MathUtil;
-import com.falsepattern.rple.api.lightmap.LightMapMask;
-import com.falsepattern.rple.api.lightmap.LightMapStrip;
+import com.falsepattern.rple.api.lightmap.RPLELightMapMask;
+import com.falsepattern.rple.api.lightmap.RPLELightMapStrip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import org.jetbrains.annotations.NotNull;
 
-public class NightVisionMask implements LightMapMask {
+public class NightVisionMask implements RPLELightMapMask {
     @Override
-    public boolean generateBlockLightMapMask(@NotNull LightMapStrip output, float partialTick) {
+    public boolean generateBlockLightMapMask(@NotNull RPLELightMapStrip output, float partialTick) {
         return generateNightVisionMask(output, partialTick);
     }
 
     @Override
-    public boolean generateSkyLightMapMask(@NotNull LightMapStrip output, float partialTick) {
+    public boolean generateSkyLightMapMask(@NotNull RPLELightMapStrip output, float partialTick) {
         return generateNightVisionMask(output, partialTick);
     }
 
-    protected boolean generateNightVisionMask(LightMapStrip output, float partialTick) {
+    protected boolean generateNightVisionMask(RPLELightMapStrip output, float partialTick) {
         final EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
         if (!player.isPotionActive(Potion.nightVision))
             return false;

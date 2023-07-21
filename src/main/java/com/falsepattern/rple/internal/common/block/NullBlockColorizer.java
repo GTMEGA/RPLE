@@ -24,32 +24,32 @@ public final class NullBlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public RPLEBlockColorizer brightness(int color) {
+    public @NotNull RPLEBlockColorizer brightness(int color) {
         return this;
     }
 
     @Override
-    public RPLEBlockColorizer brightness(@NotNull RPLEColor color) {
+    public @NotNull RPLEBlockColorizer brightness(@NotNull RPLEColor color) {
         return this;
     }
 
     @Override
-    public RPLEBlockColorizer brightness(@NotNull RPLENamedColor color) {
+    public @NotNull RPLEBlockColorizer brightness(@NotNull RPLENamedColor color) {
         return this;
     }
 
     @Override
-    public RPLEBlockColorizer translucency(int color) {
+    public @NotNull RPLEBlockColorizer translucency(int color) {
         return this;
     }
 
     @Override
-    public RPLEBlockColorizer translucency(@NotNull RPLEColor color) {
+    public @NotNull RPLEBlockColorizer translucency(@NotNull RPLEColor color) {
         return this;
     }
 
     @Override
-    public RPLEBlockColorizer translucency(@NotNull RPLENamedColor color) {
+    public @NotNull RPLEBlockColorizer translucency(@NotNull RPLENamedColor color) {
         return this;
     }
 

@@ -11,10 +11,10 @@ import com.falsepattern.rple.api.color.RPLEColor;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 
-public interface RPLEBlockBrightness {
-    @NotNull RPLEColor getColoredBrightness();
+public interface RPLEColoredBlockBrightnessProvider {
+    @NotNull RPLEColor rple$getColoredBrightness();
 
-    @NotNull RPLEColor getColoredBrightness(int blockMeta);
+    @NotNull RPLEColor rple$getColoredBrightness(int blockMeta);
 
-    @NotNull RPLEColor getColoredBrightness(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
+    @NotNull RPLEColor rple$getColoredBrightness(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
 }

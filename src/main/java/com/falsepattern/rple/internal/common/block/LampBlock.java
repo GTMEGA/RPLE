@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.block;
 
-import com.falsepattern.rple.api.block.RPLEBlockBrightness;
+import com.falsepattern.rple.api.block.RPLEColoredBlockBrightnessProvider;
 import com.falsepattern.rple.api.color.DefaultColor;
 import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.internal.Tags;
@@ -31,7 +31,7 @@ import java.util.List;
 // TODO: [PRE_RELEASE] Should have a large part of it extracted as an example of how-to implement ColoredBlock
 // TODO: [PRE_RELEASE] Created variants of this block should be defined by a load-time configuration file
 @Deprecated
-public class LampBlock extends Block implements RPLEBlockBrightness {
+public class LampBlock extends Block implements RPLEColoredBlockBrightnessProvider {
     private static final String GLOW_RESOURCE = Tags.MOD_ID + ":glow";
     public static final int POWERED_BIT = 0b0010;
     public static final int INVERTED_BIT = 0b0001;
@@ -124,17 +124,17 @@ public class LampBlock extends Block implements RPLEBlockBrightness {
     }
 
     @Override
-    public RPLEColor getColoredBrightness() {
+    public @NotNull RPLEColor rple$getColoredBrightness() {
         return DefaultColor.BLUE;
     }
 
     @Override
-    public RPLEColor getColoredBrightness(int blockMeta) {
+    public @NotNull RPLEColor rple$getColoredBrightness(int blockMeta) {
         return DefaultColor.BLUE;
     }
 
     @Override
-    public RPLEColor getColoredBrightness(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+    public @NotNull RPLEColor rple$getColoredBrightness(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
         return DefaultColor.BLUE;
     }
 }

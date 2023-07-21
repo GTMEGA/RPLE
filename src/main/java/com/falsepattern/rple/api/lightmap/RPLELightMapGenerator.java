@@ -7,5 +7,5 @@
 
 package com.falsepattern.rple.api.lightmap;
 
-public interface LightMapMask extends BlockLightMapMask, SkyLightMapMask {
+public interface RPLELightMapGenerator extends RPLELightMapBase, RPLELightMapMask {
 }

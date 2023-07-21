@@ -9,7 +9,7 @@ package com.falsepattern.rple.internal.common;
 
 import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
 import com.falsepattern.rple.api.color.LightValueColor;
-import com.falsepattern.rple.api.lightmap.LightMapRegistry;
+import com.falsepattern.rple.api.lightmap.RPLELightMapRegistry;
 import com.falsepattern.rple.api.lightmap.vanilla.BossColorModifierMask;
 import com.falsepattern.rple.api.lightmap.vanilla.NightVisionMask;
 import com.falsepattern.rple.api.lightmap.vanilla.VanillaLightMapBase;
@@ -22,7 +22,7 @@ import static net.minecraft.init.Blocks.*;
 
 @UtilityClass
 public final class RPLEDefaultValues {
-    public static void registerDefaultLightMaps(LightMapRegistry registry) {
+    public static void registerDefaultLightMaps(RPLELightMapRegistry registry) {
         registry.registerLightMapBase(new VanillaLightMapBase(), 1000);
         registry.registerLightMapMask(new NightVisionMask());
         registry.registerLightMapMask(new BossColorModifierMask());

@@ -25,7 +25,7 @@ import com.falsepattern.rple.api.color.RPLEColor;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 
-public interface RPLEBlock {
+public interface RPLEColoredBlockRoot {
     @NotNull RPLEColor rple$getColoredBrightness();
 
     @NotNull RPLEColor rple$getFallbackColoredBrightness();
