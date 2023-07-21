@@ -32,7 +32,7 @@ public final class RPLERenderAPI {
     }
 
     public static int getRGBBrightnessForTessellator(@NotNull IBlockAccess world, int posX, int posY, int posZ) {
-        return getRGBBrightnessForTessellator(world, posX, posY, posZ, 0);
+        return getRGBBrightnessForTessellator(world, posX, posY, posZ, COLOR_MIN);
     }
 
     public static int getRGBBrightnessForTessellator(@NotNull IBlockAccess world,
@@ -88,18 +88,12 @@ public final class RPLERenderAPI {
     }
 
     public static int errorBrightnessForTessellator() {
-        final RPLEColor lightValueColor = errorColor();
-        final int redLightValue = RED_CHANNEL.componentFromColor(lightValueColor);
-        final int greenLightValue = GREEN_CHANNEL.componentFromColor(lightValueColor);
-        final int blueLightValue = BLUE_CHANNEL.componentFromColor(lightValueColor);
-        return createRGBBrightnessForTessellator(redLightValue, greenLightValue, blueLightValue);
+        final RPLEColor lightColor = errorColor();
+        return createRGBBrightnessForTessellator(lightColor.red(), lightColor.green(), lightColor.blue());
     }
 
-    public static int createRGBBrightnessForTessellator(@NotNull RPLEColor lightValueColor) {
-        final int redLightValue = RED_CHANNEL.componentFromColor(lightValueColor);
-        final int greenLightValue = GREEN_CHANNEL.componentFromColor(lightValueColor);
-        final int blueLightValue = BLUE_CHANNEL.componentFromColor(lightValueColor);
-        return createRGBBrightnessForTessellator(redLightValue, greenLightValue, blueLightValue);
+    public static int createRGBBrightnessForTessellator(@NotNull RPLEColor lightColor) {
+        return createRGBBrightnessForTessellator(lightColor.red(), lightColor.green(), lightColor.blue());
     }
 
     public static int createRGBBrightnessForTessellator(int redLightValue, int greenLightValue, int blueLightValue) {
@@ -112,11 +106,8 @@ public final class RPLERenderAPI {
     }
 
     public static int createRGBBrightnessForTessellator(@NotNull LightType lightType,
-                                                        @NotNull RPLEColor lightValueColor) {
-        final int redLightValue = RED_CHANNEL.componentFromColor(lightValueColor);
-        final int greenLightValue = GREEN_CHANNEL.componentFromColor(lightValueColor);
-        final int blueLightValue = BLUE_CHANNEL.componentFromColor(lightValueColor);
-        return createRGBBrightnessForTessellator(lightType, redLightValue, greenLightValue, blueLightValue);
+                                                        @NotNull RPLEColor lightColor) {
+        return createRGBBrightnessForTessellator(lightType, lightColor.red(), lightColor.green(), lightColor.blue());
     }
 
     public static int createRGBBrightnessForTessellator(@NotNull LightType lightType,
@@ -144,18 +135,12 @@ public final class RPLERenderAPI {
 
     public static int createRGBBrightnessForTessellator(@NotNull RPLEColor blockLightColor,
                                                         @NotNull RPLEColor skyLightColor) {
-        final int redBlockLight = RED_CHANNEL.componentFromColor(blockLightColor);
-        final int greenBlockLight = GREEN_CHANNEL.componentFromColor(blockLightColor);
-        final int blueBlockLight = BLUE_CHANNEL.componentFromColor(blockLightColor);
-        final int redSkyLight = RED_CHANNEL.componentFromColor(skyLightColor);
-        final int greenSkyLight = GREEN_CHANNEL.componentFromColor(skyLightColor);
-        final int blueSkyLight = BLUE_CHANNEL.componentFromColor(skyLightColor);
-        return createRGBBrightnessForTessellator(redBlockLight,
-                                                 greenBlockLight,
-                                                 blueBlockLight,
-                                                 redSkyLight,
-                                                 greenSkyLight,
-                                                 blueSkyLight);
+        return createRGBBrightnessForTessellator(blockLightColor.red(),
+                                                 blockLightColor.green(),
+                                                 blockLightColor.blue(),
+                                                 skyLightColor.red(),
+                                                 skyLightColor.green(),
+                                                 skyLightColor.blue());
     }
 
     public static int createRGBBrightnessForTessellator(int redBlockLight,
@@ -164,9 +149,12 @@ public final class RPLERenderAPI {
                                                         int redSkyLight,
                                                         int greenSkyLight,
                                                         int blueSkyLight) {
-        final int redBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(redBlockLight, redSkyLight);
-        final int greenBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(greenBlockLight, greenSkyLight);
-        final int blueBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(blueBlockLight, blueSkyLight);
+        final int redBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(redBlockLight,
+                                                                                       redSkyLight);
+        final int greenBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(greenBlockLight,
+                                                                                         greenSkyLight);
+        final int blueBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(blueBlockLight,
+                                                                                        blueSkyLight);
         final long packedBrightness = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
                                                                                                        greenBrightness,
                                                                                                        blueBrightness);

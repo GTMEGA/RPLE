@@ -7,27 +7,12 @@
 
 package com.falsepattern.rple.api.color;
 
-import org.jetbrains.annotations.NotNull;
-
 import static com.falsepattern.rple.api.RPLEColorAPI.*;
-import static com.falsepattern.rple.api.color.ColorChannel.*;
 
 public class MutableColor implements RPLEColor {
     protected int red;
     protected int green;
     protected int blue;
-
-    public MutableColor(@NotNull RPLEColor color) {
-        this.red = RED_CHANNEL.componentFromColor(color);
-        this.green = GREEN_CHANNEL.componentFromColor(color);
-        this.blue = BLUE_CHANNEL.componentFromColor(color);
-    }
-
-    public MutableColor(int red, int green, int blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-    }
 
     public MutableColor() {
         this.red = COLOR_MIN;

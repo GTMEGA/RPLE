@@ -7,7 +7,6 @@
 
 package com.falsepattern.rple.api.color;
 
-import com.falsepattern.rple.api.RPLEColorAPI;
 import org.jetbrains.annotations.NotNull;
 
 public enum ColorChannel {
@@ -20,22 +19,16 @@ public enum ColorChannel {
     }
 
     public int componentFromColor(@NotNull RPLEColor color) {
-        final int component;
         switch (this) {
             default:
             case RED_CHANNEL:
-                component = color.red();
-                break;
+                return color.red();
             case GREEN_CHANNEL:
-                component = color.green();
-                break;
+                return color.green();
             case BLUE_CHANNEL:
-                component = color.blue();
-                break;
+                return color.blue();
         }
-        return RPLEColorAPI.clampColorComponent(component);
     }
-
 
     @Override
     public String toString() {
