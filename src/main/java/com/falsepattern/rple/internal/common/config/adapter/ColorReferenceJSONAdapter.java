@@ -19,30 +19,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.falsepattern.rple.internal.collection;
+package com.falsepattern.rple.internal.common.config.adapter;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
-import org.jetbrains.annotations.NotNull;
+import com.falsepattern.rple.internal.common.config.ColorConfigLoader;
+import com.falsepattern.rple.internal.common.config.container.ColorReference;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import lombok.NoArgsConstructor;
 
-import static lombok.AccessLevel.PRIVATE;
-
-@Getter
-@EqualsAndHashCode
-@Accessors(fluent = true, chain = false)
-@RequiredArgsConstructor(access = PRIVATE)
-public final class PriorityPair<T> implements Comparable<PriorityPair<T>> {
-    private final T value;
-    private final int priority;
-
+@NoArgsConstructor
+public final class ColorReferenceJSONAdapter extends TypeAdapter<ColorReference> {
     @Override
-    public int compareTo(@NotNull PriorityPair<T> o) {
-        return Integer.compare(priority, o.priority);
+    public void write(JsonWriter out, ColorReference value) {
+        ColorConfigLoader.colorConfigGSON().toJson(value.toString(), String.class, out);
     }
 
-    public static <T> PriorityPair<T> wrappedWithPriority(T value, int priority) {
-        return new PriorityPair<>(value, priority);
+    @Override
+    public ColorReference read(JsonReader in) {
+        return new ColorReference(ColorConfigLoader.colorConfigGSON().<String>fromJson(in, String.class));
     }
 }

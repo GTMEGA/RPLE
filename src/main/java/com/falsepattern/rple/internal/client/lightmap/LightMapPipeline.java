@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.client.lightmap;
 
 import com.falsepattern.rple.api.lightmap.*;
-import com.falsepattern.rple.internal.collection.PriorityPair;
+import com.falsepattern.rple.internal.common.collection.PriorityPair;
 import lombok.NoArgsConstructor;
 import lombok.val;
 import org.apache.logging.log4j.Logger;
@@ -16,10 +16,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static com.falsepattern.rple.internal.RPLEDefaultValues.registerDefaultLightMaps;
 import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
-import static com.falsepattern.rple.internal.collection.PriorityPair.wrappedWithPriority;
-import static com.falsepattern.rple.internal.common.RPLEDefaultValues.registerDefaultLightMaps;
-import static com.falsepattern.rple.internal.event.EventPoster.postLightMapRegistrationEvent;
+import static com.falsepattern.rple.internal.common.collection.PriorityPair.wrappedWithPriority;
+import static com.falsepattern.rple.internal.common.event.EventPoster.postLightMapRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)

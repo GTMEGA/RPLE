@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.helper;
 
-import com.falsepattern.rple.internal.collection.CircularLongBuffer;
+import com.falsepattern.rple.internal.common.collection.CircularLongBuffer;
 import com.falsepattern.rple.internal.mixin.mixins.client.TessellatorMixin;
 import lombok.val;
 import lombok.var;

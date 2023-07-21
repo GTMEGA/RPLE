@@ -10,8 +10,8 @@ package com.falsepattern.rple.internal.common.block;
 import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
 import com.falsepattern.rple.api.block.RPLEBlockColorizer;
 import com.falsepattern.rple.api.color.RPLENamedColor;
-import com.falsepattern.rple.internal.config.container.BlockColorConfig;
-import com.falsepattern.rple.internal.config.container.BlockReference;
+import com.falsepattern.rple.internal.common.config.container.BlockColorConfig;
+import com.falsepattern.rple.internal.common.config.container.BlockReference;
 import com.falsepattern.rple.internal.mixin.interfaces.RPLEBlockInit;
 import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.Getter;
@@ -26,12 +26,12 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.IdentityHashMap;
 
+import static com.falsepattern.rple.internal.RPLEDefaultValues.*;
 import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
-import static com.falsepattern.rple.internal.common.RPLEDefaultValues.*;
 import static com.falsepattern.rple.internal.common.block.NullBlockColorizer.nullBlockColorizer;
-import static com.falsepattern.rple.internal.config.ColorConfigLoader.loadCustomConfig;
-import static com.falsepattern.rple.internal.config.ColorConfigLoader.saveGeneratedConfig;
-import static com.falsepattern.rple.internal.event.EventPoster.postBlockColorRegistrationEvent;
+import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.loadCustomConfig;
+import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.saveGeneratedConfig;
+import static com.falsepattern.rple.internal.common.event.EventPoster.postBlockColorRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
 
 @Accessors(fluent = true, chain = false)

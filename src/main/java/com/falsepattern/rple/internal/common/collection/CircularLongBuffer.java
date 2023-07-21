@@ -19,7 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.falsepattern.rple.internal.collection;
+package com.falsepattern.rple.internal.common.collection;
 
 import lombok.val;
 

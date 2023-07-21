@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.val;
 
 import static com.falsepattern.rple.internal.common.block.BlockColorManager.blockColorManager;
-import static com.falsepattern.rple.internal.event.LumiEventHandler.lumiEventHandler;
+import static com.falsepattern.rple.internal.common.event.LumiEventHandler.lumiEventHandler;
 
 @NoArgsConstructor
 public abstract class CommonProxy {
