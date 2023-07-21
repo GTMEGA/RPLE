@@ -164,18 +164,19 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
             } catch (Exception ignored) {
             }
         }
-        if (hasTileEntity(blockMeta)) {
-            val tileEntity = world.getTileEntity(posX, posY, posZ);
-            if (tileEntity instanceof RPLEBlockTranslucencyColorProvider) {
-                val colorProvider = (RPLEBlockTranslucencyColorProvider) tileEntity;
-                try {
-                    val color = colorProvider.rple$getCustomTranslucencyColor(world, blockMeta, posX, posY, posZ);
-                    if (color != null)
-                        return color;
-                } catch (Exception ignored) {
-                }
-            }
-        }
+        // TODO: This will from time to time cause a stack overflow on chunk init. Needs investigation, but wont fix for now.
+//        if (hasTileEntity(blockMeta)) {
+//            val tileEntity = world.getTileEntity(posX, posY, posZ);
+//            if (tileEntity instanceof RPLEBlockTranslucencyColorProvider) {
+//                val colorProvider = (RPLEBlockTranslucencyColorProvider) tileEntity;
+//                try {
+//                    val color = colorProvider.rple$getCustomTranslucencyColor(world, blockMeta, posX, posY, posZ);
+//                    if (color != null)
+//                        return color;
+//                } catch (Exception ignored) {
+//                }
+//            }
+//        }
         return rple$getFallbackTranslucencyColor(world, blockMeta, posX, posY, posZ);
     }
 
