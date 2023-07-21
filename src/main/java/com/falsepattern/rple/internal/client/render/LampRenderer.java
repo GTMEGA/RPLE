@@ -10,7 +10,6 @@ package com.falsepattern.rple.internal.client.render;
 import com.falsepattern.falsetweaks.Compat;
 import com.falsepattern.falsetweaks.api.triangulator.ToggleableTessellator;
 import com.falsepattern.rple.internal.common.block.LampBlock;
-import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -62,7 +61,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
             val r = 0;
             val g = 0;
             val b = 0;
-            tessellator.setBrightness(BrightnessUtil.lightLevelsToBrightnessForTessellator(15, 15));
+            tessellator.setBrightness(TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(15, 15));
             tessellator.setColorRGBA(r, g, b, 128);
             drawGlowCube(tessellator, 0, 0, 0, NULL, lamp.getGlowIcon());
         }
@@ -113,7 +112,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         val g = 0;
         val b = 0;
 
-        tessellator.setBrightness(BrightnessUtil.lightLevelsToBrightnessForTessellator(15, 15));
+        tessellator.setBrightness(TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(15, 15));
         tessellator.setColorOpaque(r, g, b);
         drawGlowCube(tessellator, x, y, z, neighbors, lamp.getGlowIcon());
         return true;

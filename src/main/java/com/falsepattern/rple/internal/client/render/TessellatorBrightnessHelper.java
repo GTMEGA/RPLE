@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.helper;
+package com.falsepattern.rple.internal.client.render;
 
 import lombok.experimental.UtilityClass;
 import lombok.val;
@@ -14,7 +14,7 @@ import lombok.val;
  * Utility class for managing minecraft brightness values, and packed long RGB versions of these brightness values.
  */
 @UtilityClass
-public final class BrightnessUtil {
+public final class TessellatorBrightnessHelper {
     private static final int BLOCK_LIGHT_MASK = 0x000000FF;
     private static final int SKYLIGHT_MASK = 0x00FF0000;
 

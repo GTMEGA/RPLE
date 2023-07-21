@@ -9,8 +9,8 @@ package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.rple.api.RPLEShadersAPI;
 import com.falsepattern.rple.internal.Common;
-import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
-import com.falsepattern.rple.internal.common.helper.CookieMonster;
+import com.falsepattern.rple.internal.client.render.CookieMonster;
+import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import lombok.val;
 import net.minecraft.entity.EntityLivingBase;
 import org.lwjgl.opengl.ARBVertexShader;
@@ -110,6 +110,6 @@ public abstract class ShadersMixin {
               remap = true)
     private static int getEyeBrightness(EntityLivingBase instance, float partialTick) {
         val result = instance.getBrightnessForRender(partialTick);
-        return BrightnessUtil.getBrightestChannelFromPacked(CookieMonster.cookieToPackedLong(result));
+        return TessellatorBrightnessHelper.getBrightestChannelFromPacked(CookieMonster.cookieToPackedLong(result));
     }
 }

@@ -9,9 +9,9 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.rple.internal.Common;
+import com.falsepattern.rple.internal.client.render.CookieMonster;
+import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
-import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
-import com.falsepattern.rple.internal.common.helper.CookieMonster;
 import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorMixin;
 import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -74,9 +74,9 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
               require = 1)
     private boolean customColor(Tessellator instance) {
         if (hasBrightness) {
-            rawBuffer[rawBufferIndex + VertexConstants.getRedIndexNoShader()] = BrightnessUtil.getBrightnessRed(brightness);
-            rawBuffer[rawBufferIndex + VertexConstants.getGreenIndexNoShader()] = BrightnessUtil.getBrightnessGreen(brightness);
-            rawBuffer[rawBufferIndex + VertexConstants.getBlueIndexNoShader()] = BrightnessUtil.getBrightnessBlue(brightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getRedIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessRed(brightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getGreenIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessGreen(brightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getBlueIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessBlue(brightness);
         }
         return false;
     }

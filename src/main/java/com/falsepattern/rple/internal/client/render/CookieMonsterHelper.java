@@ -5,19 +5,19 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.helper;
+package com.falsepattern.rple.internal.client.render;
 
 import lombok.experimental.UtilityClass;
 import lombok.val;
 
 @UtilityClass
-public final class CookieWrappers {
+public final class CookieMonsterHelper {
     /**
-     * Convenience method, identical to {@link BrightnessUtil#packedMax(long, long)}, but automatically decodes and
+     * Convenience method, identical to {@link TessellatorBrightnessHelper#packedMax(long, long)}, but automatically decodes and
      * encodes the input/output into cookies.
      */
     public static int packedMax(int cookieA, int cookieB) {
-        return CookieMonster.packedLongToCookie(BrightnessUtil.packedMax(CookieMonster.cookieToPackedLong(cookieA), CookieMonster.cookieToPackedLong(cookieB)));
+        return CookieMonster.packedLongToCookie(TessellatorBrightnessHelper.packedMax(CookieMonster.cookieToPackedLong(cookieA), CookieMonster.cookieToPackedLong(cookieB)));
     }
 
     public static int mixAOBrightness(int brightTL, int brightBL, int brightBR, int brightTR, double lerpTB, double lerpLR) {
@@ -25,7 +25,7 @@ public final class CookieWrappers {
         val packedBL = CookieMonster.cookieToPackedLong(brightBL);
         val packedBR = CookieMonster.cookieToPackedLong(brightBR);
         val packedTR = CookieMonster.cookieToPackedLong(brightTR);
-        return CookieMonster.packedLongToCookie(BrightnessUtil.mixAOBrightness(packedTL, packedBL, packedBR, packedTR, lerpTB, lerpLR));
+        return CookieMonster.packedLongToCookie(TessellatorBrightnessHelper.mixAOBrightness(packedTL, packedBL, packedBR, packedTR, lerpTB, lerpLR));
     }
 
     public static int mixAOBrightness(int a, int b, int c, int d, double aMul, double bMul, double cMul, double dMul) {
@@ -33,19 +33,19 @@ public final class CookieWrappers {
         val packedB = CookieMonster.cookieToPackedLong(b);
         val packedC = CookieMonster.cookieToPackedLong(c);
         val packedD = CookieMonster.cookieToPackedLong(d);
-        return CookieMonster.packedLongToCookie(BrightnessUtil.mixAOBrightness(packedA, packedB, packedC, packedD, aMul, bMul, cMul, dMul));
+        return CookieMonster.packedLongToCookie(TessellatorBrightnessHelper.mixAOBrightness(packedA, packedB, packedC, packedD, aMul, bMul, cMul, dMul));
     }
 
     public static int mixAOBrightness(int a, int b, double aMul, double bMul) {
         val packedA = CookieMonster.cookieToPackedLong(a);
         val packedB = CookieMonster.cookieToPackedLong(b);
-        return CookieMonster.packedLongToCookie(BrightnessUtil.mixAOBrightness(packedA, packedB, aMul, bMul));
+        return CookieMonster.packedLongToCookie(TessellatorBrightnessHelper.mixAOBrightness(packedA, packedB, aMul, bMul));
     }
 
     public static int average(boolean ignoreZero, int a, int b) {
         val packedA = CookieMonster.cookieToPackedLong(a);
         val packedB = CookieMonster.cookieToPackedLong(b);
-        return CookieMonster.packedLongToCookie(BrightnessUtil.packedAverage(packedA, packedB, ignoreZero));
+        return CookieMonster.packedLongToCookie(TessellatorBrightnessHelper.packedAverage(packedA, packedB, ignoreZero));
     }
 
     public static int average(boolean ignoreZero, int a, int b, int c, int d) {
@@ -53,7 +53,7 @@ public final class CookieWrappers {
         val packedB = CookieMonster.cookieToPackedLong(b);
         val packedC = CookieMonster.cookieToPackedLong(c);
         val packedD = CookieMonster.cookieToPackedLong(d);
-        return CookieMonster.packedLongToCookie(BrightnessUtil.packedAverage(packedA, packedB, packedC, packedD, ignoreZero));
+        return CookieMonster.packedLongToCookie(TessellatorBrightnessHelper.packedAverage(packedA, packedB, packedC, packedD, ignoreZero));
     }
 
     public static int average(boolean ignoreZero, int... values) {
@@ -61,6 +61,6 @@ public final class CookieWrappers {
         for (int i = 0; i < values.length; i++) {
             packed[i] = CookieMonster.cookieToPackedLong(values[i]);
         }
-        return CookieMonster.packedLongToCookie(BrightnessUtil.packedAverage(packed, packed.length, ignoreZero));
+        return CookieMonster.packedLongToCookie(TessellatorBrightnessHelper.packedAverage(packed, packed.length, ignoreZero));
     }
 }

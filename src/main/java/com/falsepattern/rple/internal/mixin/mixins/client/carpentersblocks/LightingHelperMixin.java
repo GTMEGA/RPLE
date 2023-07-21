@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.carpentersblocks;
 
 import com.carpentersblocks.renderer.helper.LightingHelper;
-import com.falsepattern.rple.internal.common.helper.CookieWrappers;
+import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -20,6 +20,6 @@ public abstract class LightingHelperMixin {
      */
     @Overwrite
     public static int getAverageBrightness(int brightnessA, int brightnessB) {
-        return CookieWrappers.average(false, brightnessA, brightnessB);
+        return CookieMonsterHelper.average(false, brightnessA, brightnessB);
     }
 }

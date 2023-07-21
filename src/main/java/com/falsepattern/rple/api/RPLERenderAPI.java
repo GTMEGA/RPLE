@@ -10,9 +10,9 @@ package com.falsepattern.rple.api;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.EntityColorHandler;
-import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
-import com.falsepattern.rple.internal.common.helper.CookieMonster;
+import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -59,9 +59,9 @@ public final class RPLERenderAPI {
                 .rple$getChannelBrightnessForTessellator(GREEN_CHANNEL, posX, posY, posZ, minGreenBlockLight);
         final int blueBrightness = worldRoot
                 .rple$getChannelBrightnessForTessellator(BLUE_CHANNEL, posX, posY, posZ, minBlueBlockLight);
-        final long packedBrightness = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
-                                                                                                       greenBrightness,
-                                                                                                       blueBrightness);
+        final long packedBrightness = TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
+                                                                                                                    greenBrightness,
+                                                                                                                    blueBrightness);
         return CookieMonster.packedLongToCookie(packedBrightness);
     }
 
@@ -149,15 +149,15 @@ public final class RPLERenderAPI {
                                                         int redSkyLight,
                                                         int greenSkyLight,
                                                         int blueSkyLight) {
-        final int redBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(redBlockLight,
-                                                                                       redSkyLight);
-        final int greenBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(greenBlockLight,
-                                                                                         greenSkyLight);
-        final int blueBrightness = BrightnessUtil.lightLevelsToBrightnessForTessellator(blueBlockLight,
-                                                                                        blueSkyLight);
-        final long packedBrightness = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
-                                                                                                       greenBrightness,
-                                                                                                       blueBrightness);
+        final int redBrightness = TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(redBlockLight,
+                                                                                                    redSkyLight);
+        final int greenBrightness = TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(greenBlockLight,
+                                                                                                      greenSkyLight);
+        final int blueBrightness = TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(blueBlockLight,
+                                                                                                     blueSkyLight);
+        final long packedBrightness = TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
+                                                                                                                    greenBrightness,
+                                                                                                                    blueBrightness);
         return CookieMonster.packedLongToCookie(packedBrightness);
     }
 

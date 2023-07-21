@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api;
 
-import com.falsepattern.rple.internal.common.helper.CookieMonster;
+import com.falsepattern.rple.internal.client.render.CookieMonster;
 
 @SuppressWarnings("unused")
 public final class RPLEBrightnessPackingAPI {

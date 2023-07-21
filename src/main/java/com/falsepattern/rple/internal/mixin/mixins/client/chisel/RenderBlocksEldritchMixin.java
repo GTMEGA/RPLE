@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.chisel;
 
-import com.falsepattern.rple.internal.common.helper.CookieWrappers;
+import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.IIcon;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,10 +37,10 @@ public abstract class RenderBlocksEldritchMixin extends RenderBlocks {
                                                 int tc,
                                                 int td,
                                                 CallbackInfo ci) {
-        L[e] = CookieWrappers.average(false,
-                                      brightnessBottomLeft,
-                                      brightnessTopLeft,
-                                      brightnessTopRight,
-                                      brightnessBottomRight);
+        L[e] = CookieMonsterHelper.average(false,
+                                           brightnessBottomLeft,
+                                           brightnessTopLeft,
+                                           brightnessTopRight,
+                                           brightnessBottomRight);
     }
 }

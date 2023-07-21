@@ -9,7 +9,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.Compat;
-import com.falsepattern.rple.internal.common.helper.CookieMonster;
+import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.mixin.helper.CodeChickenLibHelper;
 import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;

@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.helper;
 
 import com.falsepattern.rple.internal.Common;
-import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
+import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -20,9 +20,9 @@ public final class CodeChickenLibHelper {
     public static void setLightMapTextureCoordsPacked(long packedBrightness) {
         LAST_PACKED_BRIGHTNESS = packedBrightness;
 
-        val redBrightness = BrightnessUtil.getBrightnessRed(packedBrightness);
-        val greenBrightness = BrightnessUtil.getBrightnessGreen(packedBrightness);
-        val blueBrightness = BrightnessUtil.getBrightnessBlue(packedBrightness);
+        val redBrightness = TessellatorBrightnessHelper.getBrightnessRed(packedBrightness);
+        val greenBrightness = TessellatorBrightnessHelper.getBrightnessGreen(packedBrightness);
+        val blueBrightness = TessellatorBrightnessHelper.getBrightnessBlue(packedBrightness);
         OpenGlHelper.setLightmapTextureCoords(Common.RED_LIGHT_MAP_TEXTURE_UNIT,
                                               redBrightness & 0xFFFF,
                                               redBrightness >>> 16);

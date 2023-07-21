@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.api.RPLERenderAPI;
-import com.falsepattern.rple.internal.common.helper.CookieWrappers;
+import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -60,7 +60,7 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int getAoBrightness(int a, int b, int c, int d) {
-        return CookieWrappers.average(true, a, b, c, d);
+        return CookieMonsterHelper.average(true, a, b, c, d);
     }
 
     //Ugly evil mixin-mixin hack
@@ -97,7 +97,7 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int mixAoBrightness(int a, int b, int c, int d, double aMul, double bMul, double cMul, double dMul) {
-        return CookieWrappers.mixAOBrightness(a, b, c, d, aMul, bMul, cMul, dMul);
+        return CookieMonsterHelper.mixAOBrightness(a, b, c, d, aMul, bMul, cMul, dMul);
     }
 
     private static final float alpha = 0.7f;

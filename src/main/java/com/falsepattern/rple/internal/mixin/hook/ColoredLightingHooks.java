@@ -10,11 +10,11 @@ package com.falsepattern.rple.internal.mixin.hook;
 import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.RPLERenderAPI;
 import com.falsepattern.rple.api.block.RPLEBlock;
+import com.falsepattern.rple.internal.client.render.CookieMonster;
+import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import com.falsepattern.rple.internal.client.render.EntityColorHandler;
+import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunkRoot;
-import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
-import com.falsepattern.rple.internal.common.helper.CookieMonster;
-import com.falsepattern.rple.internal.common.helper.CookieWrappers;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.experimental.UtilityClass;
@@ -106,7 +106,7 @@ public final class ColoredLightingHooks {
         var brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, cookieMinBlockLight);
         if (EntityColorHandler.isOnBlockList(entity.getClass())) {
             val packedBrightness = CookieMonster.cookieToPackedLong(brightness);
-            brightness = BrightnessUtil.getBrightestChannelFromPacked(packedBrightness);
+            brightness = TessellatorBrightnessHelper.getBrightestChannelFromPacked(packedBrightness);
         }
         return brightness;
     }
@@ -142,7 +142,7 @@ public final class ColoredLightingHooks {
                                                                int posZ) {
         val brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, 0);
         val topBrightness = getRGBBrightnessForTessellator(world, posX, posY + 1, posZ, 0);
-        return CookieWrappers.packedMax(brightness, topBrightness);
+        return CookieMonsterHelper.packedMax(brightness, topBrightness);
     }
 
     @SideOnly(Side.CLIENT)
@@ -153,13 +153,13 @@ public final class ColoredLightingHooks {
                                                      int cookieMinBlockLight) {
         val packedMinBrightness = CookieMonster.cookieToPackedLong(cookieMinBlockLight);
 
-        val minRedBrightness = BrightnessUtil.getBrightnessRed(packedMinBrightness);
-        val minGreenBrightness = BrightnessUtil.getBrightnessGreen(packedMinBrightness);
-        val minBlueBrightness = BrightnessUtil.getBrightnessBlue(packedMinBrightness);
+        val minRedBrightness = TessellatorBrightnessHelper.getBrightnessRed(packedMinBrightness);
+        val minGreenBrightness = TessellatorBrightnessHelper.getBrightnessGreen(packedMinBrightness);
+        val minBlueBrightness = TessellatorBrightnessHelper.getBrightnessBlue(packedMinBrightness);
 
-        val minRedBlockLight = BrightnessUtil.getBlockLightFromBrightness(minRedBrightness);
-        val minGreenBlockLight = BrightnessUtil.getBlockLightFromBrightness(minGreenBrightness);
-        val minBlueBlockLight = BrightnessUtil.getBlockLightFromBrightness(minBlueBrightness);
+        val minRedBlockLight = TessellatorBrightnessHelper.getBlockLightFromBrightness(minRedBrightness);
+        val minGreenBlockLight = TessellatorBrightnessHelper.getBlockLightFromBrightness(minGreenBrightness);
+        val minBlueBlockLight = TessellatorBrightnessHelper.getBlockLightFromBrightness(minBlueBrightness);
 
         return RPLERenderAPI.getRGBBrightnessForTessellator(world,
                                                             posX,

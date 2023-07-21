@@ -13,11 +13,11 @@ import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
 import com.falsepattern.rple.api.block.RPLEBlock;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
+import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunkRoot;
-import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import lombok.val;
 import lombok.var;
 import net.minecraft.block.Block;
@@ -248,7 +248,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
         var blockLightValue = rple$getChannelLightValueForRender(BLOCK_LIGHT_TYPE, posX, posY, posZ);
         blockLightValue = Math.max(blockLightValue, minBlockLight);
         val skyLightValue = rple$getChannelLightValueForRender(SKY_LIGHT_TYPE, posX, posY, posZ);
-        return BrightnessUtil.lightLevelsToBrightnessForTessellator(blockLightValue, skyLightValue);
+        return TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(blockLightValue, skyLightValue);
     }
 
     @Override

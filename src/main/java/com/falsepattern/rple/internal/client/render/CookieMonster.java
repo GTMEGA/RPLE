@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.helper;
+package com.falsepattern.rple.internal.client.render;
 
 import com.falsepattern.rple.internal.common.collection.CircularLongBuffer;
 import com.falsepattern.rple.internal.mixin.mixins.client.TessellatorMixin;
@@ -47,22 +47,22 @@ public final class CookieMonster {
     private static final long BROKEN_WARN_COLOR;
 
     static {
-        val redBrightness = BrightnessUtil
+        val redBrightness = TessellatorBrightnessHelper
                 .lightLevelsToBrightnessForTessellator(0xF, 0xF);
-        val greenBrightness = BrightnessUtil
+        val greenBrightness = TessellatorBrightnessHelper
                 .lightLevelsToBrightnessForTessellator(0x0, 0x0);
-        val blueBrightness = BrightnessUtil
+        val blueBrightness = TessellatorBrightnessHelper
                 .lightLevelsToBrightnessForTessellator(0x0, 0x0);
-        BROKEN_WARN_COLOR = BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
-                                                                                             greenBrightness,
-                                                                                             blueBrightness);
+        BROKEN_WARN_COLOR = TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
+                                                                                                          greenBrightness,
+                                                                                                          blueBrightness);
     }
 
     private static final CircularLongBuffer LIGHT_VALUES = new CircularLongBuffer(NUM_INDICES);
     private static final AtomicBoolean WARNED_BEFORE = new AtomicBoolean(false);
 
     /**
-     * @param packedLong A long value returned by {@link BrightnessUtil}.
+     * @param packedLong A long value returned by {@link TessellatorBrightnessHelper}.
      * @return An opaque, temporary cookie representing the given long.
      */
     public static int packedLongToCookie(long packedLong) {
@@ -84,7 +84,7 @@ public final class CookieMonster {
             }
             case VANILLA: {
                 // Vanilla fake-pack
-                return BrightnessUtil.packedBrightnessFromTessellatorBrightnessChannels(cookie, cookie, cookie);
+                return TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(cookie, cookie, cookie);
             }
             default: {
                 if (!WARNED_BEFORE.get()) {

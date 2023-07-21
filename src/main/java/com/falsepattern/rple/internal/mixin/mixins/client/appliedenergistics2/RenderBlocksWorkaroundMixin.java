@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.appliedenergistics2;
 
 import appeng.client.render.RenderBlocksWorkaround;
-import com.falsepattern.rple.internal.common.helper.CookieWrappers;
+import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import lombok.val;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -46,14 +46,14 @@ public abstract class RenderBlocksWorkaroundMixin extends RenderBlocks {
                       colorBlueBottomRight,
                       textureU,
                       textureV);
-        val out = CookieWrappers.mixAOBrightness(brightnessTopLeft,
-                                                 brightnessTopRight,
-                                                 brightnessBottomLeft,
-                                                 brightnessBottomRight,
-                                                 textureU * textureV,
-                                                 (1D - textureU) * textureV,
-                                                 textureU * (1D - textureV),
-                                                 (1D - textureU) * (1D - textureV));
+        val out = CookieMonsterHelper.mixAOBrightness(brightnessTopLeft,
+                                                      brightnessTopRight,
+                                                      brightnessBottomLeft,
+                                                      brightnessBottomRight,
+                                                      textureU * textureV,
+                                                      (1D - textureU) * textureV,
+                                                      textureU * (1D - textureV),
+                                                      (1D - textureU) * (1D - textureV));
         Tessellator.instance.setColorRGBA_F(r, g, b, getOpacity());
         Tessellator.instance.setBrightness(out);
     }
