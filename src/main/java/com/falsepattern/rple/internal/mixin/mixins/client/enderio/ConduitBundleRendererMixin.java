@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.enderio;
 
-import com.falsepattern.rple.internal.mixin.extension.EnderIOConduitsBrightnessHolder;
+import com.falsepattern.rple.internal.mixin.helper.EnderIOHelper;
 import com.falsepattern.rple.internal.mixin.hook.ColoredLightingHooks;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import crazypants.enderio.conduit.render.ConduitBundleRenderer;
@@ -26,17 +26,18 @@ public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRender
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/world/World;getLightBrightnessForSkyBlocks(IIII)I"),
               require = 2)
-    public int cacheBrightness(World world, int posX, int posY, int posZ, int minBlockLight) {
-        val brightness = ColoredLightingHooks.getRGBBrightnessForTessellator(world, posX, posY, posZ, minBlockLight);
-        EnderIOConduitsBrightnessHolder.setCookieBrightness(brightness);
-        return brightness;
+    public int cacheTessellatorBrightness(World world, int posX, int posY, int posZ, int minBlockLight) {
+        val tessellatorBrightness =
+                ColoredLightingHooks.getRGBBrightnessForTessellator(world, posX, posY, posZ, minBlockLight);
+        EnderIOHelper.cacheTessellatorBrightness(tessellatorBrightness);
+        return tessellatorBrightness;
     }
 
     @Redirect(method = "renderConduits",
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V"),
               require = 1)
-    public void cacheBrightness(Tessellator instance, int oldBrightness) {
-        instance.setBrightness(EnderIOConduitsBrightnessHolder.getCookieBrightness());
+    public void cacheTessellatorBrightness(Tessellator instance, int oldTessellatorBrightness) {
+        instance.setBrightness(EnderIOHelper.loadTessellatorBrightness());
     }
 }

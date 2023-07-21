@@ -15,6 +15,7 @@ import com.falsepattern.rple.api.block.RPLEBlockBrightnessColorProvider;
 import com.falsepattern.rple.api.color.CustomColor;
 import com.falsepattern.rple.api.color.LightValueColor;
 import com.falsepattern.rple.api.color.RPLEColor;
+import lombok.experimental.UtilityClass;
 import lombok.val;
 import lombok.var;
 import net.minecraft.block.Block;
@@ -23,8 +24,8 @@ import net.minecraft.world.IBlockAccess;
 import static com.falsepattern.rple.api.RPLEColorAPI.COLOR_MIN;
 import static com.falsepattern.rple.api.RPLEColorAPI.clampColorComponent;
 
-//TODO: [PRE-RELEASE] Fix this compatibility patch
-public class MultiPartHelper {
+@UtilityClass
+public final class MultiPartHelper {
     @SuppressWarnings({"InstanceofIncompatibleInterface", "CastToIncompatibleInterface"})
     public static RPLEColor getMultiPartBrightnessColor(TileMultipart multiPart) {
         var multiPartRed = COLOR_MIN;

@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.enderio;
 
-import com.falsepattern.rple.internal.mixin.extension.EnderIOConduitsBrightnessHolder;
+import com.falsepattern.rple.internal.mixin.helper.EnderIOHelper;
 import crazypants.enderio.conduit.render.ConduitRenderer;
 import crazypants.enderio.conduit.render.DefaultConduitRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -15,13 +15,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value = DefaultConduitRenderer.class)
+@Mixin(DefaultConduitRenderer.class)
 public abstract class DefaultConduitRendererMixin implements ConduitRenderer {
     @Redirect(method = "renderEntity",
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V"),
               require = 2)
-    public void cacheBrightness(Tessellator instance, int oldBrightness) {
-        instance.setBrightness(EnderIOConduitsBrightnessHolder.getCookieBrightness());
+    public void loadTessellatorBrightness(Tessellator instance, int oldTessellatorBrightness) {
+        instance.setBrightness(EnderIOHelper.loadTessellatorBrightness());
     }
 }

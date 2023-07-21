@@ -9,11 +9,12 @@ package com.falsepattern.rple.internal.mixin.mixins.client.codechickenlib;
 
 import codechicken.lib.render.CCRenderState;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
-import com.falsepattern.rple.internal.mixin.helper.OpenGlHelperPacked;
+import com.falsepattern.rple.internal.mixin.helper.CodeChickenLibHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+// TODO: Suspected reason that CCL-rendered items have broken colors.
 @Mixin(value = CCRenderState.class, remap = false)
 public abstract class CCRenderStateMixin {
     @Shadow
@@ -28,7 +29,7 @@ public abstract class CCRenderStateMixin {
      */
     @Overwrite
     public static void pullLightmap() {
-        setBrightness(CookieMonster.packedLongToCookie(OpenGlHelperPacked.prevLightValuePacked));
+        setBrightness(CookieMonster.packedLongToCookie(CodeChickenLibHelper.lastPackedBrightness()));
     }
 
     /**
@@ -37,6 +38,6 @@ public abstract class CCRenderStateMixin {
      */
     @Overwrite
     public static void pushLightmap() {
-        OpenGlHelperPacked.setLightMapTextureCoordsPacked(CookieMonster.cookieToPackedLong(brightness));
+        CodeChickenLibHelper.setLightMapTextureCoordsPacked(CookieMonster.cookieToPackedLong(brightness));
     }
 }

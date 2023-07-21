@@ -10,7 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
-import com.falsepattern.rple.internal.mixin.helper.OpenGlHelperPacked;
+import com.falsepattern.rple.internal.mixin.helper.CodeChickenLibHelper;
 import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;
 import org.lwjgl.opengl.ARBMultitexture;
@@ -41,7 +41,7 @@ public abstract class OpenGLHelperMixin {
         val brightness = (int) textureU | ((int) textureV << 16);
         if (CookieMonster.inspectValue(brightness) == CookieMonster.IntType.COOKIE) {
             val packedBrightness = CookieMonster.cookieToPackedLong(brightness);
-            OpenGlHelperPacked.setLightMapTextureCoordsPacked(packedBrightness);
+            CodeChickenLibHelper.setLightMapTextureCoordsPacked(packedBrightness);
             ci.cancel();
         }
         if (textureUnit == lightmapTexUnit) {
