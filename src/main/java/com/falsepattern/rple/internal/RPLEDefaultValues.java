@@ -407,5 +407,22 @@ public final class RPLEDefaultValues {
         registry.colorizeBlock(stained_glass, 13).translucency(GREEN).apply();
         registry.colorizeBlock(stained_glass, 14).translucency(RED).apply();
         registry.colorizeBlock(stained_glass, 15).translucency(BLACK).apply();
+
+        registry.colorizeBlock(stained_glass_pane, 0).translucency(WHITE).apply();
+        registry.colorizeBlock(stained_glass_pane, 1).translucency(ORANGE).apply();
+        registry.colorizeBlock(stained_glass_pane, 2).translucency(MAGENTA).apply();
+        registry.colorizeBlock(stained_glass_pane, 3).translucency(LIGHT_BLUE).apply();
+        registry.colorizeBlock(stained_glass_pane, 4).translucency(YELLOW).apply();
+        registry.colorizeBlock(stained_glass_pane, 5).translucency(LIME).apply();
+        registry.colorizeBlock(stained_glass_pane, 6).translucency(PINK).apply();
+        registry.colorizeBlock(stained_glass_pane, 7).translucency(GRAY).apply();
+        registry.colorizeBlock(stained_glass_pane, 8).translucency(LIGHT_GRAY).apply();
+        registry.colorizeBlock(stained_glass_pane, 9).translucency(CYAN).apply();
+        registry.colorizeBlock(stained_glass_pane, 10).translucency(PURPLE).apply();
+        registry.colorizeBlock(stained_glass_pane, 11).translucency(BLUE).apply();
+        registry.colorizeBlock(stained_glass_pane, 12).translucency(BROWN).apply();
+        registry.colorizeBlock(stained_glass_pane, 13).translucency(GREEN).apply();
+        registry.colorizeBlock(stained_glass_pane, 14).translucency(RED).apply();
+        registry.colorizeBlock(stained_glass_pane, 15).translucency(BLACK).apply();
     }
 }
