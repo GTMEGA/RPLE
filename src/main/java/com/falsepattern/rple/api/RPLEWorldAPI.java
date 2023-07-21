@@ -122,14 +122,14 @@ public final class RPLEWorldAPI {
         return maxColorComponent(redLightValue, greenLightValue, blueLightValue);
     }
 
-    public static int getChannelOpacityValue(IBlockAccess world, ColorChannel channel, int posX, int posY, int posZ) {
+    public static int getChannelLightOpacity(IBlockAccess world, ColorChannel channel, int posX, int posY, int posZ) {
         val worldRoot = getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return channel.componentFromColor(errorColor());
         return worldRoot.rple$world(channel).lumi$getBlockOpacity(posX, posY, posZ);
     }
 
-    public static int getGreyscaleOpacityValue(IBlockAccess world,
+    public static int getGreyscaleLightOpacity(IBlockAccess world,
                                                int posX,
                                                int posY,
                                                int posZ) {
@@ -137,10 +137,10 @@ public final class RPLEWorldAPI {
         if (worldRoot == null)
             return COLOR_MIN;
 
-        val redOpacityValue = worldRoot.rple$world(RED_CHANNEL).lumi$getBlockOpacity(posX, posY, posZ);
-        val greenOpacityValue = worldRoot.rple$world(GREEN_CHANNEL).lumi$getBlockOpacity(posX, posY, posZ);
-        val blueOpacityValue = worldRoot.rple$world(BLUE_CHANNEL).lumi$getBlockOpacity(posX, posY, posZ);
-        return minColorComponent(redOpacityValue, greenOpacityValue, blueOpacityValue);
+        val redLightOpacity = worldRoot.rple$world(RED_CHANNEL).lumi$getBlockOpacity(posX, posY, posZ);
+        val greenLightOpacity = worldRoot.rple$world(GREEN_CHANNEL).lumi$getBlockOpacity(posX, posY, posZ);
+        val blueLightOpacity = worldRoot.rple$world(BLUE_CHANNEL).lumi$getBlockOpacity(posX, posY, posZ);
+        return minColorComponent(redLightOpacity, greenLightOpacity, blueLightOpacity);
     }
 
     @SuppressWarnings("InstanceofIncompatibleInterface")

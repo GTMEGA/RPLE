@@ -21,8 +21,10 @@
 
 package com.falsepattern.rple.internal.mixin.hook;
 
+import com.falsepattern.rple.api.RPLEColorAPI;
 import com.falsepattern.rple.api.RPLERenderAPI;
 import com.falsepattern.rple.api.block.RPLEBlock;
+import com.falsepattern.rple.internal.common.chunk.RPLESubChunkRoot;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
 import com.falsepattern.rple.internal.common.helper.CookieWrappers;
@@ -34,12 +36,44 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 import static com.falsepattern.rple.api.RPLEColorAPI.lightOpacityFromColor;
 import static com.falsepattern.rple.api.RPLEColorAPI.lightValueFromColor;
+import static com.falsepattern.rple.api.color.ColorChannel.*;
 
 @UtilityClass
 public final class ColoredLightingHooks {
+    @SuppressWarnings("CastToIncompatibleInterface")
+    public static int getMaxBlockLightValue(ExtendedBlockStorage subChunkBase,
+                                            int subChunkPosX,
+                                            int subChunkPosY,
+                                            int subChunkPosZ) {
+        val subChunkRoot = (RPLESubChunkRoot) subChunkBase;
+        val redLightValue = subChunkRoot.rple$subChunk(RED_CHANNEL)
+                                        .lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
+        val greenLightValue = subChunkRoot.rple$subChunk(GREEN_CHANNEL)
+                                          .lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
+        val blueLightValue = subChunkRoot.rple$subChunk(BLUE_CHANNEL)
+                                         .lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
+        return RPLEColorAPI.maxColorComponent(redLightValue, greenLightValue, blueLightValue);
+    }
+
+    @SuppressWarnings("CastToIncompatibleInterface")
+    public static int getMaxSkyLightValue(ExtendedBlockStorage subChunkBase,
+                                          int subChunkPosX,
+                                          int subChunkPosY,
+                                          int subChunkPosZ) {
+        val subChunkRoot = (RPLESubChunkRoot) subChunkBase;
+        val redLightValue = subChunkRoot.rple$subChunk(RED_CHANNEL)
+                                        .lumi$getSkyLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
+        val greenLightValue = subChunkRoot.rple$subChunk(GREEN_CHANNEL)
+                                          .lumi$getSkyLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
+        val blueLightValue = subChunkRoot.rple$subChunk(BLUE_CHANNEL)
+                                         .lumi$getSkyLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
+        return RPLEColorAPI.maxColorComponent(redLightValue, greenLightValue, blueLightValue);
+    }
+
     public static int getLightValue(Block block) {
         val rpleBlock = (RPLEBlock) block;
         val color = rpleBlock.rple$getBrightnessColor();
