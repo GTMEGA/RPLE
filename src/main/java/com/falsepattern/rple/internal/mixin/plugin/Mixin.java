@@ -69,7 +69,7 @@ public enum Mixin implements IMixin {
     // endregion
 
     // region Project Red Compatibility
-    common_projectred_TileLampMixin(COMMON, projectRedLampsFilter(), "projectred.TileLampMixin"),
+    common_projectred_ILightMixin(COMMON, projectRedLampsFilter(), "projectred.ILightMixin"),
 
     client_projectred_RenderHaloMixin(CLIENT, projectRedLampsFilter(), "projectred.RenderHaloMixin"),
     // endregion
@@ -94,10 +94,6 @@ public enum Mixin implements IMixin {
     // region CodeChickenLib Compatibility
     client_codechickenlib_CCRenderStateMixin(CLIENT, require(CODE_CHICKEN_LIB), "codechickenlib.CCRenderStateMixin"),
     client_codechickenlib_LightMatrixMixin(CLIENT, require(CODE_CHICKEN_LIB), "codechickenlib.LightMatrixMixin"),
-    // endregion
-
-    // region MrTJPCore Compatibility
-    common_mrtjpcore_InstancedBlockMixin(COMMON, require(MR_TJP_CORE), "mrtjpcore.InstancedBlockMixin"),
     // endregion
     ;
 

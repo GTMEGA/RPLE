@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.mixin.helpers;
+package com.falsepattern.rple.internal.mixin.helper;
 
 import codechicken.multipart.TileMultipart;
 import com.falsepattern.rple.api.RPLEColorAPI;

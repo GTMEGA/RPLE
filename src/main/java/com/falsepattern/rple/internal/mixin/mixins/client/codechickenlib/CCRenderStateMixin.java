@@ -9,7 +9,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client.codechickenlib;
 
 import codechicken.lib.render.CCRenderState;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
-import com.falsepattern.rple.internal.mixin.helpers.OpenGlHelperPacked;
+import com.falsepattern.rple.internal.mixin.helper.OpenGlHelperPacked;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;

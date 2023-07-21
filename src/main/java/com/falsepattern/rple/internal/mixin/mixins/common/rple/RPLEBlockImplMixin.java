@@ -27,6 +27,7 @@ import com.falsepattern.rple.api.block.RPLEBlockTranslucencyColorProvider;
 import com.falsepattern.rple.api.color.RPLEColor;
 import lombok.val;
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -87,11 +88,11 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
     @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
     public @NotNull RPLEColor rple$getBrightnessColor(int blockMeta) {
         if (this instanceof RPLEBlockBrightnessColorProvider) {
-            val block = (RPLEBlockBrightnessColorProvider) this;
+            val colorProvider = (RPLEBlockBrightnessColorProvider) this;
             try {
-                val colorProvider = block.rple$getCustomBrightnessColor(blockMeta);
-                if (colorProvider != null)
-                    return colorProvider;
+                val color = colorProvider.rple$getCustomBrightnessColor(blockMeta);
+                if (color != null)
+                    return color;
             } catch (Exception ignored) {
             }
         }
@@ -106,12 +107,24 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
                                                       int posY,
                                                       int posZ) {
         if (this instanceof RPLEBlockBrightnessColorProvider) {
-            val block = (RPLEBlockBrightnessColorProvider) this;
+            val colorProvider = (RPLEBlockBrightnessColorProvider) this;
             try {
-                val customBrightness = block.rple$getCustomBrightnessColor(world, blockMeta, posX, posY, posZ);
-                if (customBrightness != null)
-                    return customBrightness;
+                val color = colorProvider.rple$getCustomBrightnessColor(world, blockMeta, posX, posY, posZ);
+                if (color != null)
+                    return color;
             } catch (Exception ignored) {
+            }
+        }
+        if (this instanceof ITileEntityProvider) {
+            val tileEntity = world.getTileEntity(posX, posY, posZ);
+            if (tileEntity instanceof RPLEBlockBrightnessColorProvider) {
+                val colorProvider = (RPLEBlockBrightnessColorProvider) tileEntity;
+                try {
+                    val color = colorProvider.rple$getCustomBrightnessColor(world, blockMeta, posX, posY, posZ);
+                    if (color != null)
+                        return color;
+                } catch (Exception ignored) {
+                }
             }
         }
         return rple$getFallbackBrightnessColor(world, blockMeta, posX, posY, posZ);
@@ -121,11 +134,11 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
     @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
     public @NotNull RPLEColor rple$getTranslucencyColor() {
         if (this instanceof RPLEBlockTranslucencyColorProvider) {
-            val block = (RPLEBlockTranslucencyColorProvider) this;
+            val colorProvider = (RPLEBlockTranslucencyColorProvider) this;
             try {
-                val customTranslucency = block.rple$getCustomTranslucencyColor();
-                if (customTranslucency != null)
-                    return customTranslucency;
+                val color = colorProvider.rple$getCustomTranslucencyColor();
+                if (color != null)
+                    return color;
             } catch (Exception ignored) {
             }
         }
@@ -136,11 +149,11 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
     @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
     public @NotNull RPLEColor rple$getTranslucencyColor(int blockMeta) {
         if (this instanceof RPLEBlockTranslucencyColorProvider) {
-            val block = (RPLEBlockTranslucencyColorProvider) this;
+            val colorProvider = (RPLEBlockTranslucencyColorProvider) this;
             try {
-                val customTranslucency = block.rple$getCustomTranslucencyColor(blockMeta);
-                if (customTranslucency != null)
-                    return customTranslucency;
+                val color = colorProvider.rple$getCustomTranslucencyColor(blockMeta);
+                if (color != null)
+                    return color;
             } catch (Exception ignored) {
             }
         }
@@ -155,12 +168,24 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
                                                         int posY,
                                                         int posZ) {
         if (this instanceof RPLEBlockTranslucencyColorProvider) {
-            val block = (RPLEBlockTranslucencyColorProvider) this;
+            val colorProvider = (RPLEBlockTranslucencyColorProvider) this;
             try {
-                val customTranslucency = block.rple$getCustomTranslucencyColor(world, blockMeta, posX, posY, posZ);
-                if (customTranslucency != null)
-                    return customTranslucency;
+                val color = colorProvider.rple$getCustomTranslucencyColor(world, blockMeta, posX, posY, posZ);
+                if (color != null)
+                    return color;
             } catch (Exception ignored) {
+            }
+        }
+        if (this instanceof ITileEntityProvider) {
+            val tileEntity = world.getTileEntity(posX, posY, posZ);
+            if (tileEntity instanceof RPLEBlockTranslucencyColorProvider) {
+                val colorProvider = (RPLEBlockTranslucencyColorProvider) tileEntity;
+                try {
+                    val color = colorProvider.rple$getCustomTranslucencyColor(world, blockMeta, posX, posY, posZ);
+                    if (color != null)
+                        return color;
+                } catch (Exception ignored) {
+                }
             }
         }
         return rple$getFallbackTranslucencyColor(world, blockMeta, posX, posY, posZ);
