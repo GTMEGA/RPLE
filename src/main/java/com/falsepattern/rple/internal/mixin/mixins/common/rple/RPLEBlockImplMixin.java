@@ -27,7 +27,6 @@ import com.falsepattern.rple.api.block.RPLEBlockTranslucencyColorProvider;
 import com.falsepattern.rple.api.color.RPLEColor;
 import lombok.val;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,6 +67,9 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
     @Shadow(remap = false)
     @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
     public abstract RPLEColor rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ);
+
+    @Shadow
+    public abstract boolean hasTileEntity(int metadata);
 
     @Override
     @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
@@ -115,7 +117,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
             } catch (Exception ignored) {
             }
         }
-        if (this instanceof ITileEntityProvider) {
+        if (hasTileEntity(blockMeta)) {
             val tileEntity = world.getTileEntity(posX, posY, posZ);
             if (tileEntity instanceof RPLEBlockBrightnessColorProvider) {
                 val colorProvider = (RPLEBlockBrightnessColorProvider) tileEntity;
@@ -176,7 +178,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
             } catch (Exception ignored) {
             }
         }
-        if (this instanceof ITileEntityProvider) {
+        if (hasTileEntity(blockMeta)) {
             val tileEntity = world.getTileEntity(posX, posY, posZ);
             if (tileEntity instanceof RPLEBlockTranslucencyColorProvider) {
                 val colorProvider = (RPLEBlockTranslucencyColorProvider) tileEntity;
