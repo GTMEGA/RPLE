@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.projectred;
 
-import com.falsepattern.rple.api.block.RPLEColoredBlockBrightnessProvider;
+import com.falsepattern.rple.api.block.RPLEBlockBrightnessColorProvider;
 import com.falsepattern.rple.api.color.DefaultColor;
 import com.falsepattern.rple.api.color.RPLEColor;
 import mrtjp.projectred.illumination.TileLamp;
@@ -21,7 +21,7 @@ import static com.falsepattern.rple.api.color.LightValueColor.LIGHT_VALUE_0;
 
 @Pseudo
 @Mixin(value = TileLamp.class, remap = false)
-public abstract class TileLampMixin implements RPLEColoredBlockBrightnessProvider {
+public abstract class TileLampMixin implements RPLEBlockBrightnessColorProvider {
     @Shadow
     public abstract int getColor();
 
@@ -29,23 +29,23 @@ public abstract class TileLampMixin implements RPLEColoredBlockBrightnessProvide
     public abstract boolean isOn();
 
     @Override
-    public @NotNull RPLEColor rple$getColoredBrightness() {
-        return rple$getColoredBrightness(0);
+    public @NotNull RPLEColor rple$getCustomBrightnessColor() {
+        return rple$getCustomBrightnessColor(0);
     }
 
     @Override
-    public @NotNull RPLEColor rple$getColoredBrightness(@NotNull IBlockAccess world,
-                                                        int blockMeta,
-                                                        int posX,
-                                                        int posY,
-                                                        int posZ) {
-        return rple$getColoredBrightness(blockMeta);
+    public @NotNull RPLEColor rple$getCustomBrightnessColor(@NotNull IBlockAccess world,
+                                                            int blockMeta,
+                                                            int posX,
+                                                            int posY,
+                                                            int posZ) {
+        return rple$getCustomBrightnessColor(blockMeta);
     }
 
     @Override
-    public @NotNull RPLEColor rple$getColoredBrightness(int blockMeta) {
+    public @NotNull RPLEColor rple$getCustomBrightnessColor(int blockMeta) {
         if (isOn())
-            return DefaultColor.fromBlockMeta(blockMeta);
+            return DefaultColor.fromVanillaBlockMeta(blockMeta);
         return LIGHT_VALUE_0;
     }
 }

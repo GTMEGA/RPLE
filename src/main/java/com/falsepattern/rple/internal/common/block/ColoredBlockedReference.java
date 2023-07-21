@@ -15,8 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.val;
-import lombok.var;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 @Accessors(fluent = true, chain = false)
 @RequiredArgsConstructor
@@ -24,49 +25,44 @@ public final class ColoredBlockedReference {
     private final RPLEBlockInit block;
 
     @Setter
-    private @Nullable RPLEColor brightness;
+    private @Nullable RPLEColor baseBrightnessColor;
     @Setter
-    private @Nullable RPLEColor translucency;
+    private @Nullable RPLEColor baseTranslucencyColor;
 
-    private final TIntObjectMap<RPLEColor> metaBrightness = new TIntObjectHashMap<>();
-    private final TIntObjectMap<RPLEColor> metaTranslucency = new TIntObjectHashMap<>();
+    private final TIntObjectMap<RPLEColor> metaBrightnessColorsMap = new TIntObjectHashMap<>();
+    private final TIntObjectMap<RPLEColor> metaTranslucencyColorsMap = new TIntObjectHashMap<>();
 
-    public void metaBrightness(int meta, RPLEColor brightness) {
-        if (meta >= 0)
-            metaBrightness.put(meta, brightness);
+    public void metaBrightnessColorsMap(int blockMeta, RPLEColor color) {
+        if (blockMeta >= 0)
+            metaBrightnessColorsMap.put(blockMeta, color);
     }
 
-    public void metaTranslucency(int meta, RPLEColor translucency) {
-        if (meta >= 0)
-            metaTranslucency.put(meta, translucency);
+    public void metaTranslucencyColorsMap(int blockMeta, RPLEColor color) {
+        if (blockMeta >= 0)
+            metaTranslucencyColorsMap.put(blockMeta, color);
     }
 
     public void apply() {
-        block.rple$initBaseColoredBrightness(brightness);
-        block.rple$initBaseColoredTranslucency(translucency);
-        block.rple$initMetaColoredBrightness(metaColors(metaBrightness));
-        block.rple$initMetaColoredTranslucency(metaColors(metaTranslucency));
+        block.rple$initBaseBrightnessColor(baseBrightnessColor);
+        block.rple$initBaseTranslucencyColor(baseTranslucencyColor);
+        block.rple$initMetaBrightnessColors(metaColorsArrayFromMap(metaBrightnessColorsMap));
+        block.rple$initMetaTranslucencyColors(metaColorsArrayFromMap(metaTranslucencyColorsMap));
     }
 
-    private @Nullable RPLEColor @Nullable [] metaColors(TIntObjectMap<RPLEColor> metaColorMap) {
-        if (metaColorMap.isEmpty())
+    private @Nullable RPLEColor @Nullable [] metaColorsArrayFromMap(TIntObjectMap<RPLEColor> metaColorsMap) {
+        if (metaColorsMap.isEmpty())
+            return null;
+        val blockMetas = metaColorsMap.keys();
+        val maxBlockMeta = Arrays.stream(blockMetas)
+                                 .max()
+                                 .orElse(-1);
+        if (maxBlockMeta < 0)
             return null;
 
-        val metas = metaColorMap.keys();
-        val size = metaArraySize(metaColorMap.keys());
-
-        val metaColors = new RPLEColor[size];
-        for (val meta : metas)
-            metaColors[meta] = metaColorMap.get(meta);
-
+        val metaColorsLength = maxBlockMeta + 1;
+        val metaColors = new RPLEColor[metaColorsLength];
+        for (val blockMeta : blockMetas)
+            metaColors[blockMeta] = metaColorsMap.get(blockMeta);
         return metaColors;
-    }
-
-    private int metaArraySize(int[] metas) {
-        var max = -1;
-        for (val value : metas)
-            if (value > max)
-                max = value;
-        return max + 1;
     }
 }

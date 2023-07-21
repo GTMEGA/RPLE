@@ -27,7 +27,6 @@ public enum Mixin implements IMixin {
 
     client_BlockFluidMixin(CLIENT, always(), "BlockFluidMixin"),
     client_BlockLiquidMixin(CLIENT, always(), "BlockLiquidMixin"),
-    client_BlockMixin(CLIENT, always(), "BlockMixin"),
     client_ChunkCacheMixin(CLIENT, always(), "ChunkCacheMixin"),
     client_EntityMixin(CLIENT, always(), "EntityMixin"),
     client_EntityRendererMixin(CLIENT, always(), "EntityRendererMixin"),
@@ -40,9 +39,13 @@ public enum Mixin implements IMixin {
     // endregion
 
     // region Right Proper Lighting Engine Implementation
-    common_rple_WorldMixin(COMMON, always(), "rple.RPLEWorldRootImplMixin"),
-    common_rple_ChunkMixin(COMMON, always(), "rple.RPLEChunkRootImplMixin"),
-    common_rple_EBSMixin(COMMON, always(), "rple.RPLESubChunkRootImplMixin"),
+    common_rple_RPLEBlockInitImplMixin(COMMON, always(), "rple.RPLEBlockInitImplMixin"),
+    common_rple_RPLEBlockImplMixin(COMMON, always(), "rple.RPLEBlockImplMixin"),
+    common_rple_RPLEBlockRootImplMixin(COMMON, always(), "rple.RPLEBlockRootImplMixin"),
+
+    common_rple_RPLEWorldRootImplMixin(COMMON, always(), "rple.RPLEWorldRootImplMixin"),
+    common_rple_RPLEChunkRootImplMixin(COMMON, always(), "rple.RPLEChunkRootImplMixin"),
+    common_rple_RPLESubChunkRootImplMixin(COMMON, always(), "rple.RPLESubChunkRootImplMixin"),
     // endregion
 
     // region OptiFine Compatibility

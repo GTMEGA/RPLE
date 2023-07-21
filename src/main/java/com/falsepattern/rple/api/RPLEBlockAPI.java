@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api;
 
-import com.falsepattern.rple.api.block.RPLEColoredBlockRoot;
+import com.falsepattern.rple.api.block.RPLEBlock;
 import com.falsepattern.rple.api.color.RPLEColor;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
@@ -24,12 +24,12 @@ public final class RPLEBlockAPI {
 
     @SuppressWarnings("ConstantValue")
     public static @NotNull RPLEColor getBlockColoredBrightness(@NotNull Block block) {
-        final RPLEColoredBlockRoot rpleBlock = rpleBlockFromBlock(block);
+        final RPLEBlock rpleBlock = rpleBlockFromBlock(block);
         if (rpleBlock == null)
             return errorColor();
 
         try {
-            final RPLEColor color = rpleBlock.rple$getColoredBrightness();
+            final RPLEColor color = rpleBlock.rple$getBrightnessColor();
             if (color != null)
                 return color;
         } catch (Exception ignored) {
@@ -39,12 +39,12 @@ public final class RPLEBlockAPI {
 
     @SuppressWarnings("ConstantValue")
     public static @NotNull RPLEColor getBlockColoredBrightness(@NotNull Block block, int blockMeta) {
-        final RPLEColoredBlockRoot rpleBlock = rpleBlockFromBlock(block);
+        final RPLEBlock rpleBlock = rpleBlockFromBlock(block);
         if (rpleBlock == null)
             return errorColor();
 
         try {
-            final RPLEColor color = rpleBlock.rple$getColoredBrightness(blockMeta);
+            final RPLEColor color = rpleBlock.rple$getBrightnessColor(blockMeta);
             if (color != null)
                 return color;
         } catch (Exception ignored) {
@@ -59,12 +59,12 @@ public final class RPLEBlockAPI {
                                                                int posX,
                                                                int posY,
                                                                int posZ) {
-        final RPLEColoredBlockRoot rpleBlock = rpleBlockFromBlock(block);
+        final RPLEBlock rpleBlock = rpleBlockFromBlock(block);
         if (rpleBlock == null)
             return errorColor();
 
         try {
-            final RPLEColor color = rpleBlock.rple$getColoredBrightness(world, blockMeta, posX, posY, posZ);
+            final RPLEColor color = rpleBlock.rple$getBrightnessColor(world, blockMeta, posX, posY, posZ);
             if (color != null)
                 return color;
         } catch (Exception ignored) {
@@ -74,12 +74,12 @@ public final class RPLEBlockAPI {
 
     @SuppressWarnings("ConstantValue")
     public static @NotNull RPLEColor getBlockColoredTranslucency(@NotNull Block block) {
-        final RPLEColoredBlockRoot rpleBlock = rpleBlockFromBlock(block);
+        final RPLEBlock rpleBlock = rpleBlockFromBlock(block);
         if (rpleBlock == null)
             return errorColor();
 
         try {
-            final RPLEColor color = rpleBlock.rple$getColoredTranslucency();
+            final RPLEColor color = rpleBlock.rple$getTranslucencyColor();
             if (color != null)
                 return color;
         } catch (Exception ignored) {
@@ -89,12 +89,12 @@ public final class RPLEBlockAPI {
 
     @SuppressWarnings("ConstantValue")
     public static @NotNull RPLEColor getBlockColoredTranslucency(@NotNull Block block, int blockMeta) {
-        final RPLEColoredBlockRoot rpleBlock = rpleBlockFromBlock(block);
+        final RPLEBlock rpleBlock = rpleBlockFromBlock(block);
         if (rpleBlock == null)
             return errorColor();
 
         try {
-            final RPLEColor color = rpleBlock.rple$getColoredTranslucency(blockMeta);
+            final RPLEColor color = rpleBlock.rple$getTranslucencyColor(blockMeta);
             if (color != null)
                 return color;
         } catch (Exception ignored) {
@@ -109,12 +109,12 @@ public final class RPLEBlockAPI {
                                                                  int posX,
                                                                  int posY,
                                                                  int posZ) {
-        final RPLEColoredBlockRoot rpleBlock = rpleBlockFromBlock(block);
+        final RPLEBlock rpleBlock = rpleBlockFromBlock(block);
         if (rpleBlock == null)
             return errorColor();
 
         try {
-            final RPLEColor color = rpleBlock.rple$getColoredTranslucency(world, blockMeta, posX, posY, posZ);
+            final RPLEColor color = rpleBlock.rple$getTranslucencyColor(world, blockMeta, posX, posY, posZ);
             if (color != null)
                 return color;
         } catch (Exception ignored) {
@@ -123,9 +123,9 @@ public final class RPLEBlockAPI {
     }
 
     @SuppressWarnings("InstanceofIncompatibleInterface")
-    private static @Nullable RPLEColoredBlockRoot rpleBlockFromBlock(Block block) {
-        if (block instanceof RPLEColoredBlockRoot)
-            return (RPLEColoredBlockRoot) block;
+    private static @Nullable RPLEBlock rpleBlockFromBlock(Block block) {
+        if (block instanceof RPLEBlock)
+            return (RPLEBlock) block;
         return null;
     }
 }

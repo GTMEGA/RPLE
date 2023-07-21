@@ -65,7 +65,7 @@ public enum DefaultColor implements RPLENamedColor {
         this.colorName = name().toLowerCase();
     }
 
-    public static DefaultColor fromBlockMeta(int blockMeta) {
+    public static DefaultColor fromVanillaBlockMeta(int blockMeta) {
         blockMeta &= 15;
         return values()[blockMeta];
     }

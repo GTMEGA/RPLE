@@ -22,6 +22,7 @@
 package com.falsepattern.rple.internal.mixin.hook;
 
 import com.falsepattern.rple.api.RPLERenderAPI;
+import com.falsepattern.rple.api.block.RPLEBlock;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
 import com.falsepattern.rple.internal.common.helper.CookieWrappers;
@@ -29,12 +30,50 @@ import com.falsepattern.rple.internal.common.helper.EntityHelper;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import lombok.var;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.IBlockAccess;
 
+import static com.falsepattern.rple.api.RPLEColorAPI.lightOpacityFromColor;
+import static com.falsepattern.rple.api.RPLEColorAPI.lightValueFromColor;
+
 @UtilityClass
 public final class ColoredLightingHooks {
+    public static int getLightValue(Block block) {
+        val rpleBlock = (RPLEBlock) block;
+        val color = rpleBlock.rple$getBrightnessColor();
+        return lightValueFromColor(color);
+    }
+
+    public static int getLightValue(IBlockAccess world,
+                                    Block block,
+                                    int posX,
+                                    int posY,
+                                    int posZ) {
+        val rpleBlock = (RPLEBlock) block;
+        val blockMeta = world.getBlockMetadata(posX, posY, posZ);
+        val color = rpleBlock.rple$getBrightnessColor(world, blockMeta, posX, posY, posZ);
+        return lightValueFromColor(color);
+    }
+
+    public static int getLightOpacity(Block block) {
+        val rpleBlock = (RPLEBlock) block;
+        val color = rpleBlock.rple$getTranslucencyColor();
+        return lightOpacityFromColor(color);
+    }
+
+    public static int getLightOpacity(IBlockAccess world,
+                                      Block block,
+                                      int posX,
+                                      int posY,
+                                      int posZ) {
+        val rpleBlock = (RPLEBlock) block;
+        val blockMeta = world.getBlockMetadata(posX, posY, posZ);
+        val color = rpleBlock.rple$getTranslucencyColor(world, blockMeta, posX, posY, posZ);
+        return lightOpacityFromColor(color);
+    }
+
     public static int getEntityRGBBrightnessForTessellator(Entity entity,
                                                            IBlockAccess world,
                                                            int posX,

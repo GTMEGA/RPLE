@@ -25,9 +25,15 @@ public final class RPLEColorAPI {
     }
 
     public static @NotNull RPLEColor errorColor() {
-        System.out.println(com.falsepattern.falsetweaks.Tags.MODNAME);
-        System.out.println(com.falsepattern.lib.internal.Tags.MODNAME);
         return ErrorColor.errorColor();
+    }
+
+    public static int lightValueFromColor(@NotNull RPLEColor color) {
+        return maxColorComponent(color);
+    }
+
+    public static int lightOpacityFromColor(@NotNull RPLEColor color) {
+        return invertColorComponent(maxColorComponent(color));
     }
 
     public static int clampColorComponent(int component) {

@@ -97,9 +97,9 @@ public final class BlockColorManager implements RPLEBlockColorRegistry {
 
             val blockMeta = blockReference.meta();
             if (blockMeta.isPresent()) {
-                colouredBlock.metaBrightness(blockMeta.get(), brightness);
+                colouredBlock.metaBrightnessColorsMap(blockMeta.get(), brightness);
             } else {
-                colouredBlock.brightness(brightness);
+                colouredBlock.baseBrightnessColor(brightness);
             }
         }
 
@@ -119,9 +119,9 @@ public final class BlockColorManager implements RPLEBlockColorRegistry {
 
             val blockMeta = blockReference.meta();
             if (blockMeta.isPresent()) {
-                colouredBlock.metaTranslucency(blockMeta.get(), translucency);
+                colouredBlock.metaTranslucencyColorsMap(blockMeta.get(), translucency);
             } else {
-                colouredBlock.translucency(translucency);
+                colouredBlock.baseTranslucencyColor(translucency);
             }
         }
 

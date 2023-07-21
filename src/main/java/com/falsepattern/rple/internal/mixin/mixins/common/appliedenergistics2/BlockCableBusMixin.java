@@ -11,7 +11,7 @@ import appeng.block.AEBaseTileBlock;
 import appeng.block.networking.BlockCableBus;
 import appeng.parts.ICableBusContainer;
 import com.falsepattern.rple.api.RPLEBlockAPI;
-import com.falsepattern.rple.api.block.RPLEColoredBlockBrightnessProvider;
+import com.falsepattern.rple.api.block.RPLEBlockBrightnessColorProvider;
 import com.falsepattern.rple.api.color.LightValueColor;
 import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.internal.mixin.interfaces.appliedenergistics2.ICableBusContainerMixin;
@@ -26,7 +26,7 @@ import static com.falsepattern.rple.api.color.LightValueColor.LIGHT_VALUE_0;
 
 @Mixin(value = BlockCableBus.class,
        remap = false)
-public abstract class BlockCableBusMixin extends AEBaseTileBlock implements RPLEColoredBlockBrightnessProvider {
+public abstract class BlockCableBusMixin extends AEBaseTileBlock implements RPLEBlockBrightnessColorProvider {
     public BlockCableBusMixin(Material mat) {
         super(mat);
     }
@@ -35,21 +35,21 @@ public abstract class BlockCableBusMixin extends AEBaseTileBlock implements RPLE
     protected abstract ICableBusContainer cb(IBlockAccess world, int posX, int posY, int posZ);
 
     @Override
-    public @NotNull RPLEColor rple$getColoredBrightness() {
+    public @NotNull RPLEColor rple$getCustomBrightnessColor() {
         return LIGHT_VALUE_0;
     }
 
     @Override
-    public @NotNull RPLEColor rple$getColoredBrightness(int blockMeta) {
+    public @NotNull RPLEColor rple$getCustomBrightnessColor(int blockMeta) {
         return LIGHT_VALUE_0;
     }
 
     @Override
-    public @NotNull RPLEColor rple$getColoredBrightness(@NotNull IBlockAccess world,
-                                                        int blockMeta,
-                                                        int posX,
-                                                        int posY,
-                                                        int posZ) {
+    public @NotNull RPLEColor rple$getCustomBrightnessColor(@NotNull IBlockAccess world,
+                                                            int blockMeta,
+                                                            int posX,
+                                                            int posY,
+                                                            int posZ) {
         val otherBlock = world.getBlock(posX, posY, posZ);
         if (otherBlock != this) {
             val otherBlockMeta = world.getBlockMetadata(posX, posY, posZ);

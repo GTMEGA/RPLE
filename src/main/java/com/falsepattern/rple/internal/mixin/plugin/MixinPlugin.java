@@ -18,6 +18,8 @@ import static com.falsepattern.rple.internal.Tags.MOD_NAME;
 
 @NoArgsConstructor
 public final class MixinPlugin implements IMixinPlugin {
+    public static final int RPLE_INIT_MIXIN_PRIORITY = 980;
+    public static final int RPLE_ROOT_MIXIN_PRIORITY = 990;
     public static final int POST_LUMINA_MIXIN_PRIORITY = 1010;
 
     @Getter
