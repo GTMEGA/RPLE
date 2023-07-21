@@ -11,7 +11,6 @@ import com.falsepattern.rple.api.block.RPLEBlockBrightnessColorProvider;
 import com.falsepattern.rple.api.color.DefaultColor;
 import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.client.render.ClampedIcon;
 import com.falsepattern.rple.internal.client.render.LampRenderer;
 import lombok.val;
 import net.minecraft.block.Block;
@@ -26,6 +25,8 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+
+import static com.falsepattern.lib.util.RenderUtil.wrapAsClampedIcon;
 
 // TODO: [PRE_RELEASE] Large parts of this may be included in API as an abstract class
 // TODO: [PRE_RELEASE] Should have a large part of it extracted as an example of how-to implement ColoredBlock
@@ -54,7 +55,7 @@ public class LampBlock extends Block implements RPLEBlockBrightnessColorProvider
     public void registerBlockIcons(@NotNull IIconRegister register) {
         blockIcon = register.registerIcon(Tags.MOD_ID + ":lamp/off/" + getTextureName());
         poweredIcon = register.registerIcon(Tags.MOD_ID + ":lamp/on/" + getTextureName());
-        glowIcon = new ClampedIcon(register.registerIcon(GLOW_RESOURCE));
+        glowIcon = wrapAsClampedIcon(register.registerIcon(GLOW_RESOURCE));
     }
 
     @Override
