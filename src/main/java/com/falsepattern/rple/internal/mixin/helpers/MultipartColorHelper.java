@@ -13,6 +13,7 @@ import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 
+//TODO: [PRE-RELEASE] Fix this compatibility patch
 public class MultipartColorHelper {
     public static int getColoredLightValue(Block vBlock, IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
         val tileEntity = world.getTileEntity(x, y, z);
@@ -20,7 +21,6 @@ public class MultipartColorHelper {
         if (!(tileEntity instanceof TileMultipart))
             return -1;
 
-        //TODO: [PRE-RELEASE] Fix this compatibility patch
         val tileMultipart = (TileMultipart) tileEntity;
         val iter = tileMultipart.partList().iterator();
         int sum = 0;

@@ -7,46 +7,45 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.projectred;
 
+import com.falsepattern.rple.api.block.RPLEBlockBrightness;
+import com.falsepattern.rple.api.color.DefaultColor;
+import com.falsepattern.rple.api.color.RPLEColor;
 import mrtjp.projectred.illumination.TileLamp;
+import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 
+import static com.falsepattern.rple.api.color.LightValueColor.LIGHT_VALUE_0;
+
 @Pseudo
 @Mixin(value = TileLamp.class, remap = false)
-public abstract class TileLampMixin {
-    @Shadow
-    public abstract boolean inverted();
-
-    @Shadow
-    public abstract boolean powered();
-
-    @Shadow
-    public abstract int getLightValue();
-
+public abstract class TileLampMixin implements RPLEBlockBrightness {
     @Shadow
     public abstract int getColor();
 
-// TODO: [PRE_RELEASE] Fix please
+    @Shadow
+    public abstract boolean isOn();
 
-//    @Override
-//    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-//        return this.inverted() != this.powered() ? LightConstants.colors[colorChannel][~this.getColor() & 0xF] : 0;
-//    }
-//
-//    @Override
-//    public int getColoredLightOpacity(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-//        //noop
-//        return 0;
-//    }
-//
-//    @Override
-//    public void setColoredLightValue(int meta, int r, int g, int b) {
-//        //noop
-//    }
-//
-//    @Override
-//    public void setColoredLightOpacity(int meta, int r, int g, int b) {
-//        //noop
-//    }
+    @Override
+    public @NotNull RPLEColor getColoredBrightness() {
+        return getColoredBrightness(0);
+    }
+
+    @Override
+    public @NotNull RPLEColor getColoredBrightness(@NotNull IBlockAccess world,
+                                                   int blockMeta,
+                                                   int posX,
+                                                   int posY,
+                                                   int posZ) {
+        return getColoredBrightness(blockMeta);
+    }
+
+    @Override
+    public @NotNull RPLEColor getColoredBrightness(int blockMeta) {
+        if (isOn())
+            return DefaultColor.fromBlockMeta(blockMeta);
+        return LIGHT_VALUE_0;
+    }
 }

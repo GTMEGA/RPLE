@@ -7,32 +7,57 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.appliedenergistics2;
 
+import appeng.block.AEBaseTileBlock;
 import appeng.block.networking.BlockCableBus;
 import appeng.parts.ICableBusContainer;
+import com.falsepattern.rple.api.RPLEBlockAPI;
+import com.falsepattern.rple.api.block.RPLEBlockBrightness;
+import com.falsepattern.rple.api.color.LightValueColor;
+import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.internal.mixin.interfaces.appliedenergistics2.ICableBusContainerMixin;
+import lombok.val;
+import net.minecraft.block.material.Material;
 import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+import static com.falsepattern.rple.api.color.LightValueColor.LIGHT_VALUE_0;
+
 @Mixin(value = BlockCableBus.class,
        remap = false)
-public abstract class BlockCableBusMixin {
-    @Shadow
-    protected abstract ICableBusContainer cb(IBlockAccess w, int x, int y, int z);
+public abstract class BlockCableBusMixin extends AEBaseTileBlock implements RPLEBlockBrightness {
+    public BlockCableBusMixin(Material mat) {
+        super(mat);
+    }
 
-    // TODO: [PRE_RELEASE] Fix patch
-//    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-//        val thiz = (Block) (Object) this;
-//        Block block = world.getBlock(x, y, z);
-//        if (block != null && block != thiz) {
-//            return block.getLightValue(world, x, y, z);
-//        } else if (block == null) {
-//            return 0;
-//        } else {
-//            val cb = this.cb(world, x, y, z);
-//            if (cb instanceof ICableBusContainerMixin) {
-//                return ((ICableBusContainerMixin)cb).getColoredLightValue(colorChannel);
-//            }
-//            return cb.getLightValue();
-//        }
-//    }
+    @Shadow
+    protected abstract ICableBusContainer cb(IBlockAccess world, int posX, int posY, int posZ);
+
+    @Override
+    public @NotNull RPLEColor getColoredBrightness() {
+        return LIGHT_VALUE_0;
+    }
+
+    @Override
+    public @NotNull RPLEColor getColoredBrightness(int blockMeta) {
+        return LIGHT_VALUE_0;
+    }
+
+    @Override
+    public @NotNull RPLEColor getColoredBrightness(@NotNull IBlockAccess world,
+                                                   int blockMeta,
+                                                   int posX,
+                                                   int posY,
+                                                   int posZ) {
+        val otherBlock = world.getBlock(posX, posY, posZ);
+        if (otherBlock != this) {
+            val otherBlockMeta = world.getBlockMetadata(posX, posY, posZ);
+            return RPLEBlockAPI.getBlockColoredBrightness(world, otherBlock, otherBlockMeta, posX, posY, posZ);
+        }
+        val cb = cb(world, posX, posY, posZ);
+        if (cb instanceof ICableBusContainerMixin)
+            return ((ICableBusContainerMixin) cb).rple$getColoredBrightness();
+        return LightValueColor.fromVanillaLightValue(cb.getLightValue());
+    }
 }

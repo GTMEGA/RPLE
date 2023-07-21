@@ -7,31 +7,56 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.mrtjpcore;
 
+import com.falsepattern.rple.api.block.RPLEBlock;
+import com.falsepattern.rple.api.block.RPLEBlockBrightness;
+import com.falsepattern.rple.api.color.LightValueColor;
+import com.falsepattern.rple.api.color.RPLEColor;
+import lombok.val;
 import mrtjp.core.block.InstancedBlock;
+import mrtjp.core.block.InstancedBlockTile;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 
 import java.lang.invoke.MethodHandles;
 
+import static com.falsepattern.rple.api.color.LightValueColor.LIGHT_VALUE_0;
+
 @Mixin(InstancedBlock.class)
-public abstract class InstancedBlockMixin {
+public abstract class InstancedBlockMixin extends BlockContainer implements RPLEBlock, RPLEBlockBrightness {
     private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
 
-    //TODO: [PRE-RELEASE] Fix this compatibility patch
-//    @Override
-//    public int getColoredLightValue(IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {
-//        TileEntity te = world.getTileEntity(x, y, z);
-//        int color;
-//
-//        if (te instanceof InstancedBlockTile && te instanceof OldColoredBlock) {
-//            OldColoredBlock colorTE = (OldColoredBlock) te;
-//            color = colorTE.getColoredLightValue(world, meta, colorChannel, x, y, z);
-//        } else if (te instanceof InstancedBlockTile) {
-//            InstancedBlockTile tile = (InstancedBlockTile) te;
-//            color = tile.getLightValue();
-//        } else {
-//            color = SuperCallHelper.getColoredLightValue(lookup, InstancedBlock.class, this, world, meta, colorChannel, x, y, z);
-//        }
-//        return color;
-//    }
+    protected InstancedBlockMixin(Material material) {
+        super(material);
+    }
 
+    @Override
+    public @NotNull RPLEColor getColoredBrightness() {
+        return LIGHT_VALUE_0;
+    }
+
+    @Override
+    public @NotNull RPLEColor getColoredBrightness(int blockMeta) {
+        return LIGHT_VALUE_0;
+    }
+
+    @Override
+    public @NotNull RPLEColor getColoredBrightness(@NotNull IBlockAccess world,
+                                                   int blockMeta,
+                                                   int posX,
+                                                   int posY,
+                                                   int posZ) {
+        val tileEntity = world.getTileEntity(posX, posY, posZ);
+        if (tileEntity instanceof RPLEBlockBrightness) {
+            val rpleTileEntity = (RPLEBlockBrightness) tileEntity;
+            return rpleTileEntity.getColoredBrightness(world, blockMeta, posX, posY, posZ);
+        }
+        if (tileEntity instanceof InstancedBlockTile) {
+            val instancedBlockTile = (InstancedBlockTile) tileEntity;
+            return LightValueColor.fromVanillaLightValue(instancedBlockTile.getLightValue());
+        }
+        return rple$getFallbackColoredBrightness(world, blockMeta, posX, posY, posZ);
+    }
 }

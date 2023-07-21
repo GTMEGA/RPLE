@@ -75,7 +75,7 @@ public enum Mixin implements IMixin {
     common_appliedenergistics2_BlockCableBusMixin(COMMON, require(APPLIED_ENERGISTICS_2), "appliedenergistics2.BlockCableBusMixin"),
     common_appliedenergistics2_CableBusContainerMixin(COMMON, require(APPLIED_ENERGISTICS_2), "appliedenergistics2.CableBusContainerMixin"),
 
-    client_appliedenergistics2_RenderBlocksWorkaroundMixin(CLIENT, require(APPLIED_ENERGISTICS_2), "ae2.RenderBlocksWorkaroundMixin"),
+    client_appliedenergistics2_RenderBlocksWorkaroundMixin(CLIENT, require(APPLIED_ENERGISTICS_2), "appliedenergistics2.RenderBlocksWorkaroundMixin"),
     // endregion
 
     // region Ender IO Compatibility

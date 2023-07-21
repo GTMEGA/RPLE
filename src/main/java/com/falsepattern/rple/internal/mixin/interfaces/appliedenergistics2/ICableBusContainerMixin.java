@@ -7,8 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.interfaces.appliedenergistics2;
 
-import com.falsepattern.rple.api.color.ColorChannel;
+
+import com.falsepattern.rple.api.color.RPLEColor;
 
 public interface ICableBusContainerMixin {
-    int rple$getColoredLightValue(ColorChannel channel);
+    RPLEColor rple$getColoredBrightness();
 }

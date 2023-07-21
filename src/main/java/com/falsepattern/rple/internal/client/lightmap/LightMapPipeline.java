@@ -8,9 +8,8 @@
 package com.falsepattern.rple.internal.client.lightmap;
 
 import com.falsepattern.rple.api.lightmap.*;
-import lombok.EqualsAndHashCode;
+import com.falsepattern.rple.internal.collection.PriorityPair;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
+import static com.falsepattern.rple.internal.collection.PriorityPair.wrappedWithPriority;
 import static com.falsepattern.rple.internal.common.RPLEDefaultValues.registerDefaultLightMaps;
 import static com.falsepattern.rple.internal.event.EventPoster.postLightMapRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
@@ -72,7 +72,7 @@ public final class LightMapPipeline implements LightMapRegistry {
         if (!registerLightMapProvider(base))
             return;
 
-        blockBases.add(new PriorityPair<>(base, priority));
+        blockBases.add(wrappedWithPriority(base, priority));
         skyBases.add(wrappedWithPriority(base, priority));
     }
 
@@ -134,6 +134,7 @@ public final class LightMapPipeline implements LightMapRegistry {
         lightMapProviders.add(provider);
         return true;
     }
+    // endregion
 
     public int[] updateLightMap(float partialTick) {
         val blockStrip = mixedLightMap.blockLightMap();
@@ -141,13 +142,13 @@ public final class LightMapPipeline implements LightMapRegistry {
 
         for (val blockBase : blockBases) {
             blockStrip.resetLightMap();
-            if (blockBase.value.generateBlockLightMapBase(blockStrip, partialTick))
+            if (blockBase.value().generateBlockLightMapBase(blockStrip, partialTick))
                 break;
         }
 
         for (val skyBase : skyBases) {
             skyStrip.resetLightMap();
-            if (skyBase.value.generateSkyLightMapBase(skyStrip, partialTick))
+            if (skyBase.value().generateSkyLightMapBase(skyStrip, partialTick))
                 break;
         }
 
@@ -165,21 +166,5 @@ public final class LightMapPipeline implements LightMapRegistry {
 
         mixedLightMap.mixLightMaps();
         return mixedLightMap.lightMapRGBData();
-    }
-
-    @EqualsAndHashCode
-    @RequiredArgsConstructor(access = PRIVATE)
-    private static class PriorityPair<T> implements Comparable<PriorityPair<T>> {
-        private final T value;
-        private final int priority;
-
-        @Override
-        public int compareTo(@NotNull LightMapPipeline.PriorityPair<T> o) {
-            return Integer.compare(priority, o.priority);
-        }
-    }
-
-    private static <T> PriorityPair<T> wrappedWithPriority(T value, int priority) {
-        return new PriorityPair<>(value, priority);
     }
 }

@@ -39,9 +39,9 @@ public abstract class RPLEChunkRootImplMixin implements LumiChunk, RPLEChunkRoot
     @Shadow
     public int[] heightMap;
 
-    private RPLEChunk redChannel;
-    private RPLEChunk greenChannel;
-    private RPLEChunk blueChannel;
+    private RPLEChunk rple$redChannel;
+    private RPLEChunk rple$greenChannel;
+    private RPLEChunk rple$blueChannel;
 
     @Inject(method = LUMI_CHUNK_BASE_INIT_METHOD_REFERENCE,
             at = @At("RETURN"),
@@ -52,9 +52,14 @@ public abstract class RPLEChunkRootImplMixin implements LumiChunk, RPLEChunkRoot
     private void rpleChunkInit(CallbackInfo ci) {
         val worldRoot = (RPLEWorldRoot) this.worldObj;
 
-        this.redChannel = new RPLEChunkContainer(RED_CHANNEL, worldRoot, this, this, heightMap, updateSkylightColumns);
-        this.greenChannel = new RPLEChunkContainer(GREEN_CHANNEL, worldRoot, this, this);
-        this.blueChannel = new RPLEChunkContainer(BLUE_CHANNEL, worldRoot, this, this);
+        this.rple$redChannel = new RPLEChunkContainer(RED_CHANNEL,
+                                                      worldRoot,
+                                                      this,
+                                                      this,
+                                                      heightMap,
+                                                      updateSkylightColumns);
+        this.rple$greenChannel = new RPLEChunkContainer(GREEN_CHANNEL, worldRoot, this, this);
+        this.rple$blueChannel = new RPLEChunkContainer(BLUE_CHANNEL, worldRoot, this, this);
     }
 
     @Override
@@ -62,11 +67,11 @@ public abstract class RPLEChunkRootImplMixin implements LumiChunk, RPLEChunkRoot
         switch (channel) {
             default:
             case RED_CHANNEL:
-                return redChannel;
+                return rple$redChannel;
             case GREEN_CHANNEL:
-                return greenChannel;
+                return rple$greenChannel;
             case BLUE_CHANNEL:
-                return blueChannel;
+                return rple$blueChannel;
         }
     }
 }

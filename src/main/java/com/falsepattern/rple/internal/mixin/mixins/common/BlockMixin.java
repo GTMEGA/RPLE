@@ -140,15 +140,12 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
             } catch (Exception ignored) {
             }
         }
+        return rple$getFallbackColoredBrightness();
+    }
 
-        val metaBrightness = lookupMetaBrightness();
-        if (metaBrightness != null)
-            return metaBrightness;
-
-        if (rple$baseColoredBrightness != null)
-            return rple$baseColoredBrightness;
-
-        return fallbackBrightness();
+    @Override
+    public @NotNull RPLEColor rple$getFallbackColoredBrightness() {
+        return rple$getFallbackColoredBrightness(0);
     }
 
     @Override
@@ -163,11 +160,30 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
             } catch (Exception ignored) {
             }
         }
+        return rple$getFallbackColoredBrightness(blockMeta);
+    }
 
-        val metaBrightness = lookupMetaBrightness(blockMeta);
-        if (metaBrightness != null)
-            return metaBrightness;
-        return fallbackBrightness();
+    @Override
+    public @NotNull RPLEColor rple$getFallbackColoredBrightness(int blockMeta) {
+        metaCheck:
+        {
+            if (blockMeta < 0)
+                break metaCheck;
+            if (rple$metaColoredBrightness == null)
+                break metaCheck;
+            if (blockMeta >= rple$metaColoredBrightness.length)
+                break metaCheck;
+            val brightness = rple$metaColoredBrightness[blockMeta];
+            if (brightness != null)
+                return brightness;
+        }
+        if (rple$baseColoredBrightness != null)
+            return rple$baseColoredBrightness;
+
+        rple$passBaseBrightness.set(true);
+        val brightness = LightValueColor.fromVanillaLightValue(getLightValue());
+        rple$passBaseBrightness.set(false);
+        return brightness;
     }
 
     @Override
@@ -186,11 +202,34 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
             } catch (Exception ignored) {
             }
         }
+        return rple$getFallbackColoredBrightness(world, blockMeta, posX, posY, posZ);
+    }
 
-        val metaBrightness = lookupMetaBrightness(blockMeta);
-        if (metaBrightness != null)
-            return metaBrightness;
-        return fallbackBrightness(world, posX, posY, posZ);
+    @Override
+    public @NotNull RPLEColor rple$getFallbackColoredBrightness(@NotNull IBlockAccess world,
+                                                                int blockMeta,
+                                                                int posX,
+                                                                int posY,
+                                                                int posZ) {
+        metaCheck:
+        {
+            if (blockMeta < 0)
+                break metaCheck;
+            if (rple$metaColoredBrightness == null)
+                break metaCheck;
+            if (blockMeta >= rple$metaColoredBrightness.length)
+                break metaCheck;
+            val brightness = rple$metaColoredBrightness[blockMeta];
+            if (brightness != null)
+                return brightness;
+        }
+        if (rple$baseColoredBrightness != null)
+            return rple$baseColoredBrightness;
+
+        rple$passBaseBrightness.set(true);
+        val brightness = LightValueColor.fromVanillaLightValue(getLightValue(world, posX, posY, posZ));
+        rple$passBaseBrightness.set(false);
+        return brightness;
     }
 
     @Override
@@ -205,15 +244,12 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
             } catch (Exception ignored) {
             }
         }
+        return rple$getFallbackColoredTranslucency();
+    }
 
-        val metaTranslucency = lookupMetaTranslucency();
-        if (metaTranslucency != null)
-            return metaTranslucency;
-
-        if (rple$baseColoredTranslucency != null)
-            return rple$baseColoredTranslucency;
-
-        return fallbackTranslucency();
+    @Override
+    public @NotNull RPLEColor rple$getFallbackColoredTranslucency() {
+        return rple$getFallbackColoredTranslucency(0);
     }
 
     @Override
@@ -228,15 +264,30 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
             } catch (Exception ignored) {
             }
         }
+        return rple$getFallbackColoredTranslucency(blockMeta);
+    }
 
-        val metaTranslucency = lookupMetaTranslucency(blockMeta);
-        if (metaTranslucency != null)
-            return metaTranslucency;
-
+    @Override
+    public @NotNull RPLEColor rple$getFallbackColoredTranslucency(int blockMeta) {
+        metaCheck:
+        {
+            if (blockMeta < 0)
+                break metaCheck;
+            if (rple$metaColoredTranslucency == null)
+                break metaCheck;
+            if (blockMeta >= rple$metaColoredTranslucency.length)
+                break metaCheck;
+            val translucency = rple$metaColoredTranslucency[blockMeta];
+            if (translucency != null)
+                return translucency;
+        }
         if (rple$baseColoredTranslucency != null)
             return rple$baseColoredTranslucency;
 
-        return fallbackTranslucency();
+        rple$passBaseOpacity.set(true);
+        val translucency = LightValueColor.fromVanillaLightOpacity(getLightOpacity());
+        rple$passBaseOpacity.set(false);
+        return translucency;
     }
 
     @Override
@@ -255,15 +306,34 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
             } catch (Exception ignored) {
             }
         }
+        return rple$getFallbackColoredTranslucency(world, blockMeta, posX, posY, posZ);
+    }
 
-        val metaTranslucency = lookupMetaTranslucency(blockMeta);
-        if (metaTranslucency != null)
-            return metaTranslucency;
-
+    @Override
+    public @NotNull RPLEColor rple$getFallbackColoredTranslucency(@NotNull IBlockAccess world,
+                                                                  int blockMeta,
+                                                                  int posX,
+                                                                  int posY,
+                                                                  int posZ) {
+        metaCheck:
+        {
+            if (blockMeta < 0)
+                break metaCheck;
+            if (rple$metaColoredTranslucency == null)
+                break metaCheck;
+            if (blockMeta >= rple$metaColoredTranslucency.length)
+                break metaCheck;
+            val translucency = rple$metaColoredTranslucency[blockMeta];
+            if (translucency != null)
+                return translucency;
+        }
         if (rple$baseColoredTranslucency != null)
             return rple$baseColoredTranslucency;
 
-        return fallbackTranslucency(world, posX, posY, posZ);
+        rple$passBaseOpacity.set(true);
+        val translucency = LightValueColor.fromVanillaLightOpacity(getLightOpacity(world, posX, posY, posZ));
+        rple$passBaseOpacity.set(false);
+        return translucency;
     }
 
     @Override
@@ -284,67 +354,5 @@ public abstract class BlockMixin implements RPLEBlockInit, RPLEBlock {
     @Override
     public void rple$initMetaColoredTranslucency(@Nullable RPLEColor @Nullable [] metaColoredTranslucency) {
         this.rple$metaColoredTranslucency = metaColoredTranslucency;
-    }
-
-    private @Nullable RPLEColor lookupMetaBrightness() {
-        return lookupMetaBrightness(0);
-    }
-
-    private @Nullable RPLEColor lookupMetaBrightness(int blockMeta) {
-        if (blockMeta < 0)
-            return rple$baseColoredBrightness;
-        if (rple$metaColoredBrightness == null)
-            return rple$baseColoredBrightness;
-        if (blockMeta >= rple$metaColoredBrightness.length)
-            return rple$baseColoredBrightness;
-        val metaBrightness = rple$metaColoredBrightness[blockMeta];
-        if (metaBrightness != null)
-            return metaBrightness;
-        return rple$baseColoredBrightness;
-    }
-
-    private @Nullable RPLEColor lookupMetaTranslucency() {
-        return lookupMetaTranslucency(0);
-    }
-
-    private @Nullable RPLEColor lookupMetaTranslucency(int blockMeta) {
-        if (blockMeta < 0)
-            return null;
-        if (rple$metaColoredTranslucency == null)
-            return null;
-        if (blockMeta >= rple$metaColoredTranslucency.length)
-            return null;
-        val metaTranslucency = rple$metaColoredTranslucency[blockMeta];
-        if (metaTranslucency != null)
-            return metaTranslucency;
-        return rple$baseColoredTranslucency;
-    }
-
-    private RPLEColor fallbackBrightness() {
-        rple$passBaseBrightness.set(true);
-        val color = LightValueColor.fromVanillaLightValue(getLightValue());
-        rple$passBaseBrightness.set(false);
-        return color;
-    }
-
-    private RPLEColor fallbackBrightness(IBlockAccess world, int posX, int posY, int posZ) {
-        rple$passBaseBrightness.set(true);
-        val color = LightValueColor.fromVanillaLightValue(getLightValue(world, posX, posY, posZ));
-        rple$passBaseBrightness.set(false);
-        return color;
-    }
-
-    private RPLEColor fallbackTranslucency() {
-        rple$passBaseOpacity.set(true);
-        val color = LightValueColor.fromVanillaLightOpacity(getLightOpacity());
-        rple$passBaseOpacity.set(false);
-        return color;
-    }
-
-    private RPLEColor fallbackTranslucency(IBlockAccess world, int posX, int posY, int posZ) {
-        rple$passBaseOpacity.set(true);
-        val color = LightValueColor.fromVanillaLightOpacity(getLightOpacity(world, posX, posY, posZ));
-        rple$passBaseOpacity.set(false);
-        return color;
     }
 }

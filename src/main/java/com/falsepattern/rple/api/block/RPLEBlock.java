@@ -28,7 +28,11 @@ import org.jetbrains.annotations.NotNull;
 public interface RPLEBlock {
     @NotNull RPLEColor rple$getColoredBrightness();
 
+    @NotNull RPLEColor rple$getFallbackColoredBrightness();
+
     @NotNull RPLEColor rple$getColoredBrightness(int blockMeta);
+
+    @NotNull RPLEColor rple$getFallbackColoredBrightness(int blockMeta);
 
     @NotNull RPLEColor rple$getColoredBrightness(@NotNull IBlockAccess world,
                                                  int blockMeta,
@@ -36,13 +40,29 @@ public interface RPLEBlock {
                                                  int posY,
                                                  int posZ);
 
+    @NotNull RPLEColor rple$getFallbackColoredBrightness(@NotNull IBlockAccess world,
+                                                         int blockMeta,
+                                                         int posX,
+                                                         int posY,
+                                                         int posZ);
+
     @NotNull RPLEColor rple$getColoredTranslucency();
 
+    @NotNull RPLEColor rple$getFallbackColoredTranslucency();
+
     @NotNull RPLEColor rple$getColoredTranslucency(int blockMeta);
+
+    @NotNull RPLEColor rple$getFallbackColoredTranslucency(int blockMeta);
 
     @NotNull RPLEColor rple$getColoredTranslucency(@NotNull IBlockAccess world,
                                                    int blockMeta,
                                                    int posX,
                                                    int posY,
                                                    int posZ);
+
+    @NotNull RPLEColor rple$getFallbackColoredTranslucency(@NotNull IBlockAccess world,
+                                                           int blockMeta,
+                                                           int posX,
+                                                           int posY,
+                                                           int posZ);
 }

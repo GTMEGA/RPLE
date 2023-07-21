@@ -22,6 +22,7 @@ public final class RPLEBlockAPI {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
+    @SuppressWarnings("ConstantValue")
     public static @NotNull RPLEColor getBlockColoredBrightness(@NotNull Block block) {
         final RPLEBlock rpleBlock = rpleBlockFromBlock(block);
         if (rpleBlock == null)
@@ -36,6 +37,7 @@ public final class RPLEBlockAPI {
         return errorColor();
     }
 
+    @SuppressWarnings("ConstantValue")
     public static @NotNull RPLEColor getBlockColoredBrightness(@NotNull Block block, int blockMeta) {
         final RPLEBlock rpleBlock = rpleBlockFromBlock(block);
         if (rpleBlock == null)
@@ -50,6 +52,7 @@ public final class RPLEBlockAPI {
         return errorColor();
     }
 
+    @SuppressWarnings("ConstantValue")
     public static @NotNull RPLEColor getBlockColoredBrightness(@NotNull IBlockAccess world,
                                                                @NotNull Block block,
                                                                int blockMeta,
@@ -69,6 +72,7 @@ public final class RPLEBlockAPI {
         return errorColor();
     }
 
+    @SuppressWarnings("ConstantValue")
     public static @NotNull RPLEColor getBlockColoredTranslucency(@NotNull Block block) {
         final RPLEBlock rpleBlock = rpleBlockFromBlock(block);
         if (rpleBlock == null)
@@ -83,6 +87,7 @@ public final class RPLEBlockAPI {
         return errorColor();
     }
 
+    @SuppressWarnings("ConstantValue")
     public static @NotNull RPLEColor getBlockColoredTranslucency(@NotNull Block block, int blockMeta) {
         final RPLEBlock rpleBlock = rpleBlockFromBlock(block);
         if (rpleBlock == null)
@@ -97,6 +102,7 @@ public final class RPLEBlockAPI {
         return errorColor();
     }
 
+    @SuppressWarnings("ConstantValue")
     public static @NotNull RPLEColor getBlockColoredTranslucency(@NotNull IBlockAccess world,
                                                                  @NotNull Block block,
                                                                  int blockMeta,
