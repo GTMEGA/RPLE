@@ -9,7 +9,6 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.client.lightmap.LightMapHook;
-import com.falsepattern.rple.internal.client.render.LightValueOverlayRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -78,6 +77,6 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
                      by = -3),
             require = 1)
     private void renderLightValueOverlay(float partialTickTime, long expectedFrameDoneTimeNs, CallbackInfo ci) {
-        LightValueOverlayRenderer.renderLightValueOverlay();
+//        LightValueOverlayRenderer.renderLightValueOverlay();
     }
 }
