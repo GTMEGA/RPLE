@@ -13,7 +13,7 @@ import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
 import com.falsepattern.rple.internal.common.helper.CookieMonster;
 import com.falsepattern.rple.internal.common.helper.EntityHelper;
-import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
+import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.IBlockAccess;

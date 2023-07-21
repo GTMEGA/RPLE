@@ -9,7 +9,7 @@ package com.falsepattern.rple.api;
 
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
+import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;

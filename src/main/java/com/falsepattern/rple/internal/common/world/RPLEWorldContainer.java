@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.storage.world;
+package com.falsepattern.rple.internal.common.world;
 
 import com.falsepattern.lumina.api.LumiAPI;
 import com.falsepattern.lumina.api.lighting.LightType;
@@ -13,11 +13,11 @@ import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
 import com.falsepattern.rple.api.block.RPLEBlock;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
+import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
+import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
+import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
+import com.falsepattern.rple.internal.common.chunk.RPLESubChunkRoot;
 import com.falsepattern.rple.internal.common.helper.BrightnessUtil;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunk;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunkRoot;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunk;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunkRoot;
 import lombok.val;
 import lombok.var;
 import net.minecraft.block.Block;

@@ -9,9 +9,9 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
 import com.falsepattern.lumina.api.chunk.LumiSubChunk;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunk;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunkContainer;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunkRoot;
+import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
+import com.falsepattern.rple.internal.common.chunk.RPLESubChunkContainer;
+import com.falsepattern.rple.internal.common.chunk.RPLESubChunkRoot;
 import lombok.val;
 import net.minecraft.world.chunk.NibbleArray;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;

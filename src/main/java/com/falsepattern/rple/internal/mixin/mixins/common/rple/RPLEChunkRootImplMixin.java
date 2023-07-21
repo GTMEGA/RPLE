@@ -9,10 +9,10 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
 import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunk;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunkContainer;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunkRoot;
-import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
+import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
+import com.falsepattern.rple.internal.common.chunk.RPLEChunkContainer;
+import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
+import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

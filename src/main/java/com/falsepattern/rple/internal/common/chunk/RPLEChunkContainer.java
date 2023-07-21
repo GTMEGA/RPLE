@@ -1,18 +1,32 @@
 /*
  * Copyright (c) 2023 FalsePattern, Ven
- * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
- * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+ * All Rights Reserved
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.falsepattern.rple.internal.common.storage.chunk;
+package com.falsepattern.rple.internal.common.chunk;
 
 import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.common.storage.world.RPLEWorld;
-import com.falsepattern.rple.internal.common.storage.world.RPLEWorldRoot;
+import com.falsepattern.rple.internal.common.world.RPLEWorld;
+import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,15 +38,12 @@ import java.util.Arrays;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
-import static com.falsepattern.rple.internal.Tags.MOD_ID;
-import static com.falsepattern.rple.internal.Tags.VERSION;
-import static com.falsepattern.rple.internal.common.block.BlockColorManager.blockColorManager;
 
 public final class RPLEChunkContainer implements RPLEChunk {
-    private static final String VERSION_NBT_TAG_NAME = MOD_ID + "_version";
-    private static final String VERSION_NBT_TAG_VALUE = VERSION;
-
-    private static final String BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME = "block_color_config_hash";
+//    private static final String VERSION_NBT_TAG_NAME = MOD_ID + "_version";
+//    private static final String VERSION_NBT_TAG_VALUE = VERSION;
+//
+//    private static final String BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME = "block_color_config_hash";
 
     private final ColorChannel channel;
     private final String chunkID;
@@ -105,8 +116,8 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
     @Override
     public void lumi$writeToNBT(@NotNull NBTTagCompound output) {
-        output.setString(VERSION_NBT_TAG_NAME, VERSION_NBT_TAG_VALUE);
-        output.setString(BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME, blockColorManager().configHashCode());
+//        output.setString(VERSION_NBT_TAG_NAME, VERSION_NBT_TAG_VALUE);
+//        output.setString(BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME, blockColorManager().configHashCode());
         output.setIntArray(SKY_LIGHT_HEIGHT_MAP_NBT_TAG_NAME, skyLightHeightMap);
         output.setBoolean(IS_LIGHT_INITIALIZED_NBT_TAG_NAME, isLightingInitialized);
     }
@@ -116,12 +127,12 @@ public final class RPLEChunkContainer implements RPLEChunk {
         isLightingInitialized = false;
         skyLightHeightMapValidCheck:
         {
-            val version = input.getString(VERSION_NBT_TAG_NAME);
-            if (!VERSION_NBT_TAG_VALUE.equals(version))
-                break skyLightHeightMapValidCheck;
-            val configHashCode = input.getString(BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME);
-            if (!blockColorManager().configHashCode().equals(configHashCode))
-                break skyLightHeightMapValidCheck;
+//            val version = input.getString(VERSION_NBT_TAG_NAME);
+//            if (!VERSION_NBT_TAG_VALUE.equals(version))
+//                break skyLightHeightMapValidCheck;
+//            val configHashCode = input.getString(BLOCK_COLOR_CONFIG_HASH_NBT_TAG_NAME);
+//            if (!blockColorManager().configHashCode().equals(configHashCode))
+//                break skyLightHeightMapValidCheck;
             if (!input.hasKey(IS_LIGHT_INITIALIZED_NBT_TAG_NAME, 1))
                 break skyLightHeightMapValidCheck;
             val isLightInitializedInput = input.getBoolean(IS_LIGHT_INITIALIZED_NBT_TAG_NAME);

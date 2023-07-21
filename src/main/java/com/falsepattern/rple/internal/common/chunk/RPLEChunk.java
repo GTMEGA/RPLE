@@ -5,10 +5,10 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.storage.chunk;
+package com.falsepattern.rple.internal.common.chunk;
 
 import com.falsepattern.lumina.api.chunk.LumiChunk;
-import com.falsepattern.rple.internal.common.storage.world.RPLEWorld;
+import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

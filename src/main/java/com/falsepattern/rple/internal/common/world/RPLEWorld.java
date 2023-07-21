@@ -5,12 +5,12 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.storage.world;
+package com.falsepattern.rple.internal.common.world;
 
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorld;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLEChunk;
-import com.falsepattern.rple.internal.common.storage.chunk.RPLESubChunk;
+import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
+import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import org.jetbrains.annotations.NotNull;
