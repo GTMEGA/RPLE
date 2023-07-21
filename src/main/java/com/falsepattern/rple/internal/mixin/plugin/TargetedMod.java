@@ -29,7 +29,7 @@ public enum TargetedMod implements ITargetedMod {
     ENDER_IO("Ender IO", false, startsWith("enderio")),
     STORAGE_DRAWERS("Storage Drawers", false, startsWith("storagedrawers-")),
     CODE_CHICKEN_LIB("CodeChickenLib", false, startsWith("codechickenlib")),
-    MR_TJP_CORE("MrTJPCore", false, startsWith("mrtjpcore")),
+    FORGE_MULTI_PART("Forge Multi Part", false, startsWith("multipart-")),
     ;
 
     @Getter

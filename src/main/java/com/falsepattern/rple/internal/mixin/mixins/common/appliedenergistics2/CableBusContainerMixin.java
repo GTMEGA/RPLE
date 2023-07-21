@@ -12,7 +12,7 @@ import appeng.helpers.AEMultiTile;
 import appeng.parts.CableBusContainer;
 import appeng.parts.CableBusStorage;
 import appeng.parts.ICableBusContainer;
-import com.falsepattern.rple.api.color.MutableColor;
+import com.falsepattern.rple.api.color.CustomColor;
 import com.falsepattern.rple.api.color.RPLEColor;
 import com.falsepattern.rple.internal.mixin.interfaces.appliedenergistics2.ICableBusContainerMixin;
 import lombok.val;
@@ -28,8 +28,6 @@ import static com.falsepattern.rple.api.color.LightValueColor.LIGHT_VALUE_0;
 public abstract class CableBusContainerMixin extends CableBusStorage implements AEMultiTile,
                                                                                 ICableBusContainer,
                                                                                 ICableBusContainerMixin {
-    private MutableColor rple$color;
-
     @Shadow
     public abstract AEColor getColor();
 
@@ -44,15 +42,10 @@ public abstract class CableBusContainerMixin extends CableBusStorage implements 
         if (light < 1)
             return LIGHT_VALUE_0;
 
-        if (rple$color == null)
-            rple$color = new MutableColor();
-
         val colorRGB = getColor().mediumVariant;
         val red = (int) ((float) ((colorRGB >>> 16) & 0xFF) / 255F * (float) light) & 0xF;
         val green = (int) ((float) ((colorRGB >>> 8) & 0xFF) / 255F * (float) light) & 0xF;
         val blue = (int) ((float) (colorRGB & 0xFF) / 255F * (float) light) & 0xF;
-        rple$color.set(red, green, blue);
-
-        return rple$color;
+        return new CustomColor(red, green, blue);
     }
 }

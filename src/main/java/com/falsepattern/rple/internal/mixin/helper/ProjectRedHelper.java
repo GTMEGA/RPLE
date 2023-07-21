@@ -30,7 +30,7 @@ import mrtjp.projectred.illumination.ILight;
 
 @UtilityClass
 public final class ProjectRedHelper {
-    public static RPLEColor lightColor(ILight light) {
+    public static RPLEColor getLightBrightnessColor(ILight light) {
         if (!light.isOn())
             return LightValueColor.LIGHT_VALUE_0;
         val blockMeta = light.getColor();

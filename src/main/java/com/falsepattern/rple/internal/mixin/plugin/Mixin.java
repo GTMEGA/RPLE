@@ -95,6 +95,10 @@ public enum Mixin implements IMixin {
     client_codechickenlib_CCRenderStateMixin(CLIENT, require(CODE_CHICKEN_LIB), "codechickenlib.CCRenderStateMixin"),
     client_codechickenlib_LightMatrixMixin(CLIENT, require(CODE_CHICKEN_LIB), "codechickenlib.LightMatrixMixin"),
     // endregion
+
+    // region Forge Multi Part Compatibility
+    client_multipart_TileMultipartMixin(COMMON, require(FORGE_MULTI_PART), "multipart.TileMultipartMixin"),
+    // endregion
     ;
 
     @Getter

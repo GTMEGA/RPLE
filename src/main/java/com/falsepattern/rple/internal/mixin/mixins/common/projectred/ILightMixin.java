@@ -35,12 +35,12 @@ import org.spongepowered.asm.mixin.Unique;
 public interface ILightMixin extends RPLEBlockBrightnessColorProvider {
     @Override
     default @NotNull RPLEColor rple$getCustomBrightnessColor() {
-        return ProjectRedHelper.lightColor((ILight) this);
+        return ProjectRedHelper.getLightBrightnessColor((ILight) this);
     }
 
     @Override
     default @NotNull RPLEColor rple$getCustomBrightnessColor(int blockMeta) {
-        return ProjectRedHelper.lightColor((ILight) this);
+        return ProjectRedHelper.getLightBrightnessColor((ILight) this);
     }
 
     @Override
@@ -49,6 +49,6 @@ public interface ILightMixin extends RPLEBlockBrightnessColorProvider {
                                                              int posX,
                                                              int posY,
                                                              int posZ) {
-        return ProjectRedHelper.lightColor((ILight) this);
+        return ProjectRedHelper.getLightBrightnessColor((ILight) this);
     }
 }
