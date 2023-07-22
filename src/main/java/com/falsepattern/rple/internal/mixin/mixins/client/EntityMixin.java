@@ -23,13 +23,13 @@ public abstract class EntityMixin {
                        target = "Lnet/minecraft/world/World;getLightBrightnessForSkyBlocks(IIII)I"),
               require = 1)
     @SideOnly(Side.CLIENT)
-    private int getBrightnessForRender(World world, int posX, int posY, int posZ, int cookieMinBlockLight) {
+    private int getBrightnessForRender(World world, int posX, int posY, int posZ, int minBrightnessCookie) {
         return ColoredLightingHooks.getEntityRGBBrightnessForTessellator(thiz(),
                                                                          world,
                                                                          posX,
                                                                          posY,
                                                                          posZ,
-                                                                         cookieMinBlockLight);
+                                                                         minBrightnessCookie);
     }
 
     private Entity thiz() {

@@ -29,9 +29,9 @@ public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRender
                        target = "Lnet/minecraft/world/World;getLightBrightnessForSkyBlocks(IIII)I"),
               require = 2)
     @SideOnly(Side.CLIENT)
-    public int cacheTessellatorBrightness(World world, int posX, int posY, int posZ, int minBlockLight) {
+    public int cacheTessellatorBrightness(World world, int posX, int posY, int posZ, int minBrightnessCookie) {
         val tessellatorBrightness =
-                ColoredLightingHooks.getRGBBrightnessForTessellator(world, posX, posY, posZ, minBlockLight);
+                ColoredLightingHooks.getRGBBrightnessForTessellator(world, posX, posY, posZ, minBrightnessCookie);
         EnderIOHelper.cacheTessellatorBrightness(tessellatorBrightness);
         return tessellatorBrightness;
     }
@@ -42,7 +42,7 @@ public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRender
                        target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V"),
               require = 1)
     @SideOnly(Side.CLIENT)
-    public void cacheTessellatorBrightness(Tessellator instance, int oldTessellatorBrightness) {
+    public void cacheTessellatorBrightness(Tessellator instance, int brightnessBase) {
         instance.setBrightness(EnderIOHelper.loadTessellatorBrightness());
     }
 }

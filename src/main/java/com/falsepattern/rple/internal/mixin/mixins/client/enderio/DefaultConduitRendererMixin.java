@@ -21,7 +21,7 @@ public abstract class DefaultConduitRendererMixin implements ConduitRenderer {
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V"),
               require = 2)
-    public void loadTessellatorBrightness(Tessellator instance, int oldTessellatorBrightness) {
+    public void loadTessellatorBrightness(Tessellator instance, int brightnessBase) {
         instance.setBrightness(EnderIOHelper.loadTessellatorBrightness());
     }
 }
