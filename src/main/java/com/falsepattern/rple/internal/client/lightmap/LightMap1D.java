@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.client.lightmap;
 
-import com.falsepattern.rple.api.lightmap.RPLELightMapStrip;
+import com.falsepattern.rple.api.client.lightmap.RPLELightMapStrip;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;

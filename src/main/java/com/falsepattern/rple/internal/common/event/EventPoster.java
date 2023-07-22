@@ -7,10 +7,10 @@
 
 package com.falsepattern.rple.internal.common.event;
 
-import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
-import com.falsepattern.rple.api.event.BlockColorRegistrationEvent;
-import com.falsepattern.rple.api.event.LightMapRegistrationEvent;
-import com.falsepattern.rple.api.lightmap.RPLELightMapRegistry;
+import com.falsepattern.rple.api.common.block.RPLEBlockColorRegistry;
+import com.falsepattern.rple.api.common.event.BlockColorRegistrationEvent;
+import com.falsepattern.rple.api.common.event.LightMapRegistrationEvent;
+import com.falsepattern.rple.api.client.lightmap.RPLELightMapRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventBus;
 import lombok.experimental.UtilityClass;

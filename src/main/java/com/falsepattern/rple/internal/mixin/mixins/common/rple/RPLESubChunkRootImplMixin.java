@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
 import com.falsepattern.lumina.api.chunk.LumiSubChunk;
-import com.falsepattern.rple.api.color.ColorChannel;
+import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunkContainer;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunkRoot;
@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.falsepattern.lumina.api.init.LumiSubChunkBaseInit.LUMI_SUB_CHUNK_BASE_INIT_METHOD_REFERENCE;
 import static com.falsepattern.lumina.api.init.LumiSubChunkBaseInit.LUMI_SUB_CHUNK_BASE_INIT_MIXIN_VALUE;
-import static com.falsepattern.rple.api.color.ColorChannel.*;
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMINA_MIXIN_PRIORITY;
 
 @Unique

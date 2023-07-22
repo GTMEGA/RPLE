@@ -10,8 +10,8 @@ package com.falsepattern.rple.internal.common.world;
 import com.falsepattern.lumina.api.LumiAPI;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
-import com.falsepattern.rple.api.block.RPLEBlock;
-import com.falsepattern.rple.api.color.ColorChannel;
+import com.falsepattern.rple.api.common.block.RPLEBlock;
+import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
-import static com.falsepattern.rple.api.RPLEColorAPI.invertColorComponent;
+import static com.falsepattern.rple.api.common.RPLEColorAPI.invertColorComponent;
 import static net.minecraftforge.common.util.ForgeDirection.*;
 
 public final class RPLEWorldContainer implements RPLEWorld {

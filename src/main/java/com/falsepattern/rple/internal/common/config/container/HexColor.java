@@ -7,16 +7,16 @@
 
 package com.falsepattern.rple.internal.common.config.container;
 
-import com.falsepattern.rple.api.RPLEColorAPI;
-import com.falsepattern.rple.api.color.ColorChannel;
-import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.api.common.RPLEColorAPI;
+import com.falsepattern.rple.api.common.color.ColorChannel;
+import com.falsepattern.rple.api.common.color.RPLEColor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
 import lombok.var;
 
-import static com.falsepattern.rple.api.RPLEColorAPI.COLOR_MIN;
-import static com.falsepattern.rple.api.color.ColorChannel.*;
+import static com.falsepattern.rple.api.common.RPLEColorAPI.COLOR_MIN;
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
 @Getter
 @Accessors(fluent = true, chain = false)

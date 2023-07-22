@@ -7,8 +7,8 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
-import com.falsepattern.rple.api.color.RPLEColor;
-import com.falsepattern.rple.internal.mixin.interfaces.RPLEBlockInit;
+import com.falsepattern.rple.api.common.color.RPLEColor;
+import com.falsepattern.rple.internal.common.block.RPLEBlockInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import org.jetbrains.annotations.Nullable;

@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.rple.api.RPLEShadersAPI;
+import com.falsepattern.rple.api.client.RPLEShadersAPI;
 import com.falsepattern.rple.internal.client.lightmap.LightMapHook;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.client.render.VertexConstants;

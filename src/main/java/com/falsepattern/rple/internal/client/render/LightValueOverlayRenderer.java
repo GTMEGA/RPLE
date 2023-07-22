@@ -22,8 +22,8 @@ import org.lwjgl.opengl.GL14;
 
 import java.awt.*;
 
-import static com.falsepattern.rple.api.RPLEWorldAPI.*;
-import static com.falsepattern.rple.api.color.ColorChannel.*;
+import static com.falsepattern.rple.api.common.RPLEWorldAPI.*;
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static net.minecraft.client.Minecraft.getMinecraft;
 
 public final class LightValueOverlayRenderer {

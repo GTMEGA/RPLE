@@ -9,9 +9,9 @@ package com.falsepattern.rple.internal.mixin.mixins.common.multipart;
 
 import codechicken.lib.world.IChunkLoadTile;
 import codechicken.multipart.TileMultipart;
-import com.falsepattern.rple.api.block.RPLEBlockBrightnessColorProvider;
-import com.falsepattern.rple.api.block.RPLEBlockTranslucencyColorProvider;
-import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.api.common.block.RPLEBlockBrightnessColorProvider;
+import com.falsepattern.rple.api.common.block.RPLEBlockTranslucencyColorProvider;
+import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.mixin.helper.MultiPartHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;

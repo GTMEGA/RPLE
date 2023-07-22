@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.helper;
 
-import com.falsepattern.rple.api.color.DefaultColor;
-import com.falsepattern.rple.api.color.LightValueColor;
-import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.api.common.color.DefaultColor;
+import com.falsepattern.rple.api.common.color.LightValueColor;
+import com.falsepattern.rple.api.common.color.RPLEColor;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import mrtjp.projectred.illumination.ILight;

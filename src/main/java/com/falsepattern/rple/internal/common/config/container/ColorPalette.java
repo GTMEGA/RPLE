@@ -7,8 +7,8 @@
 
 package com.falsepattern.rple.internal.common.config.container;
 
-import com.falsepattern.rple.api.color.RPLEColor;
-import com.falsepattern.rple.api.color.RPLENamedColor;
+import com.falsepattern.rple.api.common.color.RPLEColor;
+import com.falsepattern.rple.api.common.color.RPLENamedColor;
 import lombok.val;
 import org.jetbrains.annotations.UnmodifiableView;
 

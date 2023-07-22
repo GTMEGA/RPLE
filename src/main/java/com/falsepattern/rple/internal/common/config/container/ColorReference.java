@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.common.config.container;
 
-import com.falsepattern.rple.api.RPLEColorAPI;
-import com.falsepattern.rple.api.color.RPLEColor;
-import com.falsepattern.rple.api.color.RPLENamedColor;
+import com.falsepattern.rple.api.common.RPLEColorAPI;
+import com.falsepattern.rple.api.common.color.RPLEColor;
+import com.falsepattern.rple.api.common.color.RPLENamedColor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;

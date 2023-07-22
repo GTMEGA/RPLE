@@ -7,8 +7,7 @@
 
 package com.falsepattern.rple.internal.common.block;
 
-import com.falsepattern.rple.api.color.RPLEColor;
-import com.falsepattern.rple.internal.mixin.interfaces.RPLEBlockInit;
+import com.falsepattern.rple.api.common.color.RPLEColor;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import lombok.RequiredArgsConstructor;

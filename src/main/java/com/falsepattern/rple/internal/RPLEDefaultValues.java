@@ -7,17 +7,17 @@
 
 package com.falsepattern.rple.internal;
 
-import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
-import com.falsepattern.rple.api.color.LightValueColor;
-import com.falsepattern.rple.api.lightmap.RPLELightMapRegistry;
-import com.falsepattern.rple.api.lightmap.vanilla.BossColorModifierMask;
-import com.falsepattern.rple.api.lightmap.vanilla.NightVisionMask;
-import com.falsepattern.rple.api.lightmap.vanilla.VanillaLightMapBase;
+import com.falsepattern.rple.api.common.block.RPLEBlockColorRegistry;
+import com.falsepattern.rple.api.common.color.LightValueColor;
+import com.falsepattern.rple.api.client.lightmap.RPLELightMapRegistry;
+import com.falsepattern.rple.api.client.lightmap.vanilla.BossColorModifierMask;
+import com.falsepattern.rple.api.client.lightmap.vanilla.NightVisionMask;
+import com.falsepattern.rple.api.client.lightmap.vanilla.VanillaLightMapBase;
 import com.falsepattern.rple.internal.common.config.container.BlockColorConfig;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 
-import static com.falsepattern.rple.api.color.DefaultColor.*;
+import static com.falsepattern.rple.api.common.color.DefaultColor.*;
 import static net.minecraft.init.Blocks.*;
 
 @UtilityClass

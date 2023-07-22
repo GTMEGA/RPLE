@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
-import com.falsepattern.rple.api.block.RPLEBlockRoot;
-import com.falsepattern.rple.api.color.LightValueColor;
-import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.api.common.block.RPLEBlockRoot;
+import com.falsepattern.rple.api.common.color.LightValueColor;
+import com.falsepattern.rple.api.common.color.RPLEColor;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;

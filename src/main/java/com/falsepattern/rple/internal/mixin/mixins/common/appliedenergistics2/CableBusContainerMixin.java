@@ -12,8 +12,8 @@ import appeng.helpers.AEMultiTile;
 import appeng.parts.CableBusContainer;
 import appeng.parts.CableBusStorage;
 import appeng.parts.ICableBusContainer;
-import com.falsepattern.rple.api.color.CustomColor;
-import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.api.common.color.CustomColor;
+import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.mixin.interfaces.appliedenergistics2.ICableBusContainerMixin;
 import lombok.val;
 import lombok.var;
@@ -21,7 +21,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import static com.falsepattern.rple.api.color.LightValueColor.LIGHT_VALUE_0;
+import static com.falsepattern.rple.api.common.color.LightValueColor.LIGHT_VALUE_0;
 
 @Mixin(value = CableBusContainer.class,
        remap = false)

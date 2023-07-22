@@ -7,10 +7,10 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
-import com.falsepattern.rple.api.block.RPLEBlock;
-import com.falsepattern.rple.api.block.RPLEBlockBrightnessColorProvider;
-import com.falsepattern.rple.api.block.RPLEBlockTranslucencyColorProvider;
-import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.api.common.block.RPLEBlock;
+import com.falsepattern.rple.api.common.block.RPLEBlockBrightnessColorProvider;
+import com.falsepattern.rple.api.common.block.RPLEBlockTranslucencyColorProvider;
+import com.falsepattern.rple.api.common.color.RPLEColor;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;

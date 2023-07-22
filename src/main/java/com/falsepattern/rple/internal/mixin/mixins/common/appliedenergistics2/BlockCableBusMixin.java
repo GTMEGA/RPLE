@@ -10,10 +10,10 @@ package com.falsepattern.rple.internal.mixin.mixins.common.appliedenergistics2;
 import appeng.block.AEBaseTileBlock;
 import appeng.block.networking.BlockCableBus;
 import appeng.parts.ICableBusContainer;
-import com.falsepattern.rple.api.RPLEBlockAPI;
-import com.falsepattern.rple.api.block.RPLEBlockBrightnessColorProvider;
-import com.falsepattern.rple.api.color.LightValueColor;
-import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.api.common.RPLEBlockAPI;
+import com.falsepattern.rple.api.common.block.RPLEBlockBrightnessColorProvider;
+import com.falsepattern.rple.api.common.color.LightValueColor;
+import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.mixin.interfaces.appliedenergistics2.ICableBusContainerMixin;
 import lombok.val;
 import net.minecraft.block.material.Material;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import static com.falsepattern.rple.api.color.LightValueColor.LIGHT_VALUE_0;
+import static com.falsepattern.rple.api.common.color.LightValueColor.LIGHT_VALUE_0;
 
 @Mixin(value = BlockCableBus.class,
        remap = false)

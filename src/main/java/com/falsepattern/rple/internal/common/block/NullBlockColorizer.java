@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.common.block;
 
-import com.falsepattern.rple.api.block.RPLEBlockColorizer;
-import com.falsepattern.rple.api.color.RPLEColor;
-import com.falsepattern.rple.api.color.RPLENamedColor;
+import com.falsepattern.rple.api.common.block.RPLEBlockColorizer;
+import com.falsepattern.rple.api.common.color.RPLEColor;
+import com.falsepattern.rple.api.common.color.RPLENamedColor;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 

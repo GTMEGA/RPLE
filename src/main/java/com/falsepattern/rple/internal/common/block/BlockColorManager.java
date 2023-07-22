@@ -7,12 +7,11 @@
 
 package com.falsepattern.rple.internal.common.block;
 
-import com.falsepattern.rple.api.block.RPLEBlockColorRegistry;
-import com.falsepattern.rple.api.block.RPLEBlockColorizer;
-import com.falsepattern.rple.api.color.RPLENamedColor;
+import com.falsepattern.rple.api.common.block.RPLEBlockColorRegistry;
+import com.falsepattern.rple.api.common.block.RPLEBlockColorizer;
+import com.falsepattern.rple.api.common.color.RPLENamedColor;
 import com.falsepattern.rple.internal.common.config.container.BlockColorConfig;
 import com.falsepattern.rple.internal.common.config.container.BlockReference;
-import com.falsepattern.rple.internal.mixin.interfaces.RPLEBlockInit;
 import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

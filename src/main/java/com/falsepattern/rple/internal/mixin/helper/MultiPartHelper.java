@@ -10,19 +10,19 @@ package com.falsepattern.rple.internal.mixin.helper;
 import codechicken.multipart.TileMultipart;
 import codechicken.multipart.minecraft.IPartMeta;
 import codechicken.multipart.minecraft.McBlockPart;
-import com.falsepattern.rple.api.block.RPLEBlock;
-import com.falsepattern.rple.api.block.RPLEBlockBrightnessColorProvider;
-import com.falsepattern.rple.api.color.CustomColor;
-import com.falsepattern.rple.api.color.LightValueColor;
-import com.falsepattern.rple.api.color.RPLEColor;
+import com.falsepattern.rple.api.common.block.RPLEBlock;
+import com.falsepattern.rple.api.common.block.RPLEBlockBrightnessColorProvider;
+import com.falsepattern.rple.api.common.color.CustomColor;
+import com.falsepattern.rple.api.common.color.LightValueColor;
+import com.falsepattern.rple.api.common.color.RPLEColor;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import lombok.var;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 
-import static com.falsepattern.rple.api.RPLEColorAPI.COLOR_MIN;
-import static com.falsepattern.rple.api.RPLEColorAPI.clampColorComponent;
+import static com.falsepattern.rple.api.common.RPLEColorAPI.COLOR_MIN;
+import static com.falsepattern.rple.api.common.RPLEColorAPI.clampColorComponent;
 
 @UtilityClass
 public final class MultiPartHelper {

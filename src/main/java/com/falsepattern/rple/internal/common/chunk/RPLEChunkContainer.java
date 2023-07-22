@@ -9,7 +9,7 @@ package com.falsepattern.rple.internal.common.chunk;
 
 import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
-import com.falsepattern.rple.api.color.ColorChannel;
+import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;

@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
-import com.falsepattern.rple.api.RPLEShadersAPI;
+import com.falsepattern.rple.api.client.RPLEShadersAPI;
 import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;

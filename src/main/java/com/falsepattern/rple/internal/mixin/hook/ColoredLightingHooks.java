@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.hook;
 
-import com.falsepattern.rple.api.RPLEColorAPI;
-import com.falsepattern.rple.api.RPLERenderAPI;
-import com.falsepattern.rple.api.block.RPLEBlock;
+import com.falsepattern.rple.api.common.RPLEColorAPI;
+import com.falsepattern.rple.api.client.RPLERenderAPI;
+import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import com.falsepattern.rple.internal.client.render.EntityColorHandler;
@@ -26,9 +26,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
-import static com.falsepattern.rple.api.RPLEColorAPI.lightOpacityFromColor;
-import static com.falsepattern.rple.api.RPLEColorAPI.lightValueFromColor;
-import static com.falsepattern.rple.api.color.ColorChannel.*;
+import static com.falsepattern.rple.api.common.RPLEColorAPI.lightOpacityFromColor;
+import static com.falsepattern.rple.api.common.RPLEColorAPI.lightValueFromColor;
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
 @UtilityClass
 public final class ColoredLightingHooks {

@@ -9,7 +9,7 @@ package com.falsepattern.rple.internal.common.world;
 
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.lumina.api.world.LumiWorldProvider;
-import com.falsepattern.rple.api.color.ColorChannel;
+import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -17,7 +17,7 @@ import lombok.val;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import static com.falsepattern.rple.api.color.ColorChannel.*;
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
 @Accessors(fluent = true, chain = false)
 public final class RPLEWorldProvider implements LumiWorldProvider {

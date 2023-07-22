@@ -10,7 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
 import com.falsepattern.lumina.api.world.LumiWorld;
-import com.falsepattern.rple.api.color.ColorChannel;
+import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.world.RPLEWorldContainer;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.falsepattern.lumina.api.init.LumiWorldBaseInit.LUMI_WORLD_BASE_INIT_METHOD_REFERENCE;
 import static com.falsepattern.lumina.api.init.LumiWorldBaseInit.LUMI_WORLD_BASE_INIT_MIXIN_VALUE;
-import static com.falsepattern.rple.api.color.ColorChannel.*;
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMINA_MIXIN_PRIORITY;
 
 @Unique

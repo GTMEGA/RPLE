@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.client.lightmap;
 
-import com.falsepattern.rple.api.lightmap.*;
+import com.falsepattern.rple.api.client.lightmap.*;
 import com.falsepattern.rple.internal.common.collection.PriorityPair;
 import lombok.NoArgsConstructor;
 import lombok.val;
