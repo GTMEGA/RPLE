@@ -24,6 +24,8 @@ public final class RPLEWorldProvider implements LumiWorldProvider {
     private final ColorChannel channel;
     @Getter
     private final String worldProviderID;
+    @Getter
+    private String worldProviderVersion;
 
     private static final RPLEWorldProvider RED_CHANNEL_INSTANCE = new RPLEWorldProvider(RED_CHANNEL);
     private static final RPLEWorldProvider GREEN_CHANNEL_INSTANCE = new RPLEWorldProvider(GREEN_CHANNEL);
@@ -32,6 +34,7 @@ public final class RPLEWorldProvider implements LumiWorldProvider {
     private RPLEWorldProvider(ColorChannel channel) {
         this.channel = channel;
         this.worldProviderID = Tags.MOD_ID + "_" + channel + "_world_provider";
+        this.worldProviderVersion = Tags.VERSION + "_0x00000000";
     }
 
     public static RPLEWorldProvider redRPLEWorldProvider() {
@@ -53,5 +56,9 @@ public final class RPLEWorldProvider implements LumiWorldProvider {
             return null;
         val worldRoot = (RPLEWorldRoot) worldBase;
         return worldRoot.rple$world(channel);
+    }
+
+    public void applyConfigHashCode(String configHashCode) {
+        worldProviderVersion = Tags.VERSION + "_" + configHashCode;
     }
 }

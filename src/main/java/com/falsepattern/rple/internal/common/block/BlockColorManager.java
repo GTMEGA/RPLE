@@ -13,7 +13,6 @@ import com.falsepattern.rple.api.common.color.RPLENamedColor;
 import com.falsepattern.rple.internal.common.config.container.BlockColorConfig;
 import com.falsepattern.rple.internal.common.config.container.BlockReference;
 import cpw.mods.fml.common.registry.GameRegistry;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -31,6 +30,7 @@ import static com.falsepattern.rple.internal.common.block.NullBlockColorizer.nul
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.loadCustomConfig;
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.saveGeneratedConfig;
 import static com.falsepattern.rple.internal.common.event.EventPoster.postBlockColorRegistrationEvent;
+import static com.falsepattern.rple.internal.common.world.RPLEWorldProvider.*;
 import static lombok.AccessLevel.PRIVATE;
 
 @Accessors(fluent = true, chain = false)
@@ -41,8 +41,6 @@ public final class BlockColorManager implements RPLEBlockColorRegistry {
     private static final BlockColorManager INSTANCE = new BlockColorManager();
 
     private BlockColorConfig config;
-    @Getter
-    private String configHashCode = "";
 
     private boolean registryLocked = false;
 
@@ -126,7 +124,11 @@ public final class BlockColorManager implements RPLEBlockColorRegistry {
 
         colouredBlocks.values().forEach(ColoredBlockedReference::apply);
 
-        configHashCode = "0x" + String.format("%08x", config.hashCode()).toUpperCase();
+        val configHashCode = "0x" + String.format("%08x", config.hashCode()).toUpperCase();
+        redRPLEWorldProvider().applyConfigHashCode(configHashCode);
+        greenRPLEWorldProvider().applyConfigHashCode(configHashCode);
+        blueRPLEWorldProvider().applyConfigHashCode(configHashCode);
+
         registryLocked = true;
     }
 
