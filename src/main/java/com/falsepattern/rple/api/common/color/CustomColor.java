@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api.common.color;
 
-import com.falsepattern.rple.api.common.RPLEColorAPI;
+import com.falsepattern.rple.api.common.RPLEColorUtil;
 
 public class CustomColor implements RPLEColor {
     protected final int red;
@@ -34,12 +34,12 @@ public class CustomColor implements RPLEColor {
 
     @Override
     public int hashCode() {
-        return RPLEColorAPI.colorHashCode(this);
+        return RPLEColorUtil.colorHashCode(this);
     }
 
     @Override
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     public boolean equals(Object obj) {
-        return RPLEColorAPI.colorEquals(this, obj);
+        return RPLEColorUtil.colorEquals(this, obj);
     }
 }

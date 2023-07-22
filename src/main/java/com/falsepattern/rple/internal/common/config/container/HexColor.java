@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.config.container;
 
-import com.falsepattern.rple.api.common.RPLEColorAPI;
+import com.falsepattern.rple.api.common.RPLEColorUtil;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 import lombok.val;
 import lombok.var;
 
-import static com.falsepattern.rple.api.common.RPLEColorAPI.COLOR_MIN;
+import static com.falsepattern.rple.api.common.RPLEColorUtil.COLOR_MIN;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
 @Getter
@@ -31,9 +31,9 @@ public final class HexColor implements RPLEColor {
     private final boolean isValid;
 
     public HexColor(RPLEColor color) {
-        this.red = RPLEColorAPI.clampColorComponent(color.red());
-        this.green = RPLEColorAPI.clampColorComponent(color.green());
-        this.blue = RPLEColorAPI.clampColorComponent(color.blue());
+        this.red = RPLEColorUtil.clampColorComponent(color.red());
+        this.green = RPLEColorUtil.clampColorComponent(color.green());
+        this.blue = RPLEColorUtil.clampColorComponent(color.blue());
 
         this.asColorHex = colorHexFromColor(color);
         this.isValid = true;
@@ -58,7 +58,7 @@ public final class HexColor implements RPLEColor {
             asColorHex = String.format("0x%1X%1X%1X", red, green, blue);
             isValid = true;
         } catch (IllegalArgumentException e) {
-            val errorColor = RPLEColorAPI.errorColor();
+            val errorColor = RPLEColorUtil.errorColor();
 
             red = errorColor.red();
             green = errorColor.green();
@@ -95,7 +95,7 @@ public final class HexColor implements RPLEColor {
             asColorHex = colorHex;
             isValid = true;
         } catch (IllegalArgumentException e) {
-            val errorColor = RPLEColorAPI.errorColor();
+            val errorColor = RPLEColorUtil.errorColor();
 
             red = errorColor.red();
             green = errorColor.green();
@@ -115,13 +115,13 @@ public final class HexColor implements RPLEColor {
 
     @Override
     public int hashCode() {
-        return RPLEColorAPI.colorHashCode(this);
+        return RPLEColorUtil.colorHashCode(this);
     }
 
     @Override
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     public boolean equals(Object obj) {
-        return RPLEColorAPI.colorEquals(this, obj);
+        return RPLEColorUtil.colorEquals(this, obj);
     }
 
     @Override

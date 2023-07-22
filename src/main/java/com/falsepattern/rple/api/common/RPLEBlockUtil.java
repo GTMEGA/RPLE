@@ -14,11 +14,11 @@ import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.falsepattern.rple.api.common.RPLEColorAPI.errorColor;
+import static com.falsepattern.rple.api.common.RPLEColorUtil.errorColor;
 
 @SuppressWarnings("unused")
-public final class RPLEBlockAPI {
-    private RPLEBlockAPI() {
+public final class RPLEBlockUtil {
+    private RPLEBlockUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 

@@ -13,8 +13,8 @@ import lombok.val;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public final class RPLEPackedBrightnessAPI {
-    private RPLEPackedBrightnessAPI() {
+public final class RPLEBrightnessPackingUtil {
+    private RPLEBrightnessPackingUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 

@@ -5,8 +5,8 @@ import net.minecraft.client.renderer.Tessellator;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public final class RPLETessellatorAPI {
-    private RPLETessellatorAPI() {
+public final class RPLETessellatorUtil {
+    private RPLETessellatorUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 

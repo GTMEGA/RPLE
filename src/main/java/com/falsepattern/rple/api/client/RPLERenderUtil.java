@@ -20,14 +20,14 @@ import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
-import static com.falsepattern.rple.api.common.RPLEBlockAPI.getBlockColoredBrightness;
-import static com.falsepattern.rple.api.common.RPLEColorAPI.COLOR_MIN;
-import static com.falsepattern.rple.api.common.RPLEColorAPI.errorColor;
+import static com.falsepattern.rple.api.common.RPLEBlockUtil.getBlockColoredBrightness;
+import static com.falsepattern.rple.api.common.RPLEColorUtil.COLOR_MIN;
+import static com.falsepattern.rple.api.common.RPLEColorUtil.errorColor;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.common.world.RPLEWorldRoot.getWorldRootFromBlockAccess;
 
-public final class RPLERenderAPI {
-    private RPLERenderAPI() {
+public final class RPLERenderUtil {
+    private RPLERenderUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 

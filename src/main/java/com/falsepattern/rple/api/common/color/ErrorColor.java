@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api.common.color;
 
-import com.falsepattern.rple.api.common.RPLEColorAPI;
+import com.falsepattern.rple.api.common.RPLEColorUtil;
 import org.jetbrains.annotations.NotNull;
 
 public final class ErrorColor implements RPLENamedColor {
@@ -32,16 +32,16 @@ public final class ErrorColor implements RPLENamedColor {
 
     @Override
     public int red() {
-        return RPLEColorAPI.COLOR_MAX;
+        return RPLEColorUtil.COLOR_MAX;
     }
 
     @Override
     public int green() {
-        return RPLEColorAPI.COLOR_MIN;
+        return RPLEColorUtil.COLOR_MIN;
     }
 
     @Override
     public int blue() {
-        return RPLEColorAPI.COLOR_MIN;
+        return RPLEColorUtil.COLOR_MIN;
     }
 }

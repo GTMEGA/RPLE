@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api.common.color;
 
-import com.falsepattern.rple.api.common.RPLEColorAPI;
+import com.falsepattern.rple.api.common.RPLEColorUtil;
 import org.jetbrains.annotations.NotNull;
 
 public enum LightValueColor implements RPLENamedColor {
@@ -48,12 +48,12 @@ public enum LightValueColor implements RPLENamedColor {
     }
 
     public static @NotNull LightValueColor fromVanillaLightValue(int vanillaLightValue) {
-        final int ordinal = RPLEColorAPI.clampColorComponent(vanillaLightValue);
+        final int ordinal = RPLEColorUtil.clampColorComponent(vanillaLightValue);
         return values()[ordinal];
     }
 
     public static @NotNull LightValueColor fromVanillaLightOpacity(int vanillaLightOpacity) {
-        final int ordinal = RPLEColorAPI.invertColorComponent(vanillaLightOpacity);
+        final int ordinal = RPLEColorUtil.invertColorComponent(vanillaLightOpacity);
         return values()[ordinal];
     }
 

@@ -9,19 +9,15 @@ package com.falsepattern.rple.api.common;
 
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.common.color.ColorChannel;
-import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.val;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
-import static com.falsepattern.rple.api.common.RPLEColorAPI.*;
+import static com.falsepattern.rple.api.common.RPLEColorUtil.*;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.common.world.RPLEWorldRoot.getWorldRootFromBlockAccess;
 
-public final class RPLEWorldAPI {
-    private RPLEWorldAPI() {
+public final class RPLEWorldUtil {
+    private RPLEWorldUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 

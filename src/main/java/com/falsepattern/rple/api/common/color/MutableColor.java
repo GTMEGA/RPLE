@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api.common.color;
 
-import static com.falsepattern.rple.api.common.RPLEColorAPI.*;
+import static com.falsepattern.rple.api.common.RPLEColorUtil.*;
 
 public class MutableColor implements RPLEColor {
     protected int red;

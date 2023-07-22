@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.config.container;
 
-import com.falsepattern.rple.api.common.RPLEColorAPI;
+import com.falsepattern.rple.api.common.RPLEColorUtil;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.api.common.color.RPLENamedColor;
 import lombok.Getter;
@@ -89,7 +89,7 @@ public final class ColorReference {
 
     public RPLEColor color(ColorPalette palette) {
         if (!isValid)
-            return RPLEColorAPI.errorColor();
+            return RPLEColorUtil.errorColor();
 
         if (uniqueColor != null)
             return uniqueColor;
@@ -100,7 +100,7 @@ public final class ColorReference {
                 return paletteColor.get();
         }
 
-        return RPLEColorAPI.errorColor();
+        return RPLEColorUtil.errorColor();
     }
 
     @Override

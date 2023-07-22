@@ -21,8 +21,8 @@ import lombok.var;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 
-import static com.falsepattern.rple.api.common.RPLEColorAPI.COLOR_MIN;
-import static com.falsepattern.rple.api.common.RPLEColorAPI.clampColorComponent;
+import static com.falsepattern.rple.api.common.RPLEColorUtil.COLOR_MIN;
+import static com.falsepattern.rple.api.common.RPLEColorUtil.clampColorComponent;
 
 @UtilityClass
 public final class MultiPartHelper {

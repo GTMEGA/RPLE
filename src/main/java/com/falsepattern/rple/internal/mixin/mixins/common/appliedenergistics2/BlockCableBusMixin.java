@@ -10,7 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.common.appliedenergistics2;
 import appeng.block.AEBaseTileBlock;
 import appeng.block.networking.BlockCableBus;
 import appeng.parts.ICableBusContainer;
-import com.falsepattern.rple.api.common.RPLEBlockAPI;
+import com.falsepattern.rple.api.common.RPLEBlockUtil;
 import com.falsepattern.rple.api.common.block.RPLEBlockBrightnessColorProvider;
 import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.api.common.color.RPLEColor;
@@ -53,7 +53,7 @@ public abstract class BlockCableBusMixin extends AEBaseTileBlock implements RPLE
         val otherBlock = world.getBlock(posX, posY, posZ);
         if (otherBlock != this) {
             val otherBlockMeta = world.getBlockMetadata(posX, posY, posZ);
-            return RPLEBlockAPI.getBlockColoredBrightness(world, otherBlock, otherBlockMeta, posX, posY, posZ);
+            return RPLEBlockUtil.getBlockColoredBrightness(world, otherBlock, otherBlockMeta, posX, posY, posZ);
         }
         val cb = cb(world, posX, posY, posZ);
         if (cb instanceof ICableBusContainerMixin)

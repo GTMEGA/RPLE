@@ -16,11 +16,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
-public final class RPLEColorAPI {
+public final class RPLEColorUtil {
     public static final int COLOR_MIN = 0;
     public static final int COLOR_MAX = 15;
 
-    private RPLEColorAPI() {
+    private RPLEColorUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 

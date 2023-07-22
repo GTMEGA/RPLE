@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api.common.color;
 
-import com.falsepattern.rple.api.common.RPLEColorAPI;
+import com.falsepattern.rple.api.common.RPLEColorUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class CustomNamedColor implements RPLENamedColor {
@@ -48,12 +48,12 @@ public class CustomNamedColor implements RPLENamedColor {
 
     @Override
     public int hashCode() {
-        return RPLEColorAPI.colorHashCode(this);
+        return RPLEColorUtil.colorHashCode(this);
     }
 
     @Override
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     public boolean equals(Object obj) {
-        return RPLEColorAPI.namedColorEquals(this, obj);
+        return RPLEColorUtil.namedColorEquals(this, obj);
     }
 }

@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.rple.api.client.RPLEShadersAPI;
+import com.falsepattern.rple.api.client.RPLEShaderConstants;
 import com.falsepattern.rple.internal.client.lightmap.LightMapHook;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
@@ -109,13 +109,13 @@ public abstract class ShaderTessMixin {
     private static void edgeTexCoordPreDraw(int index, int size, boolean normalized, int stride, FloatBuffer buffer) {
         stride = VertexAPI.recomputeVertexInfo(18, Float.BYTES);
         ARBVertexShader.glVertexAttribPointerARB(index, size, normalized, stride, buffer);
-        if (RPLEShadersAPI.useRPLEEdgeTexCoordAttrib) {
-            ARBVertexShader.glVertexAttribPointerARB(RPLEShadersAPI.edgeTexCoordAttrib,
+        if (RPLEShaderConstants.useRPLEEdgeTexCoordAttrib) {
+            ARBVertexShader.glVertexAttribPointerARB(RPLEShaderConstants.edgeTexCoordAttrib,
                                                      2,
                                                      false,
                                                      stride,
                                                      (FloatBuffer) buffer.position(VertexConstants.getRpleEdgeTexUIndexShader()));
-            ARBVertexShader.glEnableVertexAttribArrayARB(RPLEShadersAPI.edgeTexCoordAttrib);
+            ARBVertexShader.glEnableVertexAttribArrayARB(RPLEShaderConstants.edgeTexCoordAttrib);
         }
     }
 
@@ -124,8 +124,8 @@ public abstract class ShaderTessMixin {
             remap = false,
             require = 1)
     private static void edgeTexCoordPostDraw(Tessellator tess, CallbackInfo ci) {
-        if (RPLEShadersAPI.useRPLEEdgeTexCoordAttrib && tess.hasTexture) {
-            ARBVertexShader.glDisableVertexAttribArrayARB(RPLEShadersAPI.edgeTexCoordAttrib);
+        if (RPLEShaderConstants.useRPLEEdgeTexCoordAttrib && tess.hasTexture) {
+            ARBVertexShader.glDisableVertexAttribArrayARB(RPLEShaderConstants.edgeTexCoordAttrib);
         }
     }
 

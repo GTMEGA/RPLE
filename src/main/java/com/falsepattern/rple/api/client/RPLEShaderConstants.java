@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api.client;
 
-public final class RPLEShadersAPI {
+public final class RPLEShaderConstants {
     public static final String RED_LIGHT_MAP_UNIFORM_NAME = "redLightMap";
     public static final String GREEN_LIGHT_MAP_UNIFORM_NAME = "greenLightMap";
     public static final String BLUE_LIGHT_MAP_UNIFORM_NAME = "blueLightMap";

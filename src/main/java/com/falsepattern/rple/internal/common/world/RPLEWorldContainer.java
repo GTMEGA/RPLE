@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
-import static com.falsepattern.rple.api.common.RPLEColorAPI.invertColorComponent;
+import static com.falsepattern.rple.api.common.RPLEColorUtil.invertColorComponent;
 import static net.minecraftforge.common.util.ForgeDirection.*;
 
 public final class RPLEWorldContainer implements RPLEWorld {
