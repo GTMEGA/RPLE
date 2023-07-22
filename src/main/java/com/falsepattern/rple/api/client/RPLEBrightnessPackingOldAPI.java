@@ -10,8 +10,8 @@ package com.falsepattern.rple.api.client;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 
 @SuppressWarnings("unused")
-public final class RPLEBrightnessPackingAPI {
-    private RPLEBrightnessPackingAPI() {
+public final class RPLEBrightnessPackingOldAPI {
+    private RPLEBrightnessPackingOldAPI() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
