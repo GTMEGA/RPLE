@@ -7,8 +7,8 @@
 
 package com.falsepattern.rple.internal.mixin.hook;
 
+import com.falsepattern.rple.api.client.RPLEBlockBrightnessUtil;
 import com.falsepattern.rple.api.common.RPLEColorUtil;
-import com.falsepattern.rple.api.client.RPLERenderUtil;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
@@ -119,7 +119,7 @@ public final class ColoredLightingHooks {
         var block = world.getBlock(posX, posY, posZ);
         var blockMeta = world.getBlockMetadata(posX, posY, posZ);
 
-        var brightness = RPLERenderUtil.getBlockBrightnessForTessellator(world, block, blockMeta, posX, posY, posZ);
+        var brightness = RPLEBlockBrightnessUtil.getBlockBrightnessForTessellator(world, block, blockMeta, posX, posY, posZ);
         brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, brightness);
 
         if (brightness == 0 && block instanceof BlockSlab) {
@@ -128,7 +128,7 @@ public final class ColoredLightingHooks {
             block = world.getBlock(posX, posY, posZ);
             blockMeta = world.getBlockMetadata(posX, posY, posZ);
 
-            brightness = RPLERenderUtil.getBlockBrightnessForTessellator(world, block, blockMeta, posX, posY, posZ);
+            brightness = RPLEBlockBrightnessUtil.getBlockBrightnessForTessellator(world, block, blockMeta, posX, posY, posZ);
             brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, brightness);
         }
 
@@ -161,12 +161,12 @@ public final class ColoredLightingHooks {
         val minGreenBlockLight = TessellatorBrightnessHelper.getBlockLightFromBrightness(minGreenBrightness);
         val minBlueBlockLight = TessellatorBrightnessHelper.getBlockLightFromBrightness(minBlueBrightness);
 
-        return RPLERenderUtil.getRGBBrightnessForTessellator(world,
-                                                             posX,
-                                                             posY,
-                                                             posZ,
-                                                             minRedBlockLight,
-                                                             minGreenBlockLight,
-                                                             minBlueBlockLight);
+        return RPLEBlockBrightnessUtil.getRGBBrightnessForTessellator(world,
+                                                                      posX,
+                                                                      posY,
+                                                                      posZ,
+                                                                      minRedBlockLight,
+                                                                      minGreenBlockLight,
+                                                                      minBlueBlockLight);
     }
 }

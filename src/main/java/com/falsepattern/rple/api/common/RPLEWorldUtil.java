@@ -14,7 +14,7 @@ import net.minecraft.world.IBlockAccess;
 
 import static com.falsepattern.rple.api.common.RPLEColorUtil.*;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
-import static com.falsepattern.rple.internal.common.world.RPLEWorldRoot.getWorldRootFromBlockAccess;
+import static com.falsepattern.rple.internal.common.world.RPLEWorldRoot.rple$getWorldRootFromBlockAccess;
 
 public final class RPLEWorldUtil {
     private RPLEWorldUtil() {
@@ -26,7 +26,7 @@ public final class RPLEWorldUtil {
                                            int posX,
                                            int posY,
                                            int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        val worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return channel.componentFromColor(errorColor());
         return worldRoot.rple$world(channel).lumi$getLightValue(posX, posY, posZ);
@@ -38,7 +38,7 @@ public final class RPLEWorldUtil {
                                            int posX,
                                            int posY,
                                            int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        val worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return channel.componentFromColor(errorColor());
         return worldRoot.rple$world(channel).lumi$getLightValue(lightType, posX, posY, posZ);
@@ -49,14 +49,14 @@ public final class RPLEWorldUtil {
                                                 int posX,
                                                 int posY,
                                                 int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        val worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return channel.componentFromColor(errorColor());
         return worldRoot.rple$world(channel).lumi$getBlockLightValue(posX, posY, posZ);
     }
 
     public static int getChannelSkyLightValue(IBlockAccess world, ColorChannel channel, int posX, int posY, int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        val worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return channel.componentFromColor(errorColor());
         return worldRoot.rple$world(channel).lumi$getSkyLightValue(posX, posY, posZ);
@@ -66,7 +66,7 @@ public final class RPLEWorldUtil {
                                              int posX,
                                              int posY,
                                              int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        val worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return COLOR_MIN;
 
@@ -81,7 +81,7 @@ public final class RPLEWorldUtil {
                                              int posX,
                                              int posY,
                                              int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        val worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return COLOR_MIN;
 
@@ -95,7 +95,7 @@ public final class RPLEWorldUtil {
                                                   int posX,
                                                   int posY,
                                                   int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        val worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return COLOR_MIN;
 
@@ -109,7 +109,7 @@ public final class RPLEWorldUtil {
                                                 int posX,
                                                 int posY,
                                                 int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        val worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return COLOR_MIN;
 
@@ -120,7 +120,7 @@ public final class RPLEWorldUtil {
     }
 
     public static int getChannelLightOpacity(IBlockAccess world, ColorChannel channel, int posX, int posY, int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        val worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return channel.componentFromColor(errorColor());
         return worldRoot.rple$world(channel).lumi$getBlockOpacity(posX, posY, posZ);
@@ -130,7 +130,7 @@ public final class RPLEWorldUtil {
                                                int posX,
                                                int posY,
                                                int posZ) {
-        val worldRoot = getWorldRootFromBlockAccess(world);
+        val worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return COLOR_MIN;
 

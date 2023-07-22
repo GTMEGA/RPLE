@@ -1,6 +1,9 @@
 package com.falsepattern.rple.api.client;
 
 import com.falsepattern.rple.internal.client.render.CookieMonster;
+import lombok.val;
+
+import static com.falsepattern.rple.api.client.RPLEPackedBrightnessUtil.*;
 
 @SuppressWarnings("unused")
 public final class RPLEBrightnessCookieUtil {
@@ -21,19 +24,31 @@ public final class RPLEBrightnessCookieUtil {
     }
 
     public static int minBrightnessCookie(int brightnessCookieA, int brightnessCookieB) {
-        return 0;
+        val packedBrightnessA = CookieMonster.cookieToPackedLong(brightnessCookieA);
+        val packedBrightnessB = CookieMonster.cookieToPackedLong(brightnessCookieB);
+        val minPackedBrightness = minPackedBrightness(packedBrightnessA, packedBrightnessB);
+        return CookieMonster.packedLongToCookie(minPackedBrightness);
     }
 
     public static int maxBrightnessCookie(int brightnessCookieA, int brightnessCookieB) {
-        return 0;
+        val packedBrightnessA = CookieMonster.cookieToPackedLong(brightnessCookieA);
+        val packedBrightnessB = CookieMonster.cookieToPackedLong(brightnessCookieB);
+        val maxPackedBrightness = maxPackedBrightness(packedBrightnessA, packedBrightnessB);
+        return CookieMonster.packedLongToCookie(maxPackedBrightness);
     }
 
     public static int avgBrightnessCookie(int brightnessCookieA, int brightnessCookieB) {
-        return 0;
+        val packedBrightnessA = CookieMonster.cookieToPackedLong(brightnessCookieA);
+        val packedBrightnessB = CookieMonster.cookieToPackedLong(brightnessCookieB);
+        val avgPackedBrightness = avgPackedBrightness(packedBrightnessA, packedBrightnessB);
+        return CookieMonster.packedLongToCookie(avgPackedBrightness);
     }
 
     public static int mixAOBrightnessCookie(int brightnessCookieA, int brightnessCookieB, double multA, double multB) {
-        return 0;
+        val packedBrightnessA = CookieMonster.cookieToPackedLong(brightnessCookieA);
+        val packedBrightnessB = CookieMonster.cookieToPackedLong(brightnessCookieB);
+        val mixedAOPackedBrightness = mixAOPackedBrightness(packedBrightnessA, packedBrightnessB, multA, multB);
+        return CookieMonster.packedLongToCookie(mixedAOPackedBrightness);
     }
 
     public static int mixAOBrightnessCookie(int brightnessCookieAC,
@@ -42,7 +57,17 @@ public final class RPLEBrightnessCookieUtil {
                                             int brightnessCookieAD,
                                             double alphaAB,
                                             double alphaCD) {
-        return 0;
+        val packedBrightnessAC = CookieMonster.cookieToPackedLong(brightnessCookieAC);
+        val packedBrightnessBC = CookieMonster.cookieToPackedLong(brightnessCookieBC);
+        val packedBrightnessBD = CookieMonster.cookieToPackedLong(brightnessCookieBD);
+        val packedBrightnessAD = CookieMonster.cookieToPackedLong(brightnessCookieAD);
+        val mixedAOPackedBrightness = mixAOPackedBrightness(packedBrightnessAC,
+                                                            packedBrightnessBC,
+                                                            packedBrightnessBD,
+                                                            packedBrightnessAD,
+                                                            alphaAB,
+                                                            alphaCD);
+        return CookieMonster.packedLongToCookie(mixedAOPackedBrightness);
     }
 
     public static int mixAOBrightnessCookie(int brightnessCookieA,
@@ -53,6 +78,18 @@ public final class RPLEBrightnessCookieUtil {
                                             double multB,
                                             double multC,
                                             double multD) {
-        return 0;
+        val packedBrightnessA = CookieMonster.cookieToPackedLong(brightnessCookieA);
+        val packedBrightnessB = CookieMonster.cookieToPackedLong(brightnessCookieB);
+        val packedBrightnessC = CookieMonster.cookieToPackedLong(brightnessCookieC);
+        val packedBrightnessD = CookieMonster.cookieToPackedLong(brightnessCookieD);
+        val mixedAOPackedBrightness = mixAOPackedBrightness(packedBrightnessA,
+                                                            packedBrightnessB,
+                                                            packedBrightnessC,
+                                                            packedBrightnessD,
+                                                            multA,
+                                                            multB,
+                                                            multC,
+                                                            multD);
+        return CookieMonster.packedLongToCookie(mixedAOPackedBrightness);
     }
 }

@@ -29,7 +29,7 @@ public interface RPLEWorldRoot extends LumiWorldRoot {
                                                 int posZ);
 
     @SuppressWarnings("InstanceofIncompatibleInterface")
-    static @Nullable RPLEWorldRoot getWorldRootFromBlockAccess(IBlockAccess blockAccess) {
+    static @Nullable RPLEWorldRoot rple$getWorldRootFromBlockAccess(IBlockAccess blockAccess) {
         if (blockAccess == null)
             return null;
         if (blockAccess instanceof RPLEWorldRoot)

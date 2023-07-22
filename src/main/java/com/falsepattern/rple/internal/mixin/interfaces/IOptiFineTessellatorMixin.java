@@ -9,11 +9,7 @@ package com.falsepattern.rple.internal.mixin.interfaces;
 
 import shadersmod.client.ShadersTess;
 
-import java.nio.ShortBuffer;
-
-public interface IOptiFineTessellatorMixin {
-    ShortBuffer rple$shortBuffer();
-
+public interface IOptiFineTessellatorMixin extends ITessellatorMixin {
     void rple$rawBuffer(int[] rawBuffer);
 
     int[] rple$rawBuffer();

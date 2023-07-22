@@ -11,11 +11,9 @@ import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
-import com.falsepattern.rple.internal.client.render.EntityColorHandler;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,10 +22,10 @@ import static com.falsepattern.rple.api.common.RPLEBlockUtil.getBlockColoredBrig
 import static com.falsepattern.rple.api.common.RPLEColorUtil.COLOR_MIN;
 import static com.falsepattern.rple.api.common.RPLEColorUtil.errorColor;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
-import static com.falsepattern.rple.internal.common.world.RPLEWorldRoot.getWorldRootFromBlockAccess;
+import static com.falsepattern.rple.internal.common.world.RPLEWorldRoot.rple$getWorldRootFromBlockAccess;
 
-public final class RPLERenderUtil {
-    private RPLERenderUtil() {
+public final class RPLEBlockBrightnessUtil {
+    private RPLEBlockBrightnessUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
@@ -50,7 +48,7 @@ public final class RPLERenderUtil {
                                                      int minRedBlockLight,
                                                      int minGreenBlockLight,
                                                      int minBlueBlockLight) {
-        final RPLEWorldRoot worldRoot = getWorldRootFromBlockAccess(world);
+        final RPLEWorldRoot worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return errorBrightnessForTessellator();
         final int redBrightness = worldRoot
@@ -71,7 +69,7 @@ public final class RPLERenderUtil {
                                                          int posX,
                                                          int posY,
                                                          int posZ) {
-        final RPLEWorldRoot worldRoot = getWorldRootFromBlockAccess(world);
+        final RPLEWorldRoot worldRoot = rple$getWorldRootFromBlockAccess(world);
         if (worldRoot == null)
             return errorBrightnessForTessellator();
         return worldRoot.rple$getChannelLightValueForTessellator(channel, lightType, posX, posY, posZ);
@@ -159,20 +157,5 @@ public final class RPLERenderUtil {
                                                                                                                     greenBrightness,
                                                                                                                     blueBrightness);
         return CookieMonster.packedLongToCookie(packedBrightness);
-    }
-
-    public static void permit(@NotNull Class<? extends Entity> entityClass) {
-        EntityColorHandler.permit(entityClass);
-    }
-
-    /**
-     * By default, any entity that overrides getBrightnessForRender will get a vanilla-style light value from Entity.getBrightnessForRender.
-     * You can use this to remove this blocking logic from specific classes. Note: make sure all your superclasses
-     * also behave correctly with colored lights!
-     *
-     * @param entityClassName The fully qualified class name
-     */
-    public static void permit(@NotNull String entityClassName) {
-        EntityColorHandler.permit(entityClassName);
     }
 }

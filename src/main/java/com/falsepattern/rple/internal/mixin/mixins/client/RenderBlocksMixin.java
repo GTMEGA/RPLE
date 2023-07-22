@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.api.client.RPLERenderUtil;
+import com.falsepattern.rple.api.client.RPLEBlockBrightnessUtil;
 import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import lombok.val;
 import net.minecraft.block.Block;
@@ -88,7 +88,7 @@ public abstract class RenderBlocksMixin {
               remap = false,
               require = 3)
     private int grabDefaultLight(Block block, IBlockAccess world, int posX, int posY, int posZ) {
-        return RPLERenderUtil.getBlockBrightnessForTessellator(world, block, meta, posX, posY, posZ);
+        return RPLEBlockBrightnessUtil.getBlockBrightnessForTessellator(world, block, meta, posX, posY, posZ);
     }
 
     /**

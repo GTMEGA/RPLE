@@ -13,8 +13,8 @@ import lombok.val;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public final class RPLEBrightnessPackingUtil {
-    private RPLEBrightnessPackingUtil() {
+public final class RPLEPackedBrightnessUtil {
+    private RPLEPackedBrightnessUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
@@ -84,86 +84,86 @@ public final class RPLEBrightnessPackingUtil {
         return 0;
     }
 
-    public static long packedBrightnessFromBrightnessChannel(@NotNull ColorChannel channel, int lightChannel) {
+    public static long packedBrightnessFromBrightnessChannel(@NotNull ColorChannel channel, long brightnessChannel) {
         return 0;
     }
 
-    public static long packedBrightnessFromBrightnessChannels(int redLightChannel,
-                                                              int greenLightChannel,
-                                                              int blueLightChannel) {
+    public static long packedBrightnessFromBrightnessChannels(long redLightChannel,
+                                                              long greenLightChannel,
+                                                              long blueLightChannel) {
         return 0;
     }
 
-    public static int colorChannelFromPackedBrightness(long packedBrightness, @NotNull ColorChannel channel) {
+    public static long brightnessChannelFromPackedBrightness(long packedBrightness, @NotNull ColorChannel channel) {
         return 0;
     }
 
-    public static int minColorChannelFromPackedBrightness(long packedBrightness) {
+    public static long minBrightnessChannelFromPackedBrightness(long packedBrightness) {
         return 0;
     }
 
-    public static int minColorChannelFromPackedBrightness(long packedBrightness, @NotNull ColorChannel channel) {
+    public static long minBrightnessChannelFromPackedBrightness(long packedBrightness, @NotNull ColorChannel channel) {
         return 0;
     }
 
-    public static int minColorChannelFromPackedBrightness(long packedBrightness, @NotNull LightType lightType) {
+    public static long minBrightnessChannelFromPackedBrightness(long packedBrightness, @NotNull LightType lightType) {
         return 0;
     }
 
-    public static int maxColorChannelFromPackedBrightness(long packedBrightness) {
+    public static long maxBrightnessChannelFromPackedBrightness(long packedBrightness) {
         return 0;
     }
 
-    public static int maxColorChannelFromPackedBrightness(long packedBrightness, @NotNull ColorChannel channel) {
+    public static long maxBrightnessChannelFromPackedBrightness(long packedBrightness, @NotNull ColorChannel channel) {
         return 0;
     }
 
-    public static int maxColorChannelFromPackedBrightness(long packedBrightness, @NotNull LightType lightType) {
+    public static long maxBrightnessChannelFromPackedBrightness(long packedBrightness, @NotNull LightType lightType) {
         return 0;
     }
 
-    public static int avgColorChannelFromPackedBrightness(long packedBrightness) {
+    public static long avgBrightnessChannelFromPackedBrightness(long packedBrightness) {
         return 0;
     }
 
-    public static int avgColorChannelFromPackedBrightness(long packedBrightness, @NotNull ColorChannel channel) {
+    public static long avgBrightnessChannelFromPackedBrightness(long packedBrightness, @NotNull ColorChannel channel) {
         return 0;
     }
 
-    public static int avgColorChannelFromPackedBrightness(long packedBrightness, @NotNull LightType lightType) {
+    public static long avgBrightnessChannelFromPackedBrightness(long packedBrightness, @NotNull LightType lightType) {
         return 0;
     }
 
-    public static int minPackedBrightness(long packedBrightnessA, long packedBrightnessB) {
+    public static long minPackedBrightness(long packedBrightnessA, long packedBrightnessB) {
         return 0;
     }
 
-    public static int maxPackedBrightness(long packedBrightnessA, long packedBrightnessB) {
+    public static long maxPackedBrightness(long packedBrightnessA, long packedBrightnessB) {
         return 0;
     }
 
-    public static int avgPackedBrightness(long packedBrightnessA, long packedBrightnessB) {
+    public static long avgPackedBrightness(long packedBrightnessA, long packedBrightnessB) {
         return 0;
     }
 
-    public static int mixAOPackedBrightness(long packedBrightnessA,
-                                            long packedBrightnessB,
-                                            double multA,
-                                            double multB) {
+    public static long mixAOPackedBrightness(long packedBrightnessA,
+                                             long packedBrightnessB,
+                                             double multA,
+                                             double multB) {
         return 0;
     }
 
-    public static int mixAOPackedBrightness(long packedBrightnessAC,
-                                            long packedBrightnessBC,
-                                            long packedBrightnessBD,
-                                            long packedBrightnessAD,
-                                            double alphaAB,
-                                            double alphaCD) {
+    public static long mixAOPackedBrightness(long packedBrightnessAC,
+                                             long packedBrightnessBC,
+                                             long packedBrightnessBD,
+                                             long packedBrightnessAD,
+                                             double alphaAB,
+                                             double alphaCD) {
         val multAC = (1D - alphaAB) * (1D - alphaCD);
         val multBC = (1D - alphaAB) * alphaCD;
         val multBD = alphaAB * (1D - alphaCD);
         val multAD = alphaAB * alphaCD;
-        return mixAOBrightnessCookie(packedBrightnessAC,
+        return mixAOPackedBrightness(packedBrightnessAC,
                                      packedBrightnessBC,
                                      packedBrightnessBD,
                                      packedBrightnessAD,
@@ -173,14 +173,14 @@ public final class RPLEBrightnessPackingUtil {
                                      multAD);
     }
 
-    public static int mixAOBrightnessCookie(long packedBrightnessA,
-                                            long packedBrightnessB,
-                                            long packedBrightnessC,
-                                            long packedBrightnessD,
-                                            double multA,
-                                            double multB,
-                                            double multC,
-                                            double multD) {
+    public static long mixAOPackedBrightness(long packedBrightnessA,
+                                             long packedBrightnessB,
+                                             long packedBrightnessC,
+                                             long packedBrightnessD,
+                                             double multA,
+                                             double multB,
+                                             double multC,
+                                             double multD) {
         return 0;
     }
 }

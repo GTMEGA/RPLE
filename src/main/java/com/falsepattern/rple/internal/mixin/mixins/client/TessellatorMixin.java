@@ -24,18 +24,21 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.nio.ShortBuffer;
+
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin implements ITessellatorMixin {
     @Shadow
-    private boolean hasBrightness;
+    private static ShortBuffer shortBuffer;
 
     @Shadow
     private int[] rawBuffer;
-
+    @Shadow
+    private boolean hasBrightness;
     @Shadow
     private int rawBufferIndex;
 
-    private long brightness;
+    private long rple$packedBrightness;
 
     @Redirect(method = "draw",
               at = @At(value = "FIELD",
@@ -74,9 +77,9 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
               require = 1)
     private boolean customColor(Tessellator instance) {
         if (hasBrightness) {
-            rawBuffer[rawBufferIndex + VertexConstants.getRedIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessRed(brightness);
-            rawBuffer[rawBufferIndex + VertexConstants.getGreenIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessGreen(brightness);
-            rawBuffer[rawBufferIndex + VertexConstants.getBlueIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessBlue(brightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getRedIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessRed(rple$packedBrightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getGreenIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessGreen(rple$packedBrightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getBlueIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessBlue(rple$packedBrightness);
         }
         return false;
     }
@@ -87,8 +90,23 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
      */
     @Overwrite
     public void setBrightness(int brightness) {
-        this.hasBrightness = true;
-        this.brightness = CookieMonster.cookieToPackedLong(brightness);
+        rple$packedBrightness(CookieMonster.cookieToPackedLong(brightness));
+    }
+
+    @Override
+    public ShortBuffer rple$shortBuffer() {
+        return shortBuffer;
+    }
+
+    @Override
+    public void rple$packedBrightness(long packedBrightness) {
+        hasBrightness = true;
+        rple$packedBrightness = packedBrightness;
+    }
+
+    @Override
+    public long rple$packedBrightness() {
+        return rple$packedBrightness;
     }
 
     private static void enableLightMapTexture(Tessellator tess, int position, int unit) {
@@ -104,10 +122,5 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
         OpenGlHelper.setClientActiveTexture(unit);
         GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
         OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
-    }
-
-    @Override
-    public long rple$brightness() {
-        return brightness;
     }
 }

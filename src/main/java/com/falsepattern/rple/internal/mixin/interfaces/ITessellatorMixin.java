@@ -7,13 +7,10 @@
 
 package com.falsepattern.rple.internal.mixin.interfaces;
 
+import com.falsepattern.rple.internal.client.render.RPLETessellator;
+
 import java.nio.ShortBuffer;
 
-/**
- * Used for vanilla<->optifine tessellator coupling.
- */
-public interface ITessellatorMixin {
+public interface ITessellatorMixin extends RPLETessellator {
     ShortBuffer rple$shortBuffer();
-
-    long rple$brightness();
 }

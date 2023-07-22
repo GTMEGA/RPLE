@@ -8,7 +8,6 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.rple.internal.mixin.interfaces.IOptiFineTessellatorMixin;
-import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorMixin;
 import net.minecraft.client.renderer.Tessellator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,7 +18,7 @@ import java.nio.ShortBuffer;
 
 @Unique
 @Mixin(Tessellator.class)
-public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMixin, ITessellatorMixin {
+public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMixin {
 
     @Shadow(aliases = "field_147567_e")
     private ShortBuffer shortBuffer;
@@ -160,7 +159,7 @@ public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMi
     }
 
     @Override
-    public long rple$brightness() {
+    public long rple$packedBrightness() {
         return brightness;
     }
 
