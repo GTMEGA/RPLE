@@ -24,15 +24,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.nio.ShortBuffer;
-
 import static com.falsepattern.rple.internal.client.lightmap.LightMapHook.enableReconfigureAll;
 
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin implements ITessellatorMixin {
-    @Shadow
-    private static ShortBuffer shortBuffer;
-
     @Shadow
     private int[] rawBuffer;
     @Shadow
@@ -94,11 +89,6 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
     @Overwrite
     public void setBrightness(int brightness) {
         rple$packedBrightness(CookieMonster.cookieToPackedLong(brightness));
-    }
-
-    @Override
-    public ShortBuffer rple$shortBuffer() {
-        return shortBuffer;
     }
 
     @Override
