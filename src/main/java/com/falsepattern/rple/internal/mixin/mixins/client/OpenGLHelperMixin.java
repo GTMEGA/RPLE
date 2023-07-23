@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(OpenGlHelper.class)
@@ -50,6 +51,24 @@ public abstract class OpenGLHelperMixin {
             setLightmapTextureCoords(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, textureU, textureV);
             setLightmapTextureCoords(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, textureU, textureV);
         }
+    }
+
+    @Redirect(method = "setLightmapTextureCoords",
+              at = @At(value = "INVOKE",
+                       target = "Lorg/lwjgl/opengl/GL13;glMultiTexCoord2f(IFF)V"),
+              require = 1)
+    private static void testA(int target, float s, float t) {
+        GL13.glMultiTexCoord2f(target, s * (32767F / 255F), t * (32767F / 255F));
+//        GL13.glMultiTexCoord2f(target, 0.75F, 0.75F);
+    }
+
+    @Redirect(method = "setLightmapTextureCoords",
+              at = @At(value = "INVOKE",
+                       target = "Lorg/lwjgl/opengl/ARBMultitexture;glMultiTexCoord2fARB(IFF)V"),
+              require = 1)
+    private static void testB(int target, float s, float t) {
+//        ARBMultitexture.glMultiTexCoord2fARB(target, s / 256F, t / 256F);
+//        ARBMultitexture.glMultiTexCoord2fARB(target, 0.75F, 0.75F);
     }
 
     /**

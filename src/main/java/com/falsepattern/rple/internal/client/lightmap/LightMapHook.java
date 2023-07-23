@@ -18,9 +18,11 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import shadersmod.client.Shaders;
 
+import static com.falsepattern.rple.api.client.RPLELightMapUtil.lightMapTextureScale;
 import static com.falsepattern.rple.internal.Common.LIGHT_MAP_1D_SIZE;
 import static net.minecraft.client.Minecraft.getMinecraft;
 
@@ -90,12 +92,10 @@ public final class LightMapHook {
     public void enableReconfigure() {
         OpenGlHelper.setActiveTexture(textureUnit);
 
-        // Set because the texture coordinates are supplied as shorts (?)
-        // Technically only needs to be set once, but Vanilla does this every time the light map is enabled.
+        val lightMapTextureScale = lightMapTextureScale();
         GL11.glMatrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
-        GL11.glScalef(TEXTURE_SCALE, TEXTURE_SCALE, TEXTURE_SCALE);
-        GL11.glTranslatef(TEXTURE_TRANSLATION, TEXTURE_TRANSLATION, TEXTURE_TRANSLATION);
+        GL11.glScalef(lightMapTextureScale, lightMapTextureScale, 1F);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
         // I don't know why, I don't know how. I don't even want to know why.
@@ -122,8 +122,8 @@ public final class LightMapHook {
         // Removing this would require not using dynamic textures.
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 

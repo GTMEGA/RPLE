@@ -26,6 +26,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.nio.ShortBuffer;
 
+import static com.falsepattern.rple.internal.client.lightmap.LightMapHook.enableReconfigureAll;
+
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin implements ITessellatorMixin {
     @Shadow
@@ -48,6 +50,7 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
               require = 1)
     private boolean enable(Tessellator tess) {
         if (hasBrightness) {
+            enableReconfigureAll();
             enableLightMapTexture(tess, VertexConstants.getRedIndexNoShader() * 2, Common.RED_LIGHT_MAP_TEXTURE_UNIT);
             enableLightMapTexture(tess, VertexConstants.getGreenIndexNoShader() * 2, Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
             enableLightMapTexture(tess, VertexConstants.getBlueIndexNoShader() * 2, Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
@@ -77,9 +80,9 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
               require = 1)
     private boolean customColor(Tessellator instance) {
         if (hasBrightness) {
-            rawBuffer[rawBufferIndex + VertexConstants.getRedIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessRed(rple$packedBrightness);
-            rawBuffer[rawBufferIndex + VertexConstants.getGreenIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessGreen(rple$packedBrightness);
-            rawBuffer[rawBufferIndex + VertexConstants.getBlueIndexNoShader()] = TessellatorBrightnessHelper.getBrightnessBlue(rple$packedBrightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getRedIndexNoShader()] = TessellatorBrightnessHelper.getTessBrightnessRed(rple$packedBrightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getGreenIndexNoShader()] = TessellatorBrightnessHelper.getTessBrightnessGreen(rple$packedBrightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getBlueIndexNoShader()] = TessellatorBrightnessHelper.getTessBrightnessBlue(rple$packedBrightness);
         }
         return false;
     }
