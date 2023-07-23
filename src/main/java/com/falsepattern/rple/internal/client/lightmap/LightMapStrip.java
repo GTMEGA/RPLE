@@ -21,12 +21,12 @@ import static com.falsepattern.rple.internal.Common.LIGHT_MAP_1D_SIZE;
 @Getter
 @Accessors(fluent = true, chain = true)
 @SuppressWarnings("MismatchedReadAndWriteOfArray")
-public final class LightMap1D implements RPLELightMapStrip {
+public final class LightMapStrip implements RPLELightMapStrip {
     private final float[] lightMapRedData;
     private final float[] lightMapGreenData;
     private final float[] lightMapBlueData;
 
-    public LightMap1D() {
+    public LightMapStrip() {
         lightMapRedData = new float[LIGHT_MAP_1D_SIZE];
         lightMapGreenData = new float[LIGHT_MAP_1D_SIZE];
         lightMapBlueData = new float[LIGHT_MAP_1D_SIZE];

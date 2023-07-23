@@ -19,9 +19,9 @@ import static net.minecraft.client.Minecraft.getMinecraft;
 @Getter
 @Accessors(fluent = true, chain = true)
 @SuppressWarnings("MismatchedReadAndWriteOfArray")
-public final class LightMap2D {
-    private final LightMap1D blockLightMap = new LightMap1D();
-    private final LightMap1D skyLightMap = new LightMap1D();
+public final class LightMap {
+    private final LightMapStrip blockLightMap = new LightMapStrip();
+    private final LightMapStrip skyLightMap = new LightMapStrip();
 
     private final int[] lightMapRGBData = new int[LIGHT_MAP_2D_SIZE];
 

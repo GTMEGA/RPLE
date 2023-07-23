@@ -35,8 +35,8 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
     private final List<RPLEBlockLightMapMask> blockMasks = new ArrayList<>();
     private final List<RPLESkyLightMapMask> skyMasks = new ArrayList<>();
 
-    private final LightMap2D mixedLightMap = new LightMap2D();
-    private final LightMap1D tempStrip = new LightMap1D();
+    private final LightMap mixedLightMap = new LightMap();
+    private final LightMapStrip tempStrip = new LightMapStrip();
 
     private boolean registryLocked = false;
 
