@@ -20,7 +20,7 @@ import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.startsWit
 public enum TargetedMod implements ITargetedMod {
     OPTIFINE("OptiFine", false, startsWith("optifine")),
     CHISEL("Chisel", false, startsWith("chisel")),
-    CARPENTERS_BLOCKS("Carpenter's Blocks", false, str -> str.matches("carpenter'?s( |-|_|%20)?blocks.*")),
+    CARPENTERS_BLOCKS("Carpenter's Blocks", false, str -> str.matches("[cC]arpenter'?s( |-|_|%20|\\+)?[bB]locks.*")),
     ARCHITECTURE_CRAFT("ArchitectureCraft", false, startsWith("architecturecraft-")),
     PROJECT_RED_CORE("ProjectRed Core", false, startsWith("projectred").and(contains("base"))),
     PROJECT_RED_ILLUMINATION("ProjectRed Illumination", false, startsWith("projectred").and(contains("lighting"))),
