@@ -327,9 +327,9 @@ public abstract class ShaderTessMixin {
               .textureU(ofTess.rple$textureU())
               .textureV(ofTess.rple$textureV())
               .colorARGB(ofTess.rple$color())
-              .redLightMapUV(TessellatorBrightnessHelper.getBrightnessRed(packed))
-              .greenLightMapUV(TessellatorBrightnessHelper.getBrightnessGreen(packed))
-              .blueLightMapUV(TessellatorBrightnessHelper.getBrightnessBlue(packed))
+              .redLightMapUV(TessellatorBrightnessHelper.getTessBrightnessRed(packed))
+              .greenLightMapUV(TessellatorBrightnessHelper.getTessBrightnessGreen(packed))
+              .blueLightMapUV(TessellatorBrightnessHelper.getTessBrightnessBlue(packed))
               .entityData(Shaders.getEntityData())
               .entityData2(Shaders.getEntityData2());
 

@@ -9,6 +9,7 @@ public final class RPLELightMapUtil {
     private static final float LIGHT_MAP_COORDINATE_SCALE = Short.MAX_VALUE;
     private static final float LIGHT_MAP_BASE_COORDINATE_SCALE = 255F / Short.MAX_VALUE;
     private static final float LIGHT_MAP_TEXTURE_SCALE = 1F / LIGHT_MAP_COORDINATE_SCALE;
+    private static final float LIGHT_MAP_TEXTURE_TRANSLATION = 1024F;
 
     private RPLELightMapUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
@@ -24,6 +25,10 @@ public final class RPLELightMapUtil {
 
     public static float lightMapTextureScale() {
         return LIGHT_MAP_TEXTURE_SCALE;
+    }
+
+    public static float lightMapTextureTranslation() {
+        return LIGHT_MAP_TEXTURE_TRANSLATION;
     }
 
     /**

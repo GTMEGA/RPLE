@@ -92,10 +92,14 @@ public final class LightMapHook {
     public void enableReconfigure() {
         OpenGlHelper.setActiveTexture(textureUnit);
 
-        val lightMapTextureScale = lightMapTextureScale();
         GL11.glMatrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
-        GL11.glScalef(lightMapTextureScale, lightMapTextureScale, 1F);
+
+        val lightMapTextureScale = lightMapTextureScale();
+        GL11.glScalef(lightMapTextureScale, lightMapTextureScale, 0F);
+        val lightMapTextureTranslation = lightMapTextureScale();
+        GL11.glTranslatef(lightMapTextureTranslation, lightMapTextureTranslation, 0F);
+
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
         // I don't know why, I don't know how. I don't even want to know why.

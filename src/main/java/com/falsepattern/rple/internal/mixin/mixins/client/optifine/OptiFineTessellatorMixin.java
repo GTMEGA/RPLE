@@ -56,8 +56,6 @@ public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMi
     private boolean hasBrightness;
     @Shadow
     private boolean hasNormals;
-    @Shadow
-    private int brightness;
 
     @Shadow
     public abstract int draw();
@@ -156,11 +154,6 @@ public abstract class OptiFineTessellatorMixin implements IOptiFineTessellatorMi
     @Override
     public boolean rple$hasBrightness() {
         return hasBrightness;
-    }
-
-    @Override
-    public long rple$packedBrightness() {
-        return brightness;
     }
 
     @Override
