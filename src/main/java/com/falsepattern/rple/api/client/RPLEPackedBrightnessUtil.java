@@ -12,8 +12,44 @@ import com.falsepattern.rple.api.common.color.ColorChannel;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
 
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
+
 @SuppressWarnings("unused")
 public final class RPLEPackedBrightnessUtil {
+    private static final int BLOCK_BRIGHTNESS_BIT_LENGTH = Byte.SIZE;
+    private static final int SKY_BRIGHTNESS_BIT_LENGTH = Byte.SIZE;
+    private static final int BRIGHTNESS_CHANNEL_BIT_LENGTH = BLOCK_BRIGHTNESS_BIT_LENGTH +
+                                                             SKY_BRIGHTNESS_BIT_LENGTH;
+
+    private static final int BLOCK_BRIGHTNESS_BIT_SHIFT = 0;
+    private static final int SKY_BRIGHTNESS_BIT_SHIFT = BLOCK_BRIGHTNESS_BIT_SHIFT +
+                                                        BLOCK_BRIGHTNESS_BIT_LENGTH;
+    private static final int BRIGHTNESS_CHANNEL_BIT_SHIFT = SKY_BRIGHTNESS_BIT_SHIFT;
+
+    private static final long BLOCK_BRIGHTNESS_BIT_MASK = (1L << BLOCK_BRIGHTNESS_BIT_LENGTH) - 1L;
+    private static final long SKY_BRIGHTNESS_BIT_MASK = (1L << SKY_BRIGHTNESS_BIT_LENGTH) - 1L;
+    private static final long BRIGHTNESS_CHANNEL_BIT_MASK = (1L << BRIGHTNESS_CHANNEL_BIT_LENGTH) - 1L;
+
+    private static final int BLUE_BRIGHTNESS_SEGMENT_BIT_LENGTH = BRIGHTNESS_CHANNEL_BIT_LENGTH;
+    private static final int GREEN_BRIGHTNESS_SEGMENT_BIT_LENGTH = BRIGHTNESS_CHANNEL_BIT_LENGTH;
+    private static final int RED_BRIGHTNESS_SEGMENT_BIT_LENGTH = BRIGHTNESS_CHANNEL_BIT_LENGTH;
+    private static final int PACKED_BRIGHTNESS_BIT_LENGTH = BLUE_BRIGHTNESS_SEGMENT_BIT_LENGTH +
+                                                            GREEN_BRIGHTNESS_SEGMENT_BIT_LENGTH +
+                                                            RED_BRIGHTNESS_SEGMENT_BIT_LENGTH;
+
+    private static final int BLUE_BRIGHTNESS_SEGMENT_BIT_SHIFT = 0;
+    private static final int GREEN_BRIGHTNESS_SEGMENT_BIT_SHIFT = BLUE_BRIGHTNESS_SEGMENT_BIT_SHIFT +
+                                                                  BLUE_BRIGHTNESS_SEGMENT_BIT_LENGTH;
+    private static final int RED_BRIGHTNESS_SEGMENT_BIT_SHIFT = GREEN_BRIGHTNESS_SEGMENT_BIT_SHIFT +
+                                                                GREEN_BRIGHTNESS_SEGMENT_BIT_LENGTH;
+
+    private static final int PACKED_BRIGHTNESS_BIT_SHIFT = BLUE_BRIGHTNESS_SEGMENT_BIT_SHIFT;
+
+    private static final long BLUE_SEGMENT_BIT_MASK = (1L << BLUE_BRIGHTNESS_SEGMENT_BIT_LENGTH) - 1L;
+    private static final long GREEN_SEGMENT_BIT_MASK = (1L << GREEN_BRIGHTNESS_SEGMENT_BIT_LENGTH) - 1L;
+    private static final long RED_SEGMENT_BIT_MASK = (1L << RED_BRIGHTNESS_SEGMENT_BIT_LENGTH) - 1L;
+    private static final long PACKED_BRIGHTNESS_BIT_MASK = (1L << PACKED_BRIGHTNESS_BIT_SHIFT) - 1L;
+
     private RPLEPackedBrightnessUtil() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
@@ -22,7 +58,9 @@ public final class RPLEPackedBrightnessUtil {
                                                           int redLightValue,
                                                           int greenLightValue,
                                                           int blueLightValue) {
-        return 0;
+        return brightnessSegmentFromLightValue(RED_CHANNEL, lightType, redLightValue) |
+               brightnessSegmentFromLightValue(GREEN_CHANNEL, lightType, greenLightValue) |
+               brightnessSegmentFromLightValue(BLUE_CHANNEL, lightType, blueLightValue);
     }
 
     public static long packedBrightnessFromRGBLightValues(int redBlockLightValue,
@@ -31,15 +69,21 @@ public final class RPLEPackedBrightnessUtil {
                                                           int redSkyLightValue,
                                                           int greenSkyLightValue,
                                                           int blueSkyLightValue) {
-        return 0;
+        return brightnessSegmentFromLightValues(RED_CHANNEL, redBlockLightValue, redSkyLightValue) |
+               brightnessSegmentFromLightValues(GREEN_CHANNEL, greenBlockLightValue, greenSkyLightValue) |
+               brightnessSegmentFromLightValues(BLUE_CHANNEL, blueBlockLightValue, blueSkyLightValue);
     }
 
     public static long packedBrightnessFromLightValue(@NotNull LightType lightType, int lightValue) {
-        return 0;
+        return brightnessSegmentFromLightValue(RED_CHANNEL, lightType, lightValue) |
+               brightnessSegmentFromLightValue(GREEN_CHANNEL, lightType, lightValue) |
+               brightnessSegmentFromLightValue(BLUE_CHANNEL, lightType, lightValue);
     }
 
     public static long packedBrightnessFromLightValues(int blockLightValue, int skyLightValue) {
-        return 0;
+        return brightnessSegmentFromLightValues(RED_CHANNEL, blockLightValue, skyLightValue) |
+               brightnessSegmentFromLightValues(GREEN_CHANNEL, blockLightValue, skyLightValue) |
+               brightnessSegmentFromLightValues(BLUE_CHANNEL, blockLightValue, skyLightValue);
     }
 
     public static int lightValueFromPackedBrightness(long packedBrightness,
@@ -182,5 +226,46 @@ public final class RPLEPackedBrightnessUtil {
                                              double multC,
                                              double multD) {
         return 0;
+    }
+
+    private static long brightnessSegmentFromLightValue(ColorChannel channel, LightType lightType, int lightValue) {
+        val brightnessChannel = brightnessChannelFromLightValue(lightType, lightValue);
+        switch (channel) {
+            default:
+            case RED_CHANNEL:
+                return brightnessChannel << RED_BRIGHTNESS_SEGMENT_BIT_SHIFT;
+            case GREEN_CHANNEL:
+                return brightnessChannel << GREEN_BRIGHTNESS_SEGMENT_BIT_SHIFT;
+            case BLUE_CHANNEL:
+                return brightnessChannel << BLUE_BRIGHTNESS_SEGMENT_BIT_SHIFT;
+        }
+    }
+
+    private static long brightnessSegmentFromLightValues(ColorChannel channel, int blockLightValue, int skyLightValue) {
+        val brightnessChannel = brightnessChannelFromLightValues(blockLightValue, skyLightValue);
+        switch (channel) {
+            default:
+            case RED_CHANNEL:
+                return brightnessChannel << RED_BRIGHTNESS_SEGMENT_BIT_SHIFT;
+            case GREEN_CHANNEL:
+                return brightnessChannel << GREEN_BRIGHTNESS_SEGMENT_BIT_SHIFT;
+            case BLUE_CHANNEL:
+                return brightnessChannel << BLUE_BRIGHTNESS_SEGMENT_BIT_SHIFT;
+        }
+    }
+
+    private static long brightnessChannelFromLightValue(LightType lightType, int lightValue) {
+        switch (lightType) {
+            default:
+            case BLOCK_LIGHT_TYPE:
+                return (lightValue | BLOCK_BRIGHTNESS_BIT_MASK) << BLOCK_BRIGHTNESS_BIT_SHIFT;
+            case SKY_LIGHT_TYPE:
+                return (lightValue | SKY_BRIGHTNESS_BIT_MASK) << SKY_BRIGHTNESS_BIT_SHIFT;
+        }
+    }
+
+    private static long brightnessChannelFromLightValues(int blockLightValue, int skyLightValue) {
+        return ((blockLightValue | BLOCK_BRIGHTNESS_BIT_MASK) << BLOCK_BRIGHTNESS_BIT_SHIFT) |
+               ((skyLightValue | SKY_BRIGHTNESS_BIT_MASK) << SKY_BRIGHTNESS_BIT_SHIFT);
     }
 }

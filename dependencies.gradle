@@ -13,15 +13,15 @@ def deobfCurse(curseDep) {
 }
 
 dependencies {
-    // FalsePattern Lib
-    implementation("com.falsepattern:falsepatternlib-mc1.7.10:0.12.0-pre1:dev")
-
     // LUMINA
     compileOnly("com.falsepattern:lumina-mc1.7.10:a036c55:api")
     runtimeOnly("com.falsepattern:lumina-mc1.7.10:a036c55:dev")
 
     // FalseTweaks
     implementation("com.falsepattern:falsetweaks-mc1.7.10:2.5.7:dev")
+
+    // FalsePatternLib
+    implementation("com.falsepattern:falsepatternlib-mc1.7.10:0.12.0-pre1:dev")
 
     // JetBrains Annotations
     compileOnly("org.jetbrains:annotations:24.0.1")
