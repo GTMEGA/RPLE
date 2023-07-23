@@ -48,8 +48,6 @@ public interface IOptiFineTessellatorMixin extends ITessellatorMixin {
 
     boolean rple$hasBrightness();
 
-    long rple$brightness();
-
     void rple$hasNormals(boolean hasNormals);
 
     ShadersTess rple$shaderTessellator();
