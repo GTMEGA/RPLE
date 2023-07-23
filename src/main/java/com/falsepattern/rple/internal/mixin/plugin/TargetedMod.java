@@ -28,8 +28,8 @@ public enum TargetedMod implements ITargetedMod {
     APPLIED_ENERGISTICS_2("Applied Energistics 2", false, startsWith("appliedenergistics2-")),
     ENDER_IO("Ender IO", false, startsWith("enderio")),
     STORAGE_DRAWERS("Storage Drawers", false, startsWith("storagedrawers-")),
-    CODE_CHICKEN_LIB("CodeChickenLib", false, startsWith("codechickenlib")),
-    FORGE_MULTI_PART("Forge Multi Part", false, startsWith("multipart-")),
+    CODE_CHICKEN_LIB("CodeChickenLib", false, startsWith("codechickenlib-")),
+    FORGE_MULTI_PART("Forge Multi Part", false, startsWith("forgemultipart-")),
     ;
 
     @Getter
