@@ -33,40 +33,40 @@ dependencies {
     compileOnly(deobfMaven("https://mvn.falsepattern.com/stripped/", "optifine:shadersmod-stripped:1.7.10-hd_u7"))
 
     // Chisel
-    compileOnly("team.chisel:chisel-mc1.7.10:2.9.21-mega:dev")
+    implementation("team.chisel:chisel-mc1.7.10:2.9.21-mega:dev")
 
     // CodeChickenLib
-    compileOnly("codechicken:codechickenlib-mc1.7.10:1.2.0-mega:dev")
+    implementation("codechicken:codechickenlib-mc1.7.10:1.2.0-mega:dev")
 
     // MRTJPCore 1.1.0.33-universal
-    compileOnly(deobfCurse("mrtjpcore-229002:2279413"))
+    implementation(deobfCurse("mrtjpcore-229002:2279413"))
 
     // ProjectRed Core 4.7.0pre12.95
-    compileOnly(deobfCurse("projectred-core-228702:2280728"))
+    implementation(deobfCurse("projectred-core-228702:2280728"))
 
     // ProjectRed Illumination 4.7.0pre12.95
-    compileOnly(deobfCurse("projectred-illum-229046:2280733"))
+    implementation(deobfCurse("projectred-illum-229046:2280733"))
 
     // ForgeMultipart 1.2.0.345
-    compileOnly(deobfCurse("multipart-229323:2242993"))
+    implementation(deobfCurse("multipart-229323:2242993"))
 
     // EnderCore 1.7.10-0.2.0.39_beta
-    compileOnly(deobfCurse("endercore-231868:2331048"))
+    implementation(deobfCurse("endercore-231868:2331048"))
 
     // Ender IO 1.7.10-2.3.0.429_beta
-    compileOnly(deobfCurse("ender-io-64578:2322348"))
+    implementation(deobfCurse("ender-io-64578:2322348"))
 
     // Carpenter's Blocks v3.3.8.2 - MC 1.7.10
-    compileOnly(deobfCurse("carpenters-blocks-228932:2719376"))
+    implementation(deobfCurse("carpenters-blocks-228932:2719376"))
 
     // ArchitectureCraft 1.7.2
-    compileOnly(deobfCurse("architecturecraft-242001:2352554"))
+    implementation(deobfCurse("architecturecraft-242001:2352554"))
 
     // Applied Energistics 2 rv3 beta 6
-    compileOnly(deobfCurse("appliedenergistics2-223794:2296430"))
+    implementation(deobfCurse("appliedenergistics2-223794:2296430"))
 
     // Storage Drawers 1.10.9
-    compileOnly(deobfCurse("storagedrawers-223852:2469586"))
+    implementation(deobfCurse("storagedrawers-223852:2469586"))
 
     // The Lord of the Rings Mod: Legacy v36.15
     compileOnly(deobfCurse("the-lord-of-the-rings-mod-legacy-423748:4091561"))

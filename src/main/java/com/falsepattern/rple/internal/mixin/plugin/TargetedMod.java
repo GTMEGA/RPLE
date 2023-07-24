@@ -19,17 +19,17 @@ import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.startsWit
 @RequiredArgsConstructor
 public enum TargetedMod implements ITargetedMod {
     OPTIFINE("OptiFine", false, startsWith("optifine")),
-    CHISEL("Chisel", false, startsWith("chisel")),
-    CARPENTERS_BLOCKS("Carpenter's Blocks", false, str -> str.matches("[cC]arpenter'?s( |-|_|%20|\\+)?[bB]locks.*")),
-    ARCHITECTURE_CRAFT("ArchitectureCraft", false, startsWith("architecturecraft-")),
-    PROJECT_RED_CORE("ProjectRed Core", false, startsWith("projectred").and(contains("base"))),
-    PROJECT_RED_ILLUMINATION("ProjectRed Illumination", false, startsWith("projectred").and(contains("lighting"))),
-    PROJECT_RED_COMBINED_JAR("ProjectRed Combined Jar", false, projectRedCombinedJarCondition()),
-    APPLIED_ENERGISTICS_2("Applied Energistics 2", false, startsWith("appliedenergistics2-")),
-    ENDER_IO("Ender IO", false, startsWith("enderio")),
-    STORAGE_DRAWERS("Storage Drawers", false, startsWith("storagedrawers-")),
-    CODE_CHICKEN_LIB("CodeChickenLib", false, startsWith("codechickenlib-")),
-    FORGE_MULTI_PART("Forge Multi Part", false, startsWith("forgemultipart-")),
+    CHISEL("Chisel", true, startsWith("chisel")),
+    CARPENTERS_BLOCKS("Carpenter's Blocks", true, str -> str.matches("[cC]arpenter'?s( |-|_|%20|\\+)?[bB]locks.*")),
+    ARCHITECTURE_CRAFT("ArchitectureCraft", true, startsWith("architecturecraft-")),
+    PROJECT_RED_CORE("ProjectRed Core", true, startsWith("projectred").and(contains("base"))),
+    PROJECT_RED_ILLUMINATION("ProjectRed Illumination", true, startsWith("projectred").and(contains("lighting"))),
+    PROJECT_RED_COMBINED_JAR("ProjectRed Combined Jar", true, projectRedCombinedJarCondition()),
+    APPLIED_ENERGISTICS_2("Applied Energistics 2", true, startsWith("appliedenergistics2-")),
+    ENDER_IO("Ender IO", true, startsWith("enderio")),
+    STORAGE_DRAWERS("Storage Drawers", true, startsWith("storagedrawers-")),
+    CODE_CHICKEN_LIB("CodeChickenLib", true, startsWith("codechickenlib-")),
+    FORGE_MULTI_PART("Forge Multi Part", true, startsWith("forgemultipart-")),
     ;
 
     @Getter
