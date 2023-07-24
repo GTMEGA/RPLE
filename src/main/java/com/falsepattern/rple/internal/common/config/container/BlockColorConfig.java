@@ -19,11 +19,12 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
-@Getter
 @Accessors(fluent = true, chain = false)
 @AllArgsConstructor
 public final class BlockColorConfig {
+    @Getter
     private final ColorPalette palette;
     private final LinkedHashMap<BlockReference, ColorReference> brightness;
     private final LinkedHashMap<BlockReference, ColorReference> translucency;
@@ -46,48 +47,12 @@ public final class BlockColorConfig {
         palette.addPaletteColor(color);
     }
 
-    public void setBlockBrightness(BlockReference block, ColorReference color) {
-        if (brightness.containsKey(block))
-            return;
-
-        if (block.isValid() && color.isValid())
-            brightness.put(block, color);
+    public Optional<ColorReference> setBlockBrightness(BlockReference block, ColorReference color) {
+        return Optional.ofNullable(brightness.put(block, color));
     }
 
-    public void setBlockTranslucency(BlockReference block, ColorReference color) {
-        if (translucency.containsKey(block))
-            return;
-
-        if (block.isValid() && color.isValid())
-            translucency.put(block, color);
-    }
-
-    @Deprecated
-    public BlockColorConfig setPaletteColor(String name, String colorHex) {
-        palette.addColor(name, colorHex);
-        return this;
-    }
-
-    @Deprecated
-    public BlockColorConfig setBlockBrightness(String blockName, String color) {
-        val blockReference = new BlockReference(blockName);
-        val colorReference = new ColorReference(color);
-        brightness.put(blockReference, colorReference);
-        return this;
-    }
-
-    @Deprecated
-    public BlockColorConfig setBlockTranslucency(String blockName, String color) {
-        val blockReference = new BlockReference(blockName);
-        val colorReference = new ColorReference(color);
-        translucency.put(blockReference, colorReference);
-        return this;
-    }
-
-    public void reset() {
-        palette.reset();
-        brightness.clear();
-        translucency.clear();
+    public Optional<ColorReference> setBlockTranslucency(BlockReference block, ColorReference color) {
+        return Optional.ofNullable(translucency.put(block, color));
     }
 
     @Override

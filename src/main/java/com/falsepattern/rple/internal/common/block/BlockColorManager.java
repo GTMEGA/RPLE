@@ -219,30 +219,46 @@ public final class BlockColorManager implements RPLEBlockColorRegistry {
 
     private void applyBlockColors(BlockColorizer colorizer) {
         if (registryLocked) {
-            LOG.error("Failed to apply block colors after post init", new Throwable());
+            LOG.error("Cannot to apply block colors after post init", new Throwable());
             return;
         }
 
-        colorizer.brightness().ifPresent(this::setBlockBrightness);
-        colorizer.translucency().ifPresent(this::setBlockTranslucency);
         colorizer.paletteBrightness().ifPresent(this::addPaletteColor);
         colorizer.paletteTranslucency().ifPresent(this::addPaletteColor);
+        colorizer.brightness().ifPresent(this::setBlockBrightness);
+        colorizer.translucency().ifPresent(this::setBlockTranslucency);
     }
 
     private void setBlockBrightness(BlockColorizer.BlockColorReference blockColor) {
         if (!blockColor.isValid()) {
-            LOG.error("Failed to apply invalid block color", new Throwable());
+            LOG.error(new IllegalArgumentException("Failed to apply invalid block brightness color"));
             return;
         }
-        config.setBlockBrightness(blockColor.block(), blockColor.color());
+        val block = blockColor.block();
+        val color = blockColor.color();
+
+        val oldColor = config.setBlockBrightness(block, color);
+        if (oldColor.isPresent()) {
+            LOG.warn("Re-Colorized block [{}] with old brightness [{}] to [{}]", block, oldColor.get(), color);
+        } else {
+            LOG.info("Colorized block [{}] with brightness [{}]", block, color);
+        }
     }
 
     private void setBlockTranslucency(BlockColorizer.BlockColorReference blockColor) {
         if (!blockColor.isValid()) {
-            LOG.error("Failed to apply invalid block color", new Throwable());
+            LOG.error(new IllegalArgumentException("Failed to apply invalid block translucency color"));
             return;
         }
-        config.setBlockTranslucency(blockColor.block(), blockColor.color());
+        val block = blockColor.block();
+        val color = blockColor.color();
+
+        val oldColor = config.setBlockTranslucency(block, color);
+        if (oldColor.isPresent()) {
+            LOG.warn("Re-Colorized block [{}] with old translucency [{}] to [{}]", block, oldColor.get(), color);
+        } else {
+            LOG.info("Colorized block [{}] with translucency [{}]", block, color);
+        }
     }
 
     private void addPaletteColor(RPLENamedColor color) {
