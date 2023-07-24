@@ -45,7 +45,7 @@ public enum DefaultColor implements RPLENamedColor {
     DIM_RED        ( 8,  0,  0),
     DIM_BLACK      ( 1,  1,  1),
 
-    TORCH_LIGHT    (12, 12,  7),
+    TORCH_LIGHT    (13, 10,  8),
     // @formatter:on
     ;
 
