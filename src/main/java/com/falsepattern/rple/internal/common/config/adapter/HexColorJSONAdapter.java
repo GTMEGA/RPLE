@@ -13,6 +13,9 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import lombok.NoArgsConstructor;
+import lombok.val;
+
+import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.logParsingError;
 
 @NoArgsConstructor
 public final class HexColorJSONAdapter extends TypeAdapter<HexColor> {
@@ -23,6 +26,10 @@ public final class HexColorJSONAdapter extends TypeAdapter<HexColor> {
 
     @Override
     public HexColor read(JsonReader in) {
-        return new HexColor(ColorConfigLoader.colorConfigGSON().<String>fromJson(in, String.class));
+        val colorHex = ColorConfigLoader.colorConfigGSON().<String>fromJson(in, String.class);
+        val hexColor = new HexColor(colorHex);
+        if (!hexColor.isValid())
+            logParsingError("Invalid hex color: {}", hexColor);
+        return hexColor;
     }
 }

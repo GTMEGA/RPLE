@@ -12,8 +12,10 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import lombok.NoArgsConstructor;
+import lombok.val;
 
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.colorConfigGSON;
+import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.logParsingError;
 
 @NoArgsConstructor
 public final class BlockReferenceJSONAdapter extends TypeAdapter<BlockReference> {
@@ -24,6 +26,10 @@ public final class BlockReferenceJSONAdapter extends TypeAdapter<BlockReference>
 
     @Override
     public BlockReference read(JsonReader in) {
-        return new BlockReference(colorConfigGSON().<String>fromJson(in, String.class));
+        val blockID = colorConfigGSON().<String>fromJson(in, String.class);
+        val blockReference = new BlockReference(blockID);
+        if (!blockReference.isValid())
+            logParsingError("Invalid block reference: {}", blockID);
+        return blockReference;
     }
 }

@@ -21,6 +21,7 @@ import com.google.gson.stream.JsonWriter;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,8 +30,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
+
 @UtilityClass
 public final class ColorConfigLoader {
+    private static final Logger LOG = createLogger("ColorConfigLoader");
+
     private static final Gson GSON;
 
     private static final Path CONFIG_PATH;
@@ -84,5 +89,9 @@ public final class ColorConfigLoader {
 
         GSON.toJson(source, source.getClass(), jsonWriter);
         return stringWriter.toString();
+    }
+
+    public static void logParsingError(String message, Object... params) {
+        LOG.warn(message, params);
     }
 }
