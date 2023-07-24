@@ -36,7 +36,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Accessors(fluent = true, chain = false)
 @NoArgsConstructor(access = PRIVATE)
 public final class BlockColorManager implements RPLEBlockColorRegistry {
-    private static final Logger LOG = createLogger("Block Color Manager");
+    private static final Logger LOG = createLogger("BlockColorManager");
 
     private static final BlockColorManager INSTANCE = new BlockColorManager();
 

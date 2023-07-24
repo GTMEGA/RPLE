@@ -24,7 +24,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class LightMapPipeline implements RPLELightMapRegistry {
-    private static final Logger LOG = createLogger("Light Map Pipeline");
+    private static final Logger LOG = createLogger("LightMapPipeline");
 
     private static final LightMapPipeline INSTANCE = new LightMapPipeline();
 

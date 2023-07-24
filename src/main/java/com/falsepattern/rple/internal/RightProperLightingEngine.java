@@ -29,7 +29,7 @@ public final class RightProperLightingEngine {
     public static CommonProxy PROXY;
 
     public static Logger createLogger(String name) {
-        return LogManager.getLogger(MOD_NAME + "|" + name);
+        return LogManager.getLogger("RPLE|" + name);
     }
 
     @Mod.EventHandler

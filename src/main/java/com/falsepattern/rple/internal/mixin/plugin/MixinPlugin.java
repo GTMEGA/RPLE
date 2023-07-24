@@ -12,9 +12,8 @@ import com.falsepattern.lib.mixin.IMixinPlugin;
 import com.falsepattern.lib.mixin.ITargetedMod;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import static com.falsepattern.rple.internal.Tags.MOD_NAME;
 
 @NoArgsConstructor
 public final class MixinPlugin implements IMixinPlugin {
@@ -23,7 +22,7 @@ public final class MixinPlugin implements IMixinPlugin {
     public static final int POST_LUMINA_MIXIN_PRIORITY = 1010;
 
     @Getter
-    private final Logger logger = IMixinPlugin.createLogger(MOD_NAME + "|Mixin Plugin");
+    private final Logger logger = LogManager.getLogger("RPLE|Mixins");
 
     @Override
     public ITargetedMod[] getTargetedModEnumValues() {

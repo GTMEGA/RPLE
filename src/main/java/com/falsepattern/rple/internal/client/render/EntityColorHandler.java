@@ -18,7 +18,7 @@ import static com.falsepattern.rple.internal.RightProperLightingEngine.createLog
 
 @UtilityClass
 public final class EntityColorHandler {
-    public static final Logger LOG = createLogger("Entity Color Handler");
+    public static final Logger LOG = createLogger("EntityColorHandler");
 
     private static final Set<String> PERMITTED = new HashSet<>();
     private static final Map<Class<?>, Boolean> BLOCK_LIST_CACHE = new HashMap<>();

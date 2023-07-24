@@ -29,7 +29,7 @@ import static com.falsepattern.rple.internal.RightProperLightingEngine.createLog
  * manager! Additionally, they should not be saved anywhere, as they expire very quickly.
  */
 public final class CookieMonster {
-    private static final Logger LOG = createLogger("Cookie Monster");
+    private static final Logger LOG = createLogger("CookieMonster");
 
     // Cookie format (bits):
     // 0100 0000 IIII IIII IIII IIII 0000 000P
