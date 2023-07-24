@@ -7,12 +7,12 @@
 
 package com.falsepattern.rple.internal;
 
-import com.falsepattern.rple.api.common.block.RPLEBlockColorRegistry;
-import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.api.client.lightmap.RPLELightMapRegistry;
 import com.falsepattern.rple.api.client.lightmap.vanilla.BossColorModifierMask;
 import com.falsepattern.rple.api.client.lightmap.vanilla.NightVisionMask;
 import com.falsepattern.rple.api.client.lightmap.vanilla.VanillaLightMapBase;
+import com.falsepattern.rple.api.common.block.RPLEBlockColorRegistry;
+import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.internal.common.config.container.BlockColorConfig;
 import lombok.experimental.UtilityClass;
 import lombok.val;
@@ -388,6 +388,65 @@ public final class RPLEDefaultValues {
 
         registry.colorizeBlock("RandomThings:spectreBlock").brightness(0xFFF).apply();
         registry.colorizeBlock("TMechworks:Dynamo").brightness(0xFFF).apply();
+
+        registry.colorizeBlock("lotr:tile.woodElvenTorch").brightness(0xEAA).apply();
+        registry.colorizeBlock("lotr:tile.highElvenTorch").brightness(0xADC).apply();
+        registry.colorizeBlock("lotr:tile.morgulTorch").brightness(0x8DB).apply();
+        registry.colorizeBlock("lotr:tile.mallornTorch").brightness(0xEEF).apply();
+        registry.colorizeBlock("lotr:tile.mallornTorchBlue").brightness(0xADD).apply();
+        registry.colorizeBlock("lotr:tile.mallornTorchGold").brightness(0xED4).apply();
+        registry.colorizeBlock("lotr:tile.mallornTorchGreen").brightness(0x4E8).apply();
+
+        registry.colorizeBlock("lotr:tile.orcTorch:0").brightness(0x000).apply();
+        registry.colorizeBlock("lotr:tile.orcTorch:1").brightness(0xEEB).apply();
+        registry.colorizeBlock("lotr:tile.tauredainDoubleTorch:0").brightness(0x000).apply();
+        registry.colorizeBlock("lotr:tile.tauredainDoubleTorch:1").brightness(0xEEB).apply();
+
+        registry.colorizeBlock("lotr:tile.chandelier:0").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:1").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:2").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:3").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:4").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:5").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:6").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:7").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:8").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:9").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:10").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:11").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:12").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:13").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:14").brightness(0xEEE).apply();
+        registry.colorizeBlock("lotr:tile.chandelier:15").brightness(0xEEE).apply();
+
+        registry.colorizeBlock("lotr:tile.rhunFire").brightness(0xFFF).apply();
+
+        registry.colorizeBlock("lotr:tile.elvenPortal").brightness(0xDDD).apply();
+        registry.colorizeBlock("lotr:tile.morgulPortal").brightness(0xDDD).apply();
+        registry.colorizeBlock("lotr:tile.utumnoReturnPortal").brightness(0xFFF).apply();
+        registry.colorizeBlock("lotr:tile.utumnoReturnLight").brightness(0xFFF).apply();
+
+        registry.colorizeBlock("lotr:tile.oreNaurite").brightness(0x777).apply();
+        registry.colorizeBlock("lotr:tile.oreQuendite").brightness(0xBBB).apply();
+        registry.colorizeBlock("lotr:tile.oreGlowstone").brightness(0xBBB).apply();
+
+        registry.colorizeBlock("lotr:tile.oreGulduril:0").brightness(0xBBB).apply();
+        registry.colorizeBlock("lotr:tile.oreGulduril:1").brightness(0xBBB).apply();
+
+        registry.colorizeBlock("lotr:tile.morgulCraftingTable:1").brightness(0x777).apply();
+        registry.colorizeBlock("lotr:tile.corruptMallorn:1").brightness(0x999).apply();
+        registry.colorizeBlock("lotr:tile.hithlainLadder:1").brightness(0x555).apply();
+
+        registry.colorizeBlock("lotr:tile.guldurilBrick:0").brightness(0xBBB).apply();
+        registry.colorizeBlock("lotr:tile.guldurilBrick:1").brightness(0xBBB).apply();
+        registry.colorizeBlock("lotr:tile.guldurilBrick:2").brightness(0xBBB).apply();
+        registry.colorizeBlock("lotr:tile.guldurilBrick:3").brightness(0xBBB).apply();
+        registry.colorizeBlock("lotr:tile.guldurilBrick:4").brightness(0xBBB).apply();
+        registry.colorizeBlock("lotr:tile.guldurilBrick:5").brightness(0xBBB).apply();
+        registry.colorizeBlock("lotr:tile.guldurilBrick:6").brightness(0xBBB).apply();
+        registry.colorizeBlock("lotr:tile.guldurilBrick:7").brightness(0xBBB).apply();
+        registry.colorizeBlock("lotr:tile.guldurilBrick:8").brightness(0xBBB).apply();
+        registry.colorizeBlock("lotr:tile.guldurilBrick:9").brightness(0xBBB).apply();
     }
 
     public static void registerDefaultBlockTranslucencyColors(RPLEBlockColorRegistry registry) {
