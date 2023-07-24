@@ -39,7 +39,8 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
     private int minSkyLightHeight;
     private int queuedRandomLightUpdates;
-    private boolean isLightingInitialized;
+    private boolean isSkyLightHeightMapValid;
+    private boolean isFullyLit;
 
     public RPLEChunkContainer(ColorChannel channel, RPLEWorldRoot worldRoot, RPLEChunkRoot root, LumiChunk lumiChunk) {
         this.channel = channel;
@@ -55,7 +56,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
         this.minSkyLightHeight = Integer.MAX_VALUE;
         this.queuedRandomLightUpdates = 0;
-        this.isLightingInitialized = false;
+        this.isFullyLit = false;
     }
 
     public RPLEChunkContainer(ColorChannel channel,
@@ -77,7 +78,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
         this.minSkyLightHeight = Integer.MAX_VALUE;
         this.queuedRandomLightUpdates = 0;
-        this.isLightingInitialized = false;
+        this.isFullyLit = false;
     }
 
     @Override
@@ -98,12 +99,12 @@ public final class RPLEChunkContainer implements RPLEChunk {
     @Override
     public void lumi$writeToNBT(@NotNull NBTTagCompound output) {
         output.setIntArray(SKY_LIGHT_HEIGHT_MAP_NBT_TAG_NAME, skyLightHeightMap);
-        output.setBoolean(IS_LIGHT_INITIALIZED_NBT_TAG_NAME, isLightingInitialized);
+        output.setBoolean(IS_LIGHT_INITIALIZED_NBT_TAG_NAME, isFullyLit);
     }
 
     @Override
     public void lumi$readFromNBT(@NotNull NBTTagCompound input) {
-        isLightingInitialized = false;
+        isFullyLit = false;
         skyLightHeightMapValidCheck:
         {
             if (!input.hasKey(IS_LIGHT_INITIALIZED_NBT_TAG_NAME, 1))
@@ -119,9 +120,9 @@ public final class RPLEChunkContainer implements RPLEChunk {
                 break skyLightHeightMapValidCheck;
 
             System.arraycopy(skyLightHeightMapInput, 0, skyLightHeightMap, 0, HEIGHT_MAP_ARRAY_SIZE);
-            isLightingInitialized = true;
+            isFullyLit = true;
         }
-        if (!isLightingInitialized)
+        if (!isFullyLit)
             world.lumi$lightingEngine().handleChunkInit(this);
     }
 
@@ -131,7 +132,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
     @Override
     public void lumi$readFromPacket(@NotNull ByteBuffer input) {
-        isLightingInitialized = true;
+        isFullyLit = true;
     }
 
     @Override
@@ -373,9 +374,13 @@ public final class RPLEChunkContainer implements RPLEChunk {
     }
 
     @Override
-    public void lumi$resetSkyLightHeightMap() {
-        Arrays.fill(skyLightHeightMap, Integer.MAX_VALUE);
-        minSkyLightHeight = Integer.MAX_VALUE;
+    public void lumi$isSkyLightHeightMapValid(boolean isSkyLightHeightMapValid) {
+        this.isSkyLightHeightMapValid = isSkyLightHeightMapValid;
+    }
+
+    @Override
+    public boolean lumi$isSkyLightHeightMapValid() {
+        return isSkyLightHeightMapValid;
     }
 
     @Override
@@ -400,18 +405,12 @@ public final class RPLEChunkContainer implements RPLEChunk {
     }
 
     @Override
-    public void lumi$isLightingInitialized(boolean isLightingInitialized) {
-        this.isLightingInitialized = isLightingInitialized;
+    public void lumi$isFullyLit(boolean isFullyLit) {
+        this.isFullyLit = isFullyLit;
     }
 
     @Override
-    public boolean lumi$isLightingInitialized() {
-        return isLightingInitialized;
-    }
-
-    @Override
-    public void lumi$resetLighting() {
-        isLightingInitialized = false;
-        world.lumi$lightingEngine().handleChunkInit(this);
+    public boolean lumi$isFullyLit() {
+        return isFullyLit;
     }
 }
