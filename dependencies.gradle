@@ -13,8 +13,8 @@ def deobfCurse(curseDep) {
 
 dependencies {
     // LUMINA
-    compileOnly("com.falsepattern:lumina-mc1.7.10:fc0736f:api")
-    runtimeOnly("com.falsepattern:lumina-mc1.7.10:fc0736f:dev")
+    compileOnly("com.falsepattern:lumina-mc1.7.10:b46ef4b:api")
+    runtimeOnly("com.falsepattern:lumina-mc1.7.10:b46ef4b:dev")
 
     // FalseTweaks
     implementation("com.falsepattern:falsetweaks-mc1.7.10:2.5.7:dev")
@@ -69,5 +69,5 @@ dependencies {
     compileOnly(deobfCurse("storagedrawers-223852:2469586"))
 
     // The Lord of the Rings Mod: Legacy v36.15
-    compileOnly(deobfCurse("the-lord-of-the-rings-mod-legacy-423748:4091561"))
+    implementation(deobfCurse("the-lord-of-the-rings-mod-legacy-423748:4091561"))
 }
