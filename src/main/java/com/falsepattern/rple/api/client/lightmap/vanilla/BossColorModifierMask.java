@@ -16,27 +16,29 @@ import org.jetbrains.annotations.NotNull;
 public class BossColorModifierMask implements RPLELightMapMask {
     @Override
     public boolean generateBlockLightMapMask(@NotNull RPLELightMapStrip output, float partialTick) {
-        generateBossColorModifierMask(output, partialTick);
-        return true;
+        return generateBossColorModifierMask(output, partialTick);
     }
 
     @Override
     public boolean generateSkyLightMapMask(@NotNull RPLELightMapStrip output, float partialTick) {
-        generateBossColorModifierMask(output, partialTick);
-        return true;
+        return generateBossColorModifierMask(output, partialTick);
     }
 
-    protected void generateBossColorModifierMask(RPLELightMapStrip output, float partialTick) {
-        final float intensity = bossColorModifierIntensity(partialTick);
+    protected boolean generateBossColorModifierMask(RPLELightMapStrip output, float partialTick) {
+        final EntityRenderer entityRenderer = Minecraft.getMinecraft().entityRenderer;
+        if (entityRenderer == null)
+            return false;
+
+        final float intensity = bossColorModifierIntensity(entityRenderer, partialTick);
         final float red = (1F - intensity) + 0.7F * intensity;
         final float green = (1F - intensity) + 0.6F * intensity;
         final float blue = (1F - intensity) + 0.6F * intensity;
 
         output.fillLightMapRGB(red, green, blue);
+        return true;
     }
 
-    protected float bossColorModifierIntensity(float partialTick) {
-        final EntityRenderer entityRenderer = Minecraft.getMinecraft().entityRenderer;
+    protected float bossColorModifierIntensity(EntityRenderer entityRenderer, float partialTick) {
         return entityRenderer.bossColorModifierPrev +
                (entityRenderer.bossColorModifier - entityRenderer.bossColorModifierPrev) * partialTick;
     }

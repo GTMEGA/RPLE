@@ -21,20 +21,28 @@ public class VanillaLightMapBase implements RPLELightMapBase {
 
     @Override
     public boolean generateBlockLightMapBase(@NotNull RPLELightMapStrip output, float partialTick) {
-        final WorldProvider worldProvider = Minecraft.getMinecraft().theWorld.provider;
+        final WorldClient world = Minecraft.getMinecraft().theWorld;
+        if (world == null)
+            return false;
+        final WorldProvider worldProvider = world.provider;
+        if (worldProvider == null)
+            return false;
 
         for (int i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
             final float brightness = worldProvider.lightBrightnessTable[i];
             output.setLightMap(i, brightness);
         }
-
         return true;
     }
 
     @Override
     public boolean generateSkyLightMapBase(@NotNull RPLELightMapStrip output, float partialTick) {
         final WorldClient world = Minecraft.getMinecraft().theWorld;
+        if (world == null)
+            return false;
         final WorldProvider worldProvider = world.provider;
+        if (worldProvider == null)
+            return false;
 
         if (worldProvider.dimensionId == END_DIMENSION_ID) {
             output.fillLightMap(0.22F);

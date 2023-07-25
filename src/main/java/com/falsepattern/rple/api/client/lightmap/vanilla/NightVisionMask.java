@@ -29,6 +29,8 @@ public class NightVisionMask implements RPLELightMapMask {
 
     protected boolean generateNightVisionMask(RPLELightMapStrip output, float partialTick) {
         final EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+        if (player == null)
+            return false;
         if (!player.isPotionActive(Potion.nightVision))
             return false;
 
