@@ -13,7 +13,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.val;
 import lombok.var;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
@@ -70,62 +69,66 @@ public final class LightMapHook {
     }
 
     public static void enableReconfigureAll() {
-        RED_LIGHT_MAP.enableReconfigure();
-        GREEN_LIGHT_MAP.enableReconfigure();
-        BLUE_LIGHT_MAP.enableReconfigure();
-
         if (Compat.shadersEnabled())
             Shaders.enableLightmap();
+
+        RED_LIGHT_MAP.prepare();
+        GREEN_LIGHT_MAP.prepare();
+        BLUE_LIGHT_MAP.prepare();
+
+        if (Compat.shadersEnabled()) {
+            rescale(GL13.GL_TEXTURE1);
+            rescale(GL13.GL_TEXTURE6);
+            rescale(GL13.GL_TEXTURE7);
+        } else {
+            rescale(GL13.GL_TEXTURE1);
+            rescale(GL13.GL_TEXTURE2);
+            rescale(GL13.GL_TEXTURE3);
+        }
     }
 
-    public void enableReconfigure() {
-        OpenGlHelper.setActiveTexture(textureUnit);
+    public void prepare() {
+        bindTexture();
+    }
 
-        GL11.glMatrixMode(GL11.GL_TEXTURE);
-        GL11.glLoadIdentity();
-
+    private static void rescale(int textureCoordsID) {
         val lightMapTextureScale = lightMapTextureScale();
-        GL11.glScalef(lightMapTextureScale, lightMapTextureScale, 0F);
         val lightMapTextureTranslation = lightMapTextureTranslation();
+
+        GL13.glActiveTexture(textureCoordsID);
+        GL11.glMatrixMode(GL11.GL_TEXTURE);
+
+        GL11.glLoadIdentity();
+        GL11.glScalef(lightMapTextureScale, lightMapTextureScale, 0F);
         GL11.glTranslatef(lightMapTextureTranslation, lightMapTextureTranslation, 0F);
 
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
-
-        // I don't know why, I don't know how. I don't even want to know why.
-        // But this works. It fixes the GL Error spam when using shaders??
-        // If I enable GL_TEXTURE_2D, (WHICH, BTW, HAPPENS IN STOCK OPTIFINE!!)
-        // Then all of a sudden, I get a spam of `GL_INVALID_OPERATION` in the log!
-        // HOWEVER!! The only documentation about `glEnable()` throwing this error,
-        // is if it is called between `glBegin()` and `glEnd()`.
-        // Minecraft may be an ancient block game, but it's not stone age enough to use the fucking
-        // "Immediate Mode" fixed render pipeline anymore.
-        // Only 2 people know why this works: God and Nobody
-        // If we want to know why it works, we need to find who asked!
-        // Because nobody asked how this works, nobody will ever ask.
-        // I think that OpenGL was made by people who asked.
-        if (Compat.shadersEnabled()) {
-            GL13.glActiveTexture(shaderTextureUnit);
-        } else {
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-        }
-
-        getTextureManager().bindTexture(location);
-
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
     }
 
     public void uploadTexture() {
         texture.updateDynamicTexture();
 
-        // This is already called internally by `updateDynamicTexture()`
-        // GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getGlTextureId());
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getGlTextureId());
 
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, GL11.GL_ZERO);
+    }
+
+    public void bindTexture() {
+        if (Compat.shadersEnabled()) {
+            GL13.glActiveTexture(shaderTextureUnit);
+        } else {
+            GL13.glActiveTexture(textureUnit);
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+        }
+
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getGlTextureId());
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
     }
 
     public static void updateLightMap(float partialTick) {
