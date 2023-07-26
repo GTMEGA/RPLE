@@ -69,5 +69,5 @@ dependencies {
     compileOnly(deobfCurse("storagedrawers-223852:2469586"))
 
     // The Lord of the Rings Mod: Legacy v36.15
-    implementation(deobfCurse("the-lord-of-the-rings-mod-legacy-423748:4091561"))
+    compileOnly(deobfCurse("the-lord-of-the-rings-mod-legacy-423748:4091561"))
 }
