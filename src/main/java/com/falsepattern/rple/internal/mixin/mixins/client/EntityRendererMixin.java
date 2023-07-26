@@ -11,7 +11,6 @@ import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.client.lightmap.LightMapHook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
@@ -42,7 +41,6 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
             at = @At("RETURN"),
             require = 1)
     private void setupColorLightMaps(Minecraft minecraft, IResourceManager resourceManager, CallbackInfo ci) {
-        Common.RED_LIGHT_MAP_TEXTURE_UNIT = OpenGlHelper.lightmapTexUnit;
         LightMapHook.init(new LightMapHook(lightmapTexture,
                                            locationLightMap,
                                            lightmapColors,

@@ -22,7 +22,7 @@ public final class Common {
     public static final int GREEN_LIGHT_MAP_SHADER_TEXTURE_SAMPLER = 32 + 10;
     public static final int BLUE_LIGHT_MAP_SHADER_TEXTURE_SAMPLER = 33 + 10;
 
-    public static int RED_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE1;
+    public static final int RED_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE1;
     public static final int GREEN_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE6;
     public static final int BLUE_LIGHT_MAP_TEXTURE_UNIT = GL13.GL_TEXTURE7;
 

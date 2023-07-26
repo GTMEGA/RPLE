@@ -23,6 +23,7 @@ import org.lwjgl.opengl.GL13;
 import shadersmod.client.Shaders;
 
 import static com.falsepattern.rple.api.client.RPLELightMapUtil.lightMapTextureScale;
+import static com.falsepattern.rple.api.client.RPLELightMapUtil.lightMapTextureTranslation;
 import static com.falsepattern.rple.internal.Common.LIGHT_MAP_1D_SIZE;
 import static net.minecraft.client.Minecraft.getMinecraft;
 
@@ -77,18 +78,6 @@ public final class LightMapHook {
             Shaders.enableLightmap();
     }
 
-    public void enable() {
-        OpenGlHelper.setActiveTexture(textureUnit);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
-    }
-
-    public void disable() {
-        OpenGlHelper.setActiveTexture(textureUnit);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
-    }
-
     public void enableReconfigure() {
         OpenGlHelper.setActiveTexture(textureUnit);
 
@@ -97,7 +86,7 @@ public final class LightMapHook {
 
         val lightMapTextureScale = lightMapTextureScale();
         GL11.glScalef(lightMapTextureScale, lightMapTextureScale, 0F);
-        val lightMapTextureTranslation = lightMapTextureScale();
+        val lightMapTextureTranslation = lightMapTextureTranslation();
         GL11.glTranslatef(lightMapTextureTranslation, lightMapTextureTranslation, 0F);
 
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -122,16 +111,21 @@ public final class LightMapHook {
 
         getTextureManager().bindTexture(location);
 
-        // The Dynamic texture will default these to nearest neighbour/repeat.
-        // Removing this would require not using dynamic textures.
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+    }
+
+    public void uploadTexture() {
+        texture.updateDynamicTexture();
+
+        // This is already called internally by `updateDynamicTexture()`
+        // GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getGlTextureId());
+
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
     public static void updateLightMap(float partialTick) {
@@ -144,9 +138,9 @@ public final class LightMapHook {
             BLUE_LIGHT_MAP.colors[i] = colorRGB | 0xFFFFFF00;
         }
 
-        RED_LIGHT_MAP.texture.updateDynamicTexture();
-        GREEN_LIGHT_MAP.texture.updateDynamicTexture();
-        BLUE_LIGHT_MAP.texture.updateDynamicTexture();
+        RED_LIGHT_MAP.uploadTexture();
+        GREEN_LIGHT_MAP.uploadTexture();
+        BLUE_LIGHT_MAP.uploadTexture();
     }
 
     private static TextureManager getTextureManager() {
