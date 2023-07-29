@@ -7,7 +7,6 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.client.lightmap.LightMapHook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -41,11 +40,7 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
             at = @At("RETURN"),
             require = 1)
     private void setupColorLightMaps(Minecraft minecraft, IResourceManager resourceManager, CallbackInfo ci) {
-        LightMapHook.init(new LightMapHook(lightmapTexture,
-                                           locationLightMap,
-                                           lightmapColors,
-                                           Common.RED_LIGHT_MAP_TEXTURE_UNIT,
-                                           Common.RED_LIGHT_MAP_SHADER_TEXTURE_UNIT));
+        LightMapHook.init();
     }
 
     @Inject(method = "enableLightmap",
