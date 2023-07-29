@@ -4,6 +4,7 @@ import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Compat;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
@@ -11,9 +12,8 @@ import org.lwjgl.opengl.GL13;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 
-import static com.falsepattern.rple.api.client.RPLELightMapUtil.lightMapTextureScale;
-import static com.falsepattern.rple.api.client.RPLELightMapUtil.lightMapTextureTranslation;
 import static com.falsepattern.rple.internal.client.lightmap.LightMapConstants.*;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -26,7 +26,6 @@ public final class LightMapTexture {
     private final int colorBitMask;
     private final int fixedTextureUnitBinding;
     private final int shaderTextureSamplerBinding;
-    private final int fixedTextureCoordsBinding;
     private final int shaderTextureCoordsBinding;
 
     public static LightMapTexture createLightMapTexture(ColorChannel channel) {
@@ -42,15 +41,14 @@ public final class LightMapTexture {
 
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, lastTextureName);
 
         final int colorBitMask;
         final int fixedTextureUnitBinding;
         final int shaderTextureSamplerBinding;
-        final int fixedTextureCoordsBinding;
         final int shaderTextureCoordsBinding;
         switch (channel) {
             default:
@@ -58,21 +56,18 @@ public final class LightMapTexture {
                 colorBitMask = R_LIGHT_MAP_COLOR_BIT_MASK;
                 fixedTextureUnitBinding = R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING;
                 shaderTextureSamplerBinding = R_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING;
-                fixedTextureCoordsBinding = R_LIGHT_MAP_FIXED_TEXTURE_COORDS_BINDING;
                 shaderTextureCoordsBinding = R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING;
                 break;
             case GREEN_CHANNEL:
                 colorBitMask = G_LIGHT_MAP_COLOR_BIT_MASK;
                 fixedTextureUnitBinding = G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING;
                 shaderTextureSamplerBinding = G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING;
-                fixedTextureCoordsBinding = G_LIGHT_MAP_FIXED_TEXTURE_COORDS_BINDING;
                 shaderTextureCoordsBinding = G_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING;
                 break;
             case BLUE_CHANNEL:
                 colorBitMask = B_LIGHT_MAP_COLOR_BIT_MASK;
                 fixedTextureUnitBinding = B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING;
                 shaderTextureSamplerBinding = B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING;
-                fixedTextureCoordsBinding = B_LIGHT_MAP_FIXED_TEXTURE_COORDS_BINDING;
                 shaderTextureCoordsBinding = B_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING;
                 break;
         }
@@ -80,7 +75,6 @@ public final class LightMapTexture {
                                    colorBitMask,
                                    fixedTextureUnitBinding,
                                    shaderTextureSamplerBinding,
-                                   fixedTextureCoordsBinding,
                                    shaderTextureCoordsBinding);
     }
 
@@ -107,6 +101,14 @@ public final class LightMapTexture {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, lastTextureName);
     }
 
+    public void setCoords(short block, short sky) {
+        if (Compat.shadersEnabled()) {
+            ARBMultitexture.glMultiTexCoord2sARB(shaderTextureCoordsBinding, block, sky);
+        } else {
+            ARBMultitexture.glMultiTexCoord2sARB(fixedTextureUnitBinding, block, sky);
+        }
+    }
+
     public void bind() {
         val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
         if (Compat.shadersEnabled()) {
@@ -123,23 +125,52 @@ public final class LightMapTexture {
 
     public void rescale() {
         val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
-        val lastMatrixMode = GL11.glGetInteger(GL11.GL_MATRIX_MODE);
-
         if (Compat.shadersEnabled()) {
             GL13.glActiveTexture(shaderTextureCoordsBinding);
         } else {
-            GL13.glActiveTexture(fixedTextureCoordsBinding);
+            GL13.glActiveTexture(fixedTextureUnitBinding);
             GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
 
-        val scale = lightMapTextureScale();
-        val translation = lightMapTextureTranslation();
+        val lastMatrixMode = GL11.glGetInteger(GL11.GL_MATRIX_MODE);
         GL11.glMatrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
-        GL11.glScalef(scale, scale, 1F);
-        GL11.glTranslatef(translation, translation, 0F);
+        GL11.glScalef(LIGHT_MAP_TEXTURE_SCALE, LIGHT_MAP_TEXTURE_SCALE, 1F);
+        GL11.glTranslatef(LIGHT_MAP_TEXTURE_TRANSLATION, LIGHT_MAP_TEXTURE_TRANSLATION, 0F);
 
         GL11.glMatrixMode(lastMatrixMode);
         GL13.glActiveTexture(lastActiveTexture);
+    }
+
+    public void setEnabled(boolean enabled) {
+        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+        if (Compat.shadersEnabled()) {
+            GL13.glActiveTexture(shaderTextureSamplerBinding);
+        } else {
+            GL13.glActiveTexture(fixedTextureUnitBinding);
+        }
+
+        if (enabled) {
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+        } else {
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+        }
+
+        GL13.glActiveTexture(lastActiveTexture);
+    }
+
+    public void enableVertexPointer(ShortBuffer buffer, int stride, int position) {
+        val lastClientActiveTexture = GL11.glGetInteger(GL13.GL_CLIENT_ACTIVE_TEXTURE);
+        if (Compat.shadersEnabled()) {
+            GL13.glClientActiveTexture(shaderTextureCoordsBinding);
+        } else {
+            GL13.glClientActiveTexture(fixedTextureUnitBinding);
+        }
+
+        buffer.position(position);
+        GL11.glTexCoordPointer(2, stride, buffer);
+        GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+
+        GL13.glClientActiveTexture(lastClientActiveTexture);
     }
 }

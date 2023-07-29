@@ -9,7 +9,6 @@ package com.falsepattern.rple.internal.client.render;
 
 import lombok.experimental.UtilityClass;
 import lombok.val;
-import lombok.var;
 
 /**
  * Utility class for managing minecraft brightness values, and packed long RGB versions of these brightness values.
@@ -115,14 +114,16 @@ public final class TessellatorBrightnessHelper {
         return funnyTessBrightness(unpackTessellatorBrightness((int) ((packed >>> PACKED_BLUE_OFFSET) & COMPRESSED_BRIGHTNESS_MASK)));
     }
 
-    public static final float foo = 32767F / 255F;
-
     public static int funnyTessBrightness(int unpacked) {
-        var lightMapBlock = (short) (unpacked & 0xFF);
-        lightMapBlock = (short) ((int) ((float) lightMapBlock * foo) & 0x7FFF);
-        var lightMapSky = (short) ((unpacked >> 16) & 0xFF);
-        lightMapSky = (short) ((int) ((float) lightMapSky * foo) & 0x7FFF);
-        return lightMapBlock | (lightMapSky << 16);
+        val lightMapBlock = remapToShort(unpacked);
+        val lightMapSky = remapToShort(unpacked >> 16);
+        return ((int) lightMapBlock & 0xFFFF) | ((int) lightMapSky << 16);
+    }
+
+    public static short remapToShort(int n) {
+        n &= 255;
+        val normalized = n / 255F;
+        return (short) Math.round(normalized * (Short.MAX_VALUE - Short.MIN_VALUE) + Short.MIN_VALUE);
     }
 
     /**

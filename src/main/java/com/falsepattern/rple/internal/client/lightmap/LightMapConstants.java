@@ -5,6 +5,11 @@ import org.lwjgl.opengl.GL13;
 
 @UtilityClass
 public final class LightMapConstants {
+    public static final float LIGHT_MAP_COORDINATE_SCALE = Short.MAX_VALUE;
+    public static final float LIGHT_MAP_BASE_COORDINATE_SCALE = 255F / Short.MAX_VALUE;
+    public static final float LIGHT_MAP_TEXTURE_SCALE = 1F / (Short.MAX_VALUE - Short.MIN_VALUE);
+    public static final float LIGHT_MAP_TEXTURE_TRANSLATION = Short.MAX_VALUE;
+
     public static final int LIGHT_MAP_1D_SIZE = 16;
     public static final int LIGHT_MAP_2D_SIZE = LIGHT_MAP_1D_SIZE * LIGHT_MAP_1D_SIZE;
 
@@ -24,10 +29,6 @@ public final class LightMapConstants {
     public static final int R_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING = GL13.GL_TEXTURE0 + R_LIGHT_MAP_SHADER_TEXTURE_SAMPLER;
     public static final int G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING = GL13.GL_TEXTURE0 + G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER;
     public static final int B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING = GL13.GL_TEXTURE0 + B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER;
-
-    public static final int R_LIGHT_MAP_FIXED_TEXTURE_COORDS_BINDING = GL13.GL_TEXTURE1;
-    public static final int G_LIGHT_MAP_FIXED_TEXTURE_COORDS_BINDING = GL13.GL_TEXTURE2;
-    public static final int B_LIGHT_MAP_FIXED_TEXTURE_COORDS_BINDING = GL13.GL_TEXTURE3;
 
     public static final int R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING = GL13.GL_TEXTURE1;
     public static final int G_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING = GL13.GL_TEXTURE6;
