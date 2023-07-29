@@ -13,7 +13,6 @@ import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.mixin.helper.CodeChickenLibHelper;
 import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;
-import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.spongepowered.asm.mixin.Mixin;
@@ -58,8 +57,7 @@ public abstract class OpenGLHelperMixin {
                        target = "Lorg/lwjgl/opengl/GL13;glMultiTexCoord2f(IFF)V"),
               require = 1)
     private static void testA(int target, float s, float t) {
-        GL13.glMultiTexCoord2f(target, s * (32767F / 255F), t * (32767F / 255F));
-//        GL13.glMultiTexCoord2f(target, 0.75F, 0.75F);
+        zamnza(target, s, t);
     }
 
     @Redirect(method = "setLightmapTextureCoords",
@@ -67,7 +65,14 @@ public abstract class OpenGLHelperMixin {
                        target = "Lorg/lwjgl/opengl/ARBMultitexture;glMultiTexCoord2fARB(IFF)V"),
               require = 1)
     private static void testB(int target, float s, float t) {
-        GL13.glMultiTexCoord2f(target, s * (32767F / 255F), t * (32767F / 255F));
+        zamnza(target, s, t);
+    }
+
+    private static void zamnza(int target, float see, float tea) {
+        val real = (see / 240F) * (Short.MAX_VALUE - Short.MIN_VALUE) + Short.MIN_VALUE;
+        val fake = (tea / 240F) * (Short.MAX_VALUE - Short.MIN_VALUE) + Short.MIN_VALUE;
+
+        GL13.glMultiTexCoord2f(target, real, fake);
     }
 
     /**
@@ -76,8 +81,8 @@ public abstract class OpenGLHelperMixin {
      */
     @Overwrite
     public static void setActiveTexture(int texture) {
-        val lastTexture = GL11.glGetInteger(field_153215_z ?
-                                            ARBMultitexture.GL_ACTIVE_TEXTURE_ARB : GL13.GL_ACTIVE_TEXTURE);
+        val lastTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+
         if (lastTexture == lightmapTexUnit && texture != lightmapTexUnit) {
             val isTexture2DEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
             toggleTexture(isTexture2DEnabled);
@@ -108,10 +113,6 @@ public abstract class OpenGLHelperMixin {
     }
 
     private static void doSetActiveTexture(int texture) {
-        if (field_153215_z) {
-            ARBMultitexture.glActiveTextureARB(texture);
-        } else {
-            GL13.glActiveTexture(texture);
-        }
+        GL13.glActiveTexture(texture);
     }
 }
