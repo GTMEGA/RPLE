@@ -29,8 +29,6 @@ public final class LightMapTexture {
     private final int fixedTextureCoordsBinding;
     private final int shaderTextureCoordsBinding;
 
-    private final int[] pixels = new int[LIGHT_MAP_2D_SIZE];
-
     public static LightMapTexture createLightMapTexture(ColorChannel channel) {
         if (PIXEL_BUFFER == null) {
             PIXEL_BUFFER = ByteBuffer.allocateDirect(LIGHT_MAP_2D_SIZE * Integer.BYTES)
@@ -96,30 +94,30 @@ public final class LightMapTexture {
         GL13.glActiveTexture(lastActiveTexture);
     }
 
-    public void setColor(int blockIndex, int skyIndex, int color) {
+    public void update(int[] pixels) {
+        final int mask;
         switch (channel) {
             default:
             case RED_CHANNEL:
-                color |= R_LIGHT_MAP_COLOR_BIT_MASK;
+                mask = R_LIGHT_MAP_COLOR_BIT_MASK;
                 break;
             case GREEN_CHANNEL:
-                color |= G_LIGHT_MAP_COLOR_BIT_MASK;
+                mask = G_LIGHT_MAP_COLOR_BIT_MASK;
                 break;
             case BLUE_CHANNEL:
-                color |= B_LIGHT_MAP_COLOR_BIT_MASK;
+                mask = B_LIGHT_MAP_COLOR_BIT_MASK;
                 break;
         }
-        val index = blockIndex + (skyIndex * LIGHT_MAP_1D_SIZE);
-        pixels[index] = color;
-    }
 
-    public void upload() {
+        PIXEL_BUFFER.clear();
+        for (int i = 0; i < LIGHT_MAP_2D_SIZE; i++) {
+            PIXEL_BUFFER.put(pixels[i] | mask);
+        }
+        PIXEL_BUFFER.flip();
+
         val lastTextureName = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
-        PIXEL_BUFFER.clear();
-        PIXEL_BUFFER.put(pixels);
-        PIXEL_BUFFER.flip();
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D,
                           0,
                           GL11.GL_RGBA,

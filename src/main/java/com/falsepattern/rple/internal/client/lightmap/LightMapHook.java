@@ -12,7 +12,6 @@ import com.falsepattern.rple.internal.Compat;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.val;
-import lombok.var;
 import shadersmod.client.Shaders;
 
 @SideOnly(Side.CLIENT)
@@ -47,37 +46,11 @@ public final class LightMapHook {
         texture.bind();
     }
 
-    public void uploadTexture() {
-        texture.upload();
-    }
-
-    public void setColor(int blockIndex, int skyIndex, int color) {
-        texture.setColor(blockIndex, skyIndex, color);
-    }
-
     public static void updateLightMap(float partialTick) {
         val pixels = LightMapPipeline.lightMapPipeline().updateLightMap(partialTick);
 
-        for (var skyIndex = 0; skyIndex < LightMapConstants.LIGHT_MAP_1D_SIZE; skyIndex++) {
-            for (var blockIndex = 0; blockIndex < LightMapConstants.LIGHT_MAP_1D_SIZE; blockIndex++) {
-                val index = blockIndex + (skyIndex * LightMapConstants.LIGHT_MAP_1D_SIZE);
-                val color = pixels[index];
-                setColors(blockIndex, skyIndex, color);
-            }
-        }
-
-        uploadTextures();
-    }
-
-    public static void setColors(int blockIndex, int skyIndex, int color) {
-        RED_LIGHT_MAP.setColor(blockIndex, skyIndex, color);
-        GREEN_LIGHT_MAP.setColor(blockIndex, skyIndex, color);
-        BLUE_LIGHT_MAP.setColor(blockIndex, skyIndex, color);
-    }
-
-    public static void uploadTextures() {
-        RED_LIGHT_MAP.uploadTexture();
-        GREEN_LIGHT_MAP.uploadTexture();
-        BLUE_LIGHT_MAP.uploadTexture();
+        RED_LIGHT_MAP.texture.update(pixels);
+        GREEN_LIGHT_MAP.texture.update(pixels);
+        BLUE_LIGHT_MAP.texture.update(pixels);
     }
 }
