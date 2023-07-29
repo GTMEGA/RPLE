@@ -28,6 +28,6 @@ public final class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent evt) {
         super.init(evt);
         RenderingRegistry.registerBlockHandler(new LampRenderer());
-        lightMapPipeline().registerLightMaps();
+        lightMapPipeline().registerLightMapProviders();
     }
 }

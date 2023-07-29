@@ -8,21 +8,23 @@
 package com.falsepattern.rple.internal.client.lightmap;
 
 import com.falsepattern.rple.api.client.lightmap.*;
-import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.collection.PriorityPair;
 import lombok.NoArgsConstructor;
 import lombok.val;
+import lombok.var;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.RPLEDefaultValues.registerDefaultLightMaps;
 import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
+import static com.falsepattern.rple.internal.client.lightmap.LightMapConstants.LIGHT_MAP_1D_SIZE;
+import static com.falsepattern.rple.internal.client.lightmap.LightMapConstants.LIGHT_MAP_2D_SIZE;
 import static com.falsepattern.rple.internal.common.collection.PriorityPair.wrappedWithPriority;
 import static com.falsepattern.rple.internal.common.event.EventPoster.postLightMapRegistrationEvent;
 import static lombok.AccessLevel.PRIVATE;
+import static net.minecraft.client.Minecraft.getMinecraft;
 
 @NoArgsConstructor(access = PRIVATE)
 public final class LightMapPipeline implements RPLELightMapRegistry {
@@ -37,21 +39,19 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
     private final List<RPLEBlockLightMapMask> blockMasks = new ArrayList<>();
     private final List<RPLESkyLightMapMask> skyMasks = new ArrayList<>();
 
-    private final LightMap2D mixedLightMap = new LightMap2D();
-    private final LightMap1D tempStrip = new LightMap1D();
+    private final LightMapStrip blockLightMapStrip = new LightMapStrip();
+    private final LightMapStrip skyLightMapStrip = new LightMapStrip();
+    private final LightMapStrip tempLightMapStrip = new LightMapStrip();
 
-    private LightMapTexture rTexture;
-    private LightMapTexture gTexture;
-    private LightMapTexture bTexture;
+    private final int[] mixedLightMapData = new int[LIGHT_MAP_2D_SIZE];
 
     private boolean registryLocked = false;
-    private boolean texturesGenerated = false;
 
     public static LightMapPipeline lightMapPipeline() {
         return INSTANCE;
     }
 
-    public void registerLightMaps() {
+    public void registerLightMapProviders() {
         if (registryLocked)
             return;
 
@@ -59,21 +59,10 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
         postLightMapRegistrationEvent(this);
 
         registryLocked = true;
-    }
-
-    public void generateTextures() {
-        if (texturesGenerated)
-            return;
-
-        rTexture = LightMapTexture.createLightMapTexture(RED_CHANNEL);
-        gTexture = LightMapTexture.createLightMapTexture(GREEN_CHANNEL);
-        bTexture = LightMapTexture.createLightMapTexture(BLUE_CHANNEL);
-
-        texturesGenerated = true;
+        LOG.info("Registered [{}] light map provider", lightMapProviders.size());
     }
 
     // region Registration
-
     @Override
     public void registerLightMapGenerator(@NotNull RPLELightMapGenerator generator, int priority) {
         if (!registerLightMapProvider(generator))
@@ -154,65 +143,87 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
     }
     // endregion
 
-    public void update(float partialTick) {
-        val blockStrip = mixedLightMap.blockLightMap();
-        val skyStrip = mixedLightMap.skyLightMap();
-
+    public int[] update(float partialTick) {
         for (val blockBase : blockBases) {
-            blockStrip.resetLightMap();
-            if (blockBase.value().generateBlockLightMapBase(blockStrip, partialTick))
+            blockLightMapStrip.resetLightMap();
+            if (blockBase.value().generateBlockLightMapBase(blockLightMapStrip, partialTick))
                 break;
         }
 
         for (val skyBase : skyBases) {
-            skyStrip.resetLightMap();
-            if (skyBase.value().generateSkyLightMapBase(skyStrip, partialTick))
+            skyLightMapStrip.resetLightMap();
+            if (skyBase.value().generateSkyLightMapBase(skyLightMapStrip, partialTick))
                 break;
         }
 
         for (val mask : blockMasks) {
-            tempStrip.resetLightMap();
-            if (mask.generateBlockLightMapMask(tempStrip, partialTick))
-                blockStrip.multLightMap(tempStrip);
+            tempLightMapStrip.resetLightMap();
+            if (mask.generateBlockLightMapMask(tempLightMapStrip, partialTick))
+                blockLightMapStrip.multLightMap(tempLightMapStrip);
         }
 
         for (val mask : skyMasks) {
-            tempStrip.resetLightMap();
-            if (mask.generateSkyLightMapMask(tempStrip, partialTick))
-                skyStrip.multLightMap(tempStrip);
+            tempLightMapStrip.resetLightMap();
+            if (mask.generateSkyLightMapMask(tempLightMapStrip, partialTick))
+                skyLightMapStrip.multLightMap(tempLightMapStrip);
         }
 
-        mixedLightMap.mixLightMaps();
-
-        val pixels = mixedLightMap.lightMapRGBData();
-        rTexture.update(pixels);
-        gTexture.update(pixels);
-        bTexture.update(pixels);
+        mixLightMaps();
+        return mixedLightMapData;
     }
 
-    public void setEnabled(boolean enabled) {
-        if (Compat.shadersEnabled())
-            Compat.toggleLightMapShaders(enabled);
+    private void mixLightMaps() {
+        val blockLightMapRed = blockLightMapStrip.lightMapRedData();
+        val blockLightMapGreen = blockLightMapStrip.lightMapGreenData();
+        val blockLightMapBlue = blockLightMapStrip.lightMapBlueData();
 
-        rTexture.setEnabled(enabled);
-        gTexture.setEnabled(enabled);
-        bTexture.setEnabled(enabled);
+        val skyLightMapRed = skyLightMapStrip.lightMapRedData();
+        val skyLightMapGreen = skyLightMapStrip.lightMapGreenData();
+        val skyLightMapBlue = skyLightMapStrip.lightMapBlueData();
+
+        val gamma = getMinecraft().gameSettings.gammaSetting;
+
+        for (var index = 0; index < LIGHT_MAP_2D_SIZE; index++) {
+            val blockIndex = index % LIGHT_MAP_1D_SIZE;
+            val skyIndex = index / LIGHT_MAP_1D_SIZE;
+
+            var red = blockLightMapRed[blockIndex] + skyLightMapRed[skyIndex];
+            var green = blockLightMapGreen[blockIndex] + skyLightMapGreen[skyIndex];
+            var blue = blockLightMapBlue[blockIndex] + skyLightMapBlue[skyIndex];
+
+            red = gammaCorrect(red, gamma);
+            green = gammaCorrect(green, gamma);
+            blue = gammaCorrect(blue, gamma);
+
+            mixedLightMapData[index] = colorToInt(red, green, blue);
+        }
     }
 
-    public void prepare() {
-        rescale();
-        bind();
+    private static float gammaCorrect(float color, float gamma) {
+        color = clamp(color);
+
+        var colorPreGamma = 1F - color;
+        colorPreGamma = 1F - (colorPreGamma * colorPreGamma * colorPreGamma * colorPreGamma);
+
+        color = (color * (1F - gamma)) + (colorPreGamma * gamma);
+        color = (color * 0.96F) + 0.03F;
+
+        return color;
     }
 
-    public void bind() {
-        rTexture.bind();
-        gTexture.bind();
-        bTexture.bind();
+    private static float clamp(float value) {
+        return Math.max(Math.min(value, 1F), 0F);
     }
 
-    public void rescale() {
-        rTexture.rescale();
-        gTexture.rescale();
-        bTexture.rescale();
+    private static int colorToInt(float red, float green, float blue) {
+        val redByte = colorToByte(red) << 16;
+        val greenByte = colorToByte(green) << 8;
+        val blueByte = colorToByte(blue);
+
+        return 0xFF000000 | redByte | greenByte | blueByte;
+    }
+
+    private static int colorToByte(float color) {
+        return Math.round(color * 255F) & 0xFF;
     }
 }

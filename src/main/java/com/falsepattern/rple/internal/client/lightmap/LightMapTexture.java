@@ -39,8 +39,8 @@ public final class LightMapTexture {
             PIXEL_BUFFER = ByteBuffer.allocateDirect(LIGHT_MAP_2D_SIZE * Integer.BYTES)
                                      .order(ByteOrder.nativeOrder())
                                      .asIntBuffer();
-            SHADER_VERTEX_STRIDE = VertexAPI.recomputeVertexInfo(8, 4);
-            FIXED_VERTEX_STRIDE = VertexAPI.recomputeVertexInfo(18, 4);
+            FIXED_VERTEX_STRIDE = VertexAPI.recomputeVertexInfo(8, 4);
+            SHADER_VERTEX_STRIDE = VertexAPI.recomputeVertexInfo(18, 4);
         }
         val textureID = GL11.glGenTextures();
 
@@ -119,7 +119,7 @@ public final class LightMapTexture {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, lastTextureName);
     }
 
-    public void setEnabled(boolean enabled) {
+    public void toggleEnabled(boolean enabled) {
         val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
         if (Compat.shadersEnabled()) {
             GL13.glActiveTexture(shaderTextureSamplerBinding);
@@ -186,7 +186,7 @@ public final class LightMapTexture {
         GL13.glClientActiveTexture(lastClientActiveTexture);
     }
 
-    public void disableVertexPointer(ShortBuffer buffer) {
+    public void disableVertexPointer() {
         val lastClientActiveTexture = GL11.glGetInteger(GL13.GL_CLIENT_ACTIVE_TEXTURE);
         if (Compat.shadersEnabled()) {
             GL13.glClientActiveTexture(shaderTextureCoordsBinding);

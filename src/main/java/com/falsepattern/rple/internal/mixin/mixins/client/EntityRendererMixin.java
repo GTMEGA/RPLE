@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.client.lightmap.LightMapPipeline;
+import com.falsepattern.rple.internal.client.lightmap.LightMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -40,7 +40,7 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
             at = @At("RETURN"),
             require = 1)
     private void setupColorLightMaps(Minecraft minecraft, IResourceManager resourceManager, CallbackInfo ci) {
-        LightMapPipeline.lightMapPipeline().generateTextures();
+        LightMap.lightMap().generateTextures();
     }
 
     @Inject(method = "enableLightmap",
@@ -48,7 +48,7 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
             cancellable = true,
             require = 1)
     private void enableLightMaps(double p_78463_1_, CallbackInfo ci) {
-        LightMapPipeline.lightMapPipeline().prepare();
+        LightMap.lightMap().prepare();
         ci.cancel();
     }
 
@@ -57,7 +57,7 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
             cancellable = true,
             require = 1)
     private void updateLightMap(float partialTickTime, CallbackInfo ci) {
-        LightMapPipeline.lightMapPipeline().update(partialTickTime);
+        LightMap.lightMap().update(partialTickTime);
         lightmapUpdateNeeded = false;
         // TODO: This is not compatible with the OptiFine `CustomColorizer`
         ci.cancel();

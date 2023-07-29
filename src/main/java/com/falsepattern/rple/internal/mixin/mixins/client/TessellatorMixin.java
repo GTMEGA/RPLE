@@ -7,17 +7,13 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
-import com.falsepattern.rple.internal.client.lightmap.LightMapPipeline;
+import com.falsepattern.rple.internal.client.lightmap.LightMap;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
 import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorMixin;
 import lombok.val;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import org.lwjgl.opengl.GL11;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -45,10 +41,9 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
               require = 1)
     private boolean enable(Tessellator tess) {
         if (hasBrightness) {
-            LightMapPipeline.lightMapPipeline().prepare();
-            enableLightMapTexture(tess, VertexConstants.getRedIndexNoShader() * 2, LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
-            enableLightMapTexture(tess, VertexConstants.getGreenIndexNoShader() * 2, LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
-            enableLightMapTexture(tess, VertexConstants.getBlueIndexNoShader() * 2, LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
+            val shortBuffer = ((ITessellatorMixin) tess).rple$shortBuffer();
+            LightMap.lightMap().prepare();
+            LightMap.lightMap().enableVertexPointers(shortBuffer);
         }
         return false;
     }
@@ -60,11 +55,8 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
                        ordinal = 1),
               require = 1)
     private boolean disable(Tessellator instance) {
-        if (hasBrightness) {
-            disableLightMapTexture(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
-            disableLightMapTexture(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
-            disableLightMapTexture(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
-        }
+        if (hasBrightness)
+            LightMap.lightMap().disableVertexPointers();
         return false;
     }
 
@@ -100,20 +92,5 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
     @Override
     public long rple$packedBrightness() {
         return rple$packedBrightness;
-    }
-
-    private static void enableLightMapTexture(Tessellator tess, int position, int unit) {
-        val shortBuffer = ((ITessellatorMixin) tess).rple$shortBuffer();
-        OpenGlHelper.setClientActiveTexture(unit);
-        shortBuffer.position(position);
-        GL11.glTexCoordPointer(2, VertexAPI.recomputeVertexInfo(8, 4), shortBuffer);
-        GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-        OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
-    }
-
-    private static void disableLightMapTexture(int unit) {
-        OpenGlHelper.setClientActiveTexture(unit);
-        GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-        OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 }
