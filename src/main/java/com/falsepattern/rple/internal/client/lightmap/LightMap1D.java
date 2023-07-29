@@ -19,12 +19,12 @@ import java.util.Arrays;
 @Getter
 @Accessors(fluent = true, chain = true)
 @SuppressWarnings("MismatchedReadAndWriteOfArray")
-public final class LightMapStrip implements RPLELightMapStrip {
+public final class LightMap1D implements RPLELightMapStrip {
     private final float[] lightMapRedData;
     private final float[] lightMapGreenData;
     private final float[] lightMapBlueData;
 
-    public LightMapStrip() {
+    public LightMap1D() {
         lightMapRedData = new float[LightMapConstants.LIGHT_MAP_1D_SIZE];
         lightMapGreenData = new float[LightMapConstants.LIGHT_MAP_1D_SIZE];
         lightMapBlueData = new float[LightMapConstants.LIGHT_MAP_1D_SIZE];

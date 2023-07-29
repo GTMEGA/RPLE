@@ -9,6 +9,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
+import com.falsepattern.rple.internal.client.lightmap.LightMapPipeline;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
@@ -24,7 +25,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import static com.falsepattern.rple.internal.client.lightmap.LightMapHook.enableReconfigureAll;
 
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin implements ITessellatorMixin {
@@ -45,7 +45,7 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
               require = 1)
     private boolean enable(Tessellator tess) {
         if (hasBrightness) {
-            enableReconfigureAll();
+            LightMapPipeline.lightMapPipeline().prepare();
             enableLightMapTexture(tess, VertexConstants.getRedIndexNoShader() * 2, LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
             enableLightMapTexture(tess, VertexConstants.getGreenIndexNoShader() * 2, LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
             enableLightMapTexture(tess, VertexConstants.getBlueIndexNoShader() * 2, LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);

@@ -1,7 +1,9 @@
 package com.falsepattern.rple.internal.client.lightmap;
 
+import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Compat;
+import com.falsepattern.rple.internal.client.render.VertexConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.lwjgl.opengl.ARBMultitexture;
@@ -20,6 +22,8 @@ import static lombok.AccessLevel.PRIVATE;
 @RequiredArgsConstructor(access = PRIVATE)
 public final class LightMapTexture {
     private static IntBuffer PIXEL_BUFFER;
+    private static int FIXED_VERTEX_STRIDE;
+    private static int SHADER_VERTEX_STRIDE;
 
     private final int textureID;
 
@@ -27,12 +31,16 @@ public final class LightMapTexture {
     private final int fixedTextureUnitBinding;
     private final int shaderTextureSamplerBinding;
     private final int shaderTextureCoordsBinding;
+    private final int fixedVertexPosition;
+    private final int shaderVertexPosition;
 
     public static LightMapTexture createLightMapTexture(ColorChannel channel) {
         if (PIXEL_BUFFER == null) {
             PIXEL_BUFFER = ByteBuffer.allocateDirect(LIGHT_MAP_2D_SIZE * Integer.BYTES)
                                      .order(ByteOrder.nativeOrder())
                                      .asIntBuffer();
+            SHADER_VERTEX_STRIDE = VertexAPI.recomputeVertexInfo(8, 4);
+            FIXED_VERTEX_STRIDE = VertexAPI.recomputeVertexInfo(18, 4);
         }
         val textureID = GL11.glGenTextures();
 
@@ -50,6 +58,8 @@ public final class LightMapTexture {
         final int fixedTextureUnitBinding;
         final int shaderTextureSamplerBinding;
         final int shaderTextureCoordsBinding;
+        final int fixedVertexPosition;
+        final int shaderVertexPosition;
         switch (channel) {
             default:
             case RED_CHANNEL:
@@ -57,25 +67,33 @@ public final class LightMapTexture {
                 fixedTextureUnitBinding = R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING;
                 shaderTextureSamplerBinding = R_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING;
                 shaderTextureCoordsBinding = R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING;
+                fixedVertexPosition = VertexConstants.getRedIndexNoShader() * 2;
+                shaderVertexPosition = VertexConstants.getRedIndexShader() * 2;
                 break;
             case GREEN_CHANNEL:
                 colorBitMask = G_LIGHT_MAP_COLOR_BIT_MASK;
                 fixedTextureUnitBinding = G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING;
                 shaderTextureSamplerBinding = G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING;
                 shaderTextureCoordsBinding = G_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING;
+                fixedVertexPosition = VertexConstants.getGreenIndexNoShader() * 2;
+                shaderVertexPosition = VertexConstants.getGreenIndexShader() * 2;
                 break;
             case BLUE_CHANNEL:
                 colorBitMask = B_LIGHT_MAP_COLOR_BIT_MASK;
                 fixedTextureUnitBinding = B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING;
                 shaderTextureSamplerBinding = B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING;
                 shaderTextureCoordsBinding = B_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING;
+                fixedVertexPosition = VertexConstants.getBlueIndexNoShader() * 2;
+                shaderVertexPosition = VertexConstants.getBlueIndexShader() * 2;
                 break;
         }
         return new LightMapTexture(textureID,
                                    colorBitMask,
                                    fixedTextureUnitBinding,
                                    shaderTextureSamplerBinding,
-                                   shaderTextureCoordsBinding);
+                                   shaderTextureCoordsBinding,
+                                   fixedVertexPosition,
+                                   shaderVertexPosition);
     }
 
     public void update(int[] pixels) {
@@ -101,12 +119,21 @@ public final class LightMapTexture {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, lastTextureName);
     }
 
-    public void setCoords(short block, short sky) {
+    public void setEnabled(boolean enabled) {
+        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
         if (Compat.shadersEnabled()) {
-            ARBMultitexture.glMultiTexCoord2sARB(shaderTextureCoordsBinding, block, sky);
+            GL13.glActiveTexture(shaderTextureSamplerBinding);
         } else {
-            ARBMultitexture.glMultiTexCoord2sARB(fixedTextureUnitBinding, block, sky);
+            GL13.glActiveTexture(fixedTextureUnitBinding);
         }
+
+        if (enabled) {
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+        } else {
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+        }
+
+        GL13.glActiveTexture(lastActiveTexture);
     }
 
     public void bind() {
@@ -142,24 +169,24 @@ public final class LightMapTexture {
         GL13.glActiveTexture(lastActiveTexture);
     }
 
-    public void setEnabled(boolean enabled) {
-        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+    public void enableVertexPointer(ShortBuffer buffer) {
+        val lastClientActiveTexture = GL11.glGetInteger(GL13.GL_CLIENT_ACTIVE_TEXTURE);
         if (Compat.shadersEnabled()) {
-            GL13.glActiveTexture(shaderTextureSamplerBinding);
+            GL13.glClientActiveTexture(shaderTextureCoordsBinding);
+            buffer.position(shaderVertexPosition);
+            GL11.glTexCoordPointer(2, SHADER_VERTEX_STRIDE, buffer);
         } else {
-            GL13.glActiveTexture(fixedTextureUnitBinding);
+            GL13.glClientActiveTexture(fixedTextureUnitBinding);
+            buffer.position(fixedVertexPosition);
+            GL11.glTexCoordPointer(2, FIXED_VERTEX_STRIDE, buffer);
         }
 
-        if (enabled) {
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-        } else {
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-        }
+        GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 
-        GL13.glActiveTexture(lastActiveTexture);
+        GL13.glClientActiveTexture(lastClientActiveTexture);
     }
 
-    public void enableVertexPointer(ShortBuffer buffer, int stride, int position) {
+    public void disableVertexPointer(ShortBuffer buffer) {
         val lastClientActiveTexture = GL11.glGetInteger(GL13.GL_CLIENT_ACTIVE_TEXTURE);
         if (Compat.shadersEnabled()) {
             GL13.glClientActiveTexture(shaderTextureCoordsBinding);
@@ -167,10 +194,16 @@ public final class LightMapTexture {
             GL13.glClientActiveTexture(fixedTextureUnitBinding);
         }
 
-        buffer.position(position);
-        GL11.glTexCoordPointer(2, stride, buffer);
-        GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+        GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 
         GL13.glClientActiveTexture(lastClientActiveTexture);
+    }
+
+    public void setCoords(short block, short sky) {
+        if (Compat.shadersEnabled()) {
+            ARBMultitexture.glMultiTexCoord2sARB(shaderTextureCoordsBinding, block, sky);
+        } else {
+            ARBMultitexture.glMultiTexCoord2sARB(fixedTextureUnitBinding, block, sky);
+        }
     }
 }

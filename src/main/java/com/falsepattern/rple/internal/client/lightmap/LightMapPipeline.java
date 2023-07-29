@@ -8,6 +8,7 @@
 package com.falsepattern.rple.internal.client.lightmap;
 
 import com.falsepattern.rple.api.client.lightmap.*;
+import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.collection.PriorityPair;
 import lombok.NoArgsConstructor;
 import lombok.val;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.RPLEDefaultValues.registerDefaultLightMaps;
 import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
 import static com.falsepattern.rple.internal.common.collection.PriorityPair.wrappedWithPriority;
@@ -35,10 +37,15 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
     private final List<RPLEBlockLightMapMask> blockMasks = new ArrayList<>();
     private final List<RPLESkyLightMapMask> skyMasks = new ArrayList<>();
 
-    private final LightMap mixedLightMap = new LightMap();
-    private final LightMapStrip tempStrip = new LightMapStrip();
+    private final LightMap2D mixedLightMap = new LightMap2D();
+    private final LightMap1D tempStrip = new LightMap1D();
+
+    private LightMapTexture rTexture;
+    private LightMapTexture gTexture;
+    private LightMapTexture bTexture;
 
     private boolean registryLocked = false;
+    private boolean texturesGenerated = false;
 
     public static LightMapPipeline lightMapPipeline() {
         return INSTANCE;
@@ -52,6 +59,17 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
         postLightMapRegistrationEvent(this);
 
         registryLocked = true;
+    }
+
+    public void generateTextures() {
+        if (texturesGenerated)
+            return;
+
+        rTexture = LightMapTexture.createLightMapTexture(RED_CHANNEL);
+        gTexture = LightMapTexture.createLightMapTexture(GREEN_CHANNEL);
+        bTexture = LightMapTexture.createLightMapTexture(BLUE_CHANNEL);
+
+        texturesGenerated = true;
     }
 
     // region Registration
@@ -136,7 +154,7 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
     }
     // endregion
 
-    public int[] updateLightMap(float partialTick) {
+    public void update(float partialTick) {
         val blockStrip = mixedLightMap.blockLightMap();
         val skyStrip = mixedLightMap.skyLightMap();
 
@@ -165,6 +183,36 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
         }
 
         mixedLightMap.mixLightMaps();
-        return mixedLightMap.lightMapRGBData();
+
+        val pixels = mixedLightMap.lightMapRGBData();
+        rTexture.update(pixels);
+        gTexture.update(pixels);
+        bTexture.update(pixels);
+    }
+
+    public void setEnabled(boolean enabled) {
+        if (Compat.shadersEnabled())
+            Compat.toggleLightMapShaders(enabled);
+
+        rTexture.setEnabled(enabled);
+        gTexture.setEnabled(enabled);
+        bTexture.setEnabled(enabled);
+    }
+
+    public void prepare() {
+        rescale();
+        bind();
+    }
+
+    public void bind() {
+        rTexture.bind();
+        gTexture.bind();
+        bTexture.bind();
+    }
+
+    public void rescale() {
+        rTexture.rescale();
+        gTexture.rescale();
+        bTexture.rescale();
     }
 }
