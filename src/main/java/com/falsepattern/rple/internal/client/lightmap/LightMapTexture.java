@@ -21,9 +21,9 @@ import static lombok.AccessLevel.PRIVATE;
 public final class LightMapTexture {
     private static IntBuffer PIXEL_BUFFER;
 
-    private final ColorChannel channel;
     private final int textureID;
 
+    private final int colorBitMask;
     private final int fixedTextureUnitBinding;
     private final int shaderTextureSamplerBinding;
     private final int fixedTextureCoordsBinding;
@@ -47,6 +47,7 @@ public final class LightMapTexture {
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, lastTextureName);
 
+        final int colorBitMask;
         final int fixedTextureUnitBinding;
         final int shaderTextureSamplerBinding;
         final int fixedTextureCoordsBinding;
@@ -54,64 +55,39 @@ public final class LightMapTexture {
         switch (channel) {
             default:
             case RED_CHANNEL:
+                colorBitMask = R_LIGHT_MAP_COLOR_BIT_MASK;
                 fixedTextureUnitBinding = R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING;
                 shaderTextureSamplerBinding = R_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING;
                 fixedTextureCoordsBinding = R_LIGHT_MAP_FIXED_TEXTURE_COORDS_BINDING;
                 shaderTextureCoordsBinding = R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING;
                 break;
             case GREEN_CHANNEL:
+                colorBitMask = G_LIGHT_MAP_COLOR_BIT_MASK;
                 fixedTextureUnitBinding = G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING;
                 shaderTextureSamplerBinding = G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING;
                 fixedTextureCoordsBinding = G_LIGHT_MAP_FIXED_TEXTURE_COORDS_BINDING;
                 shaderTextureCoordsBinding = G_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING;
                 break;
             case BLUE_CHANNEL:
+                colorBitMask = B_LIGHT_MAP_COLOR_BIT_MASK;
                 fixedTextureUnitBinding = B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING;
                 shaderTextureSamplerBinding = B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING;
                 fixedTextureCoordsBinding = B_LIGHT_MAP_FIXED_TEXTURE_COORDS_BINDING;
                 shaderTextureCoordsBinding = B_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING;
                 break;
         }
-        return new LightMapTexture(channel,
-                                   textureID,
+        return new LightMapTexture(textureID,
+                                   colorBitMask,
                                    fixedTextureUnitBinding,
                                    shaderTextureSamplerBinding,
                                    fixedTextureCoordsBinding,
                                    shaderTextureCoordsBinding);
     }
 
-    public void bind() {
-        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
-        if (Compat.shadersEnabled()) {
-            GL13.glActiveTexture(shaderTextureSamplerBinding);
-        } else {
-            GL13.glActiveTexture(fixedTextureUnitBinding);
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-        }
-
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-
-        GL13.glActiveTexture(lastActiveTexture);
-    }
-
     public void update(int[] pixels) {
-        final int mask;
-        switch (channel) {
-            default:
-            case RED_CHANNEL:
-                mask = R_LIGHT_MAP_COLOR_BIT_MASK;
-                break;
-            case GREEN_CHANNEL:
-                mask = G_LIGHT_MAP_COLOR_BIT_MASK;
-                break;
-            case BLUE_CHANNEL:
-                mask = B_LIGHT_MAP_COLOR_BIT_MASK;
-                break;
-        }
-
         PIXEL_BUFFER.clear();
         for (int i = 0; i < LIGHT_MAP_2D_SIZE; i++) {
-            PIXEL_BUFFER.put(pixels[i] | mask);
+            PIXEL_BUFFER.put(pixels[i] | colorBitMask);
         }
         PIXEL_BUFFER.flip();
 
@@ -129,6 +105,20 @@ public final class LightMapTexture {
                           PIXEL_BUFFER);
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, lastTextureName);
+    }
+
+    public void bind() {
+        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+        if (Compat.shadersEnabled()) {
+            GL13.glActiveTexture(shaderTextureSamplerBinding);
+        } else {
+            GL13.glActiveTexture(fixedTextureUnitBinding);
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+        }
+
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+
+        GL13.glActiveTexture(lastActiveTexture);
     }
 
     public void rescale() {
