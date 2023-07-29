@@ -12,8 +12,6 @@ import lombok.experimental.Accessors;
 import lombok.val;
 import lombok.var;
 
-import static com.falsepattern.rple.internal.Common.LIGHT_MAP_1D_SIZE;
-import static com.falsepattern.rple.internal.Common.LIGHT_MAP_2D_SIZE;
 import static net.minecraft.client.Minecraft.getMinecraft;
 
 @Getter
@@ -23,7 +21,7 @@ public final class LightMap {
     private final LightMapStrip blockLightMap = new LightMapStrip();
     private final LightMapStrip skyLightMap = new LightMapStrip();
 
-    private final int[] lightMapRGBData = new int[LIGHT_MAP_2D_SIZE];
+    private final int[] lightMapRGBData = new int[LightMapConstants.LIGHT_MAP_2D_SIZE];
 
     public void mixLightMaps() {
         val blockLightMapRed = blockLightMap.lightMapRedData();
@@ -36,9 +34,9 @@ public final class LightMap {
 
         val gamma = getMinecraft().gameSettings.gammaSetting;
 
-        for (var index = 0; index < LIGHT_MAP_2D_SIZE; index++) {
-            val blockIndex = index % LIGHT_MAP_1D_SIZE;
-            val skyIndex = index / LIGHT_MAP_1D_SIZE;
+        for (var index = 0; index < LightMapConstants.LIGHT_MAP_2D_SIZE; index++) {
+            val blockIndex = index % LightMapConstants.LIGHT_MAP_1D_SIZE;
+            val skyIndex = index / LightMapConstants.LIGHT_MAP_1D_SIZE;
 
             var red = blockLightMapRed[blockIndex] + skyLightMapRed[skyIndex];
             var green = blockLightMapGreen[blockIndex] + skyLightMapGreen[skyIndex];

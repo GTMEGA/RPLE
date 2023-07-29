@@ -16,8 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-import static com.falsepattern.rple.internal.Common.LIGHT_MAP_1D_SIZE;
-
 @Getter
 @Accessors(fluent = true, chain = true)
 @SuppressWarnings("MismatchedReadAndWriteOfArray")
@@ -27,9 +25,9 @@ public final class LightMapStrip implements RPLELightMapStrip {
     private final float[] lightMapBlueData;
 
     public LightMapStrip() {
-        lightMapRedData = new float[LIGHT_MAP_1D_SIZE];
-        lightMapGreenData = new float[LIGHT_MAP_1D_SIZE];
-        lightMapBlueData = new float[LIGHT_MAP_1D_SIZE];
+        lightMapRedData = new float[LightMapConstants.LIGHT_MAP_1D_SIZE];
+        lightMapGreenData = new float[LightMapConstants.LIGHT_MAP_1D_SIZE];
+        lightMapBlueData = new float[LightMapConstants.LIGHT_MAP_1D_SIZE];
 
         resetLightMap();
     }
@@ -114,7 +112,7 @@ public final class LightMapStrip implements RPLELightMapStrip {
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
 
-        for (var i = 0; i < LIGHT_MAP_1D_SIZE; i++) {
+        for (var i = 0; i < LightMapConstants.LIGHT_MAP_1D_SIZE; i++) {
             lightMapRedData[i] /= otherLightMapRed[i];
             lightMapGreenData[i] /= otherLightMapGreen[i];
             lightMapBlueData[i] /= otherLightMapBlue[i];
@@ -129,7 +127,7 @@ public final class LightMapStrip implements RPLELightMapStrip {
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
 
-        for (var i = 0; i < LIGHT_MAP_1D_SIZE; i++) {
+        for (var i = 0; i < LightMapConstants.LIGHT_MAP_1D_SIZE; i++) {
             lightMapRedData[i] += otherLightMapRed[i];
             lightMapGreenData[i] += otherLightMapGreen[i];
             lightMapBlueData[i] += otherLightMapBlue[i];
@@ -144,7 +142,7 @@ public final class LightMapStrip implements RPLELightMapStrip {
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
 
-        for (var i = 0; i < LIGHT_MAP_1D_SIZE; i++) {
+        for (var i = 0; i < LightMapConstants.LIGHT_MAP_1D_SIZE; i++) {
             lightMapRedData[i] -= otherLightMapRed[i];
             lightMapGreenData[i] -= otherLightMapGreen[i];
             lightMapBlueData[i] -= otherLightMapBlue[i];
@@ -159,7 +157,7 @@ public final class LightMapStrip implements RPLELightMapStrip {
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
 
-        for (var i = 0; i < LIGHT_MAP_1D_SIZE; i++) {
+        for (var i = 0; i < LightMapConstants.LIGHT_MAP_1D_SIZE; i++) {
             lightMapRedData[i] *= otherLightMapRed[i];
             lightMapGreenData[i] *= otherLightMapGreen[i];
             lightMapBlueData[i] *= otherLightMapBlue[i];
@@ -174,7 +172,7 @@ public final class LightMapStrip implements RPLELightMapStrip {
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();
 
-        for (var i = 0; i < LIGHT_MAP_1D_SIZE; i++) {
+        for (var i = 0; i < LightMapConstants.LIGHT_MAP_1D_SIZE; i++) {
             lightMapRedData[i] /= otherLightMapRed[i];
             lightMapGreenData[i] /= otherLightMapGreen[i];
             lightMapBlueData[i] /= otherLightMapBlue[i];

@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.rple.internal.Common;
+import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
@@ -46,9 +46,9 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
     private boolean enable(Tessellator tess) {
         if (hasBrightness) {
             enableReconfigureAll();
-            enableLightMapTexture(tess, VertexConstants.getRedIndexNoShader() * 2, Common.RED_LIGHT_MAP_TEXTURE_UNIT);
-            enableLightMapTexture(tess, VertexConstants.getGreenIndexNoShader() * 2, Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
-            enableLightMapTexture(tess, VertexConstants.getBlueIndexNoShader() * 2, Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
+            enableLightMapTexture(tess, VertexConstants.getRedIndexNoShader() * 2, LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
+            enableLightMapTexture(tess, VertexConstants.getGreenIndexNoShader() * 2, LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
+            enableLightMapTexture(tess, VertexConstants.getBlueIndexNoShader() * 2, LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
         }
         return false;
     }
@@ -61,9 +61,9 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
               require = 1)
     private boolean disable(Tessellator instance) {
         if (hasBrightness) {
-            disableLightMapTexture(Common.RED_LIGHT_MAP_TEXTURE_UNIT);
-            disableLightMapTexture(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
-            disableLightMapTexture(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
+            disableLightMapTexture(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
+            disableLightMapTexture(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
+            disableLightMapTexture(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
         }
         return false;
     }

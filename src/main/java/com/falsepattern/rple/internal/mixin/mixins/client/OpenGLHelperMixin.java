@@ -7,8 +7,8 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.internal.Common;
 import com.falsepattern.rple.internal.Compat;
+import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.mixin.helper.CodeChickenLibHelper;
 import lombok.val;
@@ -46,10 +46,10 @@ public abstract class OpenGLHelperMixin {
             ci.cancel();
         }
         if (textureUnit == lightmapTexUnit) {
-            if (lightmapTexUnit != Common.RED_LIGHT_MAP_TEXTURE_UNIT)
-                setLightmapTextureCoords(Common.RED_LIGHT_MAP_TEXTURE_UNIT, textureU, textureV);
-            setLightmapTextureCoords(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, textureU, textureV);
-            setLightmapTextureCoords(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, textureU, textureV);
+            if (lightmapTexUnit != LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING)
+                setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
+            setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
+            setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
         }
     }
 
@@ -67,8 +67,7 @@ public abstract class OpenGLHelperMixin {
                        target = "Lorg/lwjgl/opengl/ARBMultitexture;glMultiTexCoord2fARB(IFF)V"),
               require = 1)
     private static void testB(int target, float s, float t) {
-//        ARBMultitexture.glMultiTexCoord2fARB(target, s / 256F, t / 256F);
-//        ARBMultitexture.glMultiTexCoord2fARB(target, 0.75F, 0.75F);
+        GL13.glMultiTexCoord2f(target, s * (32767F / 255F), t * (32767F / 255F));
     }
 
     /**
@@ -84,14 +83,14 @@ public abstract class OpenGLHelperMixin {
             toggleTexture(isTexture2DEnabled);
             if (Compat.shadersEnabled()) {
                 Compat.toggleLightMapShaders(isTexture2DEnabled);
-                doSetActiveTexture(Common.GREEN_LIGHT_MAP_SHADER_TEXTURE_UNIT);
+                doSetActiveTexture(LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING);
                 toggleTexture(isTexture2DEnabled);
-                doSetActiveTexture(Common.BLUE_LIGHT_MAP_SHADER_TEXTURE_UNIT);
+                doSetActiveTexture(LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING);
                 toggleTexture(isTexture2DEnabled);
             } else {
-                doSetActiveTexture(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT);
+                doSetActiveTexture(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
                 toggleTexture(isTexture2DEnabled);
-                doSetActiveTexture(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT);
+                doSetActiveTexture(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
                 toggleTexture(isTexture2DEnabled);
             }
         }

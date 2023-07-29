@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.rple.api.client.RPLEShaderConstants;
-import com.falsepattern.rple.internal.Common;
+import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import lombok.val;
@@ -40,11 +40,11 @@ public abstract class ShadersMixin {
     private static void setProgramUniform1iHijack(String name, int value, CallbackInfo ci) {
         if ("lightmap".equals(name)) {
             setProgramUniform1i(RPLEShaderConstants.RED_LIGHT_MAP_UNIFORM_NAME,
-                                Common.RED_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
+                                LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
             setProgramUniform1i(RPLEShaderConstants.GREEN_LIGHT_MAP_UNIFORM_NAME,
-                                Common.GREEN_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
+                                LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
             setProgramUniform1i(RPLEShaderConstants.BLUE_LIGHT_MAP_UNIFORM_NAME,
-                                Common.BLUE_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
+                                LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
         }
     }
 

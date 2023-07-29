@@ -1,7 +1,7 @@
 package com.falsepattern.rple.api.client;
 
 import com.falsepattern.rple.api.common.color.ColorChannel;
-import com.falsepattern.rple.internal.Common;
+import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
 import org.lwjgl.opengl.GL13;
 
 @SuppressWarnings("unused")
@@ -83,9 +83,9 @@ public final class RPLELightMapUtil {
                 break;
         }
 
-        GL13.glMultiTexCoord2f(Common.RED_LIGHT_MAP_TEXTURE_UNIT, blockR, skyR);
-        GL13.glMultiTexCoord2f(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, blockG, skyG);
-        GL13.glMultiTexCoord2f(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, blockB, skyB);
+        GL13.glMultiTexCoord2f(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, blockR, skyR);
+        GL13.glMultiTexCoord2f(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, blockG, skyG);
+        GL13.glMultiTexCoord2f(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, blockB, skyB);
     }
 
     /**
@@ -110,13 +110,13 @@ public final class RPLELightMapUtil {
         switch (channel) {
             default:
             case RED_CHANNEL:
-                GL13.glMultiTexCoord2f(Common.RED_LIGHT_MAP_TEXTURE_UNIT, block, sky);
+                GL13.glMultiTexCoord2f(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, block, sky);
                 break;
             case GREEN_CHANNEL:
-                GL13.glMultiTexCoord2f(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, block, sky);
+                GL13.glMultiTexCoord2f(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, block, sky);
                 break;
             case BLUE_CHANNEL:
-                GL13.glMultiTexCoord2f(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, block, sky);
+                GL13.glMultiTexCoord2f(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, block, sky);
                 break;
         }
     }
@@ -139,9 +139,9 @@ public final class RPLELightMapUtil {
                 break;
         }
 
-        GL13.glMultiTexCoord2f(Common.RED_LIGHT_MAP_TEXTURE_UNIT, block, sky);
-        GL13.glMultiTexCoord2f(Common.GREEN_LIGHT_MAP_TEXTURE_UNIT, block, sky);
-        GL13.glMultiTexCoord2f(Common.BLUE_LIGHT_MAP_TEXTURE_UNIT, block, sky);
+        GL13.glMultiTexCoord2f(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, block, sky);
+        GL13.glMultiTexCoord2f(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, block, sky);
+        GL13.glMultiTexCoord2f(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, block, sky);
     }
 
     public enum LightMapCoordinateType {

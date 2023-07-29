@@ -15,8 +15,6 @@ import lombok.val;
 import lombok.var;
 import shadersmod.client.Shaders;
 
-import static com.falsepattern.rple.internal.Common.LIGHT_MAP_1D_SIZE;
-
 @SideOnly(Side.CLIENT)
 public final class LightMapHook {
     private static LightMapHook RED_LIGHT_MAP;
@@ -60,8 +58,8 @@ public final class LightMapHook {
     public static void updateLightMap(float partialTick) {
         val pixels = LightMapPipeline.lightMapPipeline().updateLightMap(partialTick);
 
-        for (var skyIndex = 0; skyIndex < LIGHT_MAP_1D_SIZE; skyIndex++) {
-            for (var blockIndex = 0; blockIndex < LIGHT_MAP_1D_SIZE; blockIndex++) {
+        for (var skyIndex = 0; skyIndex < LightMapConstants.LIGHT_MAP_1D_SIZE; skyIndex++) {
+            for (var blockIndex = 0; blockIndex < LightMapConstants.LIGHT_MAP_1D_SIZE; blockIndex++) {
                 val index = blockIndex + (skyIndex * LightMapConstants.LIGHT_MAP_1D_SIZE);
                 val color = pixels[index];
                 setColors(blockIndex, skyIndex, color);
