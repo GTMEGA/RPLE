@@ -447,6 +447,43 @@ public final class RPLEDefaultValues {
         registry.colorizeBlock("lotr:tile.guldurilBrick:7").brightness(0xBBB).apply();
         registry.colorizeBlock("lotr:tile.guldurilBrick:8").brightness(0xBBB).apply();
         registry.colorizeBlock("lotr:tile.guldurilBrick:9").brightness(0xBBB).apply();
+
+        registry.colorizeBlock("etfuturum:sea_lantern").brightness(0xAFF).apply();
+        registry.colorizeBlock("etfuturum:end_rod").brightness(0xFAF).apply();
+        registry.colorizeBlock("etfuturum:magma").brightness(0x510).apply();
+        registry.colorizeBlock("etfuturum:beacon").brightness(0xCCC).apply();
+        registry.colorizeBlock("etfuturum:deepslate_lit_redstone_ore").brightness(0x511).apply();
+        registry.colorizeBlock("etfuturum:lantern").brightness(0xFC5).apply();
+        registry.colorizeBlock("etfuturum:lit_blast_furnace").brightness(0xDCA).apply();
+        registry.colorizeBlock("etfuturum:lit_smoker").brightness(0xDCA).apply();
+
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:0").brightness(0x101).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:1").brightness(0x101).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:2").brightness(0x101).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:3").brightness(0x101).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:4").brightness(0x101).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:5").brightness(0x101).apply();
+
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:6").brightness(0x212).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:7").brightness(0x212).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:8").brightness(0x212).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:9").brightness(0x212).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:10").brightness(0x212).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_1:11").brightness(0x212).apply();
+
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:0").brightness(0x324).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:1").brightness(0x324).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:2").brightness(0x324).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:3").brightness(0x324).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:4").brightness(0x324).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:5").brightness(0x324).apply();
+
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:6").brightness(0x435).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:7").brightness(0x435).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:8").brightness(0x435).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:9").brightness(0x435).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:10").brightness(0x435).apply();
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:11").brightness(0x435).apply();
     }
 
     public static void registerDefaultBlockTranslucencyColors(RPLEBlockColorRegistry registry) {
@@ -483,5 +520,7 @@ public final class RPLEDefaultValues {
         registry.colorizeBlock(stained_glass_pane, 13).translucency(GREEN).apply();
         registry.colorizeBlock(stained_glass_pane, 14).translucency(RED).apply();
         registry.colorizeBlock(stained_glass_pane, 15).translucency(BLACK).apply();
+
+        registry.colorizeBlock("etfuturum:slime").translucency(LIME).apply();
     }
 }
