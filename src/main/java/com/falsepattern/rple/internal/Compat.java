@@ -15,7 +15,7 @@ import stubpackage.GlStateManager;
 @UtilityClass
 public final class Compat {
     public static boolean shadersEnabled() {
-        return FMLClientHandler.instance().hasOptifine() && Shaders.shaderPackLoaded;
+        return FMLClientHandler.instance().hasOptifine() && ShadersCompat.shaderPackLoaded();
     }
 
     public static void toggleLightMapShaders(boolean state) {
@@ -37,6 +37,10 @@ public final class Compat {
 
         public static void setActiveTexture(int texture) {
             GlStateManager.activeTextureUnit = texture;
+        }
+
+        public static boolean shaderPackLoaded() {
+            return Shaders.shaderPackLoaded;
         }
     }
 }

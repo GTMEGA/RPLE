@@ -45,10 +45,17 @@ public abstract class OpenGLHelperMixin {
             ci.cancel();
         }
         if (textureUnit == lightmapTexUnit) {
-            if (lightmapTexUnit != LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING)
-                setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
-            setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
-            setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
+            if (Compat.shadersEnabled()) {
+                if (lightmapTexUnit != LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING)
+                    setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, textureU, textureV);
+                setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, textureU, textureV);
+                setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, textureU, textureV);
+            } else {
+                if (lightmapTexUnit != LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING)
+                    setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
+                setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
+                setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
+            }
         }
     }
 

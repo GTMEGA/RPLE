@@ -7,6 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.helper;
 
+import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import lombok.experimental.UtilityClass;
@@ -23,15 +24,28 @@ public final class CodeChickenLibHelper {
         val redBrightness = TessellatorBrightnessHelper.getBrightnessRed(packedBrightness);
         val greenBrightness = TessellatorBrightnessHelper.getBrightnessGreen(packedBrightness);
         val blueBrightness = TessellatorBrightnessHelper.getBrightnessBlue(packedBrightness);
-        OpenGlHelper.setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING,
-                                              redBrightness & 0xFFFF,
-                                              redBrightness >>> 16);
-        OpenGlHelper.setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING,
-                                              greenBrightness & 0xFFFF,
-                                              greenBrightness >>> 16);
-        OpenGlHelper.setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING,
-                                              blueBrightness & 0xFFFF,
-                                              blueBrightness >>> 16);
+
+        if (Compat.shadersEnabled()) {
+            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING,
+                                                  redBrightness & 0xFFFF,
+                                                  redBrightness >>> 16);
+            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING,
+                                                  greenBrightness & 0xFFFF,
+                                                  greenBrightness >>> 16);
+            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING,
+                                                  blueBrightness & 0xFFFF,
+                                                  blueBrightness >>> 16);
+        } else {
+            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING,
+                                                  redBrightness & 0xFFFF,
+                                                  redBrightness >>> 16);
+            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING,
+                                                  greenBrightness & 0xFFFF,
+                                                  greenBrightness >>> 16);
+            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING,
+                                                  blueBrightness & 0xFFFF,
+                                                  blueBrightness >>> 16);
+        }
     }
 
     public static long lastPackedBrightness() {
