@@ -10,6 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 import com.falsepattern.rple.api.common.block.RPLEBlockRoot;
 import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.api.common.color.RPLEColor;
+import com.falsepattern.rple.internal.common.block.TransparencyRecursionDoctor;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
@@ -36,6 +37,7 @@ public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot {
     @Shadow(remap = false)
     public abstract int getLightOpacity(IBlockAccess world, int posX, int posY, int posZ);
 
+    @Shadow protected int lightOpacity;
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
     private ThreadLocal<Boolean> rple$passInternalBrightness;
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
@@ -65,7 +67,12 @@ public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot {
     @Override
     public RPLEColor rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ) {
         rple$passInternalOpacity.set(true);
-        val lightOpacity = getLightOpacity(world, posX, posY, posZ);
+        int lightOpacity;
+        if (TransparencyRecursionDoctor.isOnBlockList(TransparencyRecursionDoctor.Variant.Positional, getClass())) {
+            lightOpacity = getLightOpacity();
+        } else {
+            lightOpacity = getLightOpacity(world, posX, posY, posZ);
+        }
         return LightValueColor.fromVanillaLightOpacity(lightOpacity);
     }
 }

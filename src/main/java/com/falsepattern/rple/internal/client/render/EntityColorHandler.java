@@ -7,6 +7,7 @@
 
 package com.falsepattern.rple.internal.client.render;
 
+import com.falsepattern.rple.internal.common.util.ClassBlockList;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import net.minecraft.entity.Entity;
@@ -18,43 +19,24 @@ import static com.falsepattern.rple.internal.RightProperLightingEngine.createLog
 
 @UtilityClass
 public final class EntityColorHandler {
-    public static final Logger LOG = createLogger("EntityColorHandler");
+    private static final ClassBlockList BLOCK_LIST = new ClassBlockList("EntityColorHandler",
+                                                                        "colors",
+                                                                        Entity.class,
+                                                                        EntityColorHandler::hasMethod);
 
-    private static final Set<String> PERMITTED = new HashSet<>();
-    private static final Map<Class<?>, Boolean> BLOCK_LIST_CACHE = new HashMap<>();
     private static final String[] GBFR_NAMES = {"func_70070_b", "getBrightnessForRender"};
     private static final Class<?>[] GBFR_ARGS = {float.class};
 
     public static void permit(Class<? extends Entity> klass) {
-        PERMITTED.add(klass.getName());
+        BLOCK_LIST.permit(klass);
     }
 
     public static void permit(String klass) {
-        PERMITTED.add(klass);
+        BLOCK_LIST.permit(klass);
     }
 
     public static boolean isOnBlockList(Class<?> klass) {
-        if (BLOCK_LIST_CACHE.containsKey(klass)) {
-            return BLOCK_LIST_CACHE.get(klass);
-        }
-        val classChain = new ArrayList<Class<?>>();
-        boolean blocked = false;
-        do {
-            if (BLOCK_LIST_CACHE.containsKey(klass)) {
-                blocked = BLOCK_LIST_CACHE.get(klass);
-                break;
-            }
-            classChain.add(klass);
-            if (!PERMITTED.contains(klass.getName()) && hasMethod(klass)) {
-                blocked = true;
-                break;
-            }
-        } while ((klass = klass.getSuperclass()) != null && klass != Entity.class);
-        for (val c : classChain) {
-            LOG.debug("{} colors for {}", blocked ? "Blocking" : "Permitting", c.getName());
-            BLOCK_LIST_CACHE.put(c, blocked);
-        }
-        return blocked;
+        return BLOCK_LIST.isOnBlockList(klass);
     }
 
     private static boolean hasMethod(Class<?> klass) {
