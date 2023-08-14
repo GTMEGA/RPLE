@@ -20,7 +20,7 @@ dependencies {
     implementation("com.falsepattern:falsetweaks-mc1.7.10:2.5.7:dev")
 
     // FalsePatternLib
-    implementation("com.falsepattern:falsepatternlib-mc1.7.10:0.12.0-pre1:dev")
+    implementation("com.falsepattern:falsepatternlib-mc1.7.10:0.12.1:dev")
 
     // JetBrains Annotations
     compileOnly("org.jetbrains:annotations:24.0.1")

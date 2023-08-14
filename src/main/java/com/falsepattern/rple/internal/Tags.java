@@ -17,10 +17,10 @@ public final class Tags {
     public static final String GROUP_NAME = "GRADLETOKEN_GROUPNAME";
 
     public static final String MINECRAFT_VERSION = "[1.7.10]";
-    public static final String DEPENDENCIES = "required-after:falsepatternlib@[0.11,);" +
-                                              "required-after:chunkapi@[0.2,);" +
-                                              "required-after:lumina;" +
-                                              "required-after:falsetweaks@[2.4,)";
+    public static final String DEPENDENCIES = "required-after:lumina;" +
+                                              "required-after:falsetweaks@[2.4.7,);" +
+                                              "required-after:falsepatternlib@[0.12.1,);" +
+                                              "required-after:gasstation";
 
     public static final String INTERNAL_GROUP_NAME = GROUP_NAME + ".internal";
     public static final String PROXY_GROUP_NAME = INTERNAL_GROUP_NAME + ".proxy";
