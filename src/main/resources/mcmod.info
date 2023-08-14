@@ -12,8 +12,12 @@
       "Ven"
     ],
     "credits": "Houston, for meticulously testing every change in a production environment.",
-    "logoFile": "",
-    "screenshots": [],
-    "dependencies": []
+    "logoFile": "assets/rple/rple_logo_small.png",
+    "requiredMods": [
+      "lumina",
+      "falsetweaks@[2.4.7,)",
+      "falsepatternlib@[0.12.1,)",
+      "gasstation"
+    ]
   }
 ]
