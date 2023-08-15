@@ -33,7 +33,7 @@ The first right proper RGB lighting implementation in Minecraft.
 
 - [Houston](https://github.com/Houstonruss)
   - Most meticulous tester of every small little change in a production environment.
-- [Brochacho](https://github.com/matt-159)
+- [matt-159](https://github.com/matt-159)
 - [SirFell](https://github.com/SirFell)
 - [Roadhog360](https://github.com/Roadhog360)
 - [jss2a98aj](https://github.com/jss2a98aj)
