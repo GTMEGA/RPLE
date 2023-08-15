@@ -8,10 +8,21 @@
 package com.falsepattern.rple.api.common.block;
 
 import com.falsepattern.rple.api.common.color.RPLEColor;
+import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * This interface is implemented onto the {@link Block Block Class} by RPLE.
+ * <p>
+ * It is used as the base of the
+ * <p>
+ * You <b>SHOULD NOT</b> implement it yourself, but you can cast any instance of {@link Block} into it.
+ *
+ * @see RPLEBlockBrightnessColorProvider
+ * @see RPLEBlockTranslucencyColorProvider
+ */
 public interface RPLEBlock {
     @NotNull RPLEColor rple$getBrightnessColor();
 

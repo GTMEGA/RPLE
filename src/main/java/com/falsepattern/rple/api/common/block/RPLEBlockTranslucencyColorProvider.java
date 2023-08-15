@@ -8,9 +8,18 @@
 package com.falsepattern.rple.api.common.block;
 
 import com.falsepattern.rple.api.common.color.RPLEColor;
+import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * This interface can be implemented onto any {@link Block} or {@link TileEntity} to provide custom colored translucency.
+ * <p>
+ * If this interface is found on the target {@link Block}, the {@link TileEntity} implementation will only be used as fallback.
+ *
+ * @see RPLEBlockBrightnessColorProvider
+ */
 public interface RPLEBlockTranslucencyColorProvider {
     @NotNull RPLEColor rple$getCustomTranslucencyColor();
 
