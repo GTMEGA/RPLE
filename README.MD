@@ -8,6 +8,8 @@
 
 The first right proper RGB lighting implementation in Minecraft.
 
+[Join us on Discord](https://discord.gg/h7XAeCSfbT)
+
 ## Dependencies
 
 - [LUMINA 1.0.0-rc1](https://github.com/FalsePattern/LUMINA)
