@@ -39,8 +39,16 @@ public final class ColorConfigLoader {
     private static final Gson GSON;
 
     private static final Path CONFIG_PATH;
+    private static final File CONFIG_README_FILE;
     private static final File GENERATED_CONFIG_FILE;
     private static final File CUSTOM_CONFIG_FILE;
+
+    private static final String README_TEXT = "Copy the `generated_colors.json` to `custom_colors.json`.\n" +
+                                              "`generated_colors.json` is never read, only written to on startup.\n " +
+                                              "If `custom_colors.json` exists, it will be used to set the colors of any block configured in it.\n" +
+                                              "`custom_colors.json` does not act as an overlay, it acts as a definition.\n" +
+                                              "If `custom_colors.json` does not have a block, it will not be configured.\n" +
+                                              "Some mods may be implementing their own color values, and as such configurations may be provided by their authors.";
 
     static {
         GSON = new GsonBuilder()
@@ -54,12 +62,22 @@ public final class ColorConfigLoader {
                               .toPath()
                               .resolve("config")
                               .resolve(Tags.MOD_ID);
+        CONFIG_README_FILE = CONFIG_PATH.resolve("README.txt").toFile();
         GENERATED_CONFIG_FILE = CONFIG_PATH.resolve("generated_colors.json").toFile();
         CUSTOM_CONFIG_FILE = CONFIG_PATH.resolve("custom_colors.json").toFile();
     }
 
     public static Gson colorConfigGSON() {
         return GSON;
+    }
+
+    public static void generateReadmeFile() {
+        try {
+            Files.createDirectories(CONFIG_PATH);
+            FileUtils.writeStringToFile(CONFIG_README_FILE, README_TEXT);
+        } catch (IOException e) {
+            LOG.error("Failed to generate README.txt", e);
+        }
     }
 
     public static void saveGeneratedConfig(BlockColorConfig config) throws IOException {
