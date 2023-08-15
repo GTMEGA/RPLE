@@ -10,6 +10,7 @@ package com.falsepattern.rple.internal.proxy;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.common.block.LampBlock;
 import com.falsepattern.rple.internal.common.block.LampItemBlock;
+import com.falsepattern.rple.internal.common.config.ColorConfigLoader;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,7 @@ public abstract class CommonProxy {
     }
 
     public void init(FMLInitializationEvent evt) {
+        ColorConfigLoader.generateReadmeFile();
         blockColorManager().registerBlockColors();
     }
 
