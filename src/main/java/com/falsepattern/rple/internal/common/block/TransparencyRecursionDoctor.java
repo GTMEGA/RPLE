@@ -60,7 +60,7 @@ public class TransparencyRecursionDoctor {
                 klass.getDeclaredMethod(name, variant.args);
                 found = true;
                 break;
-            } catch (Exception ignored) {
+            } catch (Throwable ignored) {
             }
         }
         return found;
