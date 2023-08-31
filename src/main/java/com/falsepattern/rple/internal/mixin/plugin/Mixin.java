@@ -36,6 +36,8 @@ public enum Mixin implements IMixin {
     client_TessellatorMixin(CLIENT, always(), "TessellatorMixin"),
     client_WorldMixin(CLIENT, always(), "WorldMixin"),
 
+    client_RendererLivingEntityMixin(CLIENT, always(), "RendererLivingEntityMixin"),
+
     client_Tessellator_NonOptiFineMixin(CLIENT, avoid(OPTIFINE), "Tessellator_NonOptiFineMixin"),
     // endregion
 
