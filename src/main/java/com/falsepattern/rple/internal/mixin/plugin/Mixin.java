@@ -38,7 +38,7 @@ public enum Mixin implements IMixin {
 
     client_RendererLivingEntityMixin(CLIENT, always(), "RendererLivingEntityMixin"),
 
-    client_Tessellator_NonOptiFineMixin(CLIENT, avoid(OPTIFINE), "Tessellator_NonOptiFineMixin"),
+    client_Tessellator_NonOptiFineMixin(CLIENT, avoid(OPTIFINE_WITH_SHADERS).and(avoid(OPTIFINE_WITHOUT_SHADERS)), "Tessellator_NonOptiFineMixin"),
     // endregion
 
     // region Right Proper Lighting Engine Implementation
@@ -52,9 +52,10 @@ public enum Mixin implements IMixin {
     // endregion
 
     // region OptiFine Compatibility
-    client_optifine_ShadersMixin(CLIENT, require(OPTIFINE), "optifine.ShadersMixin"),
-    client_optifine_ShaderTessMixin(CLIENT, require(OPTIFINE), "optifine.ShaderTessMixin"),
-    client_optifine_OptiFineTessellatorMixin(CLIENT, require(OPTIFINE), "optifine.OptiFineTessellatorMixin"),
+    client_optifine_ShadersMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShadersMixin"),
+    client_optifine_ShaderTessMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShaderTessMixin"),
+    client_optifine_OptiFineTessellatorMixin(CLIENT, require(OPTIFINE_WITH_SHADERS).and(avoid(OPTIFINE_WITHOUT_SHADERS)), "optifine.OptiFineTessellatorMixin"),
+    client_optifine_OptiFineTessellator_NonShaderMixin(CLIENT, require(OPTIFINE_WITHOUT_SHADERS).and(avoid(OPTIFINE_WITH_SHADERS)), "optifine.OptiFineTessellator_NonShaderMixin"),
     // endregion
 
     // region Chisel Compatibility

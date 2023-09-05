@@ -12,10 +12,23 @@ import lombok.experimental.UtilityClass;
 import shadersmod.client.Shaders;
 import stubpackage.GlStateManager;
 
+import net.minecraft.launchwrapper.Launch;
+
+import java.io.IOException;
+
 @UtilityClass
 public final class Compat {
+    private static Boolean isShadersModPresent = null;
     public static boolean shadersEnabled() {
-        return FMLClientHandler.instance().hasOptifine() && ShadersCompat.shaderPackLoaded();
+        if (isShadersModPresent == null) {
+            if (FMLClientHandler.instance().hasOptifine()) {
+                try {
+                    isShadersModPresent = Launch.classLoader.getClassBytes("shadersmod.client.Shaders") != null;
+                } catch (IOException ignored) {}
+            }
+        }
+
+        return isShadersModPresent && ShadersCompat.shaderPackLoaded();
     }
 
     public static void toggleLightMapShaders(boolean state) {
