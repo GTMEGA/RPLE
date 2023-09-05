@@ -50,6 +50,9 @@ public abstract class RPLEChunkRootImplMixin implements LumiChunk, RPLEChunkRoot
     @Dynamic(LUMI_CHUNK_BASE_INIT_MIXIN_VALUE)
     @SuppressWarnings("CastToIncompatibleInterface")
     private void rpleChunkInit(CallbackInfo ci) {
+        if (this.worldObj == null)
+            return;
+
         val worldRoot = (RPLEWorldRoot) this.worldObj;
 
         this.rple$redChannel = new RPLEChunkContainer(RED_CHANNEL,
