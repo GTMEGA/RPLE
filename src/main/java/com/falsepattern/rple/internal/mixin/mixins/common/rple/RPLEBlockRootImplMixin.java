@@ -37,36 +37,37 @@ public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot {
     @Shadow(remap = false)
     public abstract int getLightOpacity(IBlockAccess world, int posX, int posY, int posZ);
 
-    @Shadow protected int lightOpacity;
+    @Shadow
+    protected int lightOpacity;
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private ThreadLocal<Boolean> rple$passInternalBrightness;
+    private ThreadLocal<Boolean> rple$passInternalLightValue;
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private ThreadLocal<Boolean> rple$passInternalOpacity;
+    private ThreadLocal<Boolean> rple$passInternalLightOpacity;
 
     @Override
     public RPLEColor rple$getInternalColoredBrightness() {
-        rple$passInternalBrightness.set(true);
+        rple$passInternalLightValue.set(true);
         val lightValue = getLightValue();
         return LightValueColor.fromVanillaLightValue(lightValue);
     }
 
     @Override
     public RPLEColor rple$getInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ) {
-        rple$passInternalBrightness.set(true);
+        rple$passInternalLightValue.set(true);
         val lightValue = getLightValue(world, posX, posY, posZ);
         return LightValueColor.fromVanillaLightValue(lightValue);
     }
 
     @Override
     public RPLEColor rple$getInternalColoredTranslucency() {
-        rple$passInternalOpacity.set(true);
+        rple$passInternalLightOpacity.set(true);
         val lightOpacity = getLightOpacity();
         return LightValueColor.fromVanillaLightOpacity(lightOpacity);
     }
 
     @Override
     public RPLEColor rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ) {
-        rple$passInternalOpacity.set(true);
+        rple$passInternalLightOpacity.set(true);
         int lightOpacity;
         if (TransparencyRecursionDoctor.isOnBlockList(TransparencyRecursionDoctor.Variant.Positional, getClass())) {
             lightOpacity = getLightOpacity();

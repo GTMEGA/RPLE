@@ -22,17 +22,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @SuppressWarnings("unused")
 public abstract class BlockMixin {
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private ThreadLocal<Boolean> rple$passInternalBrightness;
+    private ThreadLocal<Boolean> rple$passInternalLightValue;
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private ThreadLocal<Boolean> rple$passInternalOpacity;
+    private ThreadLocal<Boolean> rple$passInternalLightOpacity;
 
     @Inject(method = "getLightValue()I",
             at = @At("HEAD"),
             cancellable = true,
             require = 1)
     private void getLightValue(CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalBrightness.get()) {
-            rple$passInternalBrightness.set(false);
+        if (rple$passInternalLightValue.get()) {
+            rple$passInternalLightValue.set(false);
         } else {
             cir.setReturnValue(ColoredLightingHooks.getLightValue(thiz()));
         }
@@ -48,8 +48,8 @@ public abstract class BlockMixin {
                                int posY,
                                int posZ,
                                CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalBrightness.get()) {
-            rple$passInternalBrightness.set(false);
+        if (rple$passInternalLightValue.get()) {
+            rple$passInternalLightValue.set(false);
         } else {
             cir.setReturnValue(ColoredLightingHooks.getLightValue(world, thiz(), posX, posY, posZ));
         }
@@ -60,8 +60,8 @@ public abstract class BlockMixin {
             cancellable = true,
             require = 1)
     private void getLightOpacity(CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalOpacity.get()) {
-            rple$passInternalOpacity.set(false);
+        if (rple$passInternalLightOpacity.get()) {
+            rple$passInternalLightOpacity.set(false);
         } else {
             cir.setReturnValue(ColoredLightingHooks.getLightOpacity(thiz()));
         }
@@ -77,8 +77,8 @@ public abstract class BlockMixin {
                                  int posY,
                                  int posZ,
                                  CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalOpacity.get()) {
-            rple$passInternalOpacity.set(false);
+        if (rple$passInternalLightOpacity.get()) {
+            rple$passInternalLightOpacity.set(false);
         } else {
             cir.setReturnValue(ColoredLightingHooks.getLightOpacity(world, thiz(), posX, posY, posZ));
         }
