@@ -31,11 +31,8 @@ public abstract class BlockMixin {
             cancellable = true,
             require = 1)
     private void getLightValue(CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalLightValue.get()) {
-            rple$passInternalLightValue.set(false);
-        } else {
+        if (!rple$passInternalLightValue.get())
             cir.setReturnValue(ColoredLightingHooks.getLightValue(thiz()));
-        }
     }
 
     @Inject(method = "getLightValue(Lnet/minecraft/world/IBlockAccess;III)I",
@@ -48,11 +45,8 @@ public abstract class BlockMixin {
                                int posY,
                                int posZ,
                                CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalLightValue.get()) {
-            rple$passInternalLightValue.set(false);
-        } else {
+        if (!rple$passInternalLightValue.get())
             cir.setReturnValue(ColoredLightingHooks.getLightValue(world, thiz(), posX, posY, posZ));
-        }
     }
 
     @Inject(method = "getLightOpacity()I",
@@ -60,11 +54,8 @@ public abstract class BlockMixin {
             cancellable = true,
             require = 1)
     private void getLightOpacity(CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalLightOpacity.get()) {
-            rple$passInternalLightOpacity.set(false);
-        } else {
+        if (!rple$passInternalLightOpacity.get())
             cir.setReturnValue(ColoredLightingHooks.getLightOpacity(thiz()));
-        }
     }
 
     @Inject(method = "getLightOpacity(Lnet/minecraft/world/IBlockAccess;III)I",
@@ -77,11 +68,8 @@ public abstract class BlockMixin {
                                  int posY,
                                  int posZ,
                                  CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalLightOpacity.get()) {
-            rple$passInternalLightOpacity.set(false);
-        } else {
+        if (!rple$passInternalLightOpacity.get())
             cir.setReturnValue(ColoredLightingHooks.getLightOpacity(world, thiz(), posX, posY, posZ));
-        }
     }
 
     private Block thiz() {

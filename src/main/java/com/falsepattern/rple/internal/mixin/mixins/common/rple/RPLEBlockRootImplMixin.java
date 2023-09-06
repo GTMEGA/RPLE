@@ -10,7 +10,6 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 import com.falsepattern.rple.api.common.block.RPLEBlockRoot;
 import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.api.common.color.RPLEColor;
-import com.falsepattern.rple.internal.common.block.TransparencyRecursionDoctor;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
@@ -48,6 +47,7 @@ public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot {
     public RPLEColor rple$getInternalColoredBrightness() {
         rple$passInternalLightValue.set(true);
         val lightValue = getLightValue();
+        rple$passInternalLightValue.set(false);
         return LightValueColor.fromVanillaLightValue(lightValue);
     }
 
@@ -55,6 +55,7 @@ public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot {
     public RPLEColor rple$getInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ) {
         rple$passInternalLightValue.set(true);
         val lightValue = getLightValue(world, posX, posY, posZ);
+        rple$passInternalLightValue.set(false);
         return LightValueColor.fromVanillaLightValue(lightValue);
     }
 
@@ -62,18 +63,15 @@ public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot {
     public RPLEColor rple$getInternalColoredTranslucency() {
         rple$passInternalLightOpacity.set(true);
         val lightOpacity = getLightOpacity();
+        rple$passInternalLightOpacity.set(false);
         return LightValueColor.fromVanillaLightOpacity(lightOpacity);
     }
 
     @Override
     public RPLEColor rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ) {
         rple$passInternalLightOpacity.set(true);
-        int lightOpacity;
-        if (TransparencyRecursionDoctor.isOnBlockList(TransparencyRecursionDoctor.Variant.Positional, getClass())) {
-            lightOpacity = getLightOpacity();
-        } else {
-            lightOpacity = getLightOpacity(world, posX, posY, posZ);
-        }
+        val lightOpacity = getLightOpacity(world, posX, posY, posZ);
+        rple$passInternalLightOpacity.set(false);
         return LightValueColor.fromVanillaLightOpacity(lightOpacity);
     }
 }
