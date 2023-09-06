@@ -121,8 +121,8 @@ public final class TessellatorBrightnessHelper {
     }
 
     public static short remapToShort(int n) {
-        n &= 255;
-        val normalized = n / 255F;
+        n &= 240;
+        val normalized = n / 240F;
         return (short) Math.round(normalized * (Short.MAX_VALUE - Short.MIN_VALUE) + Short.MIN_VALUE);
     }
 
