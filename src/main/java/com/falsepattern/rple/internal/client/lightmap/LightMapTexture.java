@@ -120,13 +120,12 @@ public final class LightMapTexture {
     }
 
     public void toggleEnabled(boolean enabled) {
-        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
-        if (Compat.shadersEnabled()) {
-            GL13.glActiveTexture(shaderTextureSamplerBinding);
-        } else {
-            GL13.glActiveTexture(fixedTextureUnitBinding);
-        }
+        if (Compat.shadersEnabled())
+            return;
 
+        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+
+        GL13.glActiveTexture(fixedTextureUnitBinding);
         if (enabled) {
             GL11.glEnable(GL11.GL_TEXTURE_2D);
         } else {

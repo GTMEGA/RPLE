@@ -47,15 +47,6 @@ public final class LightMap {
         bTexture.update(pixels);
     }
 
-    public void setEnabled(boolean enabled) {
-        if (Compat.shadersEnabled())
-            Compat.toggleLightMapShaders(enabled);
-
-        rTexture.toggleEnabled(enabled);
-        gTexture.toggleEnabled(enabled);
-        bTexture.toggleEnabled(enabled);
-    }
-
     public void toggleEnabled(boolean enabled) {
         if (Compat.shadersEnabled())
             Compat.toggleLightMapShaders(enabled);
