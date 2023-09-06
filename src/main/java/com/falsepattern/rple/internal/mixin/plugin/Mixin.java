@@ -59,6 +59,11 @@ public enum Mixin implements IMixin {
     client_optifine_OptiFineTessellator_NonShaderMixin(CLIENT, require(OPTIFINE_WITHOUT_SHADERS).and(avoid(OPTIFINE_WITH_SHADERS)), "optifine.OptiFineTessellator_NonShaderMixin"),
     // endregion
 
+    //region FastCraft Compatibility
+    client_fastcraft_ClippingHelperImplMixin(CLIENT, require(FASTCRAFT), "fastcraft.ClippingHelperImplMixin"),
+    client_fastcraft_FrustumMixin(CLIENT, require(FASTCRAFT), "fastcraft.FrustumMixin"),
+    //endregion FastCraft Compatibility
+
     // region Chisel Compatibility
     client_chisel_RenderBlocksCTMMixin(CLIENT, require(CHISEL), "chisel.RenderBlocksCTMMixin"),
     client_chisel_RenderBlocksEldritchMixin(CLIENT, require(CHISEL), "chisel.RenderBlocksEldritchMixin"),
