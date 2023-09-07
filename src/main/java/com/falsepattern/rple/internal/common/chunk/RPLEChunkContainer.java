@@ -8,6 +8,7 @@
 package com.falsepattern.rple.internal.common.chunk;
 
 import com.falsepattern.lumina.api.chunk.LumiChunk;
+import com.falsepattern.lumina.api.chunk.loading.LumiChunkHelper;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
@@ -122,7 +123,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
             isLightingInitialized = true;
         }
         if (!isLightingInitialized)
-            world.lumi$lightingEngine().handleChunkInit(this);
+            LumiChunkHelper.scheduleLightingEngineReinitialization(this, world.lumi$lightingEngine());
     }
 
     @Override
