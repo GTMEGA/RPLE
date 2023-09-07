@@ -22,9 +22,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @SuppressWarnings("unused")
 public abstract class BlockMixin {
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private ThreadLocal<Boolean> rple$passInternalLightValue;
+    protected ThreadLocal<Boolean> rple$passInternalLightValue;
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private ThreadLocal<Boolean> rple$passInternalLightOpacity;
+    protected ThreadLocal<Boolean> rple$passInternalLightOpacity;
 
     @Inject(method = "getLightValue()I",
             at = @At("HEAD"),

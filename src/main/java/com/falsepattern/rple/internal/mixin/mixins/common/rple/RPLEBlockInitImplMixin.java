@@ -33,8 +33,8 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
     @Nullable
     private RPLEColor @Nullable [] rple$metaTranslucencyColors;
 
-    private ThreadLocal<Boolean> rple$passInternalLightValue;
-    private ThreadLocal<Boolean> rple$passInternalLightOpacity;
+    protected ThreadLocal<Boolean> rple$passInternalLightValue;
+    protected ThreadLocal<Boolean> rple$passInternalLightOpacity;
 
     @Inject(method = "<init>",
             at = @At("RETURN"),

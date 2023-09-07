@@ -17,7 +17,7 @@ import static cpw.mods.fml.relauncher.IFMLLoadingPlugin.*;
 public final class ASMLoadingPlugin implements IFMLLoadingPlugin {
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{RPLEBlockColorInjector.class.getName()};
+        return new String[]{RPLETransformer.class.getName()};
     }
 
     @Override
