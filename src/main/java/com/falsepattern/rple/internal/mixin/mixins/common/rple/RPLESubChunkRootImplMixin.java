@@ -33,8 +33,6 @@ import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMIN
 @Mixin(value = ExtendedBlockStorage.class, priority = POST_LUMINA_MIXIN_PRIORITY)
 public abstract class RPLESubChunkRootImplMixin implements LumiSubChunk, RPLESubChunkRoot {
     @Shadow
-    private NibbleArray blocklightArray;
-    @Shadow
     @Nullable
     private NibbleArray skylightArray;
 
@@ -49,8 +47,7 @@ public abstract class RPLESubChunkRootImplMixin implements LumiSubChunk, RPLESub
     @Dynamic(LUMI_SUB_CHUNK_BASE_INIT_MIXIN_VALUE)
     private void rpleSubChunkInit(CallbackInfo ci) {
         val hasSky = skylightArray != null;
-
-        this.rple$redChannel = new RPLESubChunkContainer(RED_CHANNEL, this, blocklightArray, skylightArray);
+        this.rple$redChannel = new RPLESubChunkContainer(RED_CHANNEL, this, hasSky);
         this.rple$greenChannel = new RPLESubChunkContainer(GREEN_CHANNEL, this, hasSky);
         this.rple$blueChannel = new RPLESubChunkContainer(BLUE_CHANNEL, this, hasSky);
     }
