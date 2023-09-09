@@ -21,6 +21,8 @@ import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 @Getter
 @Accessors(fluent = true, chain = false)
 public final class HexColor implements RPLEColor {
+    public static final HexColor INVALID_HEX_COLOR = new HexColor(RPLEColorUtil.errorColor());
+
     private static final String EXPECTED_REGEX = "0x[A-F0-9]{3}$";
 
     private final int red;

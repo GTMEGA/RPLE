@@ -19,6 +19,8 @@ import org.jetbrains.annotations.Nullable;
 public final class ColorReference {
     public static final String INVALID_COLOR = "invalid_color";
 
+    public static final ColorReference INVALID_COLOR_REFERENCE = new ColorReference(INVALID_COLOR);
+
     private final @Nullable String paletteColorName;
     private final @Nullable HexColor uniqueColor;
 
