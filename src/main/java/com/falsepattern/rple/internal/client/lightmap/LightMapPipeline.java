@@ -59,7 +59,15 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
         postLightMapRegistrationEvent(this);
 
         registryLocked = true;
-        LOG.info("Registered [{}] light map provider", lightMapProviders.size());
+        val totalLightMapProviders = lightMapProviders.size();
+        if (totalLightMapProviders == 0) {
+            LOG.error("No light map providers registered, this will result in the world being full bright");
+        }
+        if (totalLightMapProviders == 1) {
+            LOG.info("Registered 1 light map provider");
+        } else {
+            LOG.info("Registered {} light map providers", totalLightMapProviders);
+        }
     }
 
     // region Registration
