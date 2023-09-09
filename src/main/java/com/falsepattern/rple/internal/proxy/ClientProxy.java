@@ -7,12 +7,16 @@
 
 package com.falsepattern.rple.internal.proxy;
 
+import com.falsepattern.rple.api.client.ChunkStatusRenderer;
 import com.falsepattern.rple.internal.client.render.LampRenderer;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import lombok.NoArgsConstructor;
+
+import net.minecraftforge.common.MinecraftForge;
 
 import static com.falsepattern.rple.internal.client.lightmap.LightMapPipeline.lightMapPipeline;
 
@@ -29,5 +33,11 @@ public final class ClientProxy extends CommonProxy {
         super.init(evt);
         RenderingRegistry.registerBlockHandler(new LampRenderer());
         lightMapPipeline().registerLightMapProviders();
+    }
+
+    @Override
+    public void postInit(FMLPostInitializationEvent evt) {
+        super.postInit(evt);
+        MinecraftForge.EVENT_BUS.register(ChunkStatusRenderer.INSTANCE);
     }
 }
