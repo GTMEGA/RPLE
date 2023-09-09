@@ -83,6 +83,7 @@ public enum Mixin implements IMixin {
 
     client_projectred_RenderHaloMixin(CLIENT, projectRedLampsFilter(), "projectred.RenderHaloMixin"),
     client_projectred_LampTESRMixin(CLIENT, projectRedLampsFilter(), "projectred.LampTESRMixin"),
+    client_projectred_LightObjectMixin(CLIENT, projectRedLampsFilter(), "projectred.LightObjectMixin"),
     // endregion
 
     // region Applied Energistics 2 Compatibility
