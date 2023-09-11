@@ -12,7 +12,7 @@ The first right proper RGB lighting implementation in Minecraft.
 
 ## Dependencies
 
-- [LUMINA 1.0.0-rc1](https://github.com/FalsePattern/LUMINA)
+- [LUMINA 1.0.0-rc2](https://github.com/FalsePattern/LUMINA)
 - [FalseTweaks 2.5.7+](https://github.com/FalsePattern/FalseTweaks)
 - [FalsePatternLib 0.12.1+](https://github.com/FalsePattern/FalsePatternLib)
 - [GasStation 0.5.1+](https://github.com/FalsePattern/GasStation)
@@ -33,8 +33,9 @@ The first right proper RGB lighting implementation in Minecraft.
 
 - [Houston](https://github.com/Houstonruss)
   - Most meticulous tester of every small little change in a production environment.
+- [Roadhog360](https://github.com/Roadhog360)
+  - Actually gotated, having tested endless broken releases with his own mods.
 - [matt-159](https://github.com/matt-159)
 - [SirFell](https://github.com/SirFell)
-- [Roadhog360](https://github.com/Roadhog360)
 - [jss2a98aj](https://github.com/jss2a98aj)
 - [mist475](https://github.com/mist475)
