@@ -8,6 +8,7 @@
 package com.falsepattern.rple.internal.common.config.adapter;
 
 import com.falsepattern.rple.internal.common.config.container.ColorReference;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -16,6 +17,7 @@ import lombok.val;
 
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.colorConfigGSON;
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.logParsingError;
+import static com.falsepattern.rple.internal.common.config.container.ColorReference.INVALID_COLOR_REFERENCE;
 
 @NoArgsConstructor
 public final class ColorReferenceJSONAdapter extends TypeAdapter<ColorReference> {
@@ -26,10 +28,19 @@ public final class ColorReferenceJSONAdapter extends TypeAdapter<ColorReference>
 
     @Override
     public ColorReference read(JsonReader in) {
-        val color = colorConfigGSON().<String>fromJson(in, String.class);
+        final String color;
+        try {
+            color = colorConfigGSON().fromJson(in, String.class);
+        } catch (JsonSyntaxException e) {
+            logParsingError("Failed parsing color reference: {}", e.getMessage());
+            return INVALID_COLOR_REFERENCE;
+        }
+
         val colorReference = new ColorReference(color);
-        if (!colorReference.isValid())
+        if (!colorReference.isValid()) {
             logParsingError("Invalid color reference: {}", color);
+            return INVALID_COLOR_REFERENCE;
+        }
         return colorReference;
     }
 }

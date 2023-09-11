@@ -10,7 +10,6 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 import com.falsepattern.rple.api.common.block.RPLEBlockRoot;
 import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.api.common.color.RPLEColor;
-import com.falsepattern.rple.internal.common.block.TransparencyRecursionDoctor;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
@@ -37,42 +36,42 @@ public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot {
     @Shadow(remap = false)
     public abstract int getLightOpacity(IBlockAccess world, int posX, int posY, int posZ);
 
-    @Shadow protected int lightOpacity;
+    @Shadow
+    protected int lightOpacity;
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private ThreadLocal<Boolean> rple$passInternalBrightness;
+    protected ThreadLocal<Boolean> rple$passInternalLightValue;
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private ThreadLocal<Boolean> rple$passInternalOpacity;
+    protected ThreadLocal<Boolean> rple$passInternalLightOpacity;
 
     @Override
     public RPLEColor rple$getInternalColoredBrightness() {
-        rple$passInternalBrightness.set(true);
+        rple$passInternalLightValue.set(true);
         val lightValue = getLightValue();
+        rple$passInternalLightValue.set(false);
         return LightValueColor.fromVanillaLightValue(lightValue);
     }
 
     @Override
     public RPLEColor rple$getInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ) {
-        rple$passInternalBrightness.set(true);
+        rple$passInternalLightValue.set(true);
         val lightValue = getLightValue(world, posX, posY, posZ);
+        rple$passInternalLightValue.set(false);
         return LightValueColor.fromVanillaLightValue(lightValue);
     }
 
     @Override
     public RPLEColor rple$getInternalColoredTranslucency() {
-        rple$passInternalOpacity.set(true);
+        rple$passInternalLightOpacity.set(true);
         val lightOpacity = getLightOpacity();
+        rple$passInternalLightOpacity.set(false);
         return LightValueColor.fromVanillaLightOpacity(lightOpacity);
     }
 
     @Override
     public RPLEColor rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ) {
-        rple$passInternalOpacity.set(true);
-        int lightOpacity;
-        if (TransparencyRecursionDoctor.isOnBlockList(TransparencyRecursionDoctor.Variant.Positional, getClass())) {
-            lightOpacity = getLightOpacity();
-        } else {
-            lightOpacity = getLightOpacity(world, posX, posY, posZ);
-        }
+        rple$passInternalLightOpacity.set(true);
+        val lightOpacity = getLightOpacity(world, posX, posY, posZ);
+        rple$passInternalLightOpacity.set(false);
         return LightValueColor.fromVanillaLightOpacity(lightOpacity);
     }
 }

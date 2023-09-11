@@ -3,14 +3,16 @@
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+ *
  */
 
-package stubpackage;
+package com.falsepattern.rple.internal.mixin.plugin;
 
-public class GlStateManager {
-    public static int activeTextureUnit = 0;
-    public static int GL_FRAMEBUFFER = 0;
-    public static int GL_RENDERBUFFER = 0;
-    public static int GL_COLOR_ATTACHMENT0 = 0;
-    public static int GL_DEPTH_ATTACHMENT = 0;
+import java.util.function.Predicate;
+
+import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.contains;
+
+class Extras {
+    static final Predicate<String> OPTIFINE_SHADERSMOD_VERSIONS =
+            contains("d7").or(contains("d8")).or(contains("e3")).or(contains("e7"));
 }

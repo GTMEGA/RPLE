@@ -8,6 +8,7 @@
 package com.falsepattern.rple.internal.common.config.adapter;
 
 import com.falsepattern.rple.internal.common.config.container.BlockReference;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -16,6 +17,7 @@ import lombok.val;
 
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.colorConfigGSON;
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.logParsingError;
+import static com.falsepattern.rple.internal.common.config.container.BlockReference.INVALID_BLOCK_REFERENCE;
 
 @NoArgsConstructor
 public final class BlockReferenceJSONAdapter extends TypeAdapter<BlockReference> {
@@ -26,7 +28,14 @@ public final class BlockReferenceJSONAdapter extends TypeAdapter<BlockReference>
 
     @Override
     public BlockReference read(JsonReader in) {
-        val blockID = colorConfigGSON().<String>fromJson(in, String.class);
+        final String blockID;
+        try {
+            blockID = colorConfigGSON().fromJson(in, String.class);
+        } catch (JsonSyntaxException e) {
+            logParsingError("Failed parsing block reference: {}", e.getMessage());
+            return INVALID_BLOCK_REFERENCE;
+        }
+
         val blockReference = new BlockReference(blockID);
         if (!blockReference.isValid())
             logParsingError("Invalid block reference: {}", blockID);

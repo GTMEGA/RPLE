@@ -26,6 +26,9 @@ public final class BlockReference implements Comparable<BlockReference> {
     public static final String INVALID_BLOCK_DOMAIN = "invalid_domain";
     public static final String INVALID_BLOCK_NAME = "invalid_name";
 
+    public static final BlockReference INVALID_BLOCK_REFERENCE =
+            new BlockReference(INVALID_BLOCK_DOMAIN + ":" + INVALID_BLOCK_NAME);
+
     private final String domain;
     private final String name;
     @Nullable

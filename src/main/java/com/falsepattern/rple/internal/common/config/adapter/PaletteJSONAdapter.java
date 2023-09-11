@@ -7,7 +7,6 @@
 
 package com.falsepattern.rple.internal.common.config.adapter;
 
-import com.falsepattern.rple.internal.common.config.ColorConfigLoader;
 import com.falsepattern.rple.internal.common.config.container.ColorPalette;
 import com.falsepattern.rple.internal.common.config.container.HexColor;
 import com.google.gson.TypeAdapter;
@@ -19,17 +18,19 @@ import lombok.NoArgsConstructor;
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 
+import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.colorConfigGSON;
+
 @NoArgsConstructor
 public final class PaletteJSONAdapter extends TypeAdapter<ColorPalette> {
     private static final Type COLOR_MAP_TYPE = new TypeToken<LinkedHashMap<String, HexColor>>() {}.getType();
 
     @Override
     public void write(JsonWriter out, ColorPalette value) {
-        ColorConfigLoader.colorConfigGSON().toJson(value.colors(), COLOR_MAP_TYPE, out);
+        colorConfigGSON().toJson(value.colors(), COLOR_MAP_TYPE, out);
     }
 
     @Override
     public ColorPalette read(JsonReader in) {
-        return new ColorPalette(ColorConfigLoader.colorConfigGSON().fromJson(in, COLOR_MAP_TYPE));
+        return new ColorPalette(colorConfigGSON().fromJson(in, COLOR_MAP_TYPE));
     }
 }

@@ -36,7 +36,9 @@ public enum Mixin implements IMixin {
     client_TessellatorMixin(CLIENT, always(), "TessellatorMixin"),
     client_WorldMixin(CLIENT, always(), "WorldMixin"),
 
-    client_Tessellator_NonOptiFineMixin(CLIENT, avoid(OPTIFINE), "Tessellator_NonOptiFineMixin"),
+    client_RendererLivingEntityMixin(CLIENT, always(), "RendererLivingEntityMixin"),
+
+    client_Tessellator_NonOptiFineMixin(CLIENT, avoid(OPTIFINE_WITH_SHADERS).and(avoid(OPTIFINE_WITHOUT_SHADERS)), "Tessellator_NonOptiFineMixin"),
     // endregion
 
     // region Right Proper Lighting Engine Implementation
@@ -50,10 +52,17 @@ public enum Mixin implements IMixin {
     // endregion
 
     // region OptiFine Compatibility
-    client_optifine_ShadersMixin(CLIENT, require(OPTIFINE), "optifine.ShadersMixin"),
-    client_optifine_ShaderTessMixin(CLIENT, require(OPTIFINE), "optifine.ShaderTessMixin"),
-    client_optifine_OptiFineTessellatorMixin(CLIENT, require(OPTIFINE), "optifine.OptiFineTessellatorMixin"),
+    client_optifine_OpenGLHelperMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.OpenGLHelperMixin"),
+    client_optifine_ShadersMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShadersMixin"),
+    client_optifine_ShaderTessMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShaderTessMixin"),
+    client_optifine_OptiFineTessellatorMixin(CLIENT, require(OPTIFINE_WITH_SHADERS).and(avoid(OPTIFINE_WITHOUT_SHADERS)), "optifine.OptiFineTessellatorMixin"),
+    client_optifine_OptiFineTessellator_NonShaderMixin(CLIENT, require(OPTIFINE_WITHOUT_SHADERS).and(avoid(OPTIFINE_WITH_SHADERS)), "optifine.OptiFineTessellator_NonShaderMixin"),
     // endregion
+
+    //region FastCraft Compatibility
+    client_fastcraft_ClippingHelperImplMixin(CLIENT, require(FASTCRAFT), "fastcraft.ClippingHelperImplMixin"),
+    client_fastcraft_FrustumMixin(CLIENT, require(FASTCRAFT), "fastcraft.FrustumMixin"),
+    //endregion FastCraft Compatibility
 
     // region Chisel Compatibility
     client_chisel_RenderBlocksCTMMixin(CLIENT, require(CHISEL), "chisel.RenderBlocksCTMMixin"),
@@ -74,6 +83,7 @@ public enum Mixin implements IMixin {
 
     client_projectred_RenderHaloMixin(CLIENT, projectRedLampsFilter(), "projectred.RenderHaloMixin"),
     client_projectred_LampTESRMixin(CLIENT, projectRedLampsFilter(), "projectred.LampTESRMixin"),
+    client_projectred_LightObjectMixin(CLIENT, projectRedLampsFilter(), "projectred.LightObjectMixin"),
     // endregion
 
     // region Applied Energistics 2 Compatibility

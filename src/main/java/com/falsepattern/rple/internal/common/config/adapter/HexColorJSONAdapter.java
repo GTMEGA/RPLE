@@ -7,26 +7,35 @@
 
 package com.falsepattern.rple.internal.common.config.adapter;
 
-import com.falsepattern.rple.internal.common.config.ColorConfigLoader;
 import com.falsepattern.rple.internal.common.config.container.HexColor;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import lombok.NoArgsConstructor;
 import lombok.val;
 
+import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.colorConfigGSON;
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.logParsingError;
+import static com.falsepattern.rple.internal.common.config.container.HexColor.INVALID_HEX_COLOR;
 
 @NoArgsConstructor
 public final class HexColorJSONAdapter extends TypeAdapter<HexColor> {
     @Override
     public void write(JsonWriter out, HexColor value) {
-        ColorConfigLoader.colorConfigGSON().toJson(value.asColorHex(), String.class, out);
+        colorConfigGSON().toJson(value.asColorHex(), String.class, out);
     }
 
     @Override
     public HexColor read(JsonReader in) {
-        val colorHex = ColorConfigLoader.colorConfigGSON().<String>fromJson(in, String.class);
+        final String colorHex;
+        try {
+            colorHex = colorConfigGSON().fromJson(in, String.class);
+        } catch (JsonSyntaxException e) {
+            logParsingError("Failed parsing hex color: {}", e.getMessage());
+            return INVALID_HEX_COLOR;
+        }
+
         val hexColor = new HexColor(colorHex);
         if (!hexColor.isValid())
             logParsingError("Invalid hex color: {}", hexColor);

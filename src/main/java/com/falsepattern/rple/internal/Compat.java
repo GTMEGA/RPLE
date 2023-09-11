@@ -7,15 +7,29 @@
 
 package com.falsepattern.rple.internal;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import lombok.experimental.UtilityClass;
+import lombok.var;
+import net.minecraft.launchwrapper.Launch;
 import shadersmod.client.Shaders;
 import stubpackage.GlStateManager;
 
+import java.io.IOException;
+
 @UtilityClass
 public final class Compat {
+    private static final boolean IS_SHADERS_MOD_PRESENT;
+
+    static {
+        var shadersModPresent = false;
+        try {
+            shadersModPresent = Launch.classLoader.getClassBytes("shadersmod.client.Shaders") != null;
+        } catch (IOException ignored) {
+        }
+        IS_SHADERS_MOD_PRESENT = shadersModPresent;
+    }
+
     public static boolean shadersEnabled() {
-        return FMLClientHandler.instance().hasOptifine() && ShadersCompat.shaderPackLoaded();
+        return IS_SHADERS_MOD_PRESENT && ShadersCompat.shaderPackLoaded();
     }
 
     public static void toggleLightMapShaders(boolean state) {

@@ -23,6 +23,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.falsepattern.rple.internal.client.lightmap.LightMap.lightMap;
+
 @Mixin(OpenGlHelper.class)
 public abstract class OpenGLHelperMixin {
     @Shadow
@@ -88,38 +90,21 @@ public abstract class OpenGLHelperMixin {
      */
     @Overwrite
     public static void setActiveTexture(int texture) {
+        val shadersEnabled = Compat.shadersEnabled();
         val lastTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
 
         if (lastTexture == lightmapTexUnit && texture != lightmapTexUnit) {
             val isTexture2DEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
-            toggleTexture(isTexture2DEnabled);
-            if (Compat.shadersEnabled()) {
-                Compat.toggleLightMapShaders(isTexture2DEnabled);
-                doSetActiveTexture(LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING);
-                toggleTexture(isTexture2DEnabled);
-                doSetActiveTexture(LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER_BINDING);
-                toggleTexture(isTexture2DEnabled);
+            if (isTexture2DEnabled || !shadersEnabled) {
+                GL11.glEnable(GL11.GL_TEXTURE_2D);
             } else {
-                doSetActiveTexture(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
-                toggleTexture(isTexture2DEnabled);
-                doSetActiveTexture(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING);
-                toggleTexture(isTexture2DEnabled);
+                GL11.glDisable(GL11.GL_TEXTURE_2D);
             }
+
+            lightMap().toggleEnabled(isTexture2DEnabled);
         }
-        if (Compat.shadersEnabled())
+        if (shadersEnabled)
             Compat.optiFineSetActiveTexture(texture);
-        doSetActiveTexture(texture);
-    }
-
-    private static void toggleTexture(boolean state) {
-        if (state) {
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-        } else {
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
-        }
-    }
-
-    private static void doSetActiveTexture(int texture) {
         GL13.glActiveTexture(texture);
     }
 }

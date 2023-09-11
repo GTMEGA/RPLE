@@ -29,7 +29,11 @@ public class VanillaLightMapBase implements RPLELightMapBase {
             return false;
 
         for (int i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
-            final float brightness = worldProvider.lightBrightnessTable[i];
+            float brightness = worldProvider.lightBrightnessTable[i];
+            brightness *= 0.96F;
+            brightness += 0.03F;
+            if (brightness > 1F)
+                brightness = 1F;
             output.setLightMap(i, brightness);
         }
         return true;

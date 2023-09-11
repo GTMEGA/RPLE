@@ -22,20 +22,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @SuppressWarnings("unused")
 public abstract class BlockMixin {
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private ThreadLocal<Boolean> rple$passInternalBrightness;
+    protected ThreadLocal<Boolean> rple$passInternalLightValue;
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private ThreadLocal<Boolean> rple$passInternalOpacity;
+    protected ThreadLocal<Boolean> rple$passInternalLightOpacity;
 
     @Inject(method = "getLightValue()I",
             at = @At("HEAD"),
             cancellable = true,
             require = 1)
     private void getLightValue(CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalBrightness.get()) {
-            rple$passInternalBrightness.set(false);
-        } else {
+        if (!rple$passInternalLightValue.get())
             cir.setReturnValue(ColoredLightingHooks.getLightValue(thiz()));
-        }
     }
 
     @Inject(method = "getLightValue(Lnet/minecraft/world/IBlockAccess;III)I",
@@ -48,11 +45,8 @@ public abstract class BlockMixin {
                                int posY,
                                int posZ,
                                CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalBrightness.get()) {
-            rple$passInternalBrightness.set(false);
-        } else {
+        if (!rple$passInternalLightValue.get())
             cir.setReturnValue(ColoredLightingHooks.getLightValue(world, thiz(), posX, posY, posZ));
-        }
     }
 
     @Inject(method = "getLightOpacity()I",
@@ -60,11 +54,8 @@ public abstract class BlockMixin {
             cancellable = true,
             require = 1)
     private void getLightOpacity(CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalOpacity.get()) {
-            rple$passInternalOpacity.set(false);
-        } else {
+        if (!rple$passInternalLightOpacity.get())
             cir.setReturnValue(ColoredLightingHooks.getLightOpacity(thiz()));
-        }
     }
 
     @Inject(method = "getLightOpacity(Lnet/minecraft/world/IBlockAccess;III)I",
@@ -77,11 +68,8 @@ public abstract class BlockMixin {
                                  int posY,
                                  int posZ,
                                  CallbackInfoReturnable<Integer> cir) {
-        if (rple$passInternalOpacity.get()) {
-            rple$passInternalOpacity.set(false);
-        } else {
+        if (!rple$passInternalLightOpacity.get())
             cir.setReturnValue(ColoredLightingHooks.getLightOpacity(world, thiz(), posX, posY, posZ));
-        }
     }
 
     private Block thiz() {

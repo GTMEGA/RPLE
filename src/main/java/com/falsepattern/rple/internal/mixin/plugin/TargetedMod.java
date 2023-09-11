@@ -15,10 +15,14 @@ import java.util.function.Predicate;
 
 import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.contains;
 import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.startsWith;
+import static com.falsepattern.rple.internal.mixin.plugin.Extras.OPTIFINE_SHADERSMOD_VERSIONS;
 
 @RequiredArgsConstructor
 public enum TargetedMod implements ITargetedMod {
-    OPTIFINE("OptiFine", false, startsWith("optifine")),
+    OPTIFINE_WITHOUT_SHADERS("OptiFine without shaders", false,
+                             startsWith("optifine").and(OPTIFINE_SHADERSMOD_VERSIONS.negate())),
+    OPTIFINE_WITH_SHADERS("OptiFine with shaders", false, startsWith("optifine").and(OPTIFINE_SHADERSMOD_VERSIONS)),
+    FASTCRAFT("FastCraft", false, startsWith("fastcraft")),
     CHISEL("Chisel", false, startsWith("chisel")),
     CARPENTERS_BLOCKS("Carpenter's Blocks", false, str -> str.matches("[cC]arpenter'?s( |-|_|%20|\\+)?[bB]locks.*")),
     ARCHITECTURE_CRAFT("ArchitectureCraft", false, startsWith("architecturecraft-")),
