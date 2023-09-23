@@ -59,26 +59,9 @@ public final class RPLEChunkContainer implements RPLEChunk {
         this.isLightingInitialized = false;
     }
 
-    public RPLEChunkContainer(ColorChannel channel,
-                              RPLEWorldRoot worldRoot,
-                              RPLEChunkRoot root,
-                              LumiChunk lumiChunk,
-                              int[] skyLightHeightMap,
-                              boolean[] outdatedSkylightColumns) {
-        this.channel = channel;
-        this.chunkID = Tags.MOD_ID + "_" + channel + "_chunk";
-        this.world = worldRoot.rple$world(channel);
-        this.lumiChunk = lumiChunk;
-        this.root = root;
-
-        this.chunkPosX = lumiChunk.lumi$chunkPosX();
-        this.chunkPosZ = lumiChunk.lumi$chunkPosZ();
-        this.skyLightHeightMap = skyLightHeightMap;
-        this.outdatedSkylightColumns = outdatedSkylightColumns;
-
-        this.minSkyLightHeight = Integer.MAX_VALUE;
-        this.queuedRandomLightUpdates = 0;
-        this.isLightingInitialized = false;
+    @Override
+    public @NotNull ColorChannel rple$channel() {
+        return channel;
     }
 
     @Override

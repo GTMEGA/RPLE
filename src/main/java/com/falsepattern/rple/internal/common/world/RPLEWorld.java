@@ -7,16 +7,16 @@
 
 package com.falsepattern.rple.internal.common.world;
 
-import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
+import com.falsepattern.rple.internal.common.storage.RPLEBlockStorage;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface RPLEWorld extends LumiWorld {
+public interface RPLEWorld extends LumiWorld, RPLEBlockStorage {
     @Override
     @NotNull RPLEWorldRoot lumi$root();
 
@@ -31,8 +31,4 @@ public interface RPLEWorld extends LumiWorld {
 
     @Override
     @Nullable RPLEChunk lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ);
-
-    int rple$getChannelBrightnessForTessellator(int posX, int posY, int posZ, int minBlockLight);
-
-    int rple$getChannelLightValueForRender(LightType lightType, int posX, int posY, int posZ);
 }

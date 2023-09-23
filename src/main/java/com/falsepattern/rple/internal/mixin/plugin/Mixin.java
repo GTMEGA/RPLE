@@ -49,6 +49,7 @@ public enum Mixin implements IMixin {
     common_rple_RPLEWorldRootImplMixin(COMMON, always(), "rple.RPLEWorldRootImplMixin"),
     common_rple_RPLEChunkRootImplMixin(COMMON, always(), "rple.RPLEChunkRootImplMixin"),
     common_rple_RPLESubChunkRootImplMixin(COMMON, always(), "rple.RPLESubChunkRootImplMixin"),
+    common_rple_RPLEBlockCacheRootImplMixin(COMMON, always(), "rple.RPLEBlockCacheRootImplMixin"),
     // endregion
 
     // region OptiFine Compatibility

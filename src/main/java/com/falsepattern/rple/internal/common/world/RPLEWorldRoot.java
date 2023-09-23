@@ -7,39 +7,11 @@
 
 package com.falsepattern.rple.internal.common.world;
 
-import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorldRoot;
 import com.falsepattern.rple.api.common.color.ColorChannel;
-import net.minecraft.world.ChunkCache;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
+import com.falsepattern.rple.internal.common.storage.RPLEBlockStorageRoot;
+import org.jetbrains.annotations.NotNull;
 
-public interface RPLEWorldRoot extends LumiWorldRoot {
-    RPLEWorld rple$world(ColorChannel channel);
-
-    @Deprecated
-    int rple$getChannelBrightnessForTessellator(ColorChannel channel, int posX, int posY, int posZ, int minBlockLight);
-
-    @Deprecated
-    int rple$getChannelLightValueForTessellator(ColorChannel channel,
-                                                LightType lightType,
-                                                int posX,
-                                                int posY,
-                                                int posZ);
-
-    @SuppressWarnings("InstanceofIncompatibleInterface")
-    static @Nullable RPLEWorldRoot rple$getWorldRootFromBlockAccess(IBlockAccess blockAccess) {
-        if (blockAccess == null)
-            return null;
-        if (blockAccess instanceof RPLEWorldRoot)
-            return (RPLEWorldRoot) blockAccess;
-        if (blockAccess instanceof ChunkCache) {
-            final ChunkCache chunkCache = (ChunkCache) blockAccess;
-            final World worldBase = chunkCache.worldObj;
-            if (worldBase instanceof RPLEWorldRoot)
-                return (RPLEWorldRoot) worldBase;
-        }
-        return null;
-    }
+public interface RPLEWorldRoot extends LumiWorldRoot, RPLEBlockStorageRoot {
+    @NotNull RPLEWorld rple$world(@NotNull ColorChannel channel);
 }
