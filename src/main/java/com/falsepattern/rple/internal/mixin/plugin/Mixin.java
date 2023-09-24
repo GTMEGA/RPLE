@@ -24,6 +24,7 @@ import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.*;
 public enum Mixin implements IMixin {
     // region Colorization Hooks
     common_BlockMixin(COMMON, always(), "BlockMixin"),
+    common_ChunkMixin(COMMON, always(), "ChunkMixin"),
     common_ExtendedBlockStorageMixin(COMMON, always(), "ExtendedBlockStorageMixin"),
 
     client_BlockFluidMixin(CLIENT, always(), "BlockFluidMixin"),
