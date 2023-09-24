@@ -243,14 +243,16 @@ public final class RPLEWorldContainer implements RPLEWorld {
 
     @Override
     public int lumi$getBlockBrightness(int posX, int posY, int posZ) {
-        val block = root.lumi$getBlock(posX, posY, posZ);
-        return block.getLightValue(base, posX, posY, posZ);
+        val blockBase = root.lumi$getBlock(posX, posY, posZ);
+        val blockMeta = root.lumi$getBlockMeta(posX, posY, posZ);
+        return lumi$getBlockBrightness(blockBase, blockMeta, posX, posY, posZ);
     }
 
     @Override
     public int lumi$getBlockOpacity(int posX, int posY, int posZ) {
-        val block = root.lumi$getBlock(posX, posY, posZ);
-        return block.getLightOpacity(base, posX, posY, posZ);
+        val blockBase = root.lumi$getBlock(posX, posY, posZ);
+        val blockMeta = root.lumi$getBlockMeta(posX, posY, posZ);
+        return lumi$getBlockOpacity(blockBase, blockMeta, posX, posY, posZ);
     }
 
     @Override

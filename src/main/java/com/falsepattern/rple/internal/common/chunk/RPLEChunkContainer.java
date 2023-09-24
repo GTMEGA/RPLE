@@ -10,6 +10,7 @@ package com.falsepattern.rple.internal.common.chunk;
 import com.falsepattern.lumina.api.LumiChunkAPI;
 import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
+import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
+import static com.falsepattern.rple.api.common.RPLEColorUtil.invertColorComponent;
 
 public final class RPLEChunkContainer implements RPLEChunk {
     private final ColorChannel channel;
@@ -287,38 +289,50 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
     @Override
     public int lumi$getBlockBrightness(int subChunkPosX, int posY, int subChunkPosZ) {
-        val block = root.lumi$getBlock(subChunkPosX, posY, subChunkPosZ);
+        val blockBase = root.lumi$getBlock(subChunkPosX, posY, subChunkPosZ);
         val blockMeta = root.lumi$getBlockMeta(subChunkPosX, posY, subChunkPosZ);
-        return lumi$getBlockBrightness(block, blockMeta, subChunkPosX, posY, subChunkPosZ);
+        return lumi$getBlockBrightness(blockBase, blockMeta, subChunkPosX, posY, subChunkPosZ);
     }
 
     @Override
     public int lumi$getBlockOpacity(int subChunkPosX, int posY, int subChunkPosZ) {
-        val block = root.lumi$getBlock(subChunkPosX, posY, subChunkPosZ);
+        val blockBase = root.lumi$getBlock(subChunkPosX, posY, subChunkPosZ);
         val blockMeta = root.lumi$getBlockMeta(subChunkPosX, posY, subChunkPosZ);
-        return lumi$getBlockOpacity(block, blockMeta, subChunkPosX, posY, subChunkPosZ);
+        return lumi$getBlockOpacity(blockBase, blockMeta, subChunkPosX, posY, subChunkPosZ);
     }
 
     @Override
-    public int lumi$getBlockBrightness(@NotNull Block block,
+    public int lumi$getBlockBrightness(@NotNull Block blockBase,
                                        int blockMeta,
                                        int subChunkPosX,
                                        int posY,
                                        int subChunkPosZ) {
+        if (!isLightingInitialized) {
+            val block = (RPLEBlock) blockBase;
+            val brightness = block.rple$getBrightnessColor(blockMeta);
+            return channel.componentFromColor(brightness);
+        }
+
         val posX = (chunkPosX << 4) + subChunkPosX;
         val posZ = (chunkPosZ << 4) + subChunkPosZ;
-        return world.lumi$getBlockBrightness(block, blockMeta, posX, posY, posZ);
+        return world.lumi$getBlockBrightness(blockBase, blockMeta, posX, posY, posZ);
     }
 
     @Override
-    public int lumi$getBlockOpacity(@NotNull Block block,
+    public int lumi$getBlockOpacity(@NotNull Block blockBase,
                                     int blockMeta,
                                     int subChunkPosX,
                                     int posY,
                                     int subChunkPosZ) {
+        if (!isLightingInitialized) {
+            val block = (RPLEBlock) blockBase;
+            val translucency = block.rple$getTranslucencyColor(blockMeta);
+            return invertColorComponent(channel.componentFromColor(translucency));
+        }
+
         val posX = (chunkPosX << 4) + subChunkPosX;
         val posZ = (chunkPosZ << 4) + subChunkPosZ;
-        return world.lumi$getBlockOpacity(block, blockMeta, posX, posY, posZ);
+        return world.lumi$getBlockOpacity(blockBase, blockMeta, posX, posY, posZ);
     }
 
     @Override
