@@ -3,7 +3,11 @@ package com.falsepattern.rple.internal.common.cache;
 import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorld;
+import com.falsepattern.rple.api.common.RPLEColorUtil;
+import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.ColorChannel;
+import com.falsepattern.rple.api.common.color.RPLEColor;
+import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
@@ -17,16 +21,26 @@ import net.minecraft.world.chunk.Chunk;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraftforge.common.util.ForgeDirection;
+
 import java.util.Arrays;
 import java.util.BitSet;
 
+import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
+import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
+import static net.minecraftforge.common.util.ForgeDirection.EAST;
+import static net.minecraftforge.common.util.ForgeDirection.NORTH;
+import static net.minecraftforge.common.util.ForgeDirection.SOUTH;
+import static net.minecraftforge.common.util.ForgeDirection.UP;
+import static net.minecraftforge.common.util.ForgeDirection.WEST;
 
-//TODO: [CACHE] When a light color value is requested, it will get it from the requested block
-//TODO: [CACHE] Said value MUST NOT be stored as the provided object, and must be IMMEDIATELY unpacked into the integer RGB values
-//TODO: [CACHE] This is because there are ZERO promises on the value being immutable
+
+//TODO: [CACHE_DONE] When a light color value is requested, it will get it from the requested block
+//TODO: [CACHE_DONE] Said value MUST NOT be stored as the provided object, and must be IMMEDIATELY unpacked into the integer RGB values
+//TODO: [CACHE_DONE] This is because there are ZERO promises on the value being immutable
 //
-//TODO: [CACHE] If a new value is queried and provided by any of the non-root caches, it must be propagated to ALL other caches
-//TODO: [CACHE] This is VERY IMPORTANT! as getting the light/opacity value FROM is expensive!
+//TODO: [CACHE_DONE] If a new value is queried and provided by any of the non-root caches, it must be propagated to ALL other caches
+//TODO: [CACHE_DONE] This is VERY IMPORTANT! as getting the light/opacity value FROM is expensive!
 public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
     static final int CHUNK_XZ_SIZE = 16;
     static final int CHUNK_XZ_BITMASK = 15;
@@ -44,9 +58,11 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
     static final int BITSHIFT_CHUNK_X = BITSIZE_CHUNK_Y;
     static final int BITSHIFT_CHUNK = BITSIZE_CHUNK_XZ + BITSIZE_CHUNK_XZ + BITSIZE_CHUNK_Y;
 
+    static final int COLOR_CHANNEL_COUNT = ColorChannel.values().length;
+
     private final RPLEWorldRoot worldRoot;
 
-    private DynamicBlockCache blockCache = null;
+    private final DynamicBlockCache[] blockCaches = new DynamicBlockCache[COLOR_CHANNEL_COUNT];
 
     // Z/X 3/3
     private final RPLEChunkRoot[] rootChunks = new RPLEChunkRoot[TOTAL_CACHED_CHUNK_COUNT];
@@ -62,6 +78,11 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
     // CZ/CX/Z/X/Y 3/3/16/16/256
     private final BitSet checkedBlocks = new BitSet(ELEMENT_COUNT_PER_CACHED_THING);
+
+    // CZ/CX/Z/X/Y 3/3/16/16/256
+    private final short[] brightnesses = new short[ELEMENT_COUNT_PER_CACHED_THING];
+    // CZ/CX/Z/X/Y 3/3/16/16/256
+    private final short[] translucencies = new short[ELEMENT_COUNT_PER_CACHED_THING];
 
     private int minChunkPosX;
     private int minChunkPosZ;
@@ -82,12 +103,17 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
     @Override
     public @NotNull RPLEBlockCache lumi$createBlockCache(LumiWorld world) {
-        if (blockCache == null)
-            blockCache = new DynamicBlockCache((RPLEWorld) world);
-        else if (blockCache.lumi$world() != world)
+        if (!(world instanceof RPLEWorld))
+            throw new IllegalArgumentException("World must be an RPLEWorld");
+        val rpleWorld = (RPLEWorld) world;
+        val channel = rpleWorld.rple$channel();
+        val cacheIndex = channel.ordinal();
+        if (blockCaches[cacheIndex] == null)
+            blockCaches[cacheIndex] = new DynamicBlockCache(rpleWorld);
+        else if (blockCaches[cacheIndex].lumi$world() != world)
             throw new IllegalArgumentException("Block cache already created for a different world");
 
-        return blockCache;
+        return blockCaches[cacheIndex];
     }
 
     @Override
@@ -115,8 +141,6 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         if (!isReady)
             return;
 
-        if (blockCache != null)
-            blockCache.lumi$clearCache();
         // We don't need to clear the "blocks" array because blocks are singletons
         Arrays.fill(rootChunks, null);
         checkedBlocks.clear();
@@ -172,7 +196,10 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
     @Override
     public @NotNull RPLEBlockCache rple$blockCache(@NotNull ColorChannel channel) {
-        return null;// TODO: [CACHE] This must return the cache per-channel
+        val cacheIndex = channel.ordinal();
+        if (blockCaches[cacheIndex] == null)
+            throw new IllegalStateException("Block cache not created for channel " + channel.name());
+        return blockCaches[cacheIndex];
     }
 
     @Override
@@ -191,6 +218,8 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
             blockMetas[cacheIndex] = 0;
             airChecks.clear(cacheIndex);
             checkedBlocks.clear(cacheIndex);
+            brightnesses[cacheIndex] = 0;
+            translucencies[cacheIndex] = 0;
         } else {
             val subChunkX = posX & CHUNK_XZ_BITMASK;
             val subChunkZ = posZ & CHUNK_XZ_BITMASK;
@@ -202,6 +231,13 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
             blockMetas[cacheIndex] = blockMeta;
 
             airChecks.set(cacheIndex, block.isAir(helperCache, posX, posY, posZ));
+
+            val blockBrightness = ((RPLEBlock)block).rple$getBrightnessColor(helperCache, blockMeta, posX, posY, posZ);
+            val blockTranslucency = ((RPLEBlock)block).rple$getTranslucencyColor(helperCache, blockMeta, posX, posY, posZ);
+
+            brightnesses[cacheIndex] = colorToCache(blockBrightness);
+            translucencies[cacheIndex] = colorToCache(blockTranslucency);
+
             checkedBlocks.set(cacheIndex);
         }
         return cacheIndex;
@@ -240,8 +276,6 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         this.maxChunkPosX = maxChunkPosX;
         this.maxChunkPosZ = maxChunkPosZ;
         checkedBlocks.clear();
-        if (blockCache != null)
-            blockCache.lumi$clearCache();
         isReady = true;
     }
 
@@ -297,18 +331,40 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         return rootChunks[chunkPosZ * CACHE_CHUNK_XZ_SIZE + chunkPosX] = (RPLEChunkRoot) chunkBase;
     }
 
-    //TODO: [CACHE] Will store one brightness/opacity per block, per channel
-    //TODO: [CACHE] Unlike LUMINA, it will ask the root for said values instead of getting them on it's own
+
+    private static final int CACHE_CHANNEL_BITMASK = 0xf;
+    private static final int CACHE_ELEMENT_BITMASK = 0xfff;
+    private static final int CACHE_ENTRY_RED_OFFSET = 0;
+    private static final int CACHE_ENTRY_GREEN_OFFSET = 4;
+    private static final int CACHE_ENTRY_BLUE_OFFSET = 8;
+
+    //Utility methods
+    private static short colorToCache(RPLEColor color) {
+        int red = color.red();
+        int green = color.green();
+        int blue = color.blue();
+        return (short) ((red & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_RED_OFFSET |
+                       (green & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_GREEN_OFFSET |
+                       (blue & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_BLUE_OFFSET);
+    }
+
+    private static int cacheToChannel(short cacheableS, ColorChannel channel) {
+        int cacheable = cacheableS & CACHE_ELEMENT_BITMASK;
+        switch (channel) {
+            default:
+            case RED_CHANNEL:
+                return (cacheable >>> CACHE_ENTRY_RED_OFFSET) & CACHE_CHANNEL_BITMASK;
+            case GREEN_CHANNEL:
+                return (cacheable >>> CACHE_ENTRY_GREEN_OFFSET) & CACHE_CHANNEL_BITMASK;
+            case BLUE_CHANNEL:
+                return (cacheable >>> CACHE_ENTRY_BLUE_OFFSET) & CACHE_CHANNEL_BITMASK;
+        }
+    }
+
+    //TODO: [CACHE_DONE] Will store one brightness/opacity per block, per channel
+    //TODO: [CACHE_DONE] Unlike LUMINA, it will ask the root for said values instead of getting them on it's own
     public final class DynamicBlockCache implements RPLEBlockCache {
         private final RPLEWorld world;
-
-        // CZ/CX/Z/X/Y 3/3/16/16/256
-        private final int[] blockBrightnessValues = new int[ELEMENT_COUNT_PER_CACHED_THING];
-        // CZ/CX/Z/X/Y 3/3/16/16/256
-        private final int[] blockOpacityValues = new int[ELEMENT_COUNT_PER_CACHED_THING];
-
-        // CZ/CX/Z/X/Y 3/3/16/16/256
-        private final BitSet checkedBlocks = new BitSet(ELEMENT_COUNT_PER_CACHED_THING);
 
         public DynamicBlockCache(@NotNull RPLEWorld world) {
             this.world = world;
@@ -316,7 +372,7 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
         @Override
         public @NotNull ColorChannel rple$channel() {
-            return null;// TODO: [CACHE] This must return the channel of this cache
+            return world.rple$channel();
         }
 
         @Override
@@ -331,7 +387,6 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
         @Override
         public void lumi$clearCache() {
-            checkedBlocks.clear();
         }
 
         @Override
@@ -346,12 +401,49 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
         @Override
         public int rple$getChannelBrightnessForTessellator(int posX, int posY, int posZ, int minBlockLight) {
-            return 0;// TODO: [CACHE] Equal implementation to one found in RPLEWorldContainer, optionally cached.
+            // TODO: [CACHE] Equal implementation to one found in RPLEWorldContainer, optionally cached.
+            //  FP: Will do once the serverside works
+            var blockLightValue = rple$getChannelLightValueForRender(BLOCK_LIGHT_TYPE, posX, posY, posZ);
+            blockLightValue = Math.max(blockLightValue, minBlockLight);
+            val skyLightValue = rple$getChannelLightValueForRender(SKY_LIGHT_TYPE, posX, posY, posZ);
+            return TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(blockLightValue, skyLightValue);
         }
 
         @Override
         public int rple$getChannelLightValueForRender(@NotNull LightType lightType, int posX, int posY, int posZ) {
-            return 0;// TODO: [CACHE] Equal implementation to one found in RPLEWorldContainer, optionally cached.
+            // TODO: [CACHE] Equal implementation to one found in RPLEWorldContainer, optionally cached.
+            //  FP: Will do once the serverside works
+            if (lightType == SKY_LIGHT_TYPE && !DynamicBlockCacheRoot.this.lumi$hasSky())
+                return 0;
+
+            if (posY < 0) {
+                posY = 0;
+            } else if (posY > 255) {
+                return lightType.defaultLightValue();
+            }
+            if (posX < -30000000 || posX >= 30000000)
+                return lightType.defaultLightValue();
+            if (posZ < -30000000 || posZ >= 30000000)
+                return lightType.defaultLightValue();
+
+            val block = DynamicBlockCacheRoot.this.lumi$getBlock(posX, posY, posZ);
+            if (block.getUseNeighborBrightness()) {
+                var lightValue = 0;
+                lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, UP));
+                lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, NORTH));
+                lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, SOUTH));
+                lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, WEST));
+                lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, EAST));
+                return lightValue;
+            }
+            return lumi$getBrightness(lightType, posX, posY, posZ);
+        }
+
+        private int getNeighborLightValue(LightType lightType, int posX, int posY, int posZ, ForgeDirection direction) {
+            posX += direction.offsetX;
+            posY += direction.offsetY;
+            posZ += direction.offsetZ;
+            return lumi$getBrightness(lightType, posX, posY, posZ);
         }
 
         @Override
@@ -387,15 +479,15 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         @Override
         public int lumi$getBlockBrightness(int posX, int posY, int posZ) {
             val index = DynamicBlockCacheRoot.this.getIndex(posX, posY, posZ);
-            prepareBlock(index, posX, posY, posZ);
-            return blockBrightnessValues[index];
+            short cachedBrightness = brightnesses[index];
+            return cacheToChannel(cachedBrightness, rple$channel());
         }
 
         @Override
         public int lumi$getBlockOpacity(int posX, int posY, int posZ) {
             val index = DynamicBlockCacheRoot.this.getIndex(posX, posY, posZ);
-            prepareBlock(index, posX, posY, posZ);
-            return blockOpacityValues[index];
+            short cachedTranslucency = translucencies[index];
+            return RPLEColorUtil.invertColorComponent(cacheToChannel(cachedTranslucency, rple$channel()));
         }
 
         @Override
@@ -407,17 +499,6 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         public int lumi$getBlockOpacity(@NotNull Block block, int blockMeta, int posX, int posY, int posZ) {
             return lumi$getBlockOpacity(posX, posY, posZ);
         }
-
-        private void prepareBlock(int cacheIndex, int posX, int posY, int posZ) {
-            if (checkedBlocks.get(cacheIndex))
-                return;
-
-            val theBlock = DynamicBlockCacheRoot.this.lumi$getBlock(posX, posY, posZ);
-            val theMeta = DynamicBlockCacheRoot.this.lumi$getBlockMeta(posX, posY, posZ);
-
-            blockBrightnessValues[cacheIndex] = world.lumi$getBlockBrightness(theBlock, theMeta, posX, posY, posZ);
-            blockOpacityValues[cacheIndex] = world.lumi$getBlockOpacity(theBlock, theMeta, posX, posY, posZ);
-            checkedBlocks.set(cacheIndex);
-        }
     }
+
 }

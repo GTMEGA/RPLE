@@ -37,10 +37,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-// TODO: [CACHE] Initial implementation
+import static com.falsepattern.rple.internal.common.cache.DynamicBlockCacheRoot.COLOR_CHANNEL_COUNT;
+
+// TODO: [CACHE_DONE] Initial implementation
 // TODO: [CACHE_CLEANUP] May be abstracted once the system is initialized through managers
 public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
     private static final int MULTIHEAD_CACHE_COUNT = 8;
+
+    private final MultiHeadBlockCache[] blockCaches = new MultiHeadBlockCache[COLOR_CHANNEL_COUNT];
 
     private final RPLEBlockCacheRoot fallback;
     private final RPLEBlockCacheRoot[] cacheRoots = new DynamicBlockCacheRoot[MULTIHEAD_CACHE_COUNT];
@@ -59,12 +63,25 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
 
     @Override
     public @NotNull RPLEBlockCache lumi$createBlockCache(LumiWorld world) {
-        return new MultiHeadDynamicBlockCache((RPLEWorld) world);
+        if (!(world instanceof RPLEWorld))
+            throw new IllegalArgumentException("World must be an RPLEWorld");
+        val rpleWorld = (RPLEWorld) world;
+        val channel = rpleWorld.rple$channel();
+        val cacheIndex = channel.ordinal();
+        if (blockCaches[cacheIndex] == null)
+            blockCaches[cacheIndex] = new MultiHeadBlockCache(rpleWorld);
+        else if (blockCaches[cacheIndex].lumi$world() != world)
+            throw new IllegalArgumentException("Block cache already created for a different world");
+
+        return blockCaches[cacheIndex];
     }
 
     @Override
     public @NotNull RPLEBlockCache rple$blockCache(@NotNull ColorChannel channel) {
-        return null;// TODO: [CACHE] This must return the cache per-channel
+        val cacheIndex = channel.ordinal();
+        if (blockCaches[cacheIndex] == null)
+            throw new IllegalStateException("Block cache not created for channel " + channel.name());
+        return blockCaches[cacheIndex];
     }
 
     @Override
@@ -154,11 +171,11 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
         return cacheRoots[last];
     }
 
-    private final class MultiHeadDynamicBlockCache implements RPLEBlockCache {
+    private final class MultiHeadBlockCache implements RPLEBlockCache {
         private final RPLEBlockCache fallback;
         private final RPLEBlockCache[] caches = new DynamicBlockCacheRoot.DynamicBlockCache[MULTIHEAD_CACHE_COUNT];
 
-        public MultiHeadDynamicBlockCache(@NotNull RPLEWorld world) {
+        public MultiHeadBlockCache(@NotNull RPLEWorld world) {
             for (var i = 0; i < MULTIHEAD_CACHE_COUNT; i++)
                 caches[i] = cacheRoots[i].lumi$createBlockCache(world);
             fallback = caches[0];
@@ -166,7 +183,7 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
 
         @Override
         public @NotNull ColorChannel rple$channel() {
-            return null;// TODO: [CACHE] This must return the channel of this cache
+            return fallback.rple$channel();
         }
 
         @Override
@@ -186,12 +203,16 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
 
         @Override
         public int rple$getChannelBrightnessForTessellator(int posX, int posY, int posZ, int minBlockLight) {
-            return 0;// TODO: [CACHE] Equal implementation to one found in RPLEWorldContainer, optionally cached.
+            // TODO: [CACHE] Equal implementation to one found in RPLEWorldContainer, optionally cached.
+            //  FP: Will do once the serverside works
+            return fallback.rple$getChannelBrightnessForTessellator(posX, posY, posZ, minBlockLight);
         }
 
         @Override
         public int rple$getChannelLightValueForRender(@NotNull LightType lightType, int posX, int posY, int posZ) {
-            return 0;// TODO: [CACHE] Equal implementation to one found in RPLEWorldContainer, optionally cached.
+            // TODO: [CACHE] Equal implementation to one found in RPLEWorldContainer, optionally cached.
+            //  FP: Will do once the serverside works
+            return fallback.rple$getChannelLightValueForRender(lightType, posX, posY, posZ);
         }
 
         @Override
@@ -258,9 +279,9 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
         private boolean inRange(LumiBlockCache cache, int chunkPosX, int chunkPosZ) {
             val cacheRoot = cache.lumi$root();
             return cacheRoot.lumi$minChunkPosX() <= chunkPosX &&
-                   cacheRoot.lumi$maxChunkPosX() >= chunkPosX &&
+                   cacheRoot.lumi$maxChunkPosX() > chunkPosX &&
                    cacheRoot.lumi$minChunkPosZ() <= chunkPosZ &&
-                   cacheRoot.lumi$maxChunkPosZ() >= chunkPosZ;
+                   cacheRoot.lumi$maxChunkPosZ() > chunkPosZ;
         }
 
         private LumiBlockCache getCache(int chunkPosX, int chunkPosZ) {

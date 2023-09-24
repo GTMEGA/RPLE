@@ -10,6 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.common.color.ColorChannel;
+import com.falsepattern.rple.internal.common.cache.MultiHeadBlockCacheRoot;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockCacheRoot;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.world.RPLEWorldContainer;
@@ -40,6 +41,10 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
     @SuppressWarnings("unused")
     private LumiLightingEngine lumi$lightingEngine;
 
+    //TODO: [CACHE_RESPONSE] this is wrong,
+    // needs to match the LumiWorldRootImplMixin's LumiBlockCacheRoot lumi$blockCacheRoot field
+    private RPLEBlockCacheRoot rple$blockCacheRoot;
+
     private RPLEWorld rple$redChannel;
     private RPLEWorld rple$greenChannel;
     private RPLEWorld rple$blueChannel;
@@ -56,12 +61,14 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
         this.rple$greenChannel = new RPLEWorldContainer(GREEN_CHANNEL, thiz(), this, theProfiler);
         this.rple$blueChannel = new RPLEWorldContainer(BLUE_CHANNEL, thiz(), this, theProfiler);
 
-        //TODO: [CACHE] Needs to initialize the multi-head cache
+        //TODO: [CACHE_DONE] Needs to initialize the multi-head cache
+
+        this.rple$blockCacheRoot = new MultiHeadBlockCacheRoot(this);
     }
 
     @Override
     public @NotNull RPLEBlockCacheRoot lumi$blockCacheRoot() {
-        return null;//TODO: [CACHE] Needs to return the root multi-head cache
+        return rple$blockCacheRoot;
     }
 
     @Override
