@@ -82,7 +82,7 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
     // CZ/CX/Z/X/Y 3/3/16/16/256
     private final short[] brightnesses = new short[ELEMENT_COUNT_PER_CACHED_THING];
     // CZ/CX/Z/X/Y 3/3/16/16/256
-    private final short[] translucencies = new short[ELEMENT_COUNT_PER_CACHED_THING];
+    private final short[] opacities = new short[ELEMENT_COUNT_PER_CACHED_THING];
 
     private int minChunkPosX;
     private int minChunkPosZ;
@@ -219,7 +219,7 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
             airChecks.clear(cacheIndex);
             checkedBlocks.clear(cacheIndex);
             brightnesses[cacheIndex] = 0;
-            translucencies[cacheIndex] = 0;
+            opacities[cacheIndex] = 0;
         } else {
             val subChunkX = posX & CHUNK_XZ_BITMASK;
             val subChunkZ = posZ & CHUNK_XZ_BITMASK;
@@ -235,8 +235,8 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
             val blockBrightness = ((RPLEBlock)block).rple$getBrightnessColor(helperCache, blockMeta, posX, posY, posZ);
             val blockTranslucency = ((RPLEBlock)block).rple$getTranslucencyColor(helperCache, blockMeta, posX, posY, posZ);
 
-            brightnesses[cacheIndex] = colorToCache(blockBrightness);
-            translucencies[cacheIndex] = colorToCache(blockTranslucency);
+            brightnesses[cacheIndex] = brightnessToCache(blockBrightness);
+            opacities[cacheIndex] = translucencyToOpacityCache(blockTranslucency);
 
             checkedBlocks.set(cacheIndex);
         }
@@ -333,41 +333,56 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
 
     private static final int CACHE_CHANNEL_BITMASK = 0xf;
-    private static final int CACHE_ELEMENT_BITMASK = 0xfff;
     private static final int CACHE_ENTRY_RED_OFFSET = 0;
     private static final int CACHE_ENTRY_GREEN_OFFSET = 4;
     private static final int CACHE_ENTRY_BLUE_OFFSET = 8;
 
     //Utility methods
-    private static short colorToCache(RPLEColor color) {
-        int red = color.red();
-        int green = color.green();
-        int blue = color.blue();
-        return (short) ((red & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_RED_OFFSET |
-                       (green & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_GREEN_OFFSET |
-                       (blue & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_BLUE_OFFSET);
+    private static short brightnessToCache(RPLEColor brightness) {
+        int red = brightness.red();
+        int green = brightness.green();
+        int blue = brightness.blue();
+
+        return packRGB(red, green, blue);
+    }
+    private static short translucencyToOpacityCache(RPLEColor translucency) {
+        int red = RPLEColorUtil.invertColorComponent(translucency.red());
+        int green = RPLEColorUtil.invertColorComponent(translucency.green());
+        int blue = RPLEColorUtil.invertColorComponent(translucency.blue());
+
+        return packRGB(red, green, blue);
     }
 
-    private static int cacheToChannel(short cacheableS, ColorChannel channel) {
-        int cacheable = cacheableS & CACHE_ELEMENT_BITMASK;
-        switch (channel) {
-            default:
-            case RED_CHANNEL:
-                return (cacheable >>> CACHE_ENTRY_RED_OFFSET) & CACHE_CHANNEL_BITMASK;
-            case GREEN_CHANNEL:
-                return (cacheable >>> CACHE_ENTRY_GREEN_OFFSET) & CACHE_CHANNEL_BITMASK;
-            case BLUE_CHANNEL:
-                return (cacheable >>> CACHE_ENTRY_BLUE_OFFSET) & CACHE_CHANNEL_BITMASK;
-        }
+    private static short packRGB(int red, int green, int blue) {
+        return (short) ((red & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_RED_OFFSET |
+                        (green & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_GREEN_OFFSET |
+                        (blue & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_BLUE_OFFSET);
+    }
+
+    private static int cacheToChannel(short cacheableS, int shift) {
+        return (((int)cacheableS) >>> shift) & CACHE_CHANNEL_BITMASK;
     }
 
     //TODO: [CACHE_DONE] Will store one brightness/opacity per block, per channel
     //TODO: [CACHE_DONE] Unlike LUMINA, it will ask the root for said values instead of getting them on it's own
     public final class DynamicBlockCache implements RPLEBlockCache {
         private final RPLEWorld world;
+        private final int cacheEntryShift;
 
         public DynamicBlockCache(@NotNull RPLEWorld world) {
             this.world = world;
+            switch (world.rple$channel()) {
+                default:
+                case RED_CHANNEL:
+                    cacheEntryShift = CACHE_ENTRY_RED_OFFSET;
+                    break;
+                case GREEN_CHANNEL:
+                    cacheEntryShift = CACHE_ENTRY_GREEN_OFFSET;
+                    break;
+                case BLUE_CHANNEL:
+                    cacheEntryShift = CACHE_ENTRY_BLUE_OFFSET;
+                    break;
+            }
         }
 
         @Override
@@ -480,14 +495,14 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         public int lumi$getBlockBrightness(int posX, int posY, int posZ) {
             val index = DynamicBlockCacheRoot.this.getIndex(posX, posY, posZ);
             short cachedBrightness = brightnesses[index];
-            return cacheToChannel(cachedBrightness, rple$channel());
+            return cacheToChannel(cachedBrightness, cacheEntryShift);
         }
 
         @Override
         public int lumi$getBlockOpacity(int posX, int posY, int posZ) {
             val index = DynamicBlockCacheRoot.this.getIndex(posX, posY, posZ);
-            short cachedTranslucency = translucencies[index];
-            return RPLEColorUtil.invertColorComponent(cacheToChannel(cachedTranslucency, rple$channel()));
+            short cachedOpacity = opacities[index];
+            return cacheToChannel(cachedOpacity, cacheEntryShift);
         }
 
         @Override
