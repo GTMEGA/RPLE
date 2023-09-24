@@ -50,7 +50,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
         this.base = base;
         this.root = root;
 
-        this.blockCache = root.lumi$blockCacheRoot().rple$blockCache(channel);
+        this.blockCache = root.rple$blockCacheRoot().lumi$createBlockCache(this);
         this.lightingEngine = LumiAPI.provideLightingEngine(this, profiler);
     }
 

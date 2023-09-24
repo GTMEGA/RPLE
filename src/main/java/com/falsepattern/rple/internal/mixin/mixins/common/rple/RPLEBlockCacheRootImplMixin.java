@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.falsepattern.lumina.api.init.LumiChunkCacheInitHook.LUMI_CHUNK_CACHE_INIT_HOOK_INFO;
 import static com.falsepattern.lumina.api.init.LumiChunkCacheInitHook.LUMI_CHUNK_CACHE_INIT_HOOK_METHOD;
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
 @Unique
 @Mixin(ChunkCache.class)
@@ -42,9 +43,9 @@ public abstract class RPLEBlockCacheRootImplMixin implements IBlockAccess, RPLEB
             return;
 
         val worldRoot = (RPLEWorldRoot) worldObj;
-//        this.rple$redChannel = new RPLEBlockCacheContainer(RED_CHANNEL, thiz(), worldRoot, this);
-//        this.rple$greenChannel = new RPLEBlockCacheContainer(GREEN_CHANNEL, thiz(), worldRoot, this);
-//        this.rple$blueChannel = new RPLEBlockCacheContainer(BLUE_CHANNEL, thiz(), worldRoot, this);
+        this.rple$redChannel = worldRoot.rple$world(RED_CHANNEL).lumi$blockCache();
+        this.rple$greenChannel = worldRoot.rple$world(GREEN_CHANNEL).lumi$blockCache();
+        this.rple$blueChannel = worldRoot.rple$world(BLUE_CHANNEL).lumi$blockCache();
     }
 
     @Override

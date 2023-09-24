@@ -16,6 +16,5 @@ import org.jetbrains.annotations.NotNull;
 public interface RPLEWorldRoot extends LumiWorldRoot, RPLEBlockStorageRoot {
     @NotNull RPLEWorld rple$world(@NotNull ColorChannel channel);
 
-    @Override
-    @NotNull RPLEBlockCacheRoot lumi$blockCacheRoot();
+    @NotNull RPLEBlockCacheRoot rple$blockCacheRoot();
 }
