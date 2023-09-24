@@ -48,6 +48,7 @@ public enum DefaultColor implements RPLENamedColor {
     TORCH_LIGHT    (13, 10,  8),
     // @formatter:on
     ;
+    private static final DefaultColor[] VALUES = values();
 
     public static final String DEFAULT_COLOR_DOMAIN = "default";
 
@@ -67,7 +68,7 @@ public enum DefaultColor implements RPLENamedColor {
 
     public static DefaultColor fromVanillaBlockMeta(int blockMeta) {
         blockMeta &= 15;
-        return values()[blockMeta];
+        return VALUES[blockMeta];
     }
 
     public @NotNull String colorName() {
