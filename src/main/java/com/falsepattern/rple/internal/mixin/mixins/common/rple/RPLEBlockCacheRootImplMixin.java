@@ -1,10 +1,9 @@
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
 import com.falsepattern.rple.api.common.color.ColorChannel;
-import com.falsepattern.rple.internal.common.storage.RPLEBlockCache;
-import com.falsepattern.rple.internal.common.storage.RPLEBlockCacheContainer;
-import com.falsepattern.rple.internal.common.storage.RPLEBlockCacheRoot;
-import com.falsepattern.rple.internal.common.storage.RPLEBlockStorage;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockCache;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockCacheRoot;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockStorage;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.world.ChunkCache;
@@ -21,7 +20,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.falsepattern.lumina.api.init.LumiChunkCacheInitHook.LUMI_CHUNK_CACHE_INIT_HOOK_INFO;
 import static com.falsepattern.lumina.api.init.LumiChunkCacheInitHook.LUMI_CHUNK_CACHE_INIT_HOOK_METHOD;
-import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
 @Unique
 @Mixin(ChunkCache.class)
@@ -44,9 +42,9 @@ public abstract class RPLEBlockCacheRootImplMixin implements IBlockAccess, RPLEB
             return;
 
         val worldRoot = (RPLEWorldRoot) worldObj;
-        this.rple$redChannel = new RPLEBlockCacheContainer(RED_CHANNEL, thiz(), worldRoot, this);
-        this.rple$greenChannel = new RPLEBlockCacheContainer(GREEN_CHANNEL, thiz(), worldRoot, this);
-        this.rple$blueChannel = new RPLEBlockCacheContainer(BLUE_CHANNEL, thiz(), worldRoot, this);
+//        this.rple$redChannel = new RPLEBlockCacheContainer(RED_CHANNEL, thiz(), worldRoot, this);
+//        this.rple$greenChannel = new RPLEBlockCacheContainer(GREEN_CHANNEL, thiz(), worldRoot, this);
+//        this.rple$blueChannel = new RPLEBlockCacheContainer(BLUE_CHANNEL, thiz(), worldRoot, this);
     }
 
     @Override

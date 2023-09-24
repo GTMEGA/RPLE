@@ -11,7 +11,7 @@ import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
-import com.falsepattern.rple.internal.common.storage.RPLEBlockStorageRoot;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;

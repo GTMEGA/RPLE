@@ -14,6 +14,7 @@ import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockCache;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
@@ -40,6 +41,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     private final World base;
     private final RPLEWorldRoot root;
 
+    private final RPLEBlockCache blockCache;
     private final LumiLightingEngine lightingEngine;
 
     public RPLEWorldContainer(ColorChannel channel, World base, RPLEWorldRoot root, Profiler profiler) {
@@ -48,6 +50,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
         this.base = base;
         this.root = root;
 
+        this.blockCache = root.lumi$blockCacheRoot().rple$blockCache(channel);
         this.lightingEngine = LumiAPI.provideLightingEngine(this, profiler);
     }
 
@@ -99,6 +102,11 @@ public final class RPLEWorldContainer implements RPLEWorld {
             return null;
         val chunkRoot = (RPLEChunkRoot) chunkBase;
         return chunkRoot.rple$chunk(channel);
+    }
+
+    @Override
+    public @NotNull RPLEBlockCache lumi$blockCache() {
+        return blockCache;
     }
 
     @Override

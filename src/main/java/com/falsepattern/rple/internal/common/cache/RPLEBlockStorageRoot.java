@@ -1,4 +1,4 @@
-package com.falsepattern.rple.internal.common.storage;
+package com.falsepattern.rple.internal.common.cache;
 
 import com.falsepattern.lumina.api.storage.LumiBlockStorageRoot;
 import com.falsepattern.rple.api.common.color.ColorChannel;

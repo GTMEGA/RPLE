@@ -10,6 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.common.color.ColorChannel;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockCacheRoot;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.world.RPLEWorldContainer;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
@@ -54,6 +55,13 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
         this.rple$redChannel = new RPLEWorldContainer(RED_CHANNEL, thiz(), this, theProfiler);
         this.rple$greenChannel = new RPLEWorldContainer(GREEN_CHANNEL, thiz(), this, theProfiler);
         this.rple$blueChannel = new RPLEWorldContainer(BLUE_CHANNEL, thiz(), this, theProfiler);
+
+        //TODO: [CACHE] Needs to initialize the multi-head cache
+    }
+
+    @Override
+    public @NotNull RPLEBlockCacheRoot lumi$blockCacheRoot() {
+        return null;//TODO: [CACHE] Needs to return the root multi-head cache
     }
 
     @Override

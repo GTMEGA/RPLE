@@ -1,4 +1,4 @@
-package com.falsepattern.rple.internal.common.storage;
+package com.falsepattern.rple.internal.common.cache;
 
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.storage.LumiBlockStorage;

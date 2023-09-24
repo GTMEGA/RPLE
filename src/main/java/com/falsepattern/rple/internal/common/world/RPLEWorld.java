@@ -8,9 +8,10 @@
 package com.falsepattern.rple.internal.common.world;
 
 import com.falsepattern.lumina.api.world.LumiWorld;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockCache;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockStorage;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
-import com.falsepattern.rple.internal.common.storage.RPLEBlockStorage;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import org.jetbrains.annotations.NotNull;
@@ -31,4 +32,7 @@ public interface RPLEWorld extends LumiWorld, RPLEBlockStorage {
 
     @Override
     @Nullable RPLEChunk lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ);
+
+    @Override
+    @NotNull RPLEBlockCache lumi$blockCache();
 }
