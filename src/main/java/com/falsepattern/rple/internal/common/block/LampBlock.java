@@ -28,9 +28,9 @@ import java.util.List;
 
 import static com.falsepattern.lib.util.RenderUtil.wrapAsClampedIcon;
 
-// TODO: [PRE_RELEASE] Large parts of this may be included in API as an abstract class
-// TODO: [PRE_RELEASE] Should have a large part of it extracted as an example of how-to implement ColoredBlock
-// TODO: [PRE_RELEASE] Created variants of this block should be defined by a load-time configuration file
+// TODO: [LAMP_FIX] Large parts of this may be included in API as an abstract class
+// TODO: [LAMP_FIX] Should have a large part of it extracted as an example of how-to implement ColoredBlock
+// TODO: [LAMP_FIX] Created variants of this block should be defined by a load-time configuration file
 @Deprecated
 public class LampBlock extends Block implements RPLEBlockBrightnessColorProvider {
     private static final String GLOW_RESOURCE = Tags.MOD_ID + ":glow";

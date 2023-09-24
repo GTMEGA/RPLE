@@ -27,7 +27,7 @@ public abstract class CommonProxy {
         lamp.setBlockName(Tags.MOD_ID + ".lamp." + "blue").setBlockTextureName("blue");
         GameRegistry.registerBlock(lamp, LampItemBlock.class, "lamp." + "blue");
 
-        //TODO: [PRE-RELEASE] Fix these values
+        // TODO: [LAMP_FIX]
 //        if (RPLEConfig.ENABLE_LAMPS) {
 //            for (val lampData : Lamps.values()) {
 //                val name = lampData.name().toLowerCase();
