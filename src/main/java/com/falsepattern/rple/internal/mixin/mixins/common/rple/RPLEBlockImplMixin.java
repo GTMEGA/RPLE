@@ -49,6 +49,22 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
 
     @Shadow(remap = false)
     @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
+    public abstract short rple$getRawInternalColoredBrightness();
+
+    @Shadow(remap = false)
+    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
+    public abstract short rple$getRawInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ);
+
+    @Shadow(remap = false)
+    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
+    public abstract short rple$getRawInternalColoredOpacity();
+
+    @Shadow(remap = false)
+    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
+    public abstract short rple$getRawInternalColoredOpacity(IBlockAccess world, int posX, int posY, int posZ);
+
+    @Shadow(remap = false)
+    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
     public abstract RPLEColor rple$getInternalColoredBrightness();
 
     @Shadow(remap = false)
@@ -69,33 +85,75 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
     @Override
     public short rple$getRawBrightnessColor() {
         if (rple$rawBaseBrightnessColor == -1)
-            return 0x0000;
+            return rple$getRawInternalColoredBrightness();
         return rple$rawBaseBrightnessColor;
     }
 
     @Override
     public short rple$getRawBrightnessColor(int blockMeta) {
-        if (rple$rawMetaBrightnessColors == null)
-            return 0x0000;
-        if (blockMeta < 0 || blockMeta >= rple$rawMetaBrightnessColors.length)
-            return 0x0000;
-        return rple$rawMetaBrightnessColors[blockMeta];
+        checkMeta:
+        {
+            if (rple$rawMetaBrightnessColors == null)
+                break checkMeta;
+            if (blockMeta < 0 || blockMeta >= rple$rawMetaBrightnessColors.length)
+                break checkMeta;
+            return rple$rawMetaBrightnessColors[blockMeta];
+        }
+        if (rple$rawBaseBrightnessColor != -1)
+            return rple$rawBaseBrightnessColor;
+        return rple$getRawInternalColoredBrightness();
+    }
+
+    @Override
+    public short rple$getRawBrightnessColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+        checkMeta:
+        {
+            if (rple$rawMetaBrightnessColors == null)
+                break checkMeta;
+            if (blockMeta < 0 || blockMeta >= rple$rawMetaBrightnessColors.length)
+                break checkMeta;
+            return rple$rawMetaBrightnessColors[blockMeta];
+        }
+        if (rple$rawBaseBrightnessColor != -1)
+            return rple$rawBaseBrightnessColor;
+        return rple$getRawInternalColoredBrightness(world, posX, posY, posZ);
     }
 
     @Override
     public short rple$getRawOpacityColor() {
         if (rple$rawBaseOpacityColor == -1)
-            return 0x0FFF;
+            return rple$getRawInternalColoredOpacity();
         return rple$rawBaseOpacityColor;
     }
 
     @Override
     public short rple$getRawOpacityColor(int blockMeta) {
-        if (rple$rawMetaOpacityColors == null)
-            return 0x0FFF;
-        if (blockMeta < 0 || blockMeta >= rple$rawMetaOpacityColors.length)
-            return 0x0FFF;
-        return rple$rawMetaOpacityColors[blockMeta];
+        checkMeta:
+        {
+            if (rple$rawMetaOpacityColors == null)
+                break checkMeta;
+            if (blockMeta < 0 || blockMeta >= rple$rawMetaOpacityColors.length)
+                break checkMeta;
+            return rple$rawMetaOpacityColors[blockMeta];
+        }
+        if (rple$rawBaseOpacityColor != -1)
+            return rple$rawBaseOpacityColor;
+        return rple$getRawInternalColoredOpacity();
+    }
+
+    @Override
+    public short rple$getRawOpacityColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+        checkMeta:
+        {
+            if (rple$rawMetaBrightnessColors == null)
+                break checkMeta;
+            if (blockMeta < 0 || blockMeta >= rple$rawMetaBrightnessColors.length)
+                break checkMeta;
+            return rple$rawMetaBrightnessColors[blockMeta];
+        }
+        if (rple$rawBaseOpacityColor != -1)
+            return rple$rawBaseOpacityColor;
+        return rple$getRawInternalColoredOpacity(world, posX, posY, posZ);
     }
 
     @Override

@@ -28,9 +28,21 @@ public interface RPLEBlock {
 
     short rple$getRawBrightnessColor(int blockMeta);
 
+    short rple$getRawBrightnessColor(@NotNull IBlockAccess world,
+                                     int blockMeta,
+                                     int posX,
+                                     int posY,
+                                     int posZ);
+
     short rple$getRawOpacityColor();
 
     short rple$getRawOpacityColor(int blockMeta);
+
+    short rple$getRawOpacityColor(@NotNull IBlockAccess world,
+                                  int blockMeta,
+                                  int posX,
+                                  int posY,
+                                  int posZ);
 
     @NotNull RPLEColor rple$getBrightnessColor();
 

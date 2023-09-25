@@ -25,10 +25,7 @@ import java.util.BitSet;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
-import static com.falsepattern.rple.internal.common.color.ColorPackingUtil.CACHE_ENTRY_BLUE_OFFSET;
-import static com.falsepattern.rple.internal.common.color.ColorPackingUtil.CACHE_ENTRY_GREEN_OFFSET;
-import static com.falsepattern.rple.internal.common.color.ColorPackingUtil.CACHE_ENTRY_RED_OFFSET;
-import static com.falsepattern.rple.internal.common.color.ColorPackingUtil.cacheToChannel;
+import static com.falsepattern.rple.internal.common.color.ColorPackingUtil.*;
 import static net.minecraftforge.common.util.ForgeDirection.*;
 
 
@@ -230,8 +227,8 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
                 airChecks.set(cacheIndex, block.isAir(helperCache, posX, posY, posZ));
                 blockMetas[cacheIndex] = blockMeta;
-                blockLightValues[cacheIndex] = ((RPLEBlock) block).rple$getRawBrightnessColor(blockMeta);
-                blockOpacityValues[cacheIndex] = ((RPLEBlock) block).rple$getRawOpacityColor(blockMeta);
+                blockLightValues[cacheIndex] = ((RPLEBlock) block).rple$getRawBrightnessColor(helperCache, blockMeta, posX, posY, posZ);
+                blockOpacityValues[cacheIndex] = ((RPLEBlock) block).rple$getRawOpacityColor(helperCache, blockMeta, posX, posY, posZ);
             } else {
                 airChecks.set(cacheIndex);
                 blockMetas[cacheIndex] = 0;
