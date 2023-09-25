@@ -25,6 +25,15 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(Block.class)
 @SuppressWarnings("unused")
 public abstract class RPLEBlockImplMixin implements RPLEBlock {
+    @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
+    private short rple$rawBaseBrightnessColor;
+    @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
+    private short rple$rawBaseOpacityColor;
+    @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
+    private short @Nullable [] rple$rawMetaBrightnessColors;
+    @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
+    private short @Nullable [] rple$rawMetaOpacityColors;
+
     @Nullable
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
     private RPLEColor rple$baseBrightnessColor;
@@ -56,6 +65,38 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
 
     @Shadow
     public abstract boolean hasTileEntity(int metadata);
+
+    @Override
+    public short rple$getRawBrightnessColor() {
+        if (rple$rawBaseBrightnessColor == -1)
+            return 0x0000;
+        return rple$rawBaseBrightnessColor;
+    }
+
+    @Override
+    public short rple$getRawBrightnessColor(int blockMeta) {
+        if (rple$rawMetaBrightnessColors == null)
+            return 0x0000;
+        if (blockMeta < 0 || blockMeta >= rple$rawMetaBrightnessColors.length)
+            return 0x0000;
+        return rple$rawMetaBrightnessColors[blockMeta];
+    }
+
+    @Override
+    public short rple$getRawOpacityColor() {
+        if (rple$rawBaseOpacityColor == -1)
+            return 0x0FFF;
+        return rple$rawBaseOpacityColor;
+    }
+
+    @Override
+    public short rple$getRawOpacityColor(int blockMeta) {
+        if (rple$rawMetaOpacityColors == null)
+            return 0x0FFF;
+        if (blockMeta < 0 || blockMeta >= rple$rawMetaOpacityColors.length)
+            return 0x0FFF;
+        return rple$rawMetaOpacityColors[blockMeta];
+    }
 
     @Override
     @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})

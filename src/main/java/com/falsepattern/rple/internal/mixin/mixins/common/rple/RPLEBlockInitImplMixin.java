@@ -24,6 +24,11 @@ import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.RPLE_INIT_
 @Mixin(value = Block.class, priority = RPLE_INIT_MIXIN_PRIORITY)
 @SuppressWarnings("unused")
 public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
+    private short rple$rawBaseBrightnessColor;
+    private short rple$rawBaseOpacityColor;
+    private short @Nullable [] rple$rawMetaBrightnessColors;
+    private short @Nullable [] rple$rawMetaOpacityColors;
+
     @Nullable
     private RPLEColor rple$baseBrightnessColor;
     @Nullable
@@ -40,6 +45,11 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
             at = @At("RETURN"),
             require = 1)
     private void rpleBlockInit(Material material, CallbackInfo ci) {
+        this.rple$rawBaseBrightnessColor = -1;
+        this.rple$rawBaseOpacityColor = -1;
+        this.rple$rawMetaBrightnessColors = null;
+        this.rple$rawMetaOpacityColors = null;
+
         this.rple$baseBrightnessColor = null;
         this.rple$baseTranslucencyColor = null;
         this.rple$metaBrightnessColors = null;
@@ -52,20 +62,24 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
     @Override
     public void rple$initBaseBrightnessColor(@Nullable RPLEColor baseColoredBrightness) {
         rple$baseBrightnessColor = baseColoredBrightness;
+        // TODO: [COLORZ] Convert here!
     }
 
     @Override
     public void rple$initBaseTranslucencyColor(@Nullable RPLEColor baseColoredTranslucency) {
         rple$baseTranslucencyColor = baseColoredTranslucency;
+        // TODO: [COLORZ] Convert here!
     }
 
     @Override
     public void rple$initMetaBrightnessColors(@Nullable RPLEColor @Nullable [] metaColoredBrightness) {
         rple$metaBrightnessColors = metaColoredBrightness;
+        // TODO: [COLORZ] Convert here!
     }
 
     @Override
     public void rple$initMetaTranslucencyColors(@Nullable RPLEColor @Nullable [] metaColoredTranslucency) {
         rple$metaTranslucencyColors = metaColoredTranslucency;
+        // TODO: [COLORZ] Convert here!
     }
 }
