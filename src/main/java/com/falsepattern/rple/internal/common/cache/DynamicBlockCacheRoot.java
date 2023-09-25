@@ -18,21 +18,16 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Arrays;
 import java.util.BitSet;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
-import static net.minecraftforge.common.util.ForgeDirection.EAST;
-import static net.minecraftforge.common.util.ForgeDirection.NORTH;
-import static net.minecraftforge.common.util.ForgeDirection.SOUTH;
-import static net.minecraftforge.common.util.ForgeDirection.UP;
-import static net.minecraftforge.common.util.ForgeDirection.WEST;
+import static net.minecraftforge.common.util.ForgeDirection.*;
 
 
 //TODO: [CACHE_DONE] When a light color value is requested, it will get it from the requested block
@@ -225,19 +220,23 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
             val subChunkZ = posZ & CHUNK_XZ_BITMASK;
 
             val block = theChunk.lumi$getBlock(subChunkX, posY, subChunkZ);
-            val blockMeta = theChunk.lumi$getBlockMeta(subChunkX, posY, subChunkZ);
-
             blocks[cacheIndex] = block;
-            blockMetas[cacheIndex] = blockMeta;
 
-            airChecks.set(cacheIndex, block.isAir(helperCache, posX, posY, posZ));
+            if (block != Blocks.air) {
+                val blockMeta = theChunk.lumi$getBlockMeta(subChunkX, posY, subChunkZ);
+                val blockBrightness = ((RPLEBlock) block).rple$getBrightnessColor(helperCache, blockMeta, posX, posY, posZ);
+                val blockTranslucency = ((RPLEBlock) block).rple$getTranslucencyColor(helperCache, blockMeta, posX, posY, posZ);
 
-            val blockBrightness = ((RPLEBlock)block).rple$getBrightnessColor(helperCache, blockMeta, posX, posY, posZ);
-            val blockTranslucency = ((RPLEBlock)block).rple$getTranslucencyColor(helperCache, blockMeta, posX, posY, posZ);
-
-            brightnesses[cacheIndex] = brightnessToCache(blockBrightness);
-            opacities[cacheIndex] = translucencyToOpacityCache(blockTranslucency);
-
+                airChecks.set(cacheIndex, block.isAir(helperCache, posX, posY, posZ));
+                blockMetas[cacheIndex] = blockMeta;
+                brightnesses[cacheIndex] = brightnessToCache(blockBrightness);
+                opacities[cacheIndex] = translucencyToOpacityCache(blockTranslucency);
+            } else {
+                airChecks.set(cacheIndex);
+                blockMetas[cacheIndex] = 0;
+                brightnesses[cacheIndex] = 0;
+                opacities[cacheIndex] = 0;
+            }
             checkedBlocks.set(cacheIndex);
         }
         return cacheIndex;

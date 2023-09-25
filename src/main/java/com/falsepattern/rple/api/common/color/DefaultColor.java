@@ -7,7 +7,9 @@
 
 package com.falsepattern.rple.api.common.color;
 
+import lombok.val;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public enum DefaultColor implements RPLENamedColor {
     // @formatter:off
@@ -69,6 +71,18 @@ public enum DefaultColor implements RPLENamedColor {
     public static DefaultColor fromVanillaBlockMeta(int blockMeta) {
         blockMeta &= 15;
         return VALUES[blockMeta];
+    }
+
+    public static @Nullable RPLEColor attemptMapToEnum(@Nullable RPLEColor color) {
+        if (color == null)
+            return null;
+        for (val otherColor : VALUES) {
+            if (color.red() == otherColor.red() &&
+                color.green() == otherColor.green() &&
+                color.blue() == otherColor.blue())
+                return otherColor;
+        }
+        return null;
     }
 
     public @NotNull String colorName() {

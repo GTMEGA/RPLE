@@ -12,12 +12,18 @@ import com.falsepattern.rple.api.client.lightmap.vanilla.BossColorModifierMask;
 import com.falsepattern.rple.api.client.lightmap.vanilla.NightVisionMask;
 import com.falsepattern.rple.api.client.lightmap.vanilla.VanillaLightMapBase;
 import com.falsepattern.rple.api.common.block.RPLEBlockColorRegistry;
+import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.internal.common.config.container.BlockColorConfig;
+import cpw.mods.fml.common.registry.GameData;
+import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.experimental.UtilityClass;
 import lombok.val;
+import net.minecraft.block.Block;
 
 import static com.falsepattern.rple.api.common.color.DefaultColor.*;
+import static com.falsepattern.rple.api.common.color.LightValueColor.fromVanillaLightOpacity;
+import static com.falsepattern.rple.api.common.color.LightValueColor.fromVanillaLightValue;
 import static net.minecraft.init.Blocks.*;
 
 @UtilityClass
@@ -29,13 +35,24 @@ public final class RPLEDefaultValues {
     }
 
     public static void preloadDefaultColorPalette(BlockColorConfig config) {
-        for (val color : values())
+        for (val color : DefaultColor.values())
             config.addPaletteColor(color);
         for (val color : LightValueColor.values())
             config.addPaletteColor(color);
     }
 
     public static void registerDefaultBlockBrightnessColors(RPLEBlockColorRegistry registry) {
+        val blockRegistry = GameData.getBlockRegistry();
+        for (val blockObj : blockRegistry) {
+            val block = (Block) blockObj;
+            val blockId = GameRegistry.findUniqueIdentifierFor(block);
+            if (!"minecraft".equals(blockId.modId))
+                continue;
+
+            val brightness = fromVanillaLightValue(block.getLightValue());
+            registry.colorizeBlock(block).brightness(brightness).apply();
+        }
+
         registry.colorizeBlock(fire).brightness(0xEC0).apply();
         registry.colorizeBlock(lava).brightness(0xF90).apply();
         registry.colorizeBlock(flowing_lava).brightness(0xF90).apply();
@@ -487,6 +504,16 @@ public final class RPLEDefaultValues {
     }
 
     public static void registerDefaultBlockTranslucencyColors(RPLEBlockColorRegistry registry) {
+        val blockRegistry = GameData.getBlockRegistry();
+        for (val blockObj : blockRegistry) {
+            val block = (Block) blockObj;
+            val blockId = GameRegistry.findUniqueIdentifierFor(block);
+            if (!"minecraft".equals(blockId.modId))
+                continue;
+            val translucency = fromVanillaLightOpacity(block.getLightOpacity());
+            registry.colorizeBlock(block).translucency(translucency).apply();
+        }
+
         registry.colorizeBlock(stained_glass, 0).translucency(WHITE).apply();
         registry.colorizeBlock(stained_glass, 1).translucency(ORANGE).apply();
         registry.colorizeBlock(stained_glass, 2).translucency(MAGENTA).apply();

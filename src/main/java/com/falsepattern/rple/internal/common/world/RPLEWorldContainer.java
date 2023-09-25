@@ -87,20 +87,20 @@ public final class RPLEWorldContainer implements RPLEWorld {
     @Override
     @SuppressWarnings("InstanceofIncompatibleInterface")
     public @Nullable RPLEChunk lumi$getChunkFromBlockPosIfExists(int posX, int posZ) {
-        val chunkBase = base.getChunkFromBlockCoords(posX, posZ);
-        if (!(chunkBase instanceof RPLEChunkRoot))
+        val lumiChunkRoot = root.lumi$getChunkRootFromBlockPosIfExists(posX, posZ);
+        if (!(lumiChunkRoot instanceof RPLEChunkRoot))
             return null;
-        val chunkRoot = (RPLEChunkRoot) chunkBase;
+        val chunkRoot = (RPLEChunkRoot) lumiChunkRoot;
         return chunkRoot.rple$chunk(channel);
     }
 
     @Override
     @SuppressWarnings("InstanceofIncompatibleInterface")
     public @Nullable RPLEChunk lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ) {
-        val chunkBase = base.getChunkFromChunkCoords(chunkPosX, chunkPosZ);
-        if (!(chunkBase instanceof RPLEChunkRoot))
+        val lumiChunkRoot = root.lumi$getChunkRootFromChunkPosIfExists(chunkPosX, chunkPosZ);
+        if (!(lumiChunkRoot instanceof RPLEChunkRoot))
             return null;
-        val chunkRoot = (RPLEChunkRoot) chunkBase;
+        val chunkRoot = (RPLEChunkRoot) lumiChunkRoot;
         return chunkRoot.rple$chunk(channel);
     }
 
