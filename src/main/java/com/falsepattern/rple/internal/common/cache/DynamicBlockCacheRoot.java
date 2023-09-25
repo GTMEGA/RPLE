@@ -254,19 +254,8 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
             for (var chunkPosX = 0; chunkPosX < CACHE_CHUNK_XZ_SIZE; chunkPosX++) {
                 val rootChunkIndex = (chunkPosZ * CACHE_CHUNK_XZ_SIZE) + chunkPosX;
                 val realChunkPosX = chunkPosX + minChunkPosX;
-
-                val chunkProvider = worldRoot.lumi$chunkProvider();
-                chunkExistsCheck:
-                {
-                    if (!chunkProvider.chunkExists(realChunkPosX, realChunkPosZ))
-                        break chunkExistsCheck;
-                    val chunkBase = chunkProvider.provideChunk(realChunkPosX, realChunkPosZ);
-                    if (!(chunkBase instanceof RPLEChunkRoot))
-                        break chunkExistsCheck;
-                    val chunkRoot = (RPLEChunkRoot) chunkBase;
-                    rootChunks[rootChunkIndex] = chunkRoot;
-                }
-                rootChunks[rootChunkIndex] = null;
+                rootChunks[rootChunkIndex] = worldRoot.rple$getChunkRootFromChunkPosIfExists(realChunkPosX,
+                                                                                             realChunkPosZ);
             }
         }
         helperCache.init(rootChunks, CACHE_CHUNK_XZ_SIZE, minChunkPosX, minChunkPosZ);
@@ -320,14 +309,9 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         if (rootChunk != null)
             return rootChunk;
 
-        val chunkProvider = worldRoot.lumi$chunkProvider();
-        if (!chunkProvider.chunkExists(baseChunkPosX, baseChunkPosZ))
-            return null;
-        val chunkBase = chunkProvider.provideChunk(baseChunkPosX, baseChunkPosZ);
-        if (!(chunkBase instanceof RPLEChunkRoot))
-            return null;
-
-        return rootChunks[chunkPosZ * CACHE_CHUNK_XZ_SIZE + chunkPosX] = (RPLEChunkRoot) chunkBase;
+        return rootChunks[chunkPosZ * CACHE_CHUNK_XZ_SIZE + chunkPosX] =
+                worldRoot.rple$getChunkRootFromChunkPosIfExists(baseChunkPosX,
+                                                                baseChunkPosZ);
     }
 
 
@@ -344,6 +328,7 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
         return packRGB(red, green, blue);
     }
+
     private static short translucencyToOpacityCache(RPLEColor translucency) {
         int red = RPLEColorUtil.invertColorComponent(translucency.red());
         int green = RPLEColorUtil.invertColorComponent(translucency.green());
@@ -359,7 +344,7 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
     }
 
     private static int cacheToChannel(short cacheableS, int shift) {
-        return (((int)cacheableS) >>> shift) & CACHE_CHANNEL_BITMASK;
+        return (((int) cacheableS) >>> shift) & CACHE_CHANNEL_BITMASK;
     }
 
     //TODO: [CACHE_DONE] Will store one brightness/opacity per block, per channel

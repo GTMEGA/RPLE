@@ -34,6 +34,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * ChunkCache, but small and efficient
@@ -43,13 +44,10 @@ final class ChunkCacheCompact implements IBlockAccess {
     private int chunkX;
     private int chunkZ;
     private int dataSize;
-    private Chunk[] chunkArray;
+    private LumiChunkRoot[] chunkArray;
 
     public void init(LumiChunkRoot[] chunkArray, int dataSize, int chunkX, int chunkZ) {
-        if (this.chunkArray == null || this.chunkArray.length != chunkArray.length)
-            this.chunkArray = new Chunk[chunkArray.length];
-        for (int i = 0; i < chunkArray.length; i++)
-            this.chunkArray[i] = (Chunk) chunkArray[i];
+        this.chunkArray = chunkArray;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.dataSize = dataSize;
@@ -69,7 +67,7 @@ final class ChunkCacheCompact implements IBlockAccess {
             if (cX < 0 || cX >= dataSize || cZ < 0 || cZ >= dataSize)
                 break fetchBlock;
 
-            val chunk = this.chunkArray[cZ * dataSize + cX];
+            val chunk = getChunk(cZ * dataSize + cX);
             if (chunk == null)
                 break fetchBlock;
 
@@ -85,7 +83,7 @@ final class ChunkCacheCompact implements IBlockAccess {
         if (cX < 0 || cX >= dataSize || cZ < 0 || cZ >= dataSize)
             return null;
 
-        val chunk = chunkArray[cZ * dataSize + cX];
+        val chunk = getChunk(cZ * dataSize + cX);
         if (chunk == null)
             return null;
         return chunk.func_150806_e(posX & 15, posY, posZ & 15);
@@ -105,7 +103,7 @@ final class ChunkCacheCompact implements IBlockAccess {
             int cZ = (posZ >> 4) - this.chunkZ;
             if (cX < 0 || cX >= dataSize || cZ < 0 || cZ >= dataSize)
                 return 0;
-            val chunk = chunkArray[cZ * dataSize + cX];
+            val chunk = getChunk(cZ * dataSize + cX);
             if (chunk == null) return 0;
             return chunk.getBlockMetadata(posX & 15, posY, posZ & 15);
         }
@@ -150,5 +148,12 @@ final class ChunkCacheCompact implements IBlockAccess {
     @SideOnly(Side.CLIENT)
     public BiomeGenBase getBiomeGenForCoords(int x, int z) {
         throw new UnsupportedOperationException();
+    }
+
+    private @Nullable Chunk getChunk(int index) {
+        val chunkRoot = chunkArray[index];
+        if (chunkRoot instanceof Chunk)
+            return (Chunk) chunkRoot;
+        return null;
     }
 }

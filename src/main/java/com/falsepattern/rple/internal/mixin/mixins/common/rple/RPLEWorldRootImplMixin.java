@@ -8,17 +8,22 @@
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
 import com.falsepattern.lumina.api.cache.LumiBlockCacheRoot;
-import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
+import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.common.cache.MultiHeadBlockCacheRoot;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockCacheRoot;
+import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.world.RPLEWorldContainer;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
+import lombok.val;
 import net.minecraft.profiler.Profiler;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkProviderServer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
@@ -34,19 +39,17 @@ import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMIN
 @Unique
 @Mixin(value = World.class, priority = POST_LUMINA_MIXIN_PRIORITY)
 public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld, RPLEWorldRoot {
+    @Shadow
+    protected IChunkProvider chunkProvider;
+
     @Final
     @Shadow
     public Profiler theProfiler;
 
-    @Nullable
-    @SuppressWarnings("unused")
-    private LumiLightingEngine lumi$lightingEngine;
-
     @Dynamic
+    @SuppressWarnings("unused")
     private LumiBlockCacheRoot lumi$blockCacheRoot;
 
-    //TODO: [CACHE_RESPONSE] this is wrong,
-    // needs to match the LumiWorldRootImplMixin's LumiBlockCacheRoot lumi$blockCacheRoot field
     private RPLEBlockCacheRoot rple$blockCacheRoot;
 
     private RPLEWorld rple$redChannel;
@@ -59,13 +62,36 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
             require = 1)
     @Dynamic(LUMI_WORLD_INIT_HOOK_INFO)
     private void rpleWorldInit(CallbackInfo ci) {
-        //TODO: [CACHE_DONE] Needs to initialize the multi-head cache
         this.rple$blockCacheRoot = new MultiHeadBlockCacheRoot(this);
         this.lumi$blockCacheRoot = rple$blockCacheRoot;
 
         this.rple$redChannel = new RPLEWorldContainer(RED_CHANNEL, thiz(), this, theProfiler);
         this.rple$greenChannel = new RPLEWorldContainer(GREEN_CHANNEL, thiz(), this, theProfiler);
         this.rple$blueChannel = new RPLEWorldContainer(BLUE_CHANNEL, thiz(), this, theProfiler);
+    }
+
+    @Override
+    public @Nullable LumiChunkRoot rple$getChunkRootFromBlockPosIfExists(int posX, int posZ) {
+        val chunkPosX = posX >> 4;
+        val chunkPosZ = posZ >> 4;
+        return rple$getChunkRootFromChunkPosIfExists(chunkPosX, chunkPosZ);
+    }
+
+    @Override
+    public @Nullable RPLEChunkRoot rple$getChunkRootFromChunkPosIfExists(int chunkPosX, int chunkPosZ) {
+        if (chunkProvider instanceof ChunkProviderServer) {
+            val chunkProviderServer = (ChunkProviderServer) chunkProvider;
+            val loadedChunks = chunkProviderServer.loadedChunkHashMap;
+            val chunk = loadedChunks.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(chunkPosX, chunkPosZ));
+            if (chunk instanceof LumiChunkRoot)
+                return (RPLEChunkRoot) chunk;
+        }
+        if (chunkProvider.chunkExists(chunkPosX, chunkPosZ)) {
+            val chunk = chunkProvider.provideChunk(chunkPosX, chunkPosZ);
+            if (chunk instanceof LumiChunkRoot)
+                return (RPLEChunkRoot) chunk;
+        }
+        return null;
     }
 
     @Override

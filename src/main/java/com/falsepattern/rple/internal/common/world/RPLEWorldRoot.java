@@ -7,14 +7,21 @@
 
 package com.falsepattern.rple.internal.common.world;
 
+import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
 import com.falsepattern.lumina.api.world.LumiWorldRoot;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockCacheRoot;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
+import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface RPLEWorldRoot extends LumiWorldRoot, RPLEBlockStorageRoot {
     @NotNull RPLEWorld rple$world(@NotNull ColorChannel channel);
+
+    @Nullable LumiChunkRoot rple$getChunkRootFromBlockPosIfExists(int posX, int posZ);
+
+    @Nullable RPLEChunkRoot rple$getChunkRootFromChunkPosIfExists(int chunkPosX, int chunkPosZ);
 
     @NotNull RPLEBlockCacheRoot rple$blockCacheRoot();
 }
