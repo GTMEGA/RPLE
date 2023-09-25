@@ -15,7 +15,6 @@ dependencies {
     // LUMINA
     compileOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc2-49-g88e56fa:api")
     runtimeOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc2-49-g88e56fa:dev")
-    runtimeOnly("com.ventooth:megablox-mc1.7.10:0.3.2:dev")
 
     // FalseTweaks
     implementation("com.falsepattern:falsetweaks-mc1.7.10:2.5.7:dev")

@@ -11,6 +11,9 @@ import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.common.block.RPLEBlockInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+
+import com.falsepattern.rple.internal.common.color.ColorPackingUtil;
+import lombok.val;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -62,24 +65,56 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
     @Override
     public void rple$initBaseBrightnessColor(@Nullable RPLEColor baseColoredBrightness) {
         rple$baseBrightnessColor = baseColoredBrightness;
-        // TODO: [COLORZ] Convert here!
+        if (baseColoredBrightness == null) {
+            rple$rawBaseBrightnessColor = -1;
+        } else {
+            rple$rawBaseBrightnessColor = ColorPackingUtil.brightnessToCache(baseColoredBrightness);
+        }
     }
 
     @Override
     public void rple$initBaseTranslucencyColor(@Nullable RPLEColor baseColoredTranslucency) {
         rple$baseTranslucencyColor = baseColoredTranslucency;
-        // TODO: [COLORZ] Convert here!
+        if (baseColoredTranslucency == null) {
+            rple$rawBaseOpacityColor = -1;
+        } else {
+            rple$rawBaseOpacityColor = ColorPackingUtil.translucencyToOpacityCache(baseColoredTranslucency);
+        }
     }
 
     @Override
     public void rple$initMetaBrightnessColors(@Nullable RPLEColor @Nullable [] metaColoredBrightness) {
         rple$metaBrightnessColors = metaColoredBrightness;
-        // TODO: [COLORZ] Convert here!
+        if (metaColoredBrightness == null) {
+            rple$rawMetaBrightnessColors = null;
+        } else {
+            rple$rawMetaBrightnessColors = new short[metaColoredBrightness.length];
+            for (int i = 0; i < metaColoredBrightness.length; i++) {
+                val br = metaColoredBrightness[i];
+                if (br == null) {
+                    rple$rawMetaBrightnessColors[i] = -1;
+                } else {
+                    rple$rawMetaBrightnessColors[i] = ColorPackingUtil.brightnessToCache(br);
+                }
+            }
+        }
     }
 
     @Override
     public void rple$initMetaTranslucencyColors(@Nullable RPLEColor @Nullable [] metaColoredTranslucency) {
         rple$metaTranslucencyColors = metaColoredTranslucency;
-        // TODO: [COLORZ] Convert here!
+        if (metaColoredTranslucency == null) {
+            rple$rawMetaOpacityColors = null;
+        } else {
+            rple$rawMetaOpacityColors = new short[metaColoredTranslucency.length];
+            for (int i = 0; i < metaColoredTranslucency.length; i++) {
+                val op = metaColoredTranslucency[i];
+                if (op == null) {
+                    rple$rawMetaOpacityColors[i] = -1;
+                } else {
+                    rple$rawMetaOpacityColors[i] = ColorPackingUtil.translucencyToOpacityCache(op);
+                }
+            }
+        }
     }
 }

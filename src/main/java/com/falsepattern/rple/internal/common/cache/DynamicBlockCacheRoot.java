@@ -3,10 +3,8 @@ package com.falsepattern.rple.internal.common.cache;
 import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorld;
-import com.falsepattern.rple.api.common.RPLEColorUtil;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.ColorChannel;
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
@@ -27,6 +25,10 @@ import java.util.BitSet;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
+import static com.falsepattern.rple.internal.common.color.ColorPackingUtil.CACHE_ENTRY_BLUE_OFFSET;
+import static com.falsepattern.rple.internal.common.color.ColorPackingUtil.CACHE_ENTRY_GREEN_OFFSET;
+import static com.falsepattern.rple.internal.common.color.ColorPackingUtil.CACHE_ENTRY_RED_OFFSET;
+import static com.falsepattern.rple.internal.common.color.ColorPackingUtil.cacheToChannel;
 import static net.minecraftforge.common.util.ForgeDirection.*;
 
 
@@ -212,7 +214,7 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         if (theChunk == null) {
             blocks[cacheIndex] = Blocks.air;
             blockMetas[cacheIndex] = 0;
-            airChecks.clear(cacheIndex);
+            airChecks.set(cacheIndex);
             checkedBlocks.clear(cacheIndex);
             blockLightValues[cacheIndex] = 0;
             blockOpacityValues[cacheIndex] = 0;
@@ -225,13 +227,11 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
             if (block != Blocks.air) {
                 val blockMeta = theChunk.lumi$getBlockMeta(subChunkX, posY, subChunkZ);
-                val blockBrightness = ((RPLEBlock) block).rple$getBrightnessColor(helperCache, blockMeta, posX, posY, posZ);
-                val blockTranslucency = ((RPLEBlock) block).rple$getTranslucencyColor(helperCache, blockMeta, posX, posY, posZ);
 
                 airChecks.set(cacheIndex, block.isAir(helperCache, posX, posY, posZ));
                 blockMetas[cacheIndex] = blockMeta;
-                blockLightValues[cacheIndex] = brightnessToCache(blockBrightness);
-                blockOpacityValues[cacheIndex] = translucencyToOpacityCache(blockTranslucency);
+                blockLightValues[cacheIndex] = ((RPLEBlock) block).rple$getRawBrightnessColor(blockMeta);
+                blockOpacityValues[cacheIndex] = ((RPLEBlock) block).rple$getRawOpacityColor(blockMeta);
             } else {
                 airChecks.set(cacheIndex);
                 blockMetas[cacheIndex] = 0;
@@ -313,39 +313,6 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         return rootChunks[chunkPosZ * CACHE_CHUNK_XZ_SIZE + chunkPosX] =
                 worldRoot.rple$getChunkRootFromChunkPosIfExists(baseChunkPosX,
                                                                 baseChunkPosZ);
-    }
-
-
-    private static final int CACHE_CHANNEL_BITMASK = 0xf;
-    private static final int CACHE_ENTRY_RED_OFFSET = 0;
-    private static final int CACHE_ENTRY_GREEN_OFFSET = 4;
-    private static final int CACHE_ENTRY_BLUE_OFFSET = 8;
-
-    //Utility methods
-    private static short brightnessToCache(RPLEColor brightness) {
-        int red = brightness.red();
-        int green = brightness.green();
-        int blue = brightness.blue();
-
-        return packRGB(red, green, blue);
-    }
-
-    private static short translucencyToOpacityCache(RPLEColor translucency) {
-        int red = RPLEColorUtil.invertColorComponent(translucency.red());
-        int green = RPLEColorUtil.invertColorComponent(translucency.green());
-        int blue = RPLEColorUtil.invertColorComponent(translucency.blue());
-
-        return packRGB(red, green, blue);
-    }
-
-    private static short packRGB(int red, int green, int blue) {
-        return (short) ((red & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_RED_OFFSET |
-                        (green & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_GREEN_OFFSET |
-                        (blue & CACHE_CHANNEL_BITMASK) << CACHE_ENTRY_BLUE_OFFSET);
-    }
-
-    private static int cacheToChannel(short cacheableS, int shift) {
-        return (((int) cacheableS) >>> shift) & CACHE_CHANNEL_BITMASK;
     }
 
     //TODO: [CACHE_DONE] Will store one brightness/opacity per block, per channel
