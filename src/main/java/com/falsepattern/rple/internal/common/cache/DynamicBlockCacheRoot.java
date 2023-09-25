@@ -1,6 +1,6 @@
 package com.falsepattern.rple.internal.common.cache;
 
-import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
+import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.common.RPLEColorUtil;
@@ -75,10 +75,11 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
     private final BitSet checkedBlocks = new BitSet(ELEMENT_COUNT_PER_CACHED_THING);
 
     // CZ/CX/Z/X/Y 3/3/16/16/256
-    private final short[] brightnesses = new short[ELEMENT_COUNT_PER_CACHED_THING];
+    private final short[] blockLightValues = new short[ELEMENT_COUNT_PER_CACHED_THING];
     // CZ/CX/Z/X/Y 3/3/16/16/256
-    private final short[] opacities = new short[ELEMENT_COUNT_PER_CACHED_THING];
+    private final short[] blockOpacityValues = new short[ELEMENT_COUNT_PER_CACHED_THING];
 
+    
     private int minChunkPosX;
     private int minChunkPosZ;
     private int maxChunkPosX;
@@ -213,8 +214,8 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
             blockMetas[cacheIndex] = 0;
             airChecks.clear(cacheIndex);
             checkedBlocks.clear(cacheIndex);
-            brightnesses[cacheIndex] = 0;
-            opacities[cacheIndex] = 0;
+            blockLightValues[cacheIndex] = 0;
+            blockOpacityValues[cacheIndex] = 0;
         } else {
             val subChunkX = posX & CHUNK_XZ_BITMASK;
             val subChunkZ = posZ & CHUNK_XZ_BITMASK;
@@ -229,13 +230,13 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
                 airChecks.set(cacheIndex, block.isAir(helperCache, posX, posY, posZ));
                 blockMetas[cacheIndex] = blockMeta;
-                brightnesses[cacheIndex] = brightnessToCache(blockBrightness);
-                opacities[cacheIndex] = translucencyToOpacityCache(blockTranslucency);
+                blockLightValues[cacheIndex] = brightnessToCache(blockBrightness);
+                blockOpacityValues[cacheIndex] = translucencyToOpacityCache(blockTranslucency);
             } else {
                 airChecks.set(cacheIndex);
                 blockMetas[cacheIndex] = 0;
-                brightnesses[cacheIndex] = 0;
-                opacities[cacheIndex] = 0;
+                blockLightValues[cacheIndex] = 0;
+                blockOpacityValues[cacheIndex] = 0;
             }
             checkedBlocks.set(cacheIndex);
         }
@@ -291,7 +292,7 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         }
     }
 
-    private @Nullable LumiChunkRoot chunkFromBlockPos(int posX, int posZ) {
+    private @Nullable RPLEChunkRoot chunkFromBlockPos(int posX, int posZ) {
         val baseChunkPosX = posX >> BITSIZE_CHUNK_XZ;
         val baseChunkPosZ = posZ >> BITSIZE_CHUNK_XZ;
         if (!isReady) {
@@ -447,45 +448,97 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
 
         @Override
         public int lumi$getBrightness(@NotNull LightType lightType, int posX, int posY, int posZ) {
-            return world.lumi$getBrightness(lightType, posX, posY, posZ);
+            switch (lightType) {
+                case BLOCK_LIGHT_TYPE:
+                    return lumi$getBrightness(posX, posY, posZ);
+                case SKY_LIGHT_TYPE:
+                    return lumi$getSkyLightValue(posX, posY, posZ);
+                default:
+                    return 0;
+            }
         }
 
         @Override
         public int lumi$getBrightness(int posX, int posY, int posZ) {
-            return world.lumi$getBrightness(posX, posY, posZ);
+            val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+            if (chunk != null) {
+                val subChunkPosX = posX & 15;
+                val subChunkPosZ = posZ & 15;
+                return chunk.lumi$getBrightness(subChunkPosX, posY, subChunkPosZ);
+            }
+            val blockBrightness = lumi$getBlockBrightness(posX, posY, posZ);
+            return Math.max(blockBrightness, BLOCK_LIGHT_TYPE.defaultLightValue());
         }
 
         @Override
         public int lumi$getLightValue(int posX, int posY, int posZ) {
-            return world.lumi$getLightValue(posX, posY, posZ);
+            val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+            if (chunk != null) {
+                val subChunkPosX = posX & 15;
+                val subChunkPosZ = posZ & 15;
+                return chunk.lumi$getLightValue(subChunkPosX, posY, subChunkPosZ);
+            }
+            return LightType.maxBaseLightValue();
         }
 
         @Override
         public int lumi$getLightValue(@NotNull LightType lightType, int posX, int posY, int posZ) {
-            return world.lumi$getLightValue(lightType, posX, posY, posZ);
+            val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+            if (chunk != null) {
+                val subChunkPosX = posX & 15;
+                val subChunkPosZ = posZ & 15;
+                return chunk.lumi$getLightValue(lightType, subChunkPosX, posY, subChunkPosZ);
+            }
+
+            switch (lightType) {
+                default:
+                case BLOCK_LIGHT_TYPE:
+                    return BLOCK_LIGHT_TYPE.defaultLightValue();
+                case SKY_LIGHT_TYPE: {
+                    if (lumi$root().lumi$hasSky())
+                        return SKY_LIGHT_TYPE.defaultLightValue();
+                    return 0;
+                }
+            }
         }
 
         @Override
         public int lumi$getBlockLightValue(int posX, int posY, int posZ) {
-            return world.lumi$getBlockLightValue(posX, posY, posZ);
+            val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+            if (chunk != null) {
+                val subChunkPosX = posX & 15;
+                val subChunkPosZ = posZ & 15;
+                return chunk.lumi$getBlockLightValue(subChunkPosX, posY, subChunkPosZ);
+            }
+            return BLOCK_LIGHT_TYPE.defaultLightValue();
         }
 
         @Override
         public int lumi$getSkyLightValue(int posX, int posY, int posZ) {
-            return world.lumi$getSkyLightValue(posX, posY, posZ);
+            if (!lumi$root().lumi$hasSky())
+                return 0;
+
+            val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+            if (chunk != null) {
+                val subChunkPosX = posX & 15;
+                val subChunkPosZ = posZ & 15;
+                return chunk.lumi$getSkyLightValue(subChunkPosX, posY, subChunkPosZ);
+            }
+
+            return SKY_LIGHT_TYPE.defaultLightValue();
         }
 
         @Override
         public int lumi$getBlockBrightness(int posX, int posY, int posZ) {
             val index = DynamicBlockCacheRoot.this.getIndex(posX, posY, posZ);
-            short cachedBrightness = brightnesses[index];
+            short cachedBrightness = blockLightValues[index];
             return cacheToChannel(cachedBrightness, cacheEntryShift);
         }
 
         @Override
         public int lumi$getBlockOpacity(int posX, int posY, int posZ) {
             val index = DynamicBlockCacheRoot.this.getIndex(posX, posY, posZ);
-            short cachedOpacity = opacities[index];
+            short cachedOpacity = blockOpacityValues[index];
             return cacheToChannel(cachedOpacity, cacheEntryShift);
         }
 
@@ -497,6 +550,13 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         @Override
         public int lumi$getBlockOpacity(@NotNull Block block, int blockMeta, int posX, int posY, int posZ) {
             return lumi$getBlockOpacity(posX, posY, posZ);
+        }
+
+        private @Nullable LumiChunk lumi$getChunkFromBlockPosIfExists(int posX, int posZ) {
+            val chunkRoot = chunkFromBlockPos(posX, posZ);
+            if (chunkRoot == null)
+                return null;
+            return chunkRoot.rple$chunk(world.rple$channel());
         }
     }
 
