@@ -13,8 +13,8 @@ def deobfCurse(curseDep) {
 
 dependencies {
     // LUMINA
-    compileOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc2-44-ge24d65e:api")
-    runtimeOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc2-44-ge24d65e:dev")
+    compileOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc2-49-g88e56fa:api")
+    runtimeOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc2-49-g88e56fa:dev")
     runtimeOnly("com.ventooth:megablox-mc1.7.10:0.3.2:dev")
 
     // FalseTweaks
