@@ -48,12 +48,12 @@ public enum LightValueColor implements RPLENamedColor {
     }
 
     public static @NotNull LightValueColor fromVanillaLightValue(int vanillaLightValue) {
-        final int index = vanillaLightValue % 15;
+        final int index = vanillaLightValue & 15;
         return VALUES[index];
     }
 
     public static @NotNull LightValueColor fromVanillaLightOpacity(int vanillaLightOpacity) {
-        final int index = 15 - (vanillaLightOpacity % 15);
+        final int index = 15 - (vanillaLightOpacity & 15);
         return VALUES[index];
     }
 
