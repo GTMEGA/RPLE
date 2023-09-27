@@ -113,6 +113,9 @@ public enum Mixin implements IMixin {
     // region Forge Multi Part Compatibility
     client_multipart_TileMultipartMixin(COMMON, require(FORGE_MULTI_PART), "multipart.TileMultipartMixin"),
     // endregion
+
+    // TODO proper category
+    RenderManagerMixin(CLIENT, always(), "RenderManagerMixin")
     ;
 
     @Getter
