@@ -106,7 +106,9 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
                 break checkMeta;
             if (blockMeta < 0 || blockMeta >= rple$rawMetaBrightnessColors.length)
                 break checkMeta;
-            return rple$rawMetaBrightnessColors[blockMeta];
+            val brightness = rple$rawMetaBrightnessColors[blockMeta];
+            if (brightness != -1)
+                return brightness;
         }
         if (rple$rawBaseBrightnessColor != -1)
             return rple$rawBaseBrightnessColor;
@@ -130,7 +132,9 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
                 break checkMeta;
             if (blockMeta < 0 || blockMeta >= rple$rawMetaBrightnessColors.length)
                 break checkMeta;
-            return rple$rawMetaBrightnessColors[blockMeta];
+            val brightness = rple$rawMetaBrightnessColors[blockMeta];
+            if (brightness != -1)
+                return brightness;
         }
         if (rple$rawBaseBrightnessColor != -1)
             return rple$rawBaseBrightnessColor;
@@ -179,7 +183,9 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
                 break checkMeta;
             if (blockMeta < 0 || blockMeta >= rple$rawMetaOpacityColors.length)
                 break checkMeta;
-            return rple$rawMetaOpacityColors[blockMeta];
+            val opacity = rple$rawMetaOpacityColors[blockMeta];
+            if (opacity != -1)
+                return opacity;
         }
         if (rple$rawBaseOpacityColor != -1)
             return rple$rawBaseOpacityColor;
@@ -198,11 +204,13 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
     public short rple$getRawOpacityColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
         checkMeta:
         {
-            if (rple$rawMetaBrightnessColors == null)
+            if (rple$rawMetaOpacityColors == null)
                 break checkMeta;
-            if (blockMeta < 0 || blockMeta >= rple$rawMetaBrightnessColors.length)
+            if (blockMeta < 0 || blockMeta >= rple$rawMetaOpacityColors.length)
                 break checkMeta;
-            return rple$rawMetaBrightnessColors[blockMeta];
+            val opacity = rple$rawMetaOpacityColors[blockMeta];
+            if (opacity != -1)
+                return opacity;
         }
         if (rple$rawBaseOpacityColor != -1)
             return rple$rawBaseOpacityColor;
