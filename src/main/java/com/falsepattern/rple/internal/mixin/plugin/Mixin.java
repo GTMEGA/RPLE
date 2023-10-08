@@ -38,6 +38,7 @@ public enum Mixin implements IMixin {
     client_WorldMixin(CLIENT, always(), "WorldMixin"),
 
     client_RendererLivingEntityMixin(CLIENT, always(), "RendererLivingEntityMixin"),
+    client_RenderMixin(CLIENT, always(), "RenderMixin"),
 
     client_Tessellator_NonOptiFineMixin(CLIENT, avoid(OPTIFINE_WITH_SHADERS).and(avoid(OPTIFINE_WITHOUT_SHADERS)), "Tessellator_NonOptiFineMixin"),
     // endregion
@@ -108,6 +109,10 @@ public enum Mixin implements IMixin {
     // region CodeChickenLib Compatibility
     client_codechickenlib_CCRenderStateMixin(CLIENT, require(CODE_CHICKEN_LIB), "codechickenlib.CCRenderStateMixin"),
     client_codechickenlib_LightMatrixMixin(CLIENT, require(CODE_CHICKEN_LIB), "codechickenlib.LightMatrixMixin"),
+    // endregion
+
+    // region Not Enough Items Compatibility
+    client_notenoughitems_WorldOverlayRenderer(CLIENT, require(NOT_ENOUGH_ITEMS), "notenoughitems.WorldOverlayRendererMixin"),
     // endregion
 
     // region Forge Multi Part Compatibility

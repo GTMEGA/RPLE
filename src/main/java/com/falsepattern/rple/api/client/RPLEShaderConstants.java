@@ -16,4 +16,6 @@ public final class RPLEShaderConstants {
     public static final int edgeTexCoordAttrib = 13;
     public static boolean useRPLEEdgeTexCoordAttrib = false;
     public static boolean progUseRPLEEdgeTexCoordAttrib = false;
+
+    public static final String TEXTURING_ENABLED_ATTRIB_NAME = "rple_texturingEnabled";
 }

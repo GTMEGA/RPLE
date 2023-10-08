@@ -45,6 +45,8 @@ public abstract class ShadersMixin {
                                 LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
             setProgramUniform1i(RPLEShaderConstants.BLUE_LIGHT_MAP_UNIFORM_NAME,
                                 LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
+        } else if ("texture".equals(name)) {
+            setProgramUniform1i(RPLEShaderConstants.TEXTURING_ENABLED_ATTRIB_NAME, 1);
         }
     }
 
