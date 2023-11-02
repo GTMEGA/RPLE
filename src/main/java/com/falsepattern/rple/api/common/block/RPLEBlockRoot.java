@@ -27,6 +27,34 @@ public interface RPLEBlockRoot {
      *
      * @return Internal brightness value
      */
+    short rple$getRawInternalColoredBrightness();
+
+    /**
+     * Returns the translucency as defined by: {@link Block#getLightValue(IBlockAccess, int, int, int)}
+     *
+     * @return Internal brightness value
+     */
+    short rple$getRawInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ);
+
+    /**
+     * Returns the translucency as defined by: {@link Block#getLightOpacity()}
+     *
+     * @return Internal translucency value
+     */
+    short rple$getRawInternalColoredOpacity();
+
+    /**
+     * Returns the translucency as defined by: {@link Block#getLightOpacity(IBlockAccess, int, int, int)}
+     *
+     * @return Internal translucency value
+     */
+    short rple$getRawInternalColoredOpacity(IBlockAccess world, int posX, int posY, int posZ);
+
+    /**
+     * Returns the translucency as defined by: {@link Block#getLightValue()}
+     *
+     * @return Internal brightness value
+     */
     RPLEColor rple$getInternalColoredBrightness();
 
     /**

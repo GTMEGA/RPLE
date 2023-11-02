@@ -7,39 +7,21 @@
 
 package com.falsepattern.rple.internal.common.world;
 
-import com.falsepattern.lumina.api.lighting.LightType;
+import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
 import com.falsepattern.lumina.api.world.LumiWorldRoot;
 import com.falsepattern.rple.api.common.color.ColorChannel;
-import net.minecraft.world.ChunkCache;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockCacheRoot;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
+import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface RPLEWorldRoot extends LumiWorldRoot {
-    RPLEWorld rple$world(ColorChannel channel);
+public interface RPLEWorldRoot extends LumiWorldRoot, RPLEBlockStorageRoot {
+    @NotNull RPLEWorld rple$world(@NotNull ColorChannel channel);
 
-    @Deprecated
-    int rple$getChannelBrightnessForTessellator(ColorChannel channel, int posX, int posY, int posZ, int minBlockLight);
+    @Nullable LumiChunkRoot rple$getChunkRootFromBlockPosIfExists(int posX, int posZ);
 
-    @Deprecated
-    int rple$getChannelLightValueForTessellator(ColorChannel channel,
-                                                LightType lightType,
-                                                int posX,
-                                                int posY,
-                                                int posZ);
+    @Nullable RPLEChunkRoot rple$getChunkRootFromChunkPosIfExists(int chunkPosX, int chunkPosZ);
 
-    @SuppressWarnings("InstanceofIncompatibleInterface")
-    static @Nullable RPLEWorldRoot rple$getWorldRootFromBlockAccess(IBlockAccess blockAccess) {
-        if (blockAccess == null)
-            return null;
-        if (blockAccess instanceof RPLEWorldRoot)
-            return (RPLEWorldRoot) blockAccess;
-        if (blockAccess instanceof ChunkCache) {
-            final ChunkCache chunkCache = (ChunkCache) blockAccess;
-            final World worldBase = chunkCache.worldObj;
-            if (worldBase instanceof RPLEWorldRoot)
-                return (RPLEWorldRoot) worldBase;
-        }
-        return null;
-    }
+    @NotNull RPLEBlockCacheRoot rple$blockCacheRoot();
 }

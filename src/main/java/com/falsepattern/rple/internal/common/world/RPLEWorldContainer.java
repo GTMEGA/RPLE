@@ -14,6 +14,7 @@ import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockCache;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
@@ -40,6 +41,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     private final World base;
     private final RPLEWorldRoot root;
 
+    private final RPLEBlockCache blockCache;
     private final LumiLightingEngine lightingEngine;
 
     public RPLEWorldContainer(ColorChannel channel, World base, RPLEWorldRoot root, Profiler profiler) {
@@ -48,7 +50,14 @@ public final class RPLEWorldContainer implements RPLEWorld {
         this.base = base;
         this.root = root;
 
+        this.blockCache = root.rple$blockCacheRoot().lumi$createBlockCache(this);
         this.lightingEngine = LumiAPI.provideLightingEngine(this, profiler);
+    }
+
+    // region World
+    @Override
+    public @NotNull ColorChannel rple$channel() {
+        return channel;
     }
 
     @Override
@@ -78,26 +87,76 @@ public final class RPLEWorldContainer implements RPLEWorld {
     @Override
     @SuppressWarnings("InstanceofIncompatibleInterface")
     public @Nullable RPLEChunk lumi$getChunkFromBlockPosIfExists(int posX, int posZ) {
-        val chunkBase = base.getChunkFromBlockCoords(posX, posZ);
-        if (!(chunkBase instanceof RPLEChunkRoot))
+        val lumiChunkRoot = root.lumi$getChunkRootFromBlockPosIfExists(posX, posZ);
+        if (!(lumiChunkRoot instanceof RPLEChunkRoot))
             return null;
-        val chunkRoot = (RPLEChunkRoot) chunkBase;
+        val chunkRoot = (RPLEChunkRoot) lumiChunkRoot;
         return chunkRoot.rple$chunk(channel);
     }
 
     @Override
     @SuppressWarnings("InstanceofIncompatibleInterface")
     public @Nullable RPLEChunk lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ) {
-        val chunkBase = base.getChunkFromChunkCoords(chunkPosX, chunkPosZ);
-        if (!(chunkBase instanceof RPLEChunkRoot))
+        val lumiChunkRoot = root.lumi$getChunkRootFromChunkPosIfExists(chunkPosX, chunkPosZ);
+        if (!(lumiChunkRoot instanceof RPLEChunkRoot))
             return null;
-        val chunkRoot = (RPLEChunkRoot) chunkBase;
+        val chunkRoot = (RPLEChunkRoot) lumiChunkRoot;
         return chunkRoot.rple$chunk(channel);
+    }
+
+    @Override
+    public @NotNull RPLEBlockCache lumi$blockCache() {
+        return blockCache;
     }
 
     @Override
     public @NotNull LumiLightingEngine lumi$lightingEngine() {
         return lightingEngine;
+    }
+
+    @Override
+    public void lumi$setLightValue(@NotNull LightType lightType, int posX, int posY, int posZ, int lightValue) {
+        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+        if (chunk != null) {
+            val subChunkPosX = posX & 15;
+            val subChunkPosZ = posZ & 15;
+            chunk.lumi$setLightValue(lightType, subChunkPosX, posY, subChunkPosZ, lightValue);
+        }
+    }
+
+    @Override
+    public void lumi$setBlockLightValue(int posX, int posY, int posZ, int lightValue) {
+        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+        if (chunk != null) {
+            val subChunkPosX = posX & 15;
+            val subChunkPosZ = posZ & 15;
+            chunk.lumi$setBlockLightValue(subChunkPosX, posY, subChunkPosZ, lightValue);
+        }
+    }
+
+    @Override
+    public void lumi$setSkyLightValue(int posX, int posY, int posZ, int lightValue) {
+        if (!lumi$root().lumi$hasSky())
+            return;
+
+        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+        if (chunk != null) {
+            val subChunkPosX = posX & 15;
+            val subChunkPosZ = posZ & 15;
+            chunk.lumi$setSkyLightValue(subChunkPosX, posY, subChunkPosZ, lightValue);
+        }
+    }
+    // endregion
+
+    // region Block Storage
+    @Override
+    public @NotNull String lumi$blockStorageID() {
+        return worldID;
+    }
+
+    @Override
+    public @NotNull RPLEWorld lumi$world() {
+        return this;
     }
 
     @Override
@@ -136,16 +195,6 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public void lumi$setLightValue(@NotNull LightType lightType, int posX, int posY, int posZ, int lightValue) {
-        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
-        if (chunk != null) {
-            val subChunkPosX = posX & 15;
-            val subChunkPosZ = posZ & 15;
-            chunk.lumi$setLightValue(lightType, subChunkPosX, posY, subChunkPosZ, lightValue);
-        }
-    }
-
-    @Override
     public int lumi$getLightValue(@NotNull LightType lightType, int posX, int posY, int posZ) {
         val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
         if (chunk != null) {
@@ -167,16 +216,6 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public void lumi$setBlockLightValue(int posX, int posY, int posZ, int lightValue) {
-        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
-        if (chunk != null) {
-            val subChunkPosX = posX & 15;
-            val subChunkPosZ = posZ & 15;
-            chunk.lumi$setBlockLightValue(subChunkPosX, posY, subChunkPosZ, lightValue);
-        }
-    }
-
-    @Override
     public int lumi$getBlockLightValue(int posX, int posY, int posZ) {
         val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
         if (chunk != null) {
@@ -185,19 +224,6 @@ public final class RPLEWorldContainer implements RPLEWorld {
             return chunk.lumi$getBlockLightValue(subChunkPosX, posY, subChunkPosZ);
         }
         return BLOCK_LIGHT_TYPE.defaultLightValue();
-    }
-
-    @Override
-    public void lumi$setSkyLightValue(int posX, int posY, int posZ, int lightValue) {
-        if (!lumi$root().lumi$hasSky())
-            return;
-
-        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
-        if (chunk != null) {
-            val subChunkPosX = posX & 15;
-            val subChunkPosZ = posZ & 15;
-            chunk.lumi$setSkyLightValue(subChunkPosX, posY, subChunkPosZ, lightValue);
-        }
     }
 
     @Override
@@ -217,14 +243,16 @@ public final class RPLEWorldContainer implements RPLEWorld {
 
     @Override
     public int lumi$getBlockBrightness(int posX, int posY, int posZ) {
-        val block = root.lumi$getBlock(posX, posY, posZ);
-        return block.getLightValue(base, posX, posY, posZ);
+        val blockBase = root.lumi$getBlock(posX, posY, posZ);
+        val blockMeta = root.lumi$getBlockMeta(posX, posY, posZ);
+        return lumi$getBlockBrightness(blockBase, blockMeta, posX, posY, posZ);
     }
 
     @Override
     public int lumi$getBlockOpacity(int posX, int posY, int posZ) {
-        val block = root.lumi$getBlock(posX, posY, posZ);
-        return block.getLightOpacity(base, posX, posY, posZ);
+        val blockBase = root.lumi$getBlock(posX, posY, posZ);
+        val blockMeta = root.lumi$getBlockMeta(posX, posY, posZ);
+        return lumi$getBlockOpacity(blockBase, blockMeta, posX, posY, posZ);
     }
 
     @Override
@@ -252,7 +280,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public int rple$getChannelLightValueForRender(LightType lightType, int posX, int posY, int posZ) {
+    public int rple$getChannelLightValueForRender(@NotNull LightType lightType, int posX, int posY, int posZ) {
         if (lightType == SKY_LIGHT_TYPE && !root.lumi$hasSky())
             return 0;
 
@@ -278,6 +306,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
         }
         return lumi$getBrightness(lightType, posX, posY, posZ);
     }
+    // endregion
 
     private int getNeighborLightValue(LightType lightType, int posX, int posY, int posZ, ForgeDirection direction) {
         posX += direction.offsetX;

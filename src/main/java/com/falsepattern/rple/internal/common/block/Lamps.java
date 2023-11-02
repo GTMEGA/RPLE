@@ -9,21 +9,24 @@ package com.falsepattern.rple.internal.common.block;
 
 import lombok.RequiredArgsConstructor;
 
-@Deprecated
 @RequiredArgsConstructor
 public enum Lamps {
-    RED(15, 0, 0),
-    MAGENTA(15, 0, 15),
-    PURPLE(7, 0, 15),
-    BLUE(0, 0, 15),
-    AZURE(7, 7, 15),
-    CYAN(0, 15, 15),
-    GREEN(0, 15, 0),
-    LIME(7, 15, 7),
-    YELLOW(15, 15, 0),
-    ORANGE(15, 7, 0),
-    PINK(15, 7, 15),
-    WHITE(15, 15, 15);
+    BLACK     (0 , 0 , 0 ), // Why do we have this? It's just black.
+    RED       (15, 0 , 0 ),
+    GREEN     (0 , 15, 0 ),
+    BROWN     (8 , 4 , 0 ),
+    BLUE      (0 , 0 , 15),
+    PURPLE    (8 , 0 , 15),
+    CYAN      (0 , 15, 15),
+    LIGHT_GRAY(8 , 8 , 8 ),
+    GRAY      (4 , 4 , 4 ),
+    PINK      (15, 7 , 15),
+    LIME      (7 , 15, 7 ),
+    YELLOW    (15, 15, 0 ),
+    LIGHT_BLUE(7 , 7 , 15),
+    MAGENTA   (15, 0 , 15),
+    ORANGE    (15, 7 , 0 ),
+    WHITE     (15, 15, 15);
 
     public final int r;
     public final int g;

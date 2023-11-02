@@ -24,6 +24,7 @@ import static com.falsepattern.rple.internal.mixin.plugin.TargetedMod.*;
 public enum Mixin implements IMixin {
     // region Colorization Hooks
     common_BlockMixin(COMMON, always(), "BlockMixin"),
+    common_ChunkMixin(COMMON, always(), "ChunkMixin"),
     common_ExtendedBlockStorageMixin(COMMON, always(), "ExtendedBlockStorageMixin"),
 
     client_BlockFluidMixin(CLIENT, always(), "BlockFluidMixin"),
@@ -37,6 +38,7 @@ public enum Mixin implements IMixin {
     client_WorldMixin(CLIENT, always(), "WorldMixin"),
 
     client_RendererLivingEntityMixin(CLIENT, always(), "RendererLivingEntityMixin"),
+    client_RenderMixin(CLIENT, always(), "RenderMixin"),
 
     client_Tessellator_NonOptiFineMixin(CLIENT, avoid(OPTIFINE_WITH_SHADERS).and(avoid(OPTIFINE_WITHOUT_SHADERS)), "Tessellator_NonOptiFineMixin"),
     // endregion
@@ -49,6 +51,7 @@ public enum Mixin implements IMixin {
     common_rple_RPLEWorldRootImplMixin(COMMON, always(), "rple.RPLEWorldRootImplMixin"),
     common_rple_RPLEChunkRootImplMixin(COMMON, always(), "rple.RPLEChunkRootImplMixin"),
     common_rple_RPLESubChunkRootImplMixin(COMMON, always(), "rple.RPLESubChunkRootImplMixin"),
+    common_rple_RPLEBlockCacheRootImplMixin(COMMON, always(), "rple.RPLEBlockCacheRootImplMixin"),
     // endregion
 
     // region OptiFine Compatibility
@@ -108,9 +111,16 @@ public enum Mixin implements IMixin {
     client_codechickenlib_LightMatrixMixin(CLIENT, require(CODE_CHICKEN_LIB), "codechickenlib.LightMatrixMixin"),
     // endregion
 
+    // region Not Enough Items Compatibility
+    client_notenoughitems_WorldOverlayRenderer(CLIENT, require(NOT_ENOUGH_ITEMS), "notenoughitems.WorldOverlayRendererMixin"),
+    // endregion
+
     // region Forge Multi Part Compatibility
     client_multipart_TileMultipartMixin(COMMON, require(FORGE_MULTI_PART), "multipart.TileMultipartMixin"),
     // endregion
+
+    // TODO proper category
+    RenderManagerMixin(CLIENT, always(), "RenderManagerMixin")
     ;
 
     @Getter

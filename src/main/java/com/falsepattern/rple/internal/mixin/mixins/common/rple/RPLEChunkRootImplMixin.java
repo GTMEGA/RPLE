@@ -24,8 +24,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.falsepattern.lumina.api.init.LumiChunkBaseInit.LUMI_CHUNK_BASE_INIT_METHOD_REFERENCE;
-import static com.falsepattern.lumina.api.init.LumiChunkBaseInit.LUMI_CHUNK_BASE_INIT_MIXIN_VALUE;
+import static com.falsepattern.lumina.api.init.LumiChunkInitHook.LUMI_CHUNK_INIT_HOOK_INFO;
+import static com.falsepattern.lumina.api.init.LumiChunkInitHook.LUMI_CHUNK_INIT_HOOK_METHOD;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMINA_MIXIN_PRIORITY;
 
@@ -33,34 +33,24 @@ import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMIN
 @Mixin(value = Chunk.class, priority = POST_LUMINA_MIXIN_PRIORITY)
 public abstract class RPLEChunkRootImplMixin implements LumiChunk, RPLEChunkRoot {
     @Shadow
-    public boolean[] updateSkylightColumns;
-    @Shadow
     public World worldObj;
-    @Shadow
-    public int[] heightMap;
 
     private RPLEChunk rple$redChannel;
     private RPLEChunk rple$greenChannel;
     private RPLEChunk rple$blueChannel;
 
-    @Inject(method = LUMI_CHUNK_BASE_INIT_METHOD_REFERENCE,
+    @Inject(method = LUMI_CHUNK_INIT_HOOK_METHOD,
             at = @At("RETURN"),
             remap = false,
             require = 1)
-    @Dynamic(LUMI_CHUNK_BASE_INIT_MIXIN_VALUE)
+    @Dynamic(LUMI_CHUNK_INIT_HOOK_INFO)
     @SuppressWarnings("CastToIncompatibleInterface")
     private void rpleChunkInit(CallbackInfo ci) {
         if (this.worldObj == null)
             return;
 
         val worldRoot = (RPLEWorldRoot) this.worldObj;
-
-        this.rple$redChannel = new RPLEChunkContainer(RED_CHANNEL,
-                                                      worldRoot,
-                                                      this,
-                                                      this,
-                                                      heightMap,
-                                                      updateSkylightColumns);
+        this.rple$redChannel = new RPLEChunkContainer(RED_CHANNEL, worldRoot, this, this);
         this.rple$greenChannel = new RPLEChunkContainer(GREEN_CHANNEL, worldRoot, this, this);
         this.rple$blueChannel = new RPLEChunkContainer(BLUE_CHANNEL, worldRoot, this, this);
     }

@@ -13,14 +13,14 @@ def deobfCurse(curseDep) {
 
 dependencies {
     // LUMINA
-    compileOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc2:api")
-    runtimeOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc2:dev")
+    compileOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc3:api")
+    runtimeOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc3:dev")
 
     // FalseTweaks
     implementation("com.falsepattern:falsetweaks-mc1.7.10:2.5.7:dev")
 
     // FalsePatternLib
-    implementation("com.falsepattern:falsepatternlib-mc1.7.10:0.12.1:dev")
+    implementation("com.falsepattern:falsepatternlib-mc1.7.10:0.12.3:dev")
 
     // JetBrains Annotations
     compileOnly("org.jetbrains:annotations:24.0.1")
@@ -41,8 +41,14 @@ dependencies {
     // ProjectRed Illumination 4.7.0pre12.95
     compileOnly(deobfCurse("projectred-illum-229046:2280733"))
 
+    // NotEnoughItems
+    implementation("codechicken:notenoughitems-mc1.7.10:2.1.6-gtmega:dev")
+
     // CodeChickenLib
-    compileOnly("codechicken:codechickenlib-mc1.7.10:1.2.0-mega:dev")
+    implementation("codechicken:codechickenlib-mc1.7.10:1.2.0-mega:dev")
+
+    // CodeChickenCore
+    implementation("codechicken:codechickencore-mc1.7.10:1.0.10-mega:dev")
 
     // MRTJPCore 1.1.0.33-universal
     compileOnly(deobfCurse("mrtjpcore-229002:2279413"))

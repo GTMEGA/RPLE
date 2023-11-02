@@ -3,17 +3,18 @@
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+ *
  */
 
-package com.falsepattern.rple.internal.client.render;
+package com.falsepattern.rple.api.client.render;
 
 import com.falsepattern.falsetweaks.Compat;
 import com.falsepattern.falsetweaks.api.triangulator.ToggleableTessellator;
-import com.falsepattern.rple.internal.common.block.LampBlock;
+import com.falsepattern.rple.api.common.lamp.LampBlock;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import lombok.val;
 import lombok.var;
 import net.minecraft.block.Block;
@@ -24,8 +25,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
-@Deprecated
-@SideOnly(Side.CLIENT)
 public class LampRenderer implements ISimpleBlockRenderingHandler {
     public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 
@@ -37,6 +36,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         block.setBlockBoundsForItemRender();
         renderer.setRenderBoundsFromBlock(block);
 
+        GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
         GL11.glPushMatrix();
         GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
         GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
@@ -53,14 +53,15 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         drawCubeInventory(tessellator, renderer, block, 0, 0, 0, icon);
         tessellator.draw();
 
+        GL11.glDisable(GL11.GL_LIGHTING);
         tessellator.startDrawingQuads();
 
         if (glowing) {
             val lamp = (LampBlock) block;
-            // TODO: [PRE-RELEASE] Patch this up
-            val r = 0;
-            val g = 0;
-            val b = 0;
+            val color = lamp.getColor();
+            val r = color.red() * 17;
+            val g = color.green() * 17;
+            val b = color.blue() * 17;
             tessellator.setBrightness(TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(15, 15));
             tessellator.setColorRGBA(r, g, b, 128);
             drawGlowCube(tessellator, 0, 0, 0, NULL, lamp.getGlowIcon());
@@ -68,6 +69,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
 
         tessellator.draw();
         GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     @Override
@@ -107,10 +109,10 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
             }
         }
 
-        // TODO: [PRE-RELEASE] Patch this up
-        val r = 0;
-        val g = 0;
-        val b = 0;
+        val color = lamp.getColor();
+        val r = color.red() * 17;
+        val g = color.green() * 17;
+        val b = color.blue() * 17;
 
         tessellator.setBrightness(TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(15, 15));
         tessellator.setColorOpaque(r, g, b);

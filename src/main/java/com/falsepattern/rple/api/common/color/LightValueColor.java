@@ -7,8 +7,9 @@
 
 package com.falsepattern.rple.api.common.color;
 
-import com.falsepattern.rple.api.common.RPLEColorUtil;
+import lombok.val;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public enum LightValueColor implements RPLENamedColor {
     LIGHT_VALUE_0,
@@ -29,6 +30,7 @@ public enum LightValueColor implements RPLENamedColor {
     LIGHT_VALUE_15,
     ;
 
+    private static final LightValueColor[] VALUES = values();
     public static final String LIGHT_LEVEL_COLOR_DOMAIN = "light_value";
 
     private final int red;
@@ -48,13 +50,25 @@ public enum LightValueColor implements RPLENamedColor {
     }
 
     public static @NotNull LightValueColor fromVanillaLightValue(int vanillaLightValue) {
-        final int ordinal = RPLEColorUtil.clampColorComponent(vanillaLightValue);
-        return values()[ordinal];
+        final int index = vanillaLightValue & 15;
+        return VALUES[index];
     }
 
     public static @NotNull LightValueColor fromVanillaLightOpacity(int vanillaLightOpacity) {
-        final int ordinal = RPLEColorUtil.invertColorComponent(vanillaLightOpacity);
-        return values()[ordinal];
+        final int index = 15 - (vanillaLightOpacity & 15);
+        return VALUES[index];
+    }
+
+    public static @Nullable RPLEColor attemptMapToEnum(@Nullable RPLEColor color) {
+        if (color == null)
+            return null;
+        for (val otherColor : VALUES) {
+            if (color.red() == otherColor.red() &&
+                color.green() == otherColor.green() &&
+                color.blue() == otherColor.blue())
+                return otherColor;
+        }
+        return null;
     }
 
     public @NotNull String colorName() {

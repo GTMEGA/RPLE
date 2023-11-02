@@ -44,6 +44,38 @@ public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot {
     protected ThreadLocal<Boolean> rple$passInternalLightOpacity;
 
     @Override
+    public short rple$getRawInternalColoredBrightness() {
+        rple$passInternalLightValue.set(true);
+        val lightValue = getLightValue();
+        rple$passInternalLightValue.set(false);
+        return packGreyscale(lightValue);
+    }
+
+    @Override
+    public short rple$getRawInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ) {
+        rple$passInternalLightValue.set(true);
+        val lightValue = getLightValue(world, posX, posY, posZ);
+        rple$passInternalLightValue.set(false);
+        return packGreyscale(lightValue);
+    }
+
+    @Override
+    public short rple$getRawInternalColoredOpacity() {
+        rple$passInternalLightOpacity.set(true);
+        val lightOpacity = getLightOpacity();
+        rple$passInternalLightOpacity.set(false);
+        return packGreyscale(lightOpacity);
+    }
+
+    @Override
+    public short rple$getRawInternalColoredOpacity(IBlockAccess world, int posX, int posY, int posZ) {
+        rple$passInternalLightOpacity.set(true);
+        val lightOpacity = getLightOpacity(world, posX, posY, posZ);
+        rple$passInternalLightOpacity.set(false);
+        return packGreyscale(lightOpacity);
+    }
+
+    @Override
     public RPLEColor rple$getInternalColoredBrightness() {
         rple$passInternalLightValue.set(true);
         val lightValue = getLightValue();
@@ -73,5 +105,10 @@ public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot {
         val lightOpacity = getLightOpacity(world, posX, posY, posZ);
         rple$passInternalLightOpacity.set(false);
         return LightValueColor.fromVanillaLightOpacity(lightOpacity);
+    }
+
+    private static short packGreyscale(int color) {
+        color = color & 0xf;
+        return (short) ((color << 8) | (color << 4) | color);
     }
 }

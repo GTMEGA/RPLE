@@ -33,6 +33,7 @@ public enum TargetedMod implements ITargetedMod {
     ENDER_IO("Ender IO", false, startsWith("enderio")),
     STORAGE_DRAWERS("Storage Drawers", false, startsWith("storagedrawers-")),
     CODE_CHICKEN_LIB("CodeChickenLib", false, startsWith("codechickenlib-")),
+    NOT_ENOUGH_ITEMS("NotEnoughItems", false, startsWith("NotEnoughItems-")),
     FORGE_MULTI_PART("Forge Multi Part", false, startsWith("forgemultipart-")),
     ;
 

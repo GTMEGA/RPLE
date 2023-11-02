@@ -32,19 +32,6 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
     @Nullable
     private final NibbleArray skyLight;
 
-    public RPLESubChunkContainer(ColorChannel channel,
-                                 RPLESubChunkRoot root,
-                                 NibbleArray blockLight,
-                                 @Nullable
-                                 NibbleArray skyLight) {
-        this.channel = channel;
-        this.subChunkID = MOD_ID + "_" + channel + "_sub_chunk";
-        this.root = root;
-
-        this.blockLight = blockLight;
-        this.skyLight = skyLight;
-    }
-
     public RPLESubChunkContainer(ColorChannel channel, RPLESubChunkRoot root, boolean hasSky) {
         this.channel = channel;
         this.subChunkID = MOD_ID + "_" + channel + "_sub_chunk";
@@ -56,6 +43,11 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
         } else {
             this.skyLight = null;
         }
+    }
+
+    @Override
+    public @NotNull ColorChannel rple$channel() {
+        return channel;
     }
 
     @Override

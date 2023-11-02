@@ -8,11 +8,10 @@
 package com.falsepattern.rple.api.client;
 
 import com.falsepattern.lumina.api.lighting.LightType;
-import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
-import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +21,6 @@ import static com.falsepattern.rple.api.common.RPLEBlockUtil.getBlockColoredBrig
 import static com.falsepattern.rple.api.common.RPLEColorUtil.COLOR_MIN;
 import static com.falsepattern.rple.api.common.RPLEColorUtil.errorColor;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
-import static com.falsepattern.rple.internal.common.world.RPLEWorldRoot.rple$getWorldRootFromBlockAccess;
 
 public final class RPLEBlockBrightnessUtil {
     private RPLEBlockBrightnessUtil() {
@@ -48,32 +46,33 @@ public final class RPLEBlockBrightnessUtil {
                                                      int minRedBlockLight,
                                                      int minGreenBlockLight,
                                                      int minBlueBlockLight) {
-        final RPLEWorldRoot worldRoot = rple$getWorldRootFromBlockAccess(world);
-        if (worldRoot == null)
+        if (!(world instanceof RPLEBlockStorageRoot))
             return errorBrightnessForTessellator();
-        final int redBrightness = worldRoot
-                .rple$getChannelBrightnessForTessellator(RED_CHANNEL, posX, posY, posZ, minRedBlockLight);
-        final int greenBrightness = worldRoot
-                .rple$getChannelBrightnessForTessellator(GREEN_CHANNEL, posX, posY, posZ, minGreenBlockLight);
-        final int blueBrightness = worldRoot
-                .rple$getChannelBrightnessForTessellator(BLUE_CHANNEL, posX, posY, posZ, minBlueBlockLight);
+
+        final RPLEBlockStorageRoot worldRoot = (RPLEBlockStorageRoot) world;
+        final int redBrightness = worldRoot.rple$blockStorage(RED_CHANNEL)
+                                           .rple$getChannelBrightnessForTessellator(posX, posY, posZ, minRedBlockLight);
+        final int greenBrightness = worldRoot.rple$blockStorage(GREEN_CHANNEL)
+                                             .rple$getChannelBrightnessForTessellator(posX, posY, posZ, minGreenBlockLight);
+        final int blueBrightness = worldRoot.rple$blockStorage(BLUE_CHANNEL)
+                                            .rple$getChannelBrightnessForTessellator(posX, posY, posZ, minBlueBlockLight);
         final long packedBrightness = TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
                                                                                                                     greenBrightness,
                                                                                                                     blueBrightness);
         return CookieMonster.packedLongToCookie(packedBrightness);
     }
 
-    public static int getChannelLightValueForTessellator(@NotNull IBlockAccess world,
-                                                         @NotNull ColorChannel channel,
-                                                         @NotNull LightType lightType,
-                                                         int posX,
-                                                         int posY,
-                                                         int posZ) {
-        final RPLEWorldRoot worldRoot = rple$getWorldRootFromBlockAccess(world);
-        if (worldRoot == null)
-            return errorBrightnessForTessellator();
-        return worldRoot.rple$getChannelLightValueForTessellator(channel, lightType, posX, posY, posZ);
-    }
+//    public static int getChannelLightValueForTessellator(@NotNull IBlockAccess world,
+//                                                         @NotNull ColorChannel channel,
+//                                                         @NotNull LightType lightType,
+//                                                         int posX,
+//                                                         int posY,
+//                                                         int posZ) {
+//        final RPLEWorldRoot worldRoot = rple$getWorldRootFromBlockAccess(world);
+//        if (worldRoot == null)
+//            return errorBrightnessForTessellator();
+//        return worldRoot.rple$getChannelLightValueForTessellator(channel, lightType, posX, posY, posZ);
+//    }
 
     public static int getBlockBrightnessForTessellator(@NotNull IBlockAccess world,
                                                        @NotNull Block block,

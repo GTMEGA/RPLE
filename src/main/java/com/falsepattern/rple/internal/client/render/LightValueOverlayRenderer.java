@@ -22,8 +22,6 @@ import org.lwjgl.opengl.GL14;
 
 import java.awt.*;
 
-import static com.falsepattern.rple.api.common.RPLEWorldUtil.*;
-import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static net.minecraft.client.Minecraft.getMinecraft;
 
 public final class LightValueOverlayRenderer {
@@ -118,26 +116,26 @@ public final class LightValueOverlayRenderer {
 
         drawOutline(tess, posX, posY, posZ);
 
-        val redBlockLight = getChannelBlockLightValue(world, RED_CHANNEL, posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 0, 0, RED_BLOCK_LIGHT_COLOR, redBlockLight);
-        val greenBlockLight = getChannelBlockLightValue(world, GREEN_CHANNEL, posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 0, 1, GREEN_BLOCK_LIGHT_COLOR, greenBlockLight);
-        val blueBlockLight = getChannelBlockLightValue(world, BLUE_CHANNEL, posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 0, 2, BLUE_BLOCK_LIGHT_COLOR, blueBlockLight);
-
-        val redSkyLight = getChannelSkyLightValue(world, RED_CHANNEL, posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 1, 0, RED_SKY_LIGHT_COLOR, redSkyLight);
-        val greenSkyLight = getChannelSkyLightValue(world, GREEN_CHANNEL, posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 1, 1, GREEN_SKY_LIGHT_COLOR, greenSkyLight);
-        val blueSkyLight = getChannelSkyLightValue(world, BLUE_CHANNEL, posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 1, 2, BLUE_SKY_LIGHT_COLOR, blueSkyLight);
-
-        val greyscaleBlockLight = getGreyscaleBlockLightValue(world, posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 2, 0, MIXED_BLOCK_LIGHT_COLOR, greyscaleBlockLight);
-        val greyscaleSkyLight = getGreyscaleSkyLightValue(world, posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 2, 1, MIXED_SKY_LIGHT_COLOR, greyscaleSkyLight);
-        val greyscaleLightValue = getGreyscaleLightValue(world, posX, posY, posZ);
-        drawNumber(tess, posX, posY, posZ, 2, 2, MIXED_ALL_LIGHT_COLOR, greyscaleLightValue);
+//        val redBlockLight = getChannelBlockLightValue(world, RED_CHANNEL, posX, posY, posZ);
+//        drawNumber(tess, posX, posY, posZ, 0, 0, RED_BLOCK_LIGHT_COLOR, redBlockLight);
+//        val greenBlockLight = getChannelBlockLightValue(world, GREEN_CHANNEL, posX, posY, posZ);
+//        drawNumber(tess, posX, posY, posZ, 0, 1, GREEN_BLOCK_LIGHT_COLOR, greenBlockLight);
+//        val blueBlockLight = getChannelBlockLightValue(world, BLUE_CHANNEL, posX, posY, posZ);
+//        drawNumber(tess, posX, posY, posZ, 0, 2, BLUE_BLOCK_LIGHT_COLOR, blueBlockLight);
+//
+//        val redSkyLight = getChannelSkyLightValue(world, RED_CHANNEL, posX, posY, posZ);
+//        drawNumber(tess, posX, posY, posZ, 1, 0, RED_SKY_LIGHT_COLOR, redSkyLight);
+//        val greenSkyLight = getChannelSkyLightValue(world, GREEN_CHANNEL, posX, posY, posZ);
+//        drawNumber(tess, posX, posY, posZ, 1, 1, GREEN_SKY_LIGHT_COLOR, greenSkyLight);
+//        val blueSkyLight = getChannelSkyLightValue(world, BLUE_CHANNEL, posX, posY, posZ);
+//        drawNumber(tess, posX, posY, posZ, 1, 2, BLUE_SKY_LIGHT_COLOR, blueSkyLight);
+//
+//        val greyscaleBlockLight = getGreyscaleBlockLightValue(world, posX, posY, posZ);
+//        drawNumber(tess, posX, posY, posZ, 2, 0, MIXED_BLOCK_LIGHT_COLOR, greyscaleBlockLight);
+//        val greyscaleSkyLight = getGreyscaleSkyLightValue(world, posX, posY, posZ);
+//        drawNumber(tess, posX, posY, posZ, 2, 1, MIXED_SKY_LIGHT_COLOR, greyscaleSkyLight);
+//        val greyscaleLightValue = getGreyscaleLightValue(world, posX, posY, posZ);
+//        drawNumber(tess, posX, posY, posZ, 2, 2, MIXED_ALL_LIGHT_COLOR, greyscaleLightValue);
     }
 
     private static void drawOutline(Tessellator tess, float posX, float posY, float posZ) {
