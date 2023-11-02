@@ -69,6 +69,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
 
         tessellator.draw();
         GL11.glPopMatrix();
+        GL11.glPopAttrib();
     }
 
     @Override
