@@ -50,10 +50,9 @@ public abstract class CommonProxy {
                 val name = lampData.name().toLowerCase();
                 val lamp = GameRegistry.findBlock(Tags.MOD_ID, "lamp." + name);
                 val dye = new ItemStack(Items.dye, 1, lampData.ordinal());
-                val lamp_regular = new ItemStack(lamp, 1, 0);
-                val lamp_inverted = new ItemStack(lamp, 1, LampBlock.INVERTED_BIT);
-                GameRegistry.addShapedRecipe(lamp_regular, "LLL", "LDL", "LLL", 'L', Blocks.redstone_lamp, 'D', dye);
-                GameRegistry.addShapelessRecipe(lamp_inverted, lamp_regular);
+                GameRegistry.addShapedRecipe(new ItemStack(lamp, 8, 0), "LLL", "LDL", "LLL", 'L', Blocks.redstone_lamp, 'D', dye);
+                GameRegistry.addShapelessRecipe(new ItemStack(lamp, 1, LampBlock.INVERTED_BIT), new ItemStack(lamp, 1, 0));
+                GameRegistry.addShapelessRecipe(new ItemStack(lamp, 1, 0), new ItemStack(lamp, 1, LampBlock.INVERTED_BIT));
             }
         }
     }
