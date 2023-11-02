@@ -3,15 +3,19 @@
  * This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+ *
  */
 
-package com.falsepattern.rple.internal.common.block;
+package com.falsepattern.rple.api.common.lamp;
 
+import com.falsepattern.rple.api.common.RPLEColorUtil;
 import com.falsepattern.rple.api.common.block.RPLEBlockBrightnessColorProvider;
+import com.falsepattern.rple.api.common.color.CustomColor;
 import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.client.render.LampRenderer;
+import com.falsepattern.rple.api.client.render.LampRenderer;
+import lombok.Getter;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -28,20 +32,27 @@ import java.util.List;
 
 import static com.falsepattern.lib.util.RenderUtil.wrapAsClampedIcon;
 
-// TODO: [LAMP_FIX] Large parts of this may be included in API as an abstract class
-// TODO: [LAMP_FIX] Should have a large part of it extracted as an example of how-to implement ColoredBlock
-// TODO: [LAMP_FIX] Created variants of this block should be defined by a load-time configuration file
-@Deprecated
-public class LampBlock extends Block implements RPLEBlockBrightnessColorProvider {
+public abstract class LampBlock extends Block implements RPLEBlockBrightnessColorProvider {
     private static final String GLOW_RESOURCE = Tags.MOD_ID + ":glow";
     public static final int POWERED_BIT = 0b0010;
     public static final int INVERTED_BIT = 0b0001;
 
+    @Getter
+    private final RPLEColor color;
+
     private IIcon glowIcon = null;
     private IIcon poweredIcon = null;
 
-    public LampBlock() {
+    public LampBlock(int r, int g, int b) {
         super(Material.redstoneLight);
+        //RGB range checks
+        if (r < RPLEColorUtil.COLOR_MIN || r > RPLEColorUtil.COLOR_MAX)
+            throw new IllegalArgumentException("Red value must be between " + RPLEColorUtil.COLOR_MIN + " and " + RPLEColorUtil.COLOR_MAX);
+        if (g < RPLEColorUtil.COLOR_MIN || g > RPLEColorUtil.COLOR_MAX)
+            throw new IllegalArgumentException("Green value must be between " + RPLEColorUtil.COLOR_MIN + " and " + RPLEColorUtil.COLOR_MAX);
+        if (b < RPLEColorUtil.COLOR_MIN || b > RPLEColorUtil.COLOR_MAX)
+            throw new IllegalArgumentException("Blue value must be between " + RPLEColorUtil.COLOR_MIN + " and " + RPLEColorUtil.COLOR_MAX);
+        color = new CustomColor(r, g, b);
         setHardness(0.3F);
         setStepSound(soundTypeGlass);
         setCreativeTab(CreativeTabs.tabDecorations);
@@ -51,10 +62,17 @@ public class LampBlock extends Block implements RPLEBlockBrightnessColorProvider
         return ((meta ^ (meta >>> 1)) & 1) == 1;
     }
 
+    protected abstract String getOffTextureName();
+
+    protected abstract String getOnTextureName();
+
+    /**
+     * Override getOffTextureName() and getOnTextureName() instead
+     */
     @Override
     public void registerBlockIcons(@NotNull IIconRegister register) {
-        blockIcon = register.registerIcon(Tags.MOD_ID + ":lamp/off/" + getTextureName());
-        poweredIcon = register.registerIcon(Tags.MOD_ID + ":lamp/on/" + getTextureName());
+        blockIcon = register.registerIcon(getOffTextureName());
+        poweredIcon = register.registerIcon(getOnTextureName());
         glowIcon = wrapAsClampedIcon(register.registerIcon(GLOW_RESOURCE));
     }
 
@@ -126,16 +144,22 @@ public class LampBlock extends Block implements RPLEBlockBrightnessColorProvider
 
     @Override
     public @NotNull RPLEColor rple$getCustomBrightnessColor() {
-        return DefaultColor.BLUE;
+        return DefaultColor.BLACK;
+    }
+
+    protected static boolean shouldGlow(int meta) {
+        val powered = (meta & POWERED_BIT) != 0;
+        val inverted = (meta & INVERTED_BIT) != 0;
+        return powered != inverted;
     }
 
     @Override
     public @NotNull RPLEColor rple$getCustomBrightnessColor(int blockMeta) {
-        return DefaultColor.BLUE;
+        return shouldGlow(blockMeta) ? color : DefaultColor.BLACK;
     }
 
     @Override
     public @NotNull RPLEColor rple$getCustomBrightnessColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
-        return DefaultColor.BLUE;
+        return shouldGlow(blockMeta) ? color : DefaultColor.BLACK;
     }
 }

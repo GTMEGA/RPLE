@@ -8,13 +8,21 @@
 package com.falsepattern.rple.internal.proxy;
 
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.common.block.LampBlock;
-import com.falsepattern.rple.internal.common.block.LampItemBlock;
+import com.falsepattern.rple.api.common.lamp.LampBlock;
+import com.falsepattern.rple.api.common.lamp.LampItemBlock;
+import com.falsepattern.rple.internal.common.block.Lamps;
+import com.falsepattern.rple.internal.common.block.RPLELampBlock;
 import com.falsepattern.rple.internal.common.config.ColorConfigLoader;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.GameRegistry;
+
+import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import lombok.NoArgsConstructor;
 import lombok.val;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 import static com.falsepattern.rple.internal.common.block.BlockColorManager.blockColorManager;
 import static com.falsepattern.rple.internal.common.event.LumiEventHandler.lumiEventHandler;
@@ -23,26 +31,12 @@ import static com.falsepattern.rple.internal.common.event.LumiEventHandler.lumiE
 public abstract class CommonProxy {
     public void preInit(FMLPreInitializationEvent evt) {
         lumiEventHandler().registerEventHandler();
-        val lamp = new LampBlock();
-        lamp.setBlockName(Tags.MOD_ID + ".lamp." + "blue").setBlockTextureName("blue");
-        GameRegistry.registerBlock(lamp, LampItemBlock.class, "lamp." + "blue");
 
-        // TODO: [LAMP_FIX]
-//        if (RPLEConfig.ENABLE_LAMPS) {
-//            for (val lampData : Lamps.values()) {
-//                val name = lampData.name().toLowerCase();
-//                val r = lampData.r;
-//                val g = lampData.g;
-//                val b = lampData.b;
-//                val lamp = new LampBlock();
-//                lamp.setBlockName(Tags.MODID + ".lamp." + name).setBlockTextureName(name);
-//                lamp.setColoredLightValue(0, 0, 0, 0);
-//                lamp.setColoredLightValue(LampBlock.INVERTED_BIT, r, g, b);
-//                lamp.setColoredLightValue(LampBlock.POWERED_BIT, r, g, b);
-//                lamp.setColoredLightValue(LampBlock.INVERTED_BIT | LampBlock.POWERED_BIT, 0, 0, 0);
-//                GameRegistry.registerBlock(lamp, LampItemBlock.class, "lamp." + name);
-//            }
-//        }
+        for (val lampData: Lamps.values()) {
+            val name = lampData.name().toLowerCase();
+            val lamp = new RPLELampBlock(lampData);
+            GameRegistry.registerBlock(lamp, LampItemBlock.class, "lamp." + name);
+        }
     }
 
     public void init(FMLInitializationEvent evt) {
@@ -51,6 +45,17 @@ public abstract class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent evt) {
+        if (RPLEConfig.ENABLE_LAMPS) {
+            for (val lampData : Lamps.values()) {
+                val name = lampData.name().toLowerCase();
+                val lamp = GameRegistry.findBlock(Tags.MOD_ID, "lamp." + name);
+                val dye = new ItemStack(Items.dye, 1, lampData.ordinal());
+                val lamp_regular = new ItemStack(lamp, 1, 0);
+                val lamp_inverted = new ItemStack(lamp, 1, LampBlock.INVERTED_BIT);
+                GameRegistry.addShapedRecipe(lamp_regular, "LLL", "LDL", "LLL", 'L', Blocks.redstone_lamp, 'D', dye);
+                GameRegistry.addShapelessRecipe(lamp_inverted, lamp_regular);
+            }
+        }
     }
 
     public void serverAboutToStart(FMLServerAboutToStartEvent evt) {

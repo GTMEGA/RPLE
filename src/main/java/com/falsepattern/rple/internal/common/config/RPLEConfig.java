@@ -14,10 +14,10 @@ import static com.falsepattern.rple.internal.Tags.MOD_ID;
 
 @Config(modid = MOD_ID)
 public final class RPLEConfig {
-    @Config.Comment("Set this to true if you want to enable the debug lamps (no crafting recipes, only available through\n" +
-                    "creative mode or NEI.)")
-    @Config.Name("enable lamps")
-    @Config.DefaultBoolean(false)
+    @Config.Comment("Set this to true if you want to enable the default lamps.\n" +
+                    "(Based on ProjectRed's lamps, but much more optimized)")
+    @Config.Name("craftableLamps")
+    @Config.DefaultBoolean(true)
     public static boolean ENABLE_LAMPS;
 
     static {
