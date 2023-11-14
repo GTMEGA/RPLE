@@ -412,4 +412,9 @@ public final class RPLEChunkContainer implements RPLEChunk {
         isLightingInitialized = false;
         world.lumi$lightingEngine().handleChunkInit(this);
     }
+
+    @Override
+    public int[] lumi$skyLightHeightMap() {
+        return skyLightHeightMap;
+    }
 }

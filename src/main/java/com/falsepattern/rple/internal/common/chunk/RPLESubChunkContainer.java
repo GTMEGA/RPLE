@@ -148,4 +148,14 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
             return skyLight.get(subChunkPosX, subChunkPosY, subChunkPosZ);
         return 0;
     }
+
+    @Override
+    public NibbleArray lumi$getBlockLightArray() {
+        return blockLight;
+    }
+
+    @Override
+    public NibbleArray lumi$getSkyLightArray() {
+        return skyLight;
+    }
 }
