@@ -21,7 +21,6 @@
 
 package com.falsepattern.rple.internal.common.cache;
 
-import com.falsepattern.lumina.api.cache.LumiBlockCache;
 import com.falsepattern.lumina.api.cache.LumiBlockCacheRoot;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorld;
@@ -42,18 +41,25 @@ import static com.falsepattern.rple.internal.common.cache.DynamicBlockCacheRoot.
 // TODO: [CACHE_DONE] Initial implementation
 // TODO: [CACHE_CLEANUP] May be abstracted once the system is initialized through managers
 public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
-    private static final int MULTIHEAD_CACHE_COUNT = 8;
+    public static final int MAX_MULTI_HEAD_CACHE_COUNT = 8;
+    private final int multiHeadCacheCount;
 
     private final MultiHeadBlockCache[] blockCaches = new MultiHeadBlockCache[COLOR_CHANNEL_COUNT];
 
-    private final RPLEBlockCacheRoot fallback;
-    private final RPLEBlockCacheRoot[] cacheRoots = new DynamicBlockCacheRoot[MULTIHEAD_CACHE_COUNT];
-    private final LRU lru = new LRU();
+    private final ReadThroughBlockCacheRoot fallback;
+    private final DynamicBlockCacheRoot[] cacheRoots;
+    private final Thread ownerThread;
+    private final LRU lru;
 
-    public MultiHeadBlockCacheRoot(@NotNull RPLEWorldRoot worldRoot) {
-        for (int i = 0; i < MULTIHEAD_CACHE_COUNT; i++)
+    public MultiHeadBlockCacheRoot(@NotNull RPLEWorldRoot worldRoot, int multiHeadCacheCount) {
+        multiHeadCacheCount = Math.min(Math.max(multiHeadCacheCount, 1), MAX_MULTI_HEAD_CACHE_COUNT);
+        this.multiHeadCacheCount = multiHeadCacheCount;
+        lru = new LRU();
+        cacheRoots = new DynamicBlockCacheRoot[multiHeadCacheCount];
+        ownerThread = Thread.currentThread();
+        for (int i = 0; i < multiHeadCacheCount; i++)
             cacheRoots[i] = new DynamicBlockCacheRoot(worldRoot);
-        fallback = cacheRoots[0];
+        fallback = new ReadThroughBlockCacheRoot(worldRoot);
     }
 
     @Override
@@ -62,7 +68,7 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
     }
 
     @Override
-    public @NotNull RPLEBlockCache lumi$createBlockCache(LumiWorld world) {
+    public @NotNull MultiHeadBlockCache lumi$createBlockCache(LumiWorld world) {
         if (!(world instanceof RPLEWorld))
             throw new IllegalArgumentException("World must be an RPLEWorld");
         val rpleWorld = (RPLEWorld) world;
@@ -85,28 +91,8 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
     }
 
     @Override
-    public int lumi$minChunkPosX() {
-        return fallback.lumi$minChunkPosX();
-    }
-
-    @Override
-    public int lumi$minChunkPosZ() {
-        return fallback.lumi$minChunkPosZ();
-    }
-
-    @Override
-    public int lumi$maxChunkPosX() {
-        return fallback.lumi$maxChunkPosX();
-    }
-
-    @Override
-    public int lumi$maxChunkPosZ() {
-        return fallback.lumi$maxChunkPosZ();
-    }
-
-    @Override
     public void lumi$clearCache() {
-        for (var i = 0; i < MULTIHEAD_CACHE_COUNT; i++)
+        for (var i = 0; i < multiHeadCacheCount; i++)
             cacheRoots[i].lumi$clearCache();
     }
 
@@ -153,15 +139,17 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
         return rple$blockCache(channel);
     }
 
-    private boolean inRange(LumiBlockCacheRoot cache, int chunkPosX, int chunkPosZ) {
-        return cache.lumi$minChunkPosX() <= chunkPosX &&
-               cache.lumi$maxChunkPosX() >= chunkPosX &&
-               cache.lumi$minChunkPosZ() <= chunkPosZ &&
-               cache.lumi$maxChunkPosZ() >= chunkPosZ;
+    private static boolean inRange(DynamicBlockCacheRoot cache, int chunkPosX, int chunkPosZ) {
+        return cache.minChunkPosX() <= chunkPosX &&
+               cache.maxChunkPosX() >= chunkPosX &&
+               cache.minChunkPosZ() <= chunkPosZ &&
+               cache.maxChunkPosZ() >= chunkPosZ;
     }
 
     private LumiBlockCacheRoot getCacheRoot(int chunkPosX, int chunkPosZ) {
-        for (int i = 0; i < MULTIHEAD_CACHE_COUNT; i++) {
+        if (Thread.currentThread() != ownerThread)
+            return fallback;
+        for (int i = 0; i < multiHeadCacheCount; i++) {
             if (inRange(cacheRoots[i], chunkPosX, chunkPosZ)) {
                 lru.update(i);
                 return cacheRoots[i];
@@ -171,14 +159,14 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
         return cacheRoots[last];
     }
 
-    private final class MultiHeadBlockCache implements RPLEBlockCache {
-        private final RPLEBlockCache fallback;
-        private final RPLEBlockCache[] caches = new DynamicBlockCacheRoot.DynamicBlockCache[MULTIHEAD_CACHE_COUNT];
+    public final class MultiHeadBlockCache implements RPLEBlockCache {
+        private final ReadThroughBlockCacheRoot.ReadThroughBlockCache fallback;
+        private final DynamicBlockCacheRoot.DynamicBlockCache[] caches = new DynamicBlockCacheRoot.DynamicBlockCache[multiHeadCacheCount];
 
-        public MultiHeadBlockCache(@NotNull RPLEWorld world) {
-            for (var i = 0; i < MULTIHEAD_CACHE_COUNT; i++)
+        private MultiHeadBlockCache(@NotNull RPLEWorld world) {
+            for (var i = 0; i < multiHeadCacheCount; i++)
                 caches[i] = cacheRoots[i].lumi$createBlockCache(world);
-            fallback = caches[0];
+            fallback = MultiHeadBlockCacheRoot.this.fallback.lumi$createBlockCache(world);
         }
 
         @Override
@@ -187,7 +175,7 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
         }
 
         @Override
-        public @NotNull RPLEBlockCacheRoot lumi$root() {
+        public @NotNull MultiHeadBlockCacheRoot lumi$root() {
             return MultiHeadBlockCacheRoot.this;
         }
 
@@ -272,21 +260,15 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
 
         @Override
         public void lumi$clearCache() {
-            for (var i = 0; i < MULTIHEAD_CACHE_COUNT; i++)
+            for (var i = 0; i < multiHeadCacheCount; i++)
                 caches[i].lumi$clearCache();
         }
 
-        private boolean inRange(LumiBlockCache cache, int chunkPosX, int chunkPosZ) {
-            val cacheRoot = cache.lumi$root();
-            return cacheRoot.lumi$minChunkPosX() <= chunkPosX &&
-                   cacheRoot.lumi$maxChunkPosX() > chunkPosX &&
-                   cacheRoot.lumi$minChunkPosZ() <= chunkPosZ &&
-                   cacheRoot.lumi$maxChunkPosZ() > chunkPosZ;
-        }
-
-        private LumiBlockCache getCache(int chunkPosX, int chunkPosZ) {
-            for (var i = 0; i < MULTIHEAD_CACHE_COUNT; i++) {
-                if (inRange(caches[i], chunkPosX, chunkPosZ)) {
+        private RPLEBlockCache getCache(int chunkPosX, int chunkPosZ) {
+            if (Thread.currentThread() != ownerThread)
+                return fallback;
+            for (var i = 0; i < multiHeadCacheCount; i++) {
+                if (inRange(caches[i].lumi$root(), chunkPosX, chunkPosZ)) {
                     lru.update(i);
                     return caches[i];
                 }
@@ -295,18 +277,18 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
         }
     }
 
-    private static class LRU {
+    private class LRU {
         private final int[] keys;
 
         private LRU() {
-            this.keys = new int[MULTIHEAD_CACHE_COUNT];
-            for (int i = 0; i < MULTIHEAD_CACHE_COUNT; i++) {
+            this.keys = new int[multiHeadCacheCount];
+            for (int i = 0; i < multiHeadCacheCount; i++) {
                 keys[i] = i;
             }
         }
 
         public synchronized void update(int value) {
-            for (var i = 0; i < MULTIHEAD_CACHE_COUNT; i++) {
+            for (var i = 0; i < multiHeadCacheCount; i++) {
                 if (keys[i] != value)
                     continue;
                 if (i != 0) {
@@ -319,8 +301,8 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
         }
 
         public synchronized int last() {
-            val last = keys[MULTIHEAD_CACHE_COUNT - 1];
-            shiftRight(MULTIHEAD_CACHE_COUNT - 1);
+            val last = keys[multiHeadCacheCount - 1];
+            shiftRight(multiHeadCacheCount - 1);
             keys[0] = last;
             return last;
         }

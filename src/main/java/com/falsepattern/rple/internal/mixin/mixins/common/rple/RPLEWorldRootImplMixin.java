@@ -7,13 +7,16 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
+import com.falsepattern.falsetweaks.api.ThreadedChunkUpdates;
 import com.falsepattern.lumina.api.cache.LumiBlockCacheRoot;
 import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.common.cache.MultiHeadBlockCacheRoot;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockCacheRoot;
+import com.falsepattern.rple.internal.common.cache.ReadThroughBlockCacheRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
+import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.world.RPLEWorldContainer;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
@@ -30,6 +33,9 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 import static com.falsepattern.lumina.api.init.LumiWorldInitHook.LUMI_WORLD_INIT_HOOK_INFO;
 import static com.falsepattern.lumina.api.init.LumiWorldInitHook.LUMI_WORLD_INIT_HOOK_METHOD;
@@ -62,7 +68,13 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
             require = 1)
     @Dynamic(LUMI_WORLD_INIT_HOOK_INFO)
     private void rpleWorldInit(CallbackInfo ci) {
-        this.rple$blockCacheRoot = new MultiHeadBlockCacheRoot(this);
+        int cacheCount = RPLEConfig.CACHE_COUNT;
+
+        if (cacheCount <= 0 || (ThreadedChunkUpdates.isEnabled() && lumi$isClientSide())) {
+            this.rple$blockCacheRoot = new ReadThroughBlockCacheRoot(this);
+        } else {
+            this.rple$blockCacheRoot = new MultiHeadBlockCacheRoot(this, cacheCount);
+        }
         this.lumi$blockCacheRoot = rple$blockCacheRoot;
 
         this.rple$redChannel = new RPLEWorldContainer(RED_CHANNEL, thiz(), this, theProfiler);

@@ -8,6 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.appliedenergistics2;
 
 import appeng.client.render.RenderBlocksWorkaround;
+import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import lombok.val;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -54,8 +55,9 @@ public abstract class RenderBlocksWorkaroundMixin extends RenderBlocks {
                                                       (1D - textureU) * textureV,
                                                       textureU * (1D - textureV),
                                                       (1D - textureU) * (1D - textureV));
-        Tessellator.instance.setColorRGBA_F(r, g, b, getOpacity());
-        Tessellator.instance.setBrightness(out);
+        val tess = Compat.tessellator();
+        tess.setColorRGBA_F(r, g, b, getOpacity());
+        tess.setBrightness(out);
     }
 
     private static float uvMix(double topLeft,

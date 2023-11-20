@@ -9,6 +9,7 @@ package com.falsepattern.rple.internal.common.config;
 
 import com.falsepattern.lib.config.Config;
 import com.falsepattern.lib.config.ConfigurationManager;
+import com.falsepattern.rple.internal.common.cache.MultiHeadBlockCacheRoot;
 
 import static com.falsepattern.rple.internal.Tags.MOD_ID;
 
@@ -19,6 +20,14 @@ public final class RPLEConfig {
     @Config.Name("craftableLamps")
     @Config.DefaultBoolean(true)
     public static boolean ENABLE_LAMPS;
+
+    @Config.Comment("Add extra caching to the lighting engine.\n" +
+                    "0 to disable\n" +
+                    "Causes a memory leak with threaded chunk rendering in FalseTweaks, so it's force-disabled if that feature is enabled.")
+    @Config.DefaultInt(0)
+    @Config.RangeInt(min = 0, max = MultiHeadBlockCacheRoot.MAX_MULTI_HEAD_CACHE_COUNT)
+    @Config.RequiresMcRestart
+    public static int CACHE_COUNT;
 
     static {
         ConfigurationManager.selfInit();

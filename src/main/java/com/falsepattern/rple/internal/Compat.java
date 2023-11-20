@@ -7,8 +7,11 @@
 
 package com.falsepattern.rple.internal;
 
+import com.falsepattern.falsetweaks.api.ThreadedChunkUpdates;
 import lombok.experimental.UtilityClass;
 import lombok.var;
+
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.launchwrapper.Launch;
 import shadersmod.client.Shaders;
 import stubpackage.GlStateManager;
@@ -38,6 +41,14 @@ public final class Compat {
 
     public static void optiFineSetActiveTexture(int texture) {
         ShadersCompat.setActiveTexture(texture);
+    }
+
+
+    public static Tessellator tessellator() {
+        if (ThreadedChunkUpdates.isEnabled()) {
+            return ThreadedChunkUpdates.getThreadTessellator();
+        }
+        return Tessellator.instance;
     }
 
     private static class ShadersCompat {

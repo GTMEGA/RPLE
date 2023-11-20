@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.client.render;
 
-import com.falsepattern.falsetweaks.Compat;
 import com.falsepattern.lib.util.MathUtil;
 import com.falsepattern.lib.util.RenderUtil;
+import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.Tags;
 import lombok.Getter;
 import lombok.experimental.Accessors;

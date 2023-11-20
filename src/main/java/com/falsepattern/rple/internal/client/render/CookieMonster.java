@@ -35,7 +35,7 @@ public final class CookieMonster {
     // 0100 0000 IIII IIII IIII IIII 0000 000P
     // I - index bits
     // P - parity
-    private static final int NUM_INDICES = 0x10000;
+    private static final int NUM_INDICES = 0x100000;
     private static final int INDEX_SHIFT = 8;
     private static final int PARITY_BIT = 0x00000001;
     private static final int INDEX_MASK = (NUM_INDICES - 1) << INDEX_SHIFT;

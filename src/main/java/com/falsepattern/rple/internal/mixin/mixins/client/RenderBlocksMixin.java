@@ -8,6 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
 import com.falsepattern.rple.api.client.RPLEBlockBrightnessUtil;
+import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import lombok.val;
 import net.minecraft.block.Block;
@@ -108,7 +109,7 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public boolean renderBlockLiquid(Block block, int x, int y, int z) {
-        val tess = Tessellator.instance;
+        val tess = Compat.tessellator();
         val colorMul = block.colorMultiplier(this.blockAccess, x, y, z);
         val red = (float) (colorMul >> 16 & 255) / 255.0F;
         val green = (float) (colorMul >> 8 & 255) / 255.0F;

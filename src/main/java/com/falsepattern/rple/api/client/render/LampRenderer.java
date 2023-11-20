@@ -8,12 +8,12 @@
 
 package com.falsepattern.rple.api.client.render;
 
-import com.falsepattern.falsetweaks.Compat;
 import com.falsepattern.falsetweaks.api.triangulator.ToggleableTessellator;
 import com.falsepattern.rple.api.common.lamp.LampBlock;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
+import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import lombok.val;
 import lombok.var;

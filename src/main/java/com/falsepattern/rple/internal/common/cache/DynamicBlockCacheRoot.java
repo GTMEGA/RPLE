@@ -10,6 +10,7 @@ import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.var;
 import net.minecraft.block.Block;
@@ -35,6 +36,7 @@ import static net.minecraftforge.common.util.ForgeDirection.*;
 //
 //TODO: [CACHE_DONE] If a new value is queried and provided by any of the non-root caches, it must be propagated to ALL other caches
 //TODO: [CACHE_DONE] This is VERY IMPORTANT! as getting the light/opacity value FROM is expensive!
+@RequiredArgsConstructor
 public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
     static final int CHUNK_XZ_SIZE = 16;
     static final int CHUNK_XZ_BITMASK = 15;
@@ -87,17 +89,13 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
     @Getter
     private boolean isReady;
 
-    public DynamicBlockCacheRoot(@NotNull RPLEWorldRoot worldRoot) {
-        this.worldRoot = worldRoot;
-    }
-
     @Override
     public @NotNull String lumi$blockCacheRootID() {
         return "rple_dynamic_block_cache_root";
     }
 
     @Override
-    public @NotNull RPLEBlockCache lumi$createBlockCache(LumiWorld world) {
+    public @NotNull DynamicBlockCache lumi$createBlockCache(LumiWorld world) {
         if (!(world instanceof RPLEWorld))
             throw new IllegalArgumentException("World must be an RPLEWorld");
         val rpleWorld = (RPLEWorld) world;
@@ -111,23 +109,19 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         return blockCaches[cacheIndex];
     }
 
-    @Override
-    public int lumi$minChunkPosX() {
+    public int minChunkPosX() {
         return minChunkPosX;
     }
 
-    @Override
-    public int lumi$minChunkPosZ() {
+    public int minChunkPosZ() {
         return minChunkPosZ;
     }
 
-    @Override
-    public int lumi$maxChunkPosX() {
+    public int maxChunkPosX() {
         return maxChunkPosX;
     }
 
-    @Override
-    public int lumi$maxChunkPosZ() {
+    public int maxChunkPosZ() {
         return maxChunkPosZ;
     }
 
@@ -190,7 +184,7 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
     }
 
     @Override
-    public @NotNull RPLEBlockCache rple$blockCache(@NotNull ColorChannel channel) {
+    public @NotNull DynamicBlockCache rple$blockCache(@NotNull ColorChannel channel) {
         val cacheIndex = channel.ordinal();
         if (blockCaches[cacheIndex] == null)
             throw new IllegalStateException("Block cache not created for channel " + channel.name());
@@ -198,7 +192,7 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
     }
 
     @Override
-    public @NotNull RPLEBlockStorage rple$blockStorage(@NotNull ColorChannel channel) {
+    public @NotNull DynamicBlockCache rple$blockStorage(@NotNull ColorChannel channel) {
         return rple$blockCache(channel);
     }
 
@@ -340,7 +334,7 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         }
 
         @Override
-        public @NotNull RPLEBlockCacheRoot lumi$root() {
+        public @NotNull DynamicBlockCacheRoot lumi$root() {
             return DynamicBlockCacheRoot.this;
         }
 
