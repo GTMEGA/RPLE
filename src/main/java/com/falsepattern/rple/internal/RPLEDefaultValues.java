@@ -46,7 +46,10 @@ public final class RPLEDefaultValues {
         for (val blockObj : blockRegistry) {
             val block = (Block) blockObj;
             val blockId = GameRegistry.findUniqueIdentifierFor(block);
-            if (!"minecraft".equals(blockId.modId))
+            if (blockId == null)
+                continue;
+            val modId = blockId.modId;
+            if (!"minecraft".equals(modId))
                 continue;
 
             val brightness = fromVanillaLightValue(block.getLightValue());
