@@ -12,17 +12,10 @@ The first right proper RGB lighting implementation in Minecraft.
 
 ## Dependencies
 
-- [LUMINA 1.0.0-rc2](https://github.com/FalsePattern/LUMINA)
-- [FalseTweaks 2.5.7+](https://github.com/FalsePattern/FalseTweaks)
-- [FalsePatternLib 0.12.1+](https://github.com/FalsePattern/FalsePatternLib)
-- [GasStation 0.5.1+](https://github.com/FalsePattern/GasStation)
-  or [UniMixins 0.1.11+](https://github.com/LegacyModdingMC/UniMixins)
-
-## Incompatibilities
-
-- [Neodymium](https://github.com/makamys/Neodymium): Wont Fix
-  - RPLE depends on features of FalseTweaks which are incompatible with Neodymium.
-  - Additionally, both mods modifying the Tessellator.
+- [LUMINA 1.0.0-rc4](https://github.com/FalsePattern/LUMINA)
+- [FalseTweaks 2.7.0+](https://github.com/FalsePattern/FalseTweaks)
+- [FalsePatternLib 1.0.0+](https://github.com/FalsePattern/FalsePatternLib)
+- [UniMixins 0.1.11+](https://github.com/LegacyModdingMC/UniMixins)
 
 ## Authors:
 
