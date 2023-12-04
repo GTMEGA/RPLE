@@ -115,13 +115,13 @@ public final class TessellatorBrightnessHelper {
     }
 
     public static int funnyTessBrightness(int unpacked) {
-        val lightMapBlock = remapToShort(unpacked);
-        val lightMapSky = remapToShort(unpacked >> 16);
+        val lightMapBlock = remapToShort(unpacked & 0xFF);
+        val lightMapSky = remapToShort((unpacked >> 16) & 0xFF);
         return ((int) lightMapBlock & 0xFFFF) | ((int) lightMapSky << 16);
     }
 
     public static short remapToShort(int n) {
-        n &= 240;
+        n = Math.min(n, 240);
         val normalized = n / 240F;
         return (short) Math.round(normalized * (Short.MAX_VALUE - Short.MIN_VALUE) + Short.MIN_VALUE);
     }
