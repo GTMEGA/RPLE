@@ -19,8 +19,7 @@ public final class Tags {
     public static final String MINECRAFT_VERSION = "[1.7.10]";
     public static final String DEPENDENCIES = "required-after:lumina@[1.0.0-rc3,);" +
                                               "required-after:falsetweaks@[2.7.0,);" +
-                                              "required-after:falsepatternlib@[1.0.0,);" +
-                                              "required-after:gasstation";
+                                              "required-after:falsepatternlib@[1.0.0,);";
 
     public static final String INTERNAL_GROUP_NAME = GROUP_NAME + ".internal";
     public static final String PROXY_GROUP_NAME = INTERNAL_GROUP_NAME + ".proxy";
