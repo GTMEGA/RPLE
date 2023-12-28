@@ -21,6 +21,10 @@ public class Config {
         return false;
     }
 
+    public static boolean isDynamicLights() {
+        return false;
+    }
+
     public static int limit(int a, int b, int c) {
         return 0;
     }

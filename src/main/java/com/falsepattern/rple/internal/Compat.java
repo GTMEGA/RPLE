@@ -14,6 +14,7 @@ import lombok.var;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.launchwrapper.Launch;
 import shadersmod.client.Shaders;
+import stubpackage.Config;
 import stubpackage.GlStateManager;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.io.IOException;
 @UtilityClass
 public final class Compat {
     private static final boolean IS_SHADERS_MOD_PRESENT;
+    private static final boolean IS_DYNAMICLIGHTS_PRESENT;
 
     static {
         var shadersModPresent = false;
@@ -29,10 +31,20 @@ public final class Compat {
         } catch (IOException ignored) {
         }
         IS_SHADERS_MOD_PRESENT = shadersModPresent;
+        var dynLightsPresent = false;
+        try {
+            dynLightsPresent = Launch.classLoader.getClassBytes("DynamicLights") != null;
+        } catch (IOException ignored) {
+        }
+        IS_DYNAMICLIGHTS_PRESENT = dynLightsPresent;
     }
 
     public static boolean shadersEnabled() {
         return IS_SHADERS_MOD_PRESENT && ShadersCompat.shaderPackLoaded();
+    }
+
+    public static boolean dynamicLightsEnabled() {
+        return IS_DYNAMICLIGHTS_PRESENT && Config.isDynamicLights();
     }
 
     public static void toggleLightMapShaders(boolean state) {

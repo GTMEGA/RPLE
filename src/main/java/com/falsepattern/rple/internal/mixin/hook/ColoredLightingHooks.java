@@ -10,6 +10,8 @@ package com.falsepattern.rple.internal.mixin.hook;
 import com.falsepattern.rple.api.client.RPLEBlockBrightnessUtil;
 import com.falsepattern.rple.api.common.RPLEColorUtil;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
+import com.falsepattern.rple.internal.Compat;
+import com.falsepattern.rple.internal.client.optifine.ColorDynamicLights;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import com.falsepattern.rple.internal.client.render.EntityColorHandler;
@@ -103,7 +105,10 @@ public final class ColoredLightingHooks {
                                                            int posY,
                                                            int posZ,
                                                            int minBrightnessCookie) {
-        var brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, minBrightnessCookie);
+        int brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, minBrightnessCookie);
+        if (Compat.dynamicLightsEnabled()) {
+            brightness = ColorDynamicLights.getCombinedLight(posX, posY, posZ, brightness);
+        }
         if (EntityColorHandler.isOnBlockList(entity.getClass())) {
             val packedBrightness = CookieMonster.cookieToPackedLong(brightness);
             brightness = TessellatorBrightnessHelper.getBrightestChannelFromPacked(packedBrightness);
