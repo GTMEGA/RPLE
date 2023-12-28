@@ -17,7 +17,7 @@ public final class Tags {
     public static final String GROUP_NAME = "GRADLETOKEN_GROUPNAME";
 
     public static final String MINECRAFT_VERSION = "[1.7.10]";
-    public static final String DEPENDENCIES = "required-after:lumina@[1.0.0-rc3,);" +
+    public static final String DEPENDENCIES = "required-after:lumina@[1.0.0-rc5,);" +
                                               "required-after:falsetweaks@[2.7.0,);" +
                                               "required-after:falsepatternlib@[1.0.0,);";
 

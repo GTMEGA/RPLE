@@ -7,6 +7,8 @@
 
 package com.falsepattern.rple.internal.common.chunk;
 
+import com.falsepattern.chunk.api.ArrayUtil;
+import com.falsepattern.lumina.api.chunk.LumiSubChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import lombok.Getter;
@@ -28,9 +30,9 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
     private final String subChunkID;
     private final RPLESubChunkRoot root;
 
-    private final NibbleArray blockLight;
+    private NibbleArray blockLight;
     @Nullable
-    private final NibbleArray skyLight;
+    private NibbleArray skyLight;
 
     public RPLESubChunkContainer(ColorChannel channel, RPLESubChunkRoot root, boolean hasSky) {
         this.channel = channel;
@@ -80,6 +82,12 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
             if (skyLightBytes.length == 2048)
                 System.arraycopy(skyLightBytes, 0, skyLight.data, 0, 2048);
         }
+    }
+
+    @Override
+    public void lumi$cloneFrom(LumiSubChunk from) {
+        blockLight = ArrayUtil.copyArray(from.lumi$getBlockLightArray(), lumi$getBlockLightArray());
+        skyLight = ArrayUtil.copyArray(from.lumi$getSkyLightArray(), lumi$getSkyLightArray());
     }
 
     @Override

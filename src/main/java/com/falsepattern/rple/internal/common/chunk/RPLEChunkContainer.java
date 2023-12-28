@@ -7,6 +7,7 @@
 
 package com.falsepattern.rple.internal.common.chunk;
 
+import com.falsepattern.chunk.api.ArrayUtil;
 import com.falsepattern.lumina.api.LumiChunkAPI;
 import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
@@ -37,7 +38,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
     private final int chunkPosX;
     private final int chunkPosZ;
-    private final int[] skyLightHeightMap;
+    private int[] skyLightHeightMap;
     private final boolean[] outdatedSkylightColumns;
 
     private int minSkyLightHeight;
@@ -109,6 +110,12 @@ public final class RPLEChunkContainer implements RPLEChunk {
         }
         if (!isLightingInitialized)
             LumiChunkAPI.scheduleChunkLightingEngineInit(this);
+    }
+
+    @Override
+    public void lumi$cloneFrom(@NotNull LumiChunk from) {
+        skyLightHeightMap = ArrayUtil.copyArray(from.lumi$skyLightHeightMap(), lumi$skyLightHeightMap());
+        isLightingInitialized = from.lumi$isLightingInitialized();
     }
 
     @Override
