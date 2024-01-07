@@ -1,8 +1,11 @@
 package com.falsepattern.rple.api.client;
 
 import com.falsepattern.rple.api.common.color.ColorChannel;
+import com.falsepattern.rple.internal.client.lightmap.LightMap;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
 import org.lwjgl.opengl.GL13;
+
+import java.nio.ShortBuffer;
 
 @SuppressWarnings("unused")
 public final class RPLELightMapUtil {
@@ -142,6 +145,24 @@ public final class RPLELightMapUtil {
         GL13.glMultiTexCoord2f(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, block, sky);
         GL13.glMultiTexCoord2f(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, block, sky);
         GL13.glMultiTexCoord2f(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, block, sky);
+    }
+
+    // Compat methods for renderer replacement mods
+
+    public static void prepareLightMapGLTextures() {
+        LightMap.lightMap().prepare();
+    }
+
+    public static void enableVertexPointers(ShortBuffer buffer) {
+        LightMap.lightMap().enableVertexPointers(buffer);
+    }
+
+    public static void enableVertexPointersVBO() {
+        LightMap.lightMap().enableVertexPointersVBO();
+    }
+
+    public static void disableVertexPointers() {
+        LightMap.lightMap().disableVertexPointers();
     }
 
     public enum LightMapCoordinateType {

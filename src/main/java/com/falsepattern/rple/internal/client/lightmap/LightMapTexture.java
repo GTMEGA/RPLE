@@ -185,6 +185,16 @@ public final class LightMapTexture {
         GL13.glClientActiveTexture(lastClientActiveTexture);
     }
 
+    public void enableVertexPointerVBO() {
+        val lastClientActiveTexture = GL11.glGetInteger(GL13.GL_CLIENT_ACTIVE_TEXTURE);
+        GL13.glClientActiveTexture(shaderTextureCoordsBinding);
+        GL11.glTexCoordPointer(2, GL11.GL_SHORT, SHADER_VERTEX_STRIDE, shaderVertexPosition * 2L);
+
+        GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+
+        GL13.glClientActiveTexture(lastClientActiveTexture);
+    }
+
     public void disableVertexPointer() {
         val lastClientActiveTexture = GL11.glGetInteger(GL13.GL_CLIENT_ACTIVE_TEXTURE);
         if (Compat.shadersEnabled()) {

@@ -79,6 +79,12 @@ public final class LightMap {
         bTexture.enableVertexPointer(buffer);
     }
 
+    public void enableVertexPointersVBO() {
+        rTexture.enableVertexPointerVBO();
+        gTexture.enableVertexPointerVBO();
+        bTexture.enableVertexPointerVBO();
+    }
+
     public void disableVertexPointers() {
         rTexture.disableVertexPointer();
         gTexture.disableVertexPointer();
