@@ -15,15 +15,19 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
+import static com.falsepattern.rple.internal.Tags.MOD_ID;
 
 @Accessors(fluent = true, chain = false)
 public final class RPLEWorldProvider implements LumiWorldProvider {
+    private static final String RED_WORLD_PROVIDER_ID = MOD_ID + "_" + RED_CHANNEL + "_world_provider";
+    private static final String GREEN_WORLD_PROVIDER_ID = MOD_ID + "_" + GREEN_CHANNEL + "_world_provider";
+    private static final String BLUE_WORLD_PROVIDER_ID = MOD_ID + "_" + BLUE_CHANNEL + "_world_provider";
+
     private final ColorChannel channel;
-    @Getter
-    private final String worldProviderID;
     @Getter
     private String worldProviderVersion;
 
@@ -33,7 +37,6 @@ public final class RPLEWorldProvider implements LumiWorldProvider {
 
     private RPLEWorldProvider(ColorChannel channel) {
         this.channel = channel;
-        this.worldProviderID = Tags.MOD_ID + "_" + channel + "_world_provider";
         this.worldProviderVersion = Tags.VERSION + "_0x00000000";
     }
 
@@ -47,6 +50,19 @@ public final class RPLEWorldProvider implements LumiWorldProvider {
 
     public static RPLEWorldProvider blueRPLEWorldProvider() {
         return BLUE_CHANNEL_INSTANCE;
+    }
+
+    @Override
+    public @NotNull String worldProviderID() {
+        switch (channel) {
+            default:
+            case RED_CHANNEL:
+                return RED_WORLD_PROVIDER_ID;
+            case GREEN_CHANNEL:
+                return GREEN_WORLD_PROVIDER_ID;
+            case BLUE_CHANNEL:
+                return BLUE_WORLD_PROVIDER_ID;
+        }
     }
 
     @Override

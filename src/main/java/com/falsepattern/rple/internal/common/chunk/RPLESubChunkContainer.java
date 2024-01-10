@@ -21,13 +21,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.Tags.MOD_ID;
 
 @Getter
 @Accessors(fluent = true, chain = false)
 public final class RPLESubChunkContainer implements RPLESubChunk {
+    private static final String RED_SUB_CHUNK_ID = MOD_ID + "_" + RED_CHANNEL + "_sub_chunk";
+    private static final String GREEN_SUB_CHUNK_ID = MOD_ID + "_" + GREEN_CHANNEL + "_sub_chunk";
+    private static final String BLUE_SUB_CHUNK_ID = MOD_ID + "_" + BLUE_CHANNEL + "_sub_chunk";
+
     private final ColorChannel channel;
-    private final String subChunkID;
     private final RPLESubChunkRoot root;
 
     private NibbleArray blockLight;
@@ -36,7 +40,6 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
 
     public RPLESubChunkContainer(ColorChannel channel, RPLESubChunkRoot root, boolean hasSky) {
         this.channel = channel;
-        this.subChunkID = MOD_ID + "_" + channel + "_sub_chunk";
         this.root = root;
 
         this.blockLight = new NibbleArray(4096, 4);
@@ -59,7 +62,15 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
 
     @Override
     public @NotNull String lumi$subChunkID() {
-        return subChunkID;
+        switch (channel) {
+            default:
+            case RED_CHANNEL:
+                return RED_SUB_CHUNK_ID;
+            case GREEN_CHANNEL:
+                return GREEN_SUB_CHUNK_ID;
+            case BLUE_CHANNEL:
+                return BLUE_SUB_CHUNK_ID;
+        }
     }
 
     @Override

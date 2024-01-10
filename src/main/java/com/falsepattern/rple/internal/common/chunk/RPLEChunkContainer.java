@@ -13,7 +13,6 @@ import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.ColorChannel;
-import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.val;
@@ -23,15 +22,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
 import static com.falsepattern.rple.api.common.RPLEColorUtil.invertColorComponent;
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
+import static com.falsepattern.rple.internal.Tags.MOD_ID;
 
 public final class RPLEChunkContainer implements RPLEChunk {
+    private static final String RED_CHUNK_ID = MOD_ID + "_" + RED_CHANNEL + "_chunk";
+    private static final String GREEN_CHUNK_ID = MOD_ID + "_" + GREEN_CHANNEL + "_chunk";
+    private static final String BLUE_CHUNK_ID = MOD_ID + "_" + BLUE_CHANNEL + "_chunk";
+
     private final ColorChannel channel;
-    private final String chunkID;
     private final RPLEWorld world;
     private final RPLEChunkRoot root;
     private final LumiChunk lumiChunk;
@@ -47,7 +50,6 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
     public RPLEChunkContainer(ColorChannel channel, RPLEWorldRoot worldRoot, RPLEChunkRoot root, LumiChunk lumiChunk) {
         this.channel = channel;
-        this.chunkID = Tags.MOD_ID + "_" + channel + "_chunk";
         this.world = worldRoot.rple$world(channel);
         this.lumiChunk = lumiChunk;
         this.root = root;
@@ -79,7 +81,15 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
     @Override
     public @NotNull String lumi$chunkID() {
-        return chunkID;
+        switch (channel) {
+            default:
+            case RED_CHANNEL:
+                return RED_CHUNK_ID;
+            case GREEN_CHANNEL:
+                return GREEN_CHUNK_ID;
+            case BLUE_CHANNEL:
+                return BLUE_CHUNK_ID;
+        }
     }
 
     @Override
@@ -379,7 +389,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
     @Override
     public void lumi$resetSkyLightHeightMap() {
-        Arrays.fill(skyLightHeightMap, Integer.MAX_VALUE);
+        LumiChunkAPI.resetHeightMapArray(skyLightHeightMap);
         minSkyLightHeight = Integer.MAX_VALUE;
     }
 
@@ -401,7 +411,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
 
     @Override
     public void lumi$resetOutdatedHeightFlags() {
-        Arrays.fill(outdatedSkylightColumns, true);
+        LumiChunkAPI.resetUpdateSkylightColumns(outdatedSkylightColumns);
     }
 
     @Override
