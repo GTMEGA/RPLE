@@ -18,7 +18,7 @@ public final class Tags {
 
     public static final String MINECRAFT_VERSION = "[1.7.10]";
     public static final String DEPENDENCIES = "required-after:lumina@[1.0.0-rc5,);" +
-                                              "required-after:falsetweaks@[2.7.0,);" +
+                                              "after:falsetweaks@[2.7.0,);" + // Hard dep, but only on clientside!
                                               "required-after:falsepatternlib@[1.0.0,);";
 
     public static final String INTERNAL_GROUP_NAME = GROUP_NAME + ".internal";

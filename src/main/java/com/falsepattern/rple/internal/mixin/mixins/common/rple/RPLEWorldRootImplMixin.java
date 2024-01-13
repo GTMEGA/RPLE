@@ -7,12 +7,12 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
-import com.falsepattern.falsetweaks.api.ThreadedChunkUpdates;
 import com.falsepattern.lumina.api.LumiAPI;
 import com.falsepattern.lumina.api.cache.LumiBlockCacheRoot;
 import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.common.color.ColorChannel;
+import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.cache.MultiHeadBlockCacheRoot;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockCacheRoot;
 import com.falsepattern.rple.internal.common.cache.ReadThroughBlockCacheRoot;
@@ -67,7 +67,7 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
     private void rpleWorldInit(CallbackInfo ci) {
         int cacheCount = LumiAPI.configuredCacheCount();
 
-        if (cacheCount <= 0 || (ThreadedChunkUpdates.isEnabled() && lumi$isClientSide())) {
+        if (cacheCount <= 0 || (lumi$isClientSide() && Compat.falseTweaksThreadedChunksEnabled())) {
             this.rple$blockCacheRoot = new ReadThroughBlockCacheRoot(this);
         } else {
             this.rple$blockCacheRoot = new MultiHeadBlockCacheRoot(this, cacheCount);
