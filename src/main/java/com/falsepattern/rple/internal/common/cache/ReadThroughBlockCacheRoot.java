@@ -8,6 +8,7 @@
 
 package com.falsepattern.rple.internal.common.cache;
 
+import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.common.color.ColorChannel;
@@ -16,11 +17,10 @@ import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.falsepattern.rple.internal.common.cache.DynamicBlockCacheRoot.COLOR_CHANNEL_COUNT;
 
@@ -51,9 +51,10 @@ public class ReadThroughBlockCacheRoot implements RPLEBlockCacheRoot {
     }
 
     @Override
-    public void lumi$clearCache() {
+    public void lumi$prefetchChunk(@Nullable LumiChunk chunk) {}
 
-    }
+    @Override
+    public void lumi$clearCache() {}
 
     @Override
     public @NotNull ReadThroughBlockCache rple$blockCache(@NotNull ColorChannel channel) {

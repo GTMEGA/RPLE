@@ -22,6 +22,7 @@
 package com.falsepattern.rple.internal.common.cache;
 
 import com.falsepattern.lumina.api.cache.LumiBlockCacheRoot;
+import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.common.color.ColorChannel;
@@ -81,6 +82,9 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
 
         return blockCaches[cacheIndex];
     }
+
+    @Override
+    public void lumi$prefetchChunk(@Nullable LumiChunk chunk) {}
 
     @Override
     public @NotNull RPLEBlockCache rple$blockCache(@NotNull ColorChannel channel) {

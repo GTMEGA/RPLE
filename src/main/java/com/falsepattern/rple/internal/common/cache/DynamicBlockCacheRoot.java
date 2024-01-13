@@ -109,6 +109,9 @@ public final class DynamicBlockCacheRoot implements RPLEBlockCacheRoot {
         return blockCaches[cacheIndex];
     }
 
+    @Override
+    public void lumi$prefetchChunk(@Nullable LumiChunk chunk) {}
+
     public int minChunkPosX() {
         return minChunkPosX;
     }
