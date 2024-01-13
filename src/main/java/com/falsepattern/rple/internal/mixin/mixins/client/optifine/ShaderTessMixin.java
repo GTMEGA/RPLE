@@ -279,14 +279,15 @@ public abstract class ShaderTessMixin {
 
     @Unique
     private void extendBuffer() {
-        val newBufferSize = ofTess.rple$bufferSize() * 2;
+        val oldBufferSize = ofTess.rple$bufferSize();
+        val newBufferSize = oldBufferSize * 2;
         val oldRawBuffer = ofTess.rple$rawBuffer();
         val newRawBuffer = Arrays.copyOf(oldRawBuffer, newBufferSize);
 
         ofTess.rple$bufferSize(newBufferSize);
         ofTess.rple$rawBuffer(newRawBuffer);
 
-        SMCLog.info("Expand tessellator buffer %d", ofTess.rple$bufferSize());
+        SMCLog.info("Expand tessellator buffer, old: %d, new: %d", oldBufferSize, newBufferSize);
     }
 
     @Unique
