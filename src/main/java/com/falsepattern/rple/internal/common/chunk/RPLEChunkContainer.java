@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
+import java.util.BitSet;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
@@ -42,11 +43,13 @@ public final class RPLEChunkContainer implements RPLEChunk {
     private final int chunkPosX;
     private final int chunkPosZ;
     private int[] skyLightHeightMap;
-    private final boolean[] outdatedSkylightColumns;
+    private final BitSet upToDateSkylightColumns;
 
     private int minSkyLightHeight;
     private int queuedRandomLightUpdates;
     private boolean isLightingInitialized;
+
+    private boolean upToDateSkylightColumnsClear;
 
     public RPLEChunkContainer(ColorChannel channel, RPLEWorldRoot worldRoot, RPLEChunkRoot root, LumiChunk lumiChunk) {
         this.channel = channel;
@@ -57,11 +60,13 @@ public final class RPLEChunkContainer implements RPLEChunk {
         this.chunkPosX = lumiChunk.lumi$chunkPosX();
         this.chunkPosZ = lumiChunk.lumi$chunkPosZ();
         this.skyLightHeightMap = new int[HEIGHT_MAP_ARRAY_SIZE];
-        this.outdatedSkylightColumns = new boolean[HEIGHT_MAP_ARRAY_SIZE];
+        this.upToDateSkylightColumns = new BitSet(HEIGHT_MAP_ARRAY_SIZE);
 
         this.minSkyLightHeight = Integer.MAX_VALUE;
         this.queuedRandomLightUpdates = 0;
         this.isLightingInitialized = false;
+
+        this.upToDateSkylightColumnsClear = true;
     }
 
     @Override
@@ -398,7 +403,8 @@ public final class RPLEChunkContainer implements RPLEChunk {
         subChunkPosX &= 15;
         subChunkPosZ &= 15;
         val index = subChunkPosX + (subChunkPosZ << 4);
-        outdatedSkylightColumns[index] = isHeightOutdated;
+        upToDateSkylightColumns.set(index, !isHeightOutdated);
+        upToDateSkylightColumnsClear = false;
     }
 
     @Override
@@ -406,12 +412,15 @@ public final class RPLEChunkContainer implements RPLEChunk {
         subChunkPosX &= 15;
         subChunkPosZ &= 15;
         val index = subChunkPosX + (subChunkPosZ << 4);
-        return outdatedSkylightColumns[index];
+        return !upToDateSkylightColumns.get(index);
     }
 
     @Override
     public void lumi$resetOutdatedHeightFlags() {
-        LumiChunkAPI.resetUpdateSkylightColumns(outdatedSkylightColumns);
+        if (!upToDateSkylightColumnsClear) {
+            upToDateSkylightColumns.clear();
+            upToDateSkylightColumnsClear = true;
+        }
     }
 
     @Override

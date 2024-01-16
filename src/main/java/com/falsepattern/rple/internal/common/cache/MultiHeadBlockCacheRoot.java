@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
+import static com.falsepattern.rple.internal.common.cache.BlockCaches.createFallbackBlockCacheRoot;
 import static com.falsepattern.rple.internal.common.cache.DynamicBlockCacheRoot.COLOR_CHANNEL_COUNT;
 
 // TODO: [CACHE_DONE] Initial implementation
@@ -47,7 +48,7 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
 
     private final MultiHeadBlockCache[] blockCaches = new MultiHeadBlockCache[COLOR_CHANNEL_COUNT];
 
-    private final ReadThroughBlockCacheRoot fallback;
+    private final RPLEBlockCacheRoot fallback;
     private final DynamicBlockCacheRoot[] cacheRoots;
     private final Thread ownerThread;
     private final LRU lru;
@@ -60,7 +61,7 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
         ownerThread = Thread.currentThread();
         for (int i = 0; i < multiHeadCacheCount; i++)
             cacheRoots[i] = new DynamicBlockCacheRoot(worldRoot);
-        fallback = new ReadThroughBlockCacheRoot(worldRoot);
+        fallback = createFallbackBlockCacheRoot(worldRoot);
     }
 
     @Override
@@ -164,7 +165,7 @@ public final class MultiHeadBlockCacheRoot implements RPLEBlockCacheRoot {
     }
 
     public final class MultiHeadBlockCache implements RPLEBlockCache {
-        private final ReadThroughBlockCacheRoot.ReadThroughBlockCache fallback;
+        private final RPLEBlockCache fallback;
         private final DynamicBlockCacheRoot.DynamicBlockCache[] caches = new DynamicBlockCacheRoot.DynamicBlockCache[multiHeadCacheCount];
 
         private MultiHeadBlockCache(@NotNull RPLEWorld world) {

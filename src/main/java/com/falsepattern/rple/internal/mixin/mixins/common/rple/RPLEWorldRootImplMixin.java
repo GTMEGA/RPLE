@@ -15,7 +15,6 @@ import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.cache.MultiHeadBlockCacheRoot;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockCacheRoot;
-import com.falsepattern.rple.internal.common.cache.ReadThroughBlockCacheRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.world.RPLEWorldContainer;
@@ -37,6 +36,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static com.falsepattern.lumina.api.init.LumiWorldInitHook.LUMI_WORLD_INIT_HOOK_INFO;
 import static com.falsepattern.lumina.api.init.LumiWorldInitHook.LUMI_WORLD_INIT_HOOK_METHOD;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
+import static com.falsepattern.rple.internal.common.cache.BlockCaches.createFallbackBlockCacheRoot;
 import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMINA_MIXIN_PRIORITY;
 
 @Unique
@@ -68,7 +68,7 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
         int cacheCount = LumiAPI.configuredCacheCount();
 
         if (cacheCount <= 0 || (lumi$isClientSide() && Compat.falseTweaksThreadedChunksEnabled())) {
-            this.rple$blockCacheRoot = new ReadThroughBlockCacheRoot(this);
+            this.rple$blockCacheRoot = createFallbackBlockCacheRoot(this);
         } else {
             this.rple$blockCacheRoot = new MultiHeadBlockCacheRoot(this, cacheCount);
         }
@@ -80,7 +80,7 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
     }
 
     @Override
-    public @Nullable LumiChunkRoot rple$getChunkRootFromBlockPosIfExists(int posX, int posZ) {
+    public @Nullable RPLEChunkRoot rple$getChunkRootFromBlockPosIfExists(int posX, int posZ) {
         val chunkPosX = posX >> 4;
         val chunkPosZ = posZ >> 4;
         return rple$getChunkRootFromChunkPosIfExists(chunkPosX, chunkPosZ);

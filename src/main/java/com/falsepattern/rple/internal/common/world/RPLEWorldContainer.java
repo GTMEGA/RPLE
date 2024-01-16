@@ -112,6 +112,10 @@ public final class RPLEWorldContainer implements RPLEWorld {
         if (!(lumiChunkRoot instanceof RPLEChunkRoot))
             return null;
         val chunkRoot = (RPLEChunkRoot) lumiChunkRoot;
+        return rpleChunkFromRootAndChannel(chunkRoot, channel);
+    }
+
+    private static RPLEChunk rpleChunkFromRootAndChannel(RPLEChunkRoot chunkRoot, ColorChannel channel) {
         return chunkRoot.rple$chunk(channel);
     }
 
