@@ -329,6 +329,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
                                        int subChunkPosX,
                                        int posY,
                                        int subChunkPosZ) {
+        // Fast-Path for World-Gen
         if (!isLightingInitialized) {
             val block = (RPLEBlock) blockBase;
             val brightness = block.rple$getBrightnessColor(blockMeta);
@@ -346,6 +347,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
                                     int subChunkPosX,
                                     int posY,
                                     int subChunkPosZ) {
+        // Fast-Path for World-Gen
         if (!isLightingInitialized) {
             val block = (RPLEBlock) blockBase;
             val translucency = block.rple$getTranslucencyColor(blockMeta);

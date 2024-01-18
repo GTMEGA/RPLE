@@ -9,11 +9,10 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.common.block.RPLEBlockInit;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-
 import com.falsepattern.rple.internal.common.color.ColorPackingUtil;
 import lombok.val;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -41,9 +40,6 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
     @Nullable
     private RPLEColor @Nullable [] rple$metaTranslucencyColors;
 
-    protected ThreadLocal<Boolean> rple$passInternalLightValue;
-    protected ThreadLocal<Boolean> rple$passInternalLightOpacity;
-
     @Inject(method = "<init>",
             at = @At("RETURN"),
             require = 1)
@@ -57,9 +53,6 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
         this.rple$baseTranslucencyColor = null;
         this.rple$metaBrightnessColors = null;
         this.rple$metaTranslucencyColors = null;
-
-        this.rple$passInternalLightValue = ThreadLocal.withInitial(() -> false);
-        this.rple$passInternalLightOpacity = ThreadLocal.withInitial(() -> false);
     }
 
     @Override

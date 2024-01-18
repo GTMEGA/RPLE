@@ -1,9 +1,8 @@
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
 import com.falsepattern.rple.api.common.color.ColorChannel;
-import com.falsepattern.rple.internal.common.cache.RPLEBlockCache;
-import com.falsepattern.rple.internal.common.cache.RPLEBlockCacheRoot;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorage;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.world.ChunkCache;
@@ -24,13 +23,13 @@ import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
 @Unique
 @Mixin(ChunkCache.class)
-public abstract class RPLEBlockCacheRootImplMixin implements IBlockAccess, RPLEBlockCacheRoot {
+public abstract class RPLEBlockCacheRootImplMixin implements IBlockAccess, RPLEBlockStorageRoot {
     @Shadow
     public World worldObj;
 
-    private RPLEBlockCache rple$redChannel;
-    private RPLEBlockCache rple$greenChannel;
-    private RPLEBlockCache rple$blueChannel;
+    private RPLEBlockStorage rple$redChannel;
+    private RPLEBlockStorage rple$greenChannel;
+    private RPLEBlockStorage rple$blueChannel;
 
     @Inject(method = LUMI_CHUNK_CACHE_INIT_HOOK_METHOD,
             at = @At("RETURN"),
@@ -43,18 +42,13 @@ public abstract class RPLEBlockCacheRootImplMixin implements IBlockAccess, RPLEB
             return;
 
         val worldRoot = (RPLEWorldRoot) worldObj;
-        this.rple$redChannel = worldRoot.rple$world(RED_CHANNEL).lumi$blockCache();
-        this.rple$greenChannel = worldRoot.rple$world(GREEN_CHANNEL).lumi$blockCache();
-        this.rple$blueChannel = worldRoot.rple$world(BLUE_CHANNEL).lumi$blockCache();
+        this.rple$redChannel = worldRoot.rple$world(RED_CHANNEL);
+        this.rple$greenChannel = worldRoot.rple$world(GREEN_CHANNEL);
+        this.rple$blueChannel = worldRoot.rple$world(BLUE_CHANNEL);
     }
 
     @Override
     public @NotNull RPLEBlockStorage rple$blockStorage(@NotNull ColorChannel channel) {
-        return rple$blockCache(channel);
-    }
-
-    @Override
-    public @NotNull RPLEBlockCache rple$blockCache(@NotNull ColorChannel channel) {
         switch (channel) {
             default:
             case RED_CHANNEL:

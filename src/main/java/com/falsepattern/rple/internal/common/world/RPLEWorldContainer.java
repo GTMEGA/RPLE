@@ -13,7 +13,6 @@ import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
-import com.falsepattern.rple.internal.common.cache.RPLEBlockCache;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
@@ -31,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
-import static com.falsepattern.rple.api.common.RPLEColorUtil.invertColorComponent;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.Tags.MOD_ID;
 import static net.minecraftforge.common.util.ForgeDirection.*;
@@ -45,7 +43,6 @@ public final class RPLEWorldContainer implements RPLEWorld {
     private final World base;
     private final RPLEWorldRoot root;
 
-    private final RPLEBlockCache blockCache;
     private final LumiLightingEngine lightingEngine;
 
     public RPLEWorldContainer(ColorChannel channel, World base, RPLEWorldRoot root, Profiler profiler) {
@@ -53,7 +50,6 @@ public final class RPLEWorldContainer implements RPLEWorld {
         this.base = base;
         this.root = root;
 
-        this.blockCache = root.rple$blockCacheRoot().lumi$createBlockCache(this);
         this.lightingEngine = LumiAPI.provideLightingEngine(this, profiler);
     }
 
@@ -117,11 +113,6 @@ public final class RPLEWorldContainer implements RPLEWorld {
 
     private static RPLEChunk rpleChunkFromRootAndChannel(RPLEChunkRoot chunkRoot, ColorChannel channel) {
         return chunkRoot.rple$chunk(channel);
-    }
-
-    @Override
-    public @NotNull RPLEBlockCache lumi$blockCache() {
-        return blockCache;
     }
 
     @Override
@@ -274,16 +265,24 @@ public final class RPLEWorldContainer implements RPLEWorld {
     @SuppressWarnings("CastToIncompatibleInterface")
     public int lumi$getBlockBrightness(@NotNull Block blockBase, int blockMeta, int posX, int posY, int posZ) {
         val block = (RPLEBlock) blockBase;
-        val brightness = block.rple$getBrightnessColor(base, blockMeta, posX, posY, posZ);
-        return channel.componentFromColor(brightness);
+//        val brightness = block.rple$getBrightnessColor(base, blockMeta, posX, posY, posZ);
+//        return channel.componentFromColor(brightness);
+
+//        return blockBase.getLightValue();
+
+        return channel.componentFromColor(block.rple$getRawBrightnessColor(base, blockMeta, posX, posY, posZ));
     }
 
     @Override
     @SuppressWarnings("CastToIncompatibleInterface")
     public int lumi$getBlockOpacity(@NotNull Block blockBase, int blockMeta, int posX, int posY, int posZ) {
         val block = (RPLEBlock) blockBase;
-        val translucency = block.rple$getTranslucencyColor(base, blockMeta, posX, posY, posZ);
-        return invertColorComponent(channel.componentFromColor(translucency));
+//        val translucency = block.rple$getTranslucencyColor(base, blockMeta, posX, posY, posZ);
+//        return invertColorComponent(channel.componentFromColor(translucency));
+
+        return channel.componentFromColor(block.rple$getRawOpacityColor(base, blockMeta, posX, posY, posZ));
+
+//        return blockBase.getLightOpacity();
     }
 
     @Override

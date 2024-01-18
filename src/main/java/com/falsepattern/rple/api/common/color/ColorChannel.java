@@ -9,13 +9,20 @@ package com.falsepattern.rple.api.common.color;
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.falsepattern.rple.internal.common.color.ColorPackingUtil.*;
+
 public enum ColorChannel {
-    RED_CHANNEL, GREEN_CHANNEL, BLUE_CHANNEL;
+    RED_CHANNEL(CACHE_ENTRY_RED_OFFSET),
+    GREEN_CHANNEL(CACHE_ENTRY_GREEN_OFFSET),
+    BLUE_CHANNEL(CACHE_ENTRY_BLUE_OFFSET),
+    ;
 
     private final String name;
+    private final int bitShift;
 
-    ColorChannel() {
+    ColorChannel(int bitShift) {
         this.name = name().split("_")[0].toLowerCase();
+        this.bitShift = bitShift;
     }
 
     public int componentFromColor(@NotNull RPLEColor color) {
@@ -28,6 +35,10 @@ public enum ColorChannel {
             case BLUE_CHANNEL:
                 return color.blue();
         }
+    }
+
+    public int componentFromColor(short color) {
+        return ((int) color >>> bitShift) & CACHE_CHANNEL_BITMASK;
     }
 
     @Override

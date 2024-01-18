@@ -11,16 +11,7 @@ import lombok.var;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
+import org.objectweb.asm.tree.*;
 
 import java.util.HashMap;
 import java.util.ListIterator;
@@ -52,6 +43,9 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
     private static final String DESC_LIGHT_RAW           = "()I";
     private static final String DESC_LIGHT_POSITIONAL    = "(Lnet/minecraft/world/IBlockAccess;III)I";
 
+    private static final String NAME_LIGHT_VALUE_RENAMED = "rple$renamed$getLightValue";
+    private static final String NAME_LIGHT_OPACITY_RENAMED = "rple$renamed$getLightOpacity";
+
     private static final MethodDecl DECL_LIGHT_VALUE_RAW_OBF     = new MethodDecl(NAME_LIGHT_VALUE_OBF    , DESC_LIGHT_RAW       );
     private static final MethodDecl DECL_LIGHT_VALUE_RAW_DEOBF   = new MethodDecl(NAME_LIGHT_VALUE_DEOBF  , DESC_LIGHT_RAW       );
     private static final MethodDecl DECL_LIGHT_VALUE_POSITIONAL  = new MethodDecl(NAME_LIGHT_VALUE_DEOBF  , DESC_LIGHT_POSITIONAL);
@@ -68,7 +62,7 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
             DECL_LIGHT_OPACITY_POSITIONAL
     };
 
-    private static final Map<MethodDecl, HookTarget> MAPPINGS = new HashMap<>();
+    private static final Map<MethodDecl, String> MAPPINGS = new HashMap<>();
 
     static {
         val NAME_RPLE_PASS_LIGHT_VALUE   = "rple$passInternalLightValue";
@@ -93,12 +87,12 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
         val TARGET_LIGHT_OPACITY_RAW        = new HookTarget(NAME_RPLE_PASS_LIGHT_OPACITY, RPLE_LIGHT_OPACITY_RAW       , LOCALS_RAW       );
         val TARGET_LIGHT_OPACITY_POSITIONAL = new HookTarget(NAME_RPLE_PASS_LIGHT_OPACITY, RPLE_LIGHT_OPACITY_POSITIONAL, LOCALS_POSITIONAL);
 
-        MAPPINGS.put(DECL_LIGHT_VALUE_RAW_OBF     , TARGET_LIGHT_VALUE_RAW         );
-        MAPPINGS.put(DECL_LIGHT_VALUE_RAW_DEOBF   , TARGET_LIGHT_VALUE_RAW         );
-        MAPPINGS.put(DECL_LIGHT_VALUE_POSITIONAL  , TARGET_LIGHT_VALUE_POSITIONAL  );
-        MAPPINGS.put(DECL_LIGHT_OPACITY_RAW_OBF   , TARGET_LIGHT_OPACITY_RAW       );
-        MAPPINGS.put(DECL_LIGHT_OPACITY_RAW_DEOBF , TARGET_LIGHT_OPACITY_RAW       );
-        MAPPINGS.put(DECL_LIGHT_OPACITY_POSITIONAL, TARGET_LIGHT_OPACITY_POSITIONAL);
+        MAPPINGS.put(DECL_LIGHT_VALUE_RAW_OBF     , NAME_LIGHT_VALUE_RENAMED         );
+        MAPPINGS.put(DECL_LIGHT_VALUE_RAW_DEOBF   , NAME_LIGHT_VALUE_RENAMED         );
+        MAPPINGS.put(DECL_LIGHT_VALUE_POSITIONAL  , NAME_LIGHT_VALUE_RENAMED  );
+        MAPPINGS.put(DECL_LIGHT_OPACITY_RAW_OBF   , NAME_LIGHT_OPACITY_RENAMED       );
+        MAPPINGS.put(DECL_LIGHT_OPACITY_RAW_DEOBF , NAME_LIGHT_OPACITY_RENAMED       );
+        MAPPINGS.put(DECL_LIGHT_OPACITY_POSITIONAL, NAME_LIGHT_OPACITY_RENAMED);
 
     }
 
@@ -129,20 +123,24 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
         }
     }
 
-    private static boolean tryTransform(MethodNode method, MethodDecl decl, HookTarget target) {
-        if (!decl.matches(method)) {
+    private static boolean tryTransform(MethodNode method, MethodDecl decl, String newName) {
+        if (!decl.matches(method))
             return false;
+        method.name = newName;
+        val insts = method.instructions.iterator();
+        while (insts.hasNext()) {
+            val inst = insts.next();
+            if (inst instanceof MethodInsnNode) {
+                val insnNode = (MethodInsnNode) inst;
+                for (val mapping : MAPPINGS.entrySet()) {
+                    if (mapping.getKey().matches(insnNode)) {
+                        insnNode.name = mapping.getValue();
+                        break;
+                    }
+                }
+            }
         }
-        val iter = method.instructions.iterator();
-        addThreadLocalFetch(iter, target.threadLocalName);
-        val jump = new LabelNode();
-        iter.add(new JumpInsnNode(Opcodes.IFNE, jump));
-        for (val local: target.locals) {
-            iter.add(new VarInsnNode(local.opcode, local.index));
-        }
-        iter.add(target.target.asInsn());
-        iter.add(new InsnNode(Opcodes.IRETURN));
-        iter.add(jump);
+
         return true;
     }
 

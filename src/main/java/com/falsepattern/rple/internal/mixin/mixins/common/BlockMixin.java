@@ -8,68 +8,79 @@
 package com.falsepattern.rple.internal.mixin.mixins.common;
 
 import com.falsepattern.rple.internal.mixin.hook.ColoredLightingHooks;
+import com.falsepattern.rple.internal.mixin.interfaces.RPLERenamedBlockLightMethods;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
-import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-@Unique
 @Mixin(Block.class)
 @SuppressWarnings("unused")
-public abstract class BlockMixin {
-    @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    protected ThreadLocal<Boolean> rple$passInternalLightValue;
-    @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    protected ThreadLocal<Boolean> rple$passInternalLightOpacity;
+public abstract class BlockMixin implements RPLERenamedBlockLightMethods {
+    @Shadow
+    protected int lightValue;
+    @Shadow
+    protected int lightOpacity;
 
-    @Inject(method = "getLightValue()I",
-            at = @At("HEAD"),
-            cancellable = true,
-            require = 1)
-    private void getLightValue(CallbackInfoReturnable<Integer> cir) {
-        if (!rple$passInternalLightValue.get())
-            cir.setReturnValue(ColoredLightingHooks.getLightValue(thiz()));
+    /**
+     * @author _
+     * @reason _
+     */
+    @Overwrite
+    public int getLightValue() {
+//        return 0;
+        return ColoredLightingHooks.getLightValue(thiz());
     }
 
-    @Inject(method = "getLightValue(Lnet/minecraft/world/IBlockAccess;III)I",
-            at = @At("HEAD"),
-            cancellable = true,
-            remap = false,
-            require = 1)
-    private void getLightValue(IBlockAccess world,
-                               int posX,
-                               int posY,
-                               int posZ,
-                               CallbackInfoReturnable<Integer> cir) {
-        if (!rple$passInternalLightValue.get())
-            cir.setReturnValue(ColoredLightingHooks.getLightValue(world, thiz(), posX, posY, posZ));
+    /**
+     * @author _
+     * @reason _
+     */
+    @Overwrite(remap = false)
+    public int getLightValue(IBlockAccess world, int posX, int posY, int posZ) {
+//        return 0;
+        return ColoredLightingHooks.getLightValue(world, thiz(), posX, posY, posZ);
     }
 
-    @Inject(method = "getLightOpacity()I",
-            at = @At("HEAD"),
-            cancellable = true,
-            require = 1)
-    private void getLightOpacity(CallbackInfoReturnable<Integer> cir) {
-        if (!rple$passInternalLightOpacity.get())
-            cir.setReturnValue(ColoredLightingHooks.getLightOpacity(thiz()));
+    /**
+     * @author _
+     * @reason _
+     */
+    @Overwrite
+    public int getLightOpacity() {
+        return ColoredLightingHooks.getLightOpacity(thiz());
+//        return thiz() == Blocks.air ? 0 : 15;
     }
 
-    @Inject(method = "getLightOpacity(Lnet/minecraft/world/IBlockAccess;III)I",
-            at = @At("HEAD"),
-            cancellable = true,
-            remap = false,
-            require = 1)
-    private void getLightOpacity(IBlockAccess world,
-                                 int posX,
-                                 int posY,
-                                 int posZ,
-                                 CallbackInfoReturnable<Integer> cir) {
-        if (!rple$passInternalLightOpacity.get())
-            cir.setReturnValue(ColoredLightingHooks.getLightOpacity(world, thiz(), posX, posY, posZ));
+    /**
+     * @author _
+     * @reason _
+     */
+    @Overwrite(remap = false)
+    public int getLightOpacity(IBlockAccess world, int posX, int posY, int posZ) {
+        return ColoredLightingHooks.getLightOpacity(world, thiz(), posX, posY, posZ);
+//        return thiz() == Blocks.air ? 0 : 15;
+    }
+
+    @Override
+    public int rple$renamed$getLightValue() {
+        return this.lightValue;
+    }
+
+    @Override
+    public int rple$renamed$getLightValue(IBlockAccess world, int posX, int posY, int posZ) {
+        return this.lightValue;
+    }
+
+    @Override
+    public int rple$renamed$getLightOpacity() {
+        return this.lightOpacity;
+    }
+
+    @Override
+    public int rple$renamed$getLightOpacity(IBlockAccess world, int posX, int posY, int posZ) {
+        return this.lightOpacity;
     }
 
     private Block thiz() {

@@ -9,6 +9,7 @@
 package com.falsepattern.rple.internal.asm.util;
 
 import lombok.Data;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 @Data
@@ -18,5 +19,9 @@ public class MethodDecl {
 
     public boolean matches(MethodNode node) {
         return node.name.equals(name) && node.desc.equals(desc);
+    }
+
+    public boolean matches(MethodInsnNode insnNode) {
+        return insnNode.name.equals(name) && insnNode.desc.equals(desc);
     }
 }

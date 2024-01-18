@@ -7,14 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
-import com.falsepattern.lumina.api.LumiAPI;
-import com.falsepattern.lumina.api.cache.LumiBlockCacheRoot;
 import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
 import com.falsepattern.lumina.api.world.LumiWorld;
 import com.falsepattern.rple.api.common.color.ColorChannel;
-import com.falsepattern.rple.internal.Compat;
-import com.falsepattern.rple.internal.common.cache.MultiHeadBlockCacheRoot;
-import com.falsepattern.rple.internal.common.cache.RPLEBlockCacheRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
 import com.falsepattern.rple.internal.common.world.RPLEWorldContainer;
@@ -36,7 +31,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static com.falsepattern.lumina.api.init.LumiWorldInitHook.LUMI_WORLD_INIT_HOOK_INFO;
 import static com.falsepattern.lumina.api.init.LumiWorldInitHook.LUMI_WORLD_INIT_HOOK_METHOD;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
-import static com.falsepattern.rple.internal.common.cache.BlockCaches.createFallbackBlockCacheRoot;
 import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMINA_MIXIN_PRIORITY;
 
 @Unique
@@ -49,12 +43,6 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
     @Shadow
     public Profiler theProfiler;
 
-    @Dynamic
-    @SuppressWarnings("unused")
-    private LumiBlockCacheRoot lumi$blockCacheRoot;
-
-    private RPLEBlockCacheRoot rple$blockCacheRoot;
-
     private RPLEWorld rple$redChannel;
     private RPLEWorld rple$greenChannel;
     private RPLEWorld rple$blueChannel;
@@ -65,15 +53,6 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
             require = 1)
     @Dynamic(LUMI_WORLD_INIT_HOOK_INFO)
     private void rpleWorldInit(CallbackInfo ci) {
-        int cacheCount = LumiAPI.configuredCacheCount();
-
-        if (cacheCount <= 0 || (lumi$isClientSide() && Compat.falseTweaksThreadedChunksEnabled())) {
-            this.rple$blockCacheRoot = createFallbackBlockCacheRoot(this);
-        } else {
-            this.rple$blockCacheRoot = new MultiHeadBlockCacheRoot(this, cacheCount);
-        }
-        this.lumi$blockCacheRoot = rple$blockCacheRoot;
-
         this.rple$redChannel = new RPLEWorldContainer(RED_CHANNEL, thiz(), this, theProfiler);
         this.rple$greenChannel = new RPLEWorldContainer(GREEN_CHANNEL, thiz(), this, theProfiler);
         this.rple$blueChannel = new RPLEWorldContainer(BLUE_CHANNEL, thiz(), this, theProfiler);
@@ -101,11 +80,6 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
                 return (RPLEChunkRoot) chunk;
         }
         return null;
-    }
-
-    @Override
-    public @NotNull RPLEBlockCacheRoot rple$blockCacheRoot() {
-        return rple$blockCacheRoot;
     }
 
     @Override

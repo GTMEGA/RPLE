@@ -8,7 +8,6 @@
 package com.falsepattern.rple.internal.common.world;
 
 import com.falsepattern.lumina.api.world.LumiWorld;
-import com.falsepattern.rple.internal.common.cache.RPLEBlockCache;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorage;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
@@ -32,7 +31,4 @@ public interface RPLEWorld extends LumiWorld, RPLEBlockStorage {
 
     @Override
     @Nullable RPLEChunk lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ);
-
-    @Override
-    @NotNull RPLEBlockCache lumi$blockCache();
 }
