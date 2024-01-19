@@ -26,7 +26,6 @@ import java.util.BitSet;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
-import static com.falsepattern.rple.api.common.RPLEColorUtil.invertColorComponent;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.Tags.MOD_ID;
 
@@ -332,8 +331,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
         // Fast-Path for World-Gen
         if (!isLightingInitialized) {
             val block = (RPLEBlock) blockBase;
-            val brightness = block.rple$getBrightnessColor(blockMeta);
-            return channel.componentFromColor(brightness);
+            return channel.componentFromColor(block.rple$getRawBrightnessColor(blockMeta));
         }
 
         val posX = (chunkPosX << 4) + subChunkPosX;
@@ -350,8 +348,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
         // Fast-Path for World-Gen
         if (!isLightingInitialized) {
             val block = (RPLEBlock) blockBase;
-            val translucency = block.rple$getTranslucencyColor(blockMeta);
-            return invertColorComponent(channel.componentFromColor(translucency));
+            return channel.componentFromColor(block.rple$getRawOpacityColor(blockMeta));
         }
 
         val posX = (chunkPosX << 4) + subChunkPosX;

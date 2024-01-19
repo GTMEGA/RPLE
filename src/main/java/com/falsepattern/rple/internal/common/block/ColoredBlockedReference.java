@@ -46,6 +46,7 @@ public final class ColoredBlockedReference {
         block.rple$initBaseTranslucencyColor(baseTranslucencyColor);
         block.rple$initMetaBrightnessColors(metaColorsArrayFromMap(metaBrightnessColorsMap));
         block.rple$initMetaTranslucencyColors(metaColorsArrayFromMap(metaTranslucencyColorsMap));
+        block.rple$finishColorInit();
     }
 
     private @Nullable RPLEColor @Nullable [] metaColorsArrayFromMap(TIntObjectMap<RPLEColor> metaColorsMap) {

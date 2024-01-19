@@ -110,4 +110,9 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
             }
         }
     }
+
+    @Override
+    public void rple$finishColorInit() {
+
+    }
 }

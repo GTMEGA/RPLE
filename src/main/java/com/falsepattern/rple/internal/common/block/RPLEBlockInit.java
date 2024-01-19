@@ -18,4 +18,6 @@ public interface RPLEBlockInit {
     void rple$initMetaBrightnessColors(@Nullable RPLEColor @Nullable [] metaColoredBrightness);
 
     void rple$initMetaTranslucencyColors(@Nullable RPLEColor @Nullable [] metaColoredTranslucency);
+
+    void rple$finishColorInit();
 }

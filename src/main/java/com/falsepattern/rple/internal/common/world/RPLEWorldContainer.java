@@ -120,10 +120,6 @@ public final class RPLEWorldContainer implements RPLEWorld {
         if (!(lumiChunkRoot instanceof RPLEChunkRoot))
             return null;
         val chunkRoot = (RPLEChunkRoot) lumiChunkRoot;
-        return rpleChunkFromRootAndChannel(chunkRoot, channel);
-    }
-
-    private static RPLEChunk rpleChunkFromRootAndChannel(RPLEChunkRoot chunkRoot, ColorChannel channel) {
         return chunkRoot.rple$chunk(channel);
     }
 
@@ -269,11 +265,6 @@ public final class RPLEWorldContainer implements RPLEWorld {
     @SuppressWarnings("CastToIncompatibleInterface")
     public int lumi$getBlockBrightness(@NotNull Block blockBase, int blockMeta, int posX, int posY, int posZ) {
         val block = (RPLEBlock) blockBase;
-//        val brightness = block.rple$getBrightnessColor(base, blockMeta, posX, posY, posZ);
-//        return channel.componentFromColor(brightness);
-
-//        return blockBase.getLightValue();
-
         return channel.componentFromColor(block.rple$getRawBrightnessColor(base, blockMeta, posX, posY, posZ));
     }
 
@@ -281,12 +272,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     @SuppressWarnings("CastToIncompatibleInterface")
     public int lumi$getBlockOpacity(@NotNull Block blockBase, int blockMeta, int posX, int posY, int posZ) {
         val block = (RPLEBlock) blockBase;
-//        val translucency = block.rple$getTranslucencyColor(base, blockMeta, posX, posY, posZ);
-//        return invertColorComponent(channel.componentFromColor(translucency));
-
         return channel.componentFromColor(block.rple$getRawOpacityColor(base, blockMeta, posX, posY, posZ));
-
-//        return blockBase.getLightOpacity();
     }
 
     @Override
