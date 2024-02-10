@@ -10,6 +10,7 @@ package com.falsepattern.rple.internal.common.collection;
 import lombok.val;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.IntUnaryOperator;
 
 
 public final class CircularLongBuffer {
@@ -23,6 +24,16 @@ public final class CircularLongBuffer {
         this.counter = new AtomicInteger(0);
     }
 
+
+    private int getAndIncrementIndexModular() {
+        int prev, next;
+        do {
+            prev = counter.get();
+            next = (prev + 1) % size;
+        } while (!counter.compareAndSet(prev, next));
+        return prev;
+    }
+
     /**
      * Inserts the specified element at the current head and updates the head.
      *
@@ -30,7 +41,7 @@ public final class CircularLongBuffer {
      * @return the index of the element in the buffer
      */
     public int put(long value) {
-        val index = counter.getAndUpdate(i -> (i + 1) % size);
+        val index = getAndIncrementIndexModular();
         buffer[index] = value;
         return index;
     }

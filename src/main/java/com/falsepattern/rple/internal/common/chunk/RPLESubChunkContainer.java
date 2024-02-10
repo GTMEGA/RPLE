@@ -11,6 +11,7 @@ import com.falsepattern.chunk.api.ArrayUtil;
 import com.falsepattern.lumina.api.chunk.LumiSubChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.common.color.ColorChannel;
+import com.falsepattern.rple.internal.ArrayHelper;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -18,6 +19,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.chunk.NibbleArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import net.minecraftforge.common.util.Constants;
 
 import java.nio.ByteBuffer;
 
@@ -34,6 +37,7 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
     private final ColorChannel channel;
     private final RPLESubChunkRoot root;
 
+    @Nullable
     private NibbleArray blockLight;
     @Nullable
     private NibbleArray skyLight;
@@ -41,13 +45,6 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
     public RPLESubChunkContainer(ColorChannel channel, RPLESubChunkRoot root, boolean hasSky) {
         this.channel = channel;
         this.root = root;
-
-        this.blockLight = new NibbleArray(4096, 4);
-        if (hasSky) {
-            this.skyLight = new NibbleArray(4096, 4);
-        } else {
-            this.skyLight = null;
-        }
     }
 
     @Override
@@ -75,23 +72,38 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
 
     @Override
     public void lumi$writeToNBT(@NotNull NBTTagCompound output) {
-        output.setByteArray(BLOCK_LIGHT_NBT_TAG_NAME, blockLight.data);
+        if (blockLight != null)
+            output.setByteArray(BLOCK_LIGHT_NBT_TAG_NAME, blockLight.data);
         if (skyLight != null)
             output.setByteArray(SKY_LIGHT_NBT_TAG_NAME, skyLight.data);
     }
 
     @Override
     public void lumi$readFromNBT(@NotNull NBTTagCompound input) {
-        if (input.hasKey(BLOCK_LIGHT_NBT_TAG_NAME, 7)) {
+        if (input.hasKey(BLOCK_LIGHT_NBT_TAG_NAME, Constants.NBT.TAG_BYTE_ARRAY)) {
             val blockLightBytes = input.getByteArray(BLOCK_LIGHT_NBT_TAG_NAME);
-            if (blockLightBytes.length == 2048)
+            if (ArrayHelper.isZero(blockLightBytes)) {
+                blockLight = null;
+            } else if (blockLight == null) {
+                blockLight = new NibbleArray(blockLightBytes, 4);
+            } else {
                 System.arraycopy(blockLightBytes, 0, blockLight.data, 0, 2048);
+            }
+        } else {
+            blockLight = null;
         }
 
-        if (skyLight != null && input.hasKey(SKY_LIGHT_NBT_TAG_NAME, 7)) {
+        if (input.hasKey(SKY_LIGHT_NBT_TAG_NAME, Constants.NBT.TAG_BYTE_ARRAY)) {
             val skyLightBytes = input.getByteArray(SKY_LIGHT_NBT_TAG_NAME);
-            if (skyLightBytes.length == 2048)
+            if (ArrayHelper.isZero(skyLightBytes)) {
+                skyLight = null;
+            } else if (skyLight == null) {
+                skyLight = new NibbleArray(skyLightBytes, 4);
+            } else {
                 System.arraycopy(skyLightBytes, 0, skyLight.data, 0, 2048);
+            }
+        } else {
+            skyLight = null;
         }
     }
 
@@ -103,16 +115,41 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
 
     @Override
     public void lumi$writeToPacket(@NotNull ByteBuffer output) {
-        output.put(blockLight.data);
+        if (blockLight != null && ArrayHelper.isZero(blockLight.data))
+            blockLight = null;
+        if (skyLight != null && ArrayHelper.isZero(skyLight.data))
+            skyLight = null;
+
+        byte flag = (byte) ((blockLight != null ? 1 : 0) | (skyLight != null ? 2 : 0));
+        output.put(flag);
+        if (blockLight != null)
+            output.put(blockLight.data);
         if (skyLight != null)
             output.put(skyLight.data);
     }
 
     @Override
     public void lumi$readFromPacket(@NotNull ByteBuffer input) {
-        input.get(blockLight.data);
-        if (skyLight != null)
+        byte flag = input.get();
+        boolean doBlock = (flag & 1) != 0;
+        boolean doSky = (flag & 2) != 0;
+
+        if (doBlock) {
+            if (blockLight == null) {
+                blockLight = new NibbleArray(4096, 4);
+            }
+            input.get(blockLight.data);
+        } else {
+            blockLight = null;
+        }
+        if (doSky) {
+            if (skyLight == null) {
+                skyLight = new NibbleArray(4096, 4);
+            }
             input.get(skyLight.data);
+        } else {
+            skyLight = null;
+        }
     }
 
     @Override
@@ -147,25 +184,40 @@ public final class RPLESubChunkContainer implements RPLESubChunk {
 
     @Override
     public void lumi$setBlockLightValue(int subChunkPosX, int subChunkPosY, int subChunkPosZ, int lightValue) {
+        if (blockLight == null) {
+            if (lightValue == 0)
+                return;
+            blockLight = new NibbleArray(4096, 4);
+        }
         blockLight.set(subChunkPosX, subChunkPosY, subChunkPosZ, lightValue);
     }
 
     @Override
     public int lumi$getBlockLightValue(int subChunkPosX, int subChunkPosY, int subChunkPosZ) {
+        if (blockLight == null)
+            return 0;
+
         return blockLight.get(subChunkPosX, subChunkPosY, subChunkPosZ);
     }
 
     @Override
     public void lumi$setSkyLightValue(int subChunkPosX, int subChunkPosY, int subChunkPosZ, int lightValue) {
-        if (skyLight != null)
-            skyLight.set(subChunkPosX, subChunkPosY, subChunkPosZ, lightValue);
+        if (skyLight == null) {
+            if (lightValue == 0)
+                return;
+
+            skyLight = new NibbleArray(4096, 4);
+        }
+
+        skyLight.set(subChunkPosX, subChunkPosY, subChunkPosZ, lightValue);
     }
 
     @Override
     public int lumi$getSkyLightValue(int subChunkPosX, int subChunkPosY, int subChunkPosZ) {
-        if (skyLight != null)
-            return skyLight.get(subChunkPosX, subChunkPosY, subChunkPosZ);
-        return 0;
+        if (skyLight == null)
+            return 0;
+
+        return skyLight.get(subChunkPosX, subChunkPosY, subChunkPosZ);
     }
 
     @Override
