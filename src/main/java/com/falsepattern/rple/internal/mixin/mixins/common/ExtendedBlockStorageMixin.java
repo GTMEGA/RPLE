@@ -12,7 +12,7 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-@Mixin(ExtendedBlockStorage.class)
+@Mixin(value = ExtendedBlockStorage.class, priority = 1010)
 public abstract class ExtendedBlockStorageMixin {
     /**
      * @author Ven
