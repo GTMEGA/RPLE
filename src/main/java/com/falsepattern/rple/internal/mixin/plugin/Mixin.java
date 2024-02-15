@@ -32,6 +32,7 @@ public enum Mixin implements IMixin {
     client_ChunkCacheMixin(CLIENT, always(), "ChunkCacheMixin"),
     client_EntityMixin(CLIENT, always(), "EntityMixin"),
     client_EntityRendererMixin(CLIENT, always(), "EntityRendererMixin"),
+    client_GuiIngameForgeMixin(CLIENT, always(), "GuiIngameForgeMixin"),
     client_OpenGLHelperMixin(CLIENT, always(), "OpenGLHelperMixin"),
     client_RenderBlocksMixin(CLIENT, always(), "RenderBlocksMixin"),
     client_TessellatorMixin(CLIENT, always(), "TessellatorMixin"),
