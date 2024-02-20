@@ -8,15 +8,19 @@
 package com.falsepattern.rple.internal.common.world;
 
 import com.falsepattern.lumina.api.LumiAPI;
+import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunkRoot;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.var;
 import net.minecraft.block.Block;
@@ -34,6 +38,7 @@ import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.Tags.MOD_ID;
 import static net.minecraftforge.common.util.ForgeDirection.*;
 
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RPLEWorldContainer implements RPLEWorld {
     private static final String RED_WORLD_ID = MOD_ID + "_" + RED_CHANNEL + "_world";
     private static final String GREEN_WORLD_ID = MOD_ID + "_" + GREEN_CHANNEL + "_world";
@@ -41,14 +46,16 @@ public final class RPLEWorldContainer implements RPLEWorld {
 
     private final ColorChannel channel;
     private final World base;
-    private final RPLEWorldRoot root;
+    private final RPLEWorldRoot worldRoot;
+    private final RPLEBlockStorageRoot blockStorageRoot;
 
     private final LumiLightingEngine lightingEngine;
 
     public RPLEWorldContainer(ColorChannel channel, World base, RPLEWorldRoot root, Profiler profiler) {
         this.channel = channel;
         this.base = base;
-        this.root = root;
+        this.worldRoot = root;
+        this.blockStorageRoot = root;
 
         this.lightingEngine = LumiAPI.provideLightingEngine(this, profiler);
     }
@@ -61,7 +68,12 @@ public final class RPLEWorldContainer implements RPLEWorld {
 
     @Override
     public @NotNull RPLEWorldRoot lumi$root() {
-        return root;
+        return worldRoot;
+    }
+
+    @Override
+    public RPLEWorld getCloneForChunkCache(RPLEBlockStorageRoot chunkCache) {
+        return new RPLEWorldContainer(channel, base, worldRoot, chunkCache, lightingEngine);
     }
 
     @Override
@@ -94,7 +106,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     @Override
     @SuppressWarnings("InstanceofIncompatibleInterface")
     public @Nullable RPLEChunk lumi$getChunkFromBlockPosIfExists(int posX, int posZ) {
-        val lumiChunkRoot = root.lumi$getChunkRootFromBlockPosIfExists(posX, posZ);
+        val lumiChunkRoot = blockStorageRoot.lumi$getChunkRootFromBlockPosIfExists(posX, posZ);
         if (!(lumiChunkRoot instanceof RPLEChunkRoot))
             return null;
         val chunkRoot = (RPLEChunkRoot) lumiChunkRoot;
@@ -104,7 +116,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     @Override
     @SuppressWarnings("InstanceofIncompatibleInterface")
     public @Nullable RPLEChunk lumi$getChunkFromChunkPosIfExists(int chunkPosX, int chunkPosZ) {
-        val lumiChunkRoot = root.lumi$getChunkRootFromChunkPosIfExists(chunkPosX, chunkPosZ);
+        val lumiChunkRoot = blockStorageRoot.lumi$getChunkRootFromChunkPosIfExists(chunkPosX, chunkPosZ);
         if (!(lumiChunkRoot instanceof RPLEChunkRoot))
             return null;
         val chunkRoot = (RPLEChunkRoot) lumiChunkRoot;
@@ -121,8 +133,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public void lumi$setLightValue(@NotNull LightType lightType, int posX, int posY, int posZ, int lightValue) {
-        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+    public void lumi$setLightValue(@Nullable LumiChunk chunk, @NotNull LightType lightType, int posX, int posY, int posZ, int lightValue) {
         if (chunk != null) {
             val subChunkPosX = posX & 15;
             val subChunkPosZ = posZ & 15;
@@ -131,8 +142,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public void lumi$setBlockLightValue(int posX, int posY, int posZ, int lightValue) {
-        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+    public void lumi$setBlockLightValue(@Nullable LumiChunk chunk, int posX, int posY, int posZ, int lightValue) {
         if (chunk != null) {
             val subChunkPosX = posX & 15;
             val subChunkPosZ = posZ & 15;
@@ -141,11 +151,10 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public void lumi$setSkyLightValue(int posX, int posY, int posZ, int lightValue) {
+    public void lumi$setSkyLightValue(@Nullable LumiChunk chunk, int posX, int posY, int posZ, int lightValue) {
         if (!lumi$root().lumi$hasSky())
             return;
 
-        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
         if (chunk != null) {
             val subChunkPosX = posX & 15;
             val subChunkPosZ = posZ & 15;
@@ -166,20 +175,19 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public int lumi$getBrightness(@NotNull LightType lightType, int posX, int posY, int posZ) {
+    public int lumi$getBrightness(@Nullable LumiChunk chunk, @NotNull LightType lightType, int posX, int posY, int posZ) {
         switch (lightType) {
             case BLOCK_LIGHT_TYPE:
-                return lumi$getBrightness(posX, posY, posZ);
+                return lumi$getBrightness(chunk, posX, posY, posZ);
             case SKY_LIGHT_TYPE:
-                return lumi$getSkyLightValue(posX, posY, posZ);
+                return lumi$getSkyLightValue(chunk, posX, posY, posZ);
             default:
                 return 0;
         }
     }
 
     @Override
-    public int lumi$getBrightness(int posX, int posY, int posZ) {
-        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+    public int lumi$getBrightness(@Nullable LumiChunk chunk, int posX, int posY, int posZ) {
         if (chunk != null) {
             val subChunkPosX = posX & 15;
             val subChunkPosZ = posZ & 15;
@@ -190,8 +198,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public int lumi$getLightValue(int posX, int posY, int posZ) {
-        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+    public int lumi$getLightValue(@Nullable LumiChunk chunk, int posX, int posY, int posZ) {
         if (chunk != null) {
             val subChunkPosX = posX & 15;
             val subChunkPosZ = posZ & 15;
@@ -201,8 +208,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public int lumi$getLightValue(@NotNull LightType lightType, int posX, int posY, int posZ) {
-        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+    public int lumi$getLightValue(@Nullable LumiChunk chunk, @NotNull LightType lightType, int posX, int posY, int posZ) {
         if (chunk != null) {
             val subChunkPosX = posX & 15;
             val subChunkPosZ = posZ & 15;
@@ -222,8 +228,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public int lumi$getBlockLightValue(int posX, int posY, int posZ) {
-        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+    public int lumi$getBlockLightValue(@Nullable LumiChunk chunk, int posX, int posY, int posZ) {
         if (chunk != null) {
             val subChunkPosX = posX & 15;
             val subChunkPosZ = posZ & 15;
@@ -233,11 +238,10 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public int lumi$getSkyLightValue(int posX, int posY, int posZ) {
+    public int lumi$getSkyLightValue(@Nullable LumiChunk chunk, int posX, int posY, int posZ) {
         if (!lumi$root().lumi$hasSky())
             return 0;
 
-        val chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
         if (chunk != null) {
             val subChunkPosX = posX & 15;
             val subChunkPosZ = posZ & 15;
@@ -249,15 +253,15 @@ public final class RPLEWorldContainer implements RPLEWorld {
 
     @Override
     public int lumi$getBlockBrightness(int posX, int posY, int posZ) {
-        val blockBase = root.lumi$getBlock(posX, posY, posZ);
-        val blockMeta = root.lumi$getBlockMeta(posX, posY, posZ);
+        val blockBase = blockStorageRoot.lumi$getBlock(posX, posY, posZ);
+        val blockMeta = blockStorageRoot.lumi$getBlockMeta(posX, posY, posZ);
         return lumi$getBlockBrightness(blockBase, blockMeta, posX, posY, posZ);
     }
 
     @Override
     public int lumi$getBlockOpacity(int posX, int posY, int posZ) {
-        val blockBase = root.lumi$getBlock(posX, posY, posZ);
-        val blockMeta = root.lumi$getBlockMeta(posX, posY, posZ);
+        val blockBase = blockStorageRoot.lumi$getBlock(posX, posY, posZ);
+        val blockMeta = blockStorageRoot.lumi$getBlockMeta(posX, posY, posZ);
         return lumi$getBlockOpacity(blockBase, blockMeta, posX, posY, posZ);
     }
 
@@ -286,16 +290,16 @@ public final class RPLEWorldContainer implements RPLEWorld {
     }
 
     @Override
-    public int rple$getChannelBrightnessForTessellator(int posX, int posY, int posZ, int minBlockLight) {
-        var blockLightValue = rple$getChannelLightValueForRender(BLOCK_LIGHT_TYPE, posX, posY, posZ);
+    public int rple$getChannelBrightnessForTessellator(@Nullable RPLEChunk chunk, int posX, int posY, int posZ, int minBlockLight) {
+        var blockLightValue = rple$getChannelLightValueForRender(chunk, BLOCK_LIGHT_TYPE, posX, posY, posZ);
         blockLightValue = Math.max(blockLightValue, minBlockLight);
-        val skyLightValue = rple$getChannelLightValueForRender(SKY_LIGHT_TYPE, posX, posY, posZ);
+        val skyLightValue = rple$getChannelLightValueForRender(chunk, SKY_LIGHT_TYPE, posX, posY, posZ);
         return TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(blockLightValue, skyLightValue);
     }
 
     @Override
-    public int rple$getChannelLightValueForRender(@NotNull LightType lightType, int posX, int posY, int posZ) {
-        if (lightType == SKY_LIGHT_TYPE && !root.lumi$hasSky())
+    public int rple$getChannelLightValueForRender(@Nullable RPLEChunk chunk, @NotNull LightType lightType, int posX, int posY, int posZ) {
+        if (lightType == SKY_LIGHT_TYPE && !blockStorageRoot.lumi$hasSky())
             return 0;
 
         if (posY < 0) {
@@ -308,24 +312,31 @@ public final class RPLEWorldContainer implements RPLEWorld {
         if (posZ < -30000000 || posZ >= 30000000)
             return lightType.defaultLightValue();
 
-        val block = root.lumi$getBlock(posX, posY, posZ);
+        val block = blockStorageRoot.lumi$getBlock(posX, posY, posZ);
         if (block.getUseNeighborBrightness()) {
             var lightValue = 0;
-            lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, UP));
-            lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, NORTH));
-            lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, SOUTH));
-            lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, WEST));
-            lightValue = Math.max(lightValue, getNeighborLightValue(lightType, posX, posY, posZ, EAST));
+            lightValue = Math.max(lightValue, getNeighborLightValue(chunk, lightType, posX, posY, posZ, UP));
+            lightValue = Math.max(lightValue, getNeighborLightValue(chunk, lightType, posX, posY, posZ, NORTH));
+            lightValue = Math.max(lightValue, getNeighborLightValue(chunk, lightType, posX, posY, posZ, SOUTH));
+            lightValue = Math.max(lightValue, getNeighborLightValue(chunk, lightType, posX, posY, posZ, WEST));
+            lightValue = Math.max(lightValue, getNeighborLightValue(chunk, lightType, posX, posY, posZ, EAST));
             return lightValue;
         }
-        return lumi$getBrightness(lightType, posX, posY, posZ);
+        return lumi$getBrightness(chunk, lightType, posX, posY, posZ);
     }
     // endregion
 
-    private int getNeighborLightValue(LightType lightType, int posX, int posY, int posZ, ForgeDirection direction) {
+    private int getNeighborLightValue(@Nullable RPLEChunk chunk, LightType lightType, int posX, int posY, int posZ, ForgeDirection direction) {
+        int chunkXPre = posX >> 4;
+        int chunkZPre = posZ >> 4;
         posX += direction.offsetX;
         posY += direction.offsetY;
         posZ += direction.offsetZ;
-        return lumi$getBrightness(lightType, posX, posY, posZ);
+        int chunkXPost = posX >> 4;
+        int chunkZPost = posZ >> 4;
+        if (chunkXPre != chunkXPost || chunkZPre != chunkZPost) {
+            chunk = lumi$getChunkFromBlockPosIfExists(posX, posZ);
+        }
+        return lumi$getBrightness(chunk, lightType, posX, posY, posZ);
     }
 }

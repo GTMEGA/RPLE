@@ -14,6 +14,9 @@ import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
+
+import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
+import lombok.val;
 import org.jetbrains.annotations.NotNull;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
@@ -50,12 +53,16 @@ public final class RPLEBlockBrightnessUtil {
             return errorBrightnessForTessellator();
 
         final RPLEBlockStorageRoot worldRoot = (RPLEBlockStorageRoot) world;
+        val chunk = worldRoot.rple$getChunkRootFromBlockPosIfExists(posX, posZ);
+        val cr = (RPLEChunk) (chunk == null ? null : chunk.rple$chunk(RED_CHANNEL));
+        val cg = (RPLEChunk) (chunk == null ? null : chunk.rple$chunk(GREEN_CHANNEL));
+        val cb = (RPLEChunk) (chunk == null ? null : chunk.rple$chunk(BLUE_CHANNEL));
         final int redBrightness = worldRoot.rple$blockStorage(RED_CHANNEL)
-                                           .rple$getChannelBrightnessForTessellator(posX, posY, posZ, minRedBlockLight);
+                                           .rple$getChannelBrightnessForTessellator(cr, posX, posY, posZ, minRedBlockLight);
         final int greenBrightness = worldRoot.rple$blockStorage(GREEN_CHANNEL)
-                                             .rple$getChannelBrightnessForTessellator(posX, posY, posZ, minGreenBlockLight);
+                                             .rple$getChannelBrightnessForTessellator(cg, posX, posY, posZ, minGreenBlockLight);
         final int blueBrightness = worldRoot.rple$blockStorage(BLUE_CHANNEL)
-                                            .rple$getChannelBrightnessForTessellator(posX, posY, posZ, minBlueBlockLight);
+                                            .rple$getChannelBrightnessForTessellator(cb, posX, posY, posZ, minBlueBlockLight);
         final long packedBrightness = TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
                                                                                                                     greenBrightness,
                                                                                                                     blueBrightness);

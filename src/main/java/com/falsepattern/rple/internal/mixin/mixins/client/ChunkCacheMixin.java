@@ -19,9 +19,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ChunkCache.class)
 public abstract class ChunkCacheMixin implements IBlockAccess {
-    @Shadow
-    public World worldObj;
-
     /**
      * @author FalsePattern
      * @reason Colorize
@@ -29,6 +26,6 @@ public abstract class ChunkCacheMixin implements IBlockAccess {
     @Overwrite
     @SideOnly(Side.CLIENT)
     public int getLightBrightnessForSkyBlocks(int posX, int posY, int posZ, int minBlockLight) {
-        return ColoredLightingHooks.getRGBBrightnessForTessellator(worldObj, posX, posY, posZ, minBlockLight);
+        return ColoredLightingHooks.getRGBBrightnessForTessellator(this, posX, posY, posZ, minBlockLight);
     }
 }

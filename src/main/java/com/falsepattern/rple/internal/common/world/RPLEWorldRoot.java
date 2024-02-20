@@ -16,8 +16,4 @@ import org.jetbrains.annotations.Nullable;
 
 public interface RPLEWorldRoot extends LumiWorldRoot, RPLEBlockStorageRoot {
     @NotNull RPLEWorld rple$world(@NotNull ColorChannel channel);
-
-    @Nullable RPLEChunkRoot rple$getChunkRootFromBlockPosIfExists(int posX, int posZ);
-
-    @Nullable RPLEChunkRoot rple$getChunkRootFromChunkPosIfExists(int chunkPosX, int chunkPosZ);
 }

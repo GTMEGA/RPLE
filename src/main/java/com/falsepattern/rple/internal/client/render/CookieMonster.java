@@ -14,6 +14,7 @@ import lombok.var;
 import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
 
@@ -32,15 +33,19 @@ public final class CookieMonster {
     private static final Logger LOG = createLogger("CookieMonster");
 
     // Cookie format (bits):
-    // 0100 0000 IIII IIII IIII IIII 0000 000P
+    // 0100 0000 IIII IIII IIII IIII CCCC CCCP
     // I - index bits
+    // C - check bits
     // P - parity
     private static final int NUM_INDICES = 0x100000;
     private static final int INDEX_SHIFT = 8;
     private static final int PARITY_BIT = 0x00000001;
     private static final int INDEX_MASK = (NUM_INDICES - 1) << INDEX_SHIFT;
+    private static final int CHECK_SHIFT = 1;
+    private static final int NUM_CHECKS = 0b10000000;
+    private static final int CHECK_MASK = (NUM_CHECKS - 1) << CHECK_SHIFT;
     private static final int COOKIE_BIT = 0x40000000;
-    private static final int ZERO_MASK = ~(PARITY_BIT | INDEX_MASK | COOKIE_BIT);
+    private static final int ZERO_MASK = ~(PARITY_BIT | INDEX_MASK | CHECK_MASK | COOKIE_BIT);
 
     private static final int BRIGHTNESS_MASK = 0x00FF00FF;
 
@@ -58,7 +63,18 @@ public final class CookieMonster {
                                                                                                           blueBrightness);
     }
 
-    private static final CircularLongBuffer LIGHT_VALUES = new CircularLongBuffer(NUM_INDICES);
+    private static final AtomicInteger checkIndexCounter = new AtomicInteger(0);
+    private static int getCheckBits() {
+        return checkIndexCounter.getAndUpdate(x -> (x + 1) % NUM_CHECKS);
+    }
+
+    private static class ThreadState {
+        public final int check = getCheckBits();
+        public final CircularLongBuffer lightValues = new CircularLongBuffer(NUM_INDICES);
+    }
+
+    private static final ThreadLocal<ThreadState> STATE = ThreadLocal.withInitial(ThreadState::new);
+
     private static final AtomicBoolean WARNED_BEFORE = new AtomicBoolean(false);
 
     /**
@@ -66,8 +82,9 @@ public final class CookieMonster {
      * @return An opaque, temporary cookie representing the given long.
      */
     public static int packedLongToCookie(long packedLong) {
-        val index = LIGHT_VALUES.put(packedLong);
-        val cookie = ((index << INDEX_SHIFT) & INDEX_MASK) | COOKIE_BIT;
+        val state = STATE.get();
+        val index = state.lightValues.put(packedLong);
+        val cookie = ((index << INDEX_SHIFT) & INDEX_MASK) | (state.check << CHECK_SHIFT) | COOKIE_BIT;
         return cookie | parity(cookie);
     }
 
@@ -80,7 +97,7 @@ public final class CookieMonster {
     public static long cookieToPackedLong(int cookie) {
         switch (inspectValue(cookie)) {
             case COOKIE: {
-                return LIGHT_VALUES.get((cookie & INDEX_MASK) >>> INDEX_SHIFT);
+                return STATE.get().lightValues.get((cookie & INDEX_MASK) >>> INDEX_SHIFT);
             }
             case VANILLA: {
                 // Vanilla fake-pack
@@ -107,7 +124,11 @@ public final class CookieMonster {
      * brightness value, and {@link IntType#BROKEN} if it was neither.
      */
     public static IntType inspectValue(int potentialCookie) {
+        val state = STATE.get();
         if ((potentialCookie & COOKIE_BIT) != 0 && parity(potentialCookie) == 0 && (potentialCookie & ZERO_MASK) == 0) {
+            if (((potentialCookie & CHECK_MASK) >>> CHECK_SHIFT) != state.check) {
+                System.err.println("Cookie passed through thread boundary!");
+            }
             return IntType.COOKIE;
         } else if ((potentialCookie & BRIGHTNESS_MASK) == potentialCookie) {
             return IntType.VANILLA;
