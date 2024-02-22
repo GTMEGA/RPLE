@@ -18,14 +18,13 @@ import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.var;
-import stubpackage.Config;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -37,6 +36,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import stubpackage.Config;
 
 import java.util.List;
 
@@ -268,6 +268,10 @@ public class ColorDynamicLights {
             } else if (entity instanceof EntityItem) {
                 EntityItem entityItem = (EntityItem) entity;
                 ItemStack itemStack = getItemStack(entityItem);
+                return getLightLevel(itemStack);
+            } else if (entity instanceof EntityItemFrame) {
+                EntityItemFrame entityItemFrame = (EntityItemFrame) entity;
+                ItemStack itemStack = entityItemFrame.getDisplayedItem();
                 return getLightLevel(itemStack);
             } else {
                 return LightValueColor.LIGHT_VALUE_0;
