@@ -286,8 +286,6 @@ public abstract class ShaderTessMixin {
 
         ofTess.rple$bufferSize(newBufferSize);
         ofTess.rple$rawBuffer(newRawBuffer);
-
-        SMCLog.info("Expand tessellator buffer, old: %d, new: %d", oldBufferSize, newBufferSize);
     }
 
     @Unique
