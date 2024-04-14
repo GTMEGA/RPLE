@@ -29,7 +29,6 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
     public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 
     private static final float OFFSET = 0.05F;
-    private static final boolean[][][] NULL = new boolean[3][3][3];
 
     @Override
     public void renderInventoryBlock(Block block, int meta, int modelId, RenderBlocks renderer) {
@@ -64,7 +63,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
             val b = color.blue() * 17;
             tessellator.setBrightness(TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(15, 15));
             tessellator.setColorRGBA(r, g, b, 128);
-            drawGlowCube(tessellator, 0, 0, 0, NULL, lamp.getGlowIcon());
+            drawGlowCube(tessellator, 0, 0, 0, 0, lamp.getGlowIcon());
         }
 
         tessellator.draw();
@@ -96,15 +95,18 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         if (powered == inverted)
             return false;
 
-        val neighbors = new boolean[3][3][3];
+        int neighbors = 0;
         for (int Z = 0; Z <= 2; Z++) {
             for (int Y = 0; Y <= 2; Y++) {
                 for (int X = 0; X <= 2; X++) {
                     if (X == 1 && Y == 1 && Z == 1)
                         continue;
-
-                    neighbors[X][Y][Z] = (Y - 1 + y) < 256 && (Y - 1 + y) > 0 &&
-                                         isBlockGlowingLamp(world, X - 1 + x, Y - 1 + y, Z - 1 + z);
+                    int BX = X - 1 + x;
+                    int BY = Y - 1 + y;
+                    int BZ = Z - 1 + z;
+                    if (BY < 256 && BY >= 0 && isBlockGlowingLamp(world, BX, BY, BZ)) {
+                        neighbors = setNeighbor(neighbors, X, Y, Z);
+                    }
                 }
             }
         }
@@ -118,6 +120,22 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         tessellator.setColorOpaque(r, g, b);
         drawGlowCube(tessellator, x, y, z, neighbors, lamp.getGlowIcon());
         return true;
+    }
+
+    private static int toShift(int X, int Y, int Z) {
+        return X * 9 + Y * 3 + Z;
+    }
+
+    private static int toBitMask(int X, int Y, int Z) {
+        return 1 << toShift(X, Y, Z);
+    }
+
+    private static int setNeighbor(int neighbors, int X, int Y, int Z) {
+        return neighbors | toBitMask(X, Y, Z);
+    }
+
+    private static boolean getNeighbor(int neighbors, int X, int Y, int Z) {
+        return (neighbors & toBitMask(X, Y, Z)) != 0;
     }
 
     @Override
@@ -157,75 +175,129 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         renderer.renderFaceXPos(block, x, y, z, texture);
     }
 
+    private static final int DGC_MASK_X_POS = toBitMask(2, 1, 1);
+    private static final int DGC_MASK_X_NEG = toBitMask(0, 1, 1);
+    private static final int DGC_MASK_Y_POS = toBitMask(1, 2, 1);
+    private static final int DGC_MASK_Y_NEG = toBitMask(1, 0, 1);
+    private static final int DGC_MASK_Z_POS = toBitMask(1, 1, 2);
+    private static final int DGC_MASK_Z_NEG = toBitMask(1, 1, 0);
+    private static final int DGC_MASK_ALL = DGC_MASK_X_POS | DGC_MASK_X_NEG | DGC_MASK_Y_POS | DGC_MASK_Y_NEG | DGC_MASK_Z_POS | DGC_MASK_Z_NEG;
     private static void drawGlowCube(Tessellator tessellator, double x, double y, double z,
-                                     boolean[][][] neighbors, IIcon icon) {
-        if (!neighbors[2][1][1])
-            drawXPos(tessellator, x, y, z, neighbors, icon);
-        if (!neighbors[0][1][1])
-            drawXNeg(tessellator, x, y, z, neighbors, icon);
-        if (!neighbors[1][2][1])
-            drawYPos(tessellator, x, y, z, neighbors, icon);
-        if (!neighbors[1][0][1])
-            drawYNeg(tessellator, x, y, z, neighbors, icon);
-        if (!neighbors[1][1][2])
-            drawZPos(tessellator, x, y, z, neighbors, icon);
-        if (!neighbors[1][1][0])
-            drawZNeg(tessellator, x, y, z, neighbors, icon);
+                                     int neighbors, IIcon icon) {
+        if ((neighbors & DGC_MASK_ALL) == DGC_MASK_ALL)
+            return;
+        val sBuf = S_BUF.get();
+        if ((neighbors & DGC_MASK_X_POS) == 0)
+            drawXPos(sBuf, tessellator, x, y, z, neighbors, icon);
+        if ((neighbors & DGC_MASK_X_NEG) == 0)
+            drawXNeg(sBuf, tessellator, x, y, z, neighbors, icon);
+        if ((neighbors & DGC_MASK_Y_POS) == 0)
+            drawYPos(sBuf, tessellator, x, y, z, neighbors, icon);
+        if ((neighbors & DGC_MASK_Y_NEG) == 0)
+            drawYNeg(sBuf, tessellator, x, y, z, neighbors, icon);
+        if ((neighbors & DGC_MASK_Z_POS) == 0)
+            drawZPos(sBuf, tessellator, x, y, z, neighbors, icon);
+        if ((neighbors & DGC_MASK_Z_NEG) == 0)
+            drawZNeg(sBuf, tessellator, x, y, z, neighbors, icon);
     }
 
     // region Face drawing
-    private static void drawXPos(Tessellator tessellator, double x, double y, double z,
-                                 boolean[][][] neighbors, IIcon icon) {
-        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[1 + forward][y1][x1]);
-        for (val segment : segments)
+    private static final Sampler XPosSampler = (neighbors, x, y, forward) -> getNeighbor(neighbors, 1 + forward, y, x);
+    private static final Sampler XNegSampler = (neighbors, x, y, forward) -> getNeighbor(neighbors, 1 - forward, y, x);
+    private static final Sampler YPosSampler = (neighbors, x, y, forward) -> getNeighbor(neighbors, y, 1 + forward, x);
+    private static final Sampler YNegSampler = (neighbors, x, y, forward) -> getNeighbor(neighbors, y, 1 - forward, x);
+    private static final Sampler ZPosSampler = (neighbors, x, y, forward) -> getNeighbor(neighbors, y, x, 1 + forward);
+    private static final Sampler ZNegSampler = (neighbors, x, y, forward) -> getNeighbor(neighbors, y, x, 1 - forward);
+
+    private static void drawXPos(SegmentBuffer sBuf, Tessellator tessellator, double x, double y, double z,
+                                 int neighbors, IIcon icon) {
+        val segments = sBuf.result;
+        val sCount = genSegments(sBuf, neighbors, XPosSampler);
+        for (int i = 0; i < sCount; i++) {
+            val segment = segments[i];
             drawXPos(tessellator, y + segment[1], y + segment[3], z + segment[0], z + segment[2], x + 1 + OFFSET, icon);
+        }
     }
 
-    private static void drawXNeg(Tessellator tessellator, double x, double y, double z,
-                                 boolean[][][] neighbors, IIcon icon) {
-        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[1 - forward][y1][x1]);
-        for (val segment : segments)
+    private static void drawXNeg(SegmentBuffer sBuf, Tessellator tessellator, double x, double y, double z,
+                                 int neighbors, IIcon icon) {
+        val segments = sBuf.result;
+        val sCount = genSegments(sBuf, neighbors, XNegSampler);
+        for (int i = 0; i < sCount; i++) {
+            val segment = segments[i];
             drawXNeg(tessellator, y + segment[1], y + segment[3], z + segment[0], z + segment[2], x - OFFSET, icon);
+        }
     }
 
-    private static void drawYPos(Tessellator tessellator, double x, double y, double z,
-                                 boolean[][][] neighbors, IIcon icon) {
-        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][1 + forward][x1]);
-        for (val segment : segments)
+    private static void drawYPos(SegmentBuffer sBuf, Tessellator tessellator, double x, double y, double z,
+                                 int neighbors, IIcon icon) {
+        val segments = sBuf.result;
+        val sCount = genSegments(sBuf, neighbors, YPosSampler);
+        for (int i = 0; i < sCount; i++) {
+            val segment = segments[i];
             drawYPos(tessellator, x + segment[1], x + segment[3], z + segment[0], z + segment[2], y + 1 + OFFSET, icon);
+        }
     }
 
-    private static void drawYNeg(Tessellator tessellator, double x, double y, double z,
-                                 boolean[][][] neighbors, IIcon icon) {
-        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][1 - forward][x1]);
-        for (val segment : segments)
+    private static void drawYNeg(SegmentBuffer sBuf, Tessellator tessellator, double x, double y, double z,
+                                 int neighbors, IIcon icon) {
+        val segments = sBuf.result;
+        val sCount = genSegments(sBuf, neighbors, YNegSampler);
+        for (int i = 0; i < sCount; i++) {
+            val segment = segments[i];
             drawYNeg(tessellator, x + segment[1], x + segment[3], z + segment[0], z + segment[2], y - OFFSET, icon);
+        }
     }
 
-    private static void drawZPos(Tessellator tessellator, double x, double y, double z,
-                                 boolean[][][] neighbors, IIcon icon) {
-        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][x1][1 + forward]);
-        for (val segment : segments)
+    private static void drawZPos(SegmentBuffer sBuf, Tessellator tessellator, double x, double y, double z,
+                                 int neighbors, IIcon icon) {
+        val segments = sBuf.result;
+        val sCount = genSegments(sBuf, neighbors, ZPosSampler);
+        for (int i = 0; i < sCount; i++) {
+            val segment = segments[i];
             drawZPos(tessellator, x + segment[1], x + segment[3], y + segment[0], y + segment[2], z + 1 + OFFSET, icon);
+        }
     }
 
-    private static void drawZNeg(Tessellator tessellator, double x, double y, double z,
-                                 boolean[][][] neighbors, IIcon icon) {
-        val segments = genSegments(neighbors, (neighbors1, x1, y1, forward) -> neighbors1[y1][x1][1 - forward]);
-        for (val segment : segments)
+    private static void drawZNeg(SegmentBuffer sBuf, Tessellator tessellator, double x, double y, double z,
+                                 int neighbors, IIcon icon) {
+        val segments = sBuf.result;
+        val sCount = genSegments(sBuf, neighbors, ZNegSampler);
+        for (int i = 0; i < sCount; i++) {
+            val segment = segments[i];
             drawZNeg(tessellator, x + segment[1], x + segment[3], y + segment[0], y + segment[2], z - OFFSET, icon);
+        }
     }
     // endregion
 
     // region Face Toggling
     private interface Sampler {
-        boolean sample(boolean[][][] neighbors, int x, int y, int forward);
+        boolean sample(int neighbors, int x, int y, int forward);
     }
 
-    private static float[][] genSegments(boolean[][][] neighbors, Sampler sampler) {
-        val center = new float[]{OFFSET, -OFFSET, 1 - OFFSET, 1 + OFFSET};
-        var xMin = new float[]{-OFFSET, -OFFSET, OFFSET, 1 + OFFSET};
-        var xMax = new float[]{1 - OFFSET, -OFFSET, 1 + OFFSET, 1 + OFFSET};
+    private static class SegmentBuffer {
+        private static final float[] DefaultCenter = new float[]{OFFSET, -OFFSET, 1 - OFFSET, 1 + OFFSET};
+        private static final float[] DefaultXMin = new float[]{-OFFSET, -OFFSET, OFFSET, 1 + OFFSET};
+        private static final float[] DefaultXMax = new float[]{1 - OFFSET, -OFFSET, 1 + OFFSET, 1 + OFFSET};
+        public final float[] center = new float[4];
+        public final float[] xMin = new float[4];
+        public final float[] xMax = new float[4];
+        public final float[][] result = new float[3][];
+
+        public void init() {
+            System.arraycopy(DefaultCenter, 0, center, 0, 4);
+            System.arraycopy(DefaultXMin, 0, xMin, 0, 4);
+            System.arraycopy(DefaultXMax, 0, xMax, 0, 4);
+        }
+    }
+
+    private static final ThreadLocal<SegmentBuffer> S_BUF = ThreadLocal.withInitial(SegmentBuffer::new);
+
+    private static int genSegments(SegmentBuffer sBuf, int neighbors, Sampler sampler) {
+        sBuf.init();
+        val center = sBuf.center;
+        var xMin = sBuf.xMin;
+        var xMax = sBuf.xMax;
 
         //planar edges
         if (sampler.sample(neighbors, 1, 2, 0)) {
@@ -291,10 +363,10 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
             xMax = null;
         }
 
-        return merge(xMin, center, xMax);
+        return merge(sBuf, xMin, center, xMax);
     }
 
-    private static float[][] merge(float[] xMin, float[] center, float[] xMax) {
+    private static int merge(SegmentBuffer sBuf, float[] xMin, float[] center, float[] xMax) {
         if (xMin != null && xMin[1] == center[1] && xMin[3] == center[3]) {
             center[0] = xMin[0];
             xMin = null;
@@ -304,7 +376,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
             xMax = null;
         }
 
-        val result = new float[1 + (xMin == null ? 0 : 1) + (xMax == null ? 0 : 1)][];
+        val result = sBuf.result;
 
         var i = 0;
         if (xMin != null) {
@@ -313,10 +385,12 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         }
         result[i] = center;
         i++;
-        if (xMax != null)
+        if (xMax != null) {
             result[i] = xMax;
+            i++;
+        }
 
-        return result;
+        return i;
     }
     // endregion
 
