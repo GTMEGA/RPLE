@@ -115,7 +115,7 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
     public void transform(ClassNode cn, String transformedName, boolean obfuscated) {
         for (val method: cn.methods) {
             for (val mapping: MAPPINGS.entrySet()) {
-                if (tryTransform(method, mapping.getKey(), mapping.getValue())) {
+                if (tryTransform(cn, method, mapping.getKey(), mapping.getValue())) {
                     RPLETransformer.LOG.info("[BlockLightHooks] Transformed {}.{}{}", transformedName, method.name, method.desc);
                     break;
                 }
@@ -123,7 +123,7 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
         }
     }
 
-    private static boolean tryTransform(MethodNode method, MethodDecl decl, String newName) {
+    private static boolean tryTransform(ClassNode cn, MethodNode method, MethodDecl decl, String newName) {
         if (!decl.matches(method))
             return false;
         method.name = newName;
@@ -132,6 +132,8 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
             val inst = insts.next();
             if (inst instanceof MethodInsnNode) {
                 val insnNode = (MethodInsnNode) inst;
+                if (!insnNode.owner.equals(cn.name) && !insnNode.owner.equals(cn.superName) && !isBlockSubclass(insnNode.owner))
+                    continue;
                 for (val mapping : MAPPINGS.entrySet()) {
                     if (mapping.getKey().matches(insnNode)) {
                         insnNode.name = mapping.getValue();
@@ -152,7 +154,30 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
         iter.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, INTERNAL_BOOLEAN_BOXED, NAME_BOOLEAN_UNBOX, DESC_BOOLEAN_UNBOX, false));
     }
 
+    private static final Map<String, Boolean> blockSubclassMemoization = new HashMap<>(1024, 0.2f);
 
+    static {
+        blockSubclassMemoization.put(INTERNAL_BLOCK, true);
+    }
+
+    private static boolean isBlockSubclass(String className) {
+        if (className == null)
+            return false;
+        val v = blockSubclassMemoization.get(className);
+        if (v != null)
+            return v;
+
+        if (className.equals(INTERNAL_BLOCK)) {
+            blockSubclassMemoization.put(className, true);
+            return true;
+        }
+        val classBytes = Util.bytesFromInternalName(className);
+        if (classBytes == null) {
+            blockSubclassMemoization.put(className, false);
+            return false;
+        }
+        return isBlockSubclass(new ClassReader(classBytes).getSuperName());
+    }
 
     private static boolean isValidTarget(ClassNode node) {
         //Detect classes that can be patched based on their methods. This avoids unnecessary parsing of superclasses.
@@ -170,19 +195,6 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
             return false;
         }
 
-        //Make sure the class is a subclass of Block
-        var superClass = node.superName;
-        while (!INTERNAL_OBJECT.equals(superClass)) {
-            if (superClass.equals(INTERNAL_BLOCK))
-                return true;
-            val classBytes = Util.bytesFromInternalName(superClass);
-            if (classBytes == null)
-                return false;
-            val cr = new ClassReader(classBytes);
-            val superNode = new ClassNode();
-            cr.accept(superNode, 0);
-            superClass = superNode.superName;
-        }
-        return false;
+        return isBlockSubclass(node.superName);
     }
 }
