@@ -1,4 +1,4 @@
-//version: 1656003793falsepattern74
+//version: 1656003793falsepattern75
 /*
 DO NOT CHANGE THIS FILE!
 
@@ -1032,6 +1032,10 @@ static unzip(String zipFileName, String outputDir) {
 configure(deobfParams) {
     group = 'forgegradle'
     description = 'Rename all obfuscated parameter names inherited from Minecraft classes'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 // Dependency Deobfuscation
