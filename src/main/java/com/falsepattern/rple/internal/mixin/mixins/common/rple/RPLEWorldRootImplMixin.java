@@ -67,6 +67,8 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
 
     @Override
     public @Nullable RPLEChunkRoot rple$getChunkRootFromChunkPosIfExists(int chunkPosX, int chunkPosZ) {
+        if (chunkProvider == null)
+            return null;
         if (chunkProvider instanceof ChunkProviderServer) {
             val chunkProviderServer = (ChunkProviderServer) chunkProvider;
             val loadedChunks = chunkProviderServer.loadedChunkHashMap;
