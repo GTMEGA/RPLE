@@ -32,7 +32,7 @@ public enum TargetedMod implements ITargetedMod {
     APPLIED_ENERGISTICS_2("Applied Energistics 2", false, startsWith("appliedenergistics2-")),
     ENDER_IO("Ender IO", false, startsWith("enderio")),
     STORAGE_DRAWERS("Storage Drawers", false, startsWith("storagedrawers-")),
-    CODE_CHICKEN_LIB("CodeChickenLib", false, startsWith("codechickenlib-")),
+    CODE_CHICKEN_LIB("CodeChickenLib", false, startsWith("codechickenlib-").or(startsWith("codechickencore-"))),
     NOT_ENOUGH_ITEMS("NotEnoughItems", false, startsWith("NotEnoughItems-")),
     FORGE_MULTI_PART("Forge Multi Part", false, startsWith("forgemultipart-")),
     ;
