@@ -23,9 +23,9 @@ import java.util.List;
 
 import static com.falsepattern.rple.internal.LogHelper.createLogger;
 
-@Accessors(fluent = true)
-public class RPLETransformer implements SmartTransformer {
-    public static final Logger LOG = createLogger("ASM");
+@Accessors(fluent = true, chain = false)
+public final class RPLETransformer implements SmartTransformer {
+    static final Logger LOG = createLogger("ASM");
 
     static {
         RPLEConfig.poke();

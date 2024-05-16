@@ -65,6 +65,13 @@ public final class RPLEConfig {
         @Config.DefaultBoolean(false)
         public static boolean DEBUG_FORCE_LOG_TO_CONSOLE;
 
+        @Config.Name("asmTransformer")
+        @Config.Comment("Toggles ASM transformation logging.")
+        @Config.LangKey("config.rple.debug.asmTransformer")
+        @Config.RequiresMcRestart
+        @Config.DefaultBoolean(false)
+        public static boolean DEBUG_ASM_TRANSFORMER;
+
         @Config.Name("cookieMonster")
         @Config.Comment("Toggles the logging of the Cookie Monster class, which handles the 'packing' of brightness values for rendering.")
         @Config.LangKey("config.rple.debug.cookieMonster")
