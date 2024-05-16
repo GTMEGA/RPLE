@@ -9,7 +9,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client.codechickenlib;
 
 import codechicken.lib.render.CCRenderState;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
-import com.falsepattern.rple.internal.mixin.helper.CodeChickenLibHelper;
+import com.falsepattern.rple.internal.mixin.extension.ExtendedOpenGlHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,7 +29,7 @@ public abstract class CCRenderStateMixin {
      */
     @Overwrite
     public static void pullLightmap() {
-        setBrightness(CookieMonster.packedLongToCookie(CodeChickenLibHelper.lastPackedBrightness()));
+        setBrightness(CookieMonster.packedLongToCookie(ExtendedOpenGlHelper.lastPackedBrightness()));
     }
 
     /**
@@ -38,6 +38,6 @@ public abstract class CCRenderStateMixin {
      */
     @Overwrite
     public static void pushLightmap() {
-        CodeChickenLibHelper.setLightMapTextureCoordsPacked(CookieMonster.cookieToPackedLong(brightness));
+        ExtendedOpenGlHelper.setLightMapTextureCoordsPacked(CookieMonster.cookieToPackedLong(brightness));
     }
 }

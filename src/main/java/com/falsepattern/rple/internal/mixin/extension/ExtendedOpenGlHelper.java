@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.mixin.helper;
+package com.falsepattern.rple.internal.mixin.extension;
 
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
@@ -15,7 +15,7 @@ import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;
 
 @UtilityClass
-public final class CodeChickenLibHelper {
+public final class ExtendedOpenGlHelper {
     private static long LAST_PACKED_BRIGHTNESS = 0;
 
     public static void setLightMapTextureCoordsPacked(long packedBrightness) {
