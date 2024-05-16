@@ -77,6 +77,13 @@ public final class RPLEConfig {
         @Config.LangKey("config.rple.debug.cookieMonster")
         @Config.DefaultBoolean(false)
         public static boolean DEBUG_COOKIE_MONSTER;
+
+        @Config.Name("classBlockList")
+        @Config.Comment({"Toggles the logging of classes being blocked or permitted to handle cookie brightness.",
+                         "This relates to the colorization of entities and particles."})
+        @Config.LangKey("config.rple.debug.classBlockList")
+        @Config.DefaultBoolean(false)
+        public static boolean DEBUG_CLASS_BLOCK_LIST;
     }
 
     public enum LogMode {CUSTOM, ALL, NONE}

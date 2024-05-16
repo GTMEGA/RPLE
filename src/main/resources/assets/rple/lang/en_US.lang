@@ -44,3 +44,5 @@ config.rple.debug.asmTransformer=ASM Transformer Logging
 config.rple.debug.asmTransformer.tooltip=Toggles ASM transformation logging.
 config.rple.debug.cookieMonster=Cookie Monster Logging
 config.rple.debug.cookieMonster.tooltip=Toggles the logging of the Cookie Monster class, which handles the 'packing' of brightness values for rendering.
+config.rple.debug.classBlockList=Entity Class Blocking Logging
+config.rple.debug.classBlockList.tooltip=Toggles the logging of classes being blocked or permitted to handle cookie brightness. This relates to the colorization of entities and particles.

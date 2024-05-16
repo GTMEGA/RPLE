@@ -8,6 +8,7 @@
 
 package com.falsepattern.rple.internal.common.util;
 
+import com.falsepattern.rple.internal.LogHelper;
 import lombok.val;
 import org.apache.logging.log4j.Logger;
 
@@ -19,17 +20,18 @@ import java.util.WeakHashMap;
 import java.util.function.Function;
 
 import static com.falsepattern.rple.internal.LogHelper.createLogger;
+import static com.falsepattern.rple.internal.common.config.RPLEConfig.Debug.DEBUG_CLASS_BLOCK_LIST;
 
-public class ClassBlockList {
-    private final Logger LOG;
-    private final Set<String> PERMITTED = new HashSet<>();
-    private final Map<Class<?>, Boolean> BLOCK_LIST_CACHE = new WeakHashMap<>();
+public final class ClassBlockList {
+    private final Logger log;
+    private final Set<String> permitted = new HashSet<>();
+    private final Map<Class<?>, Boolean> blockListCache = new WeakHashMap<>();
     private final Function<Class<?>, Boolean> shouldBlockFn;
     private final String condName;
     private final Class<?> baseClass;
 
     public ClassBlockList(String name, String conditionTypeName, Class<?> baseClass, Function<Class<?>, Boolean> shouldBlockFn) {
-        LOG = createLogger(name);
+        this.log = createLogger(name);
         this.shouldBlockFn = shouldBlockFn;
         this.condName = conditionTypeName;
         this.baseClass = baseClass;
@@ -40,29 +42,30 @@ public class ClassBlockList {
     }
 
     public void permit(String klass) {
-        PERMITTED.add(klass);
+        permitted.add(klass);
     }
 
     public boolean isOnBlockList(Class<?> klass) {
-        if (BLOCK_LIST_CACHE.containsKey(klass)) {
-            return BLOCK_LIST_CACHE.get(klass);
-        }
+        if (blockListCache.containsKey(klass))
+            return blockListCache.get(klass);
+
         val classChain = new ArrayList<Class<?>>();
         boolean blocked = false;
         do {
-            if (BLOCK_LIST_CACHE.containsKey(klass)) {
-                blocked = BLOCK_LIST_CACHE.get(klass);
+            if (blockListCache.containsKey(klass)) {
+                blocked = blockListCache.get(klass);
                 break;
             }
             classChain.add(klass);
-            if (!PERMITTED.contains(klass.getName()) && shouldBlockFn.apply(klass)) {
+            if (!permitted.contains(klass.getName()) && shouldBlockFn.apply(klass)) {
                 blocked = true;
                 break;
             }
         } while ((klass = klass.getSuperclass()) != null && klass != baseClass);
         for (val c : classChain) {
-            LOG.debug("{} {} for {}", blocked ? "Blocking" : "Permitting", condName, c.getName());
-            BLOCK_LIST_CACHE.put(c, blocked);
+            if (LogHelper.shouldLogDebug(DEBUG_CLASS_BLOCK_LIST))
+                log.debug("{} {} for {}", blocked ? "Blocking" : "Permitting", condName, c.getName());
+            blockListCache.put(c, blocked);
         }
         return blocked;
     }

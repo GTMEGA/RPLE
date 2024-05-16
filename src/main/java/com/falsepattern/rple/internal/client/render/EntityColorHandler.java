@@ -15,7 +15,7 @@ import net.minecraft.entity.Entity;
 @UtilityClass
 public final class EntityColorHandler {
     private static final ClassBlockList BLOCK_LIST = new ClassBlockList("EntityColorHandler",
-                                                                        "colors",
+                                                                        "Color",
                                                                         Entity.class,
                                                                         EntityColorHandler::hasMethod);
 
