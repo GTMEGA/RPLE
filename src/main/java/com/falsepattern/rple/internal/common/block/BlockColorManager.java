@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.IdentityHashMap;
 
 import static com.falsepattern.rple.internal.RPLEDefaultValues.*;
-import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
+import static com.falsepattern.rple.internal.LogHelper.createLogger;
 import static com.falsepattern.rple.internal.common.block.NullBlockColorizer.nullBlockColorizer;
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.loadCustomConfig;
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.saveGeneratedConfig;

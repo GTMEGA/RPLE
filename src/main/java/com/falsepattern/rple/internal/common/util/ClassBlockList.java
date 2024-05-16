@@ -11,8 +11,6 @@ package com.falsepattern.rple.internal.common.util;
 import lombok.val;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.entity.Entity;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,7 +18,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.function.Function;
 
-import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
+import static com.falsepattern.rple.internal.LogHelper.createLogger;
 
 public class ClassBlockList {
     private final Logger LOG;

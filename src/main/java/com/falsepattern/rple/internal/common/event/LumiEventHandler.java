@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.val;
 import org.apache.logging.log4j.Logger;
 
-import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
+import static com.falsepattern.rple.internal.LogHelper.createLogger;
 import static com.falsepattern.rple.internal.common.world.RPLEWorldProvider.*;
 import static lombok.AccessLevel.PRIVATE;
 

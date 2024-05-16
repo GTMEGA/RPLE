@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.nio.ShortBuffer;
 
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
-import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
+import static com.falsepattern.rple.internal.LogHelper.createLogger;
 import static com.falsepattern.rple.internal.client.lightmap.LightMapPipeline.lightMapPipeline;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -37,7 +37,7 @@ public final class LightMap {
         bTexture = LightMapTexture.createLightMapTexture(BLUE_CHANNEL);
 
         texturesGenerated = true;
-        LOG.info("Generated light map textures");
+        LOG.info("Created LightMap");
     }
 
     public void update(float partialTick) {

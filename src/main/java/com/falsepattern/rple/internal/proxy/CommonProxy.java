@@ -45,7 +45,7 @@ public abstract class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent evt) {
-        if (RPLEConfig.ENABLE_LAMPS) {
+        if (RPLEConfig.General.ENABLE_LAMPS) {
             for (val lampData : Lamps.values()) {
                 val name = lampData.name().toLowerCase();
                 val lamp = GameRegistry.findBlock(Tags.MOD_ID, "lamp." + name);

@@ -7,16 +7,18 @@
 
 package com.falsepattern.rple.internal.client.render;
 
+import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.collection.CircularLongBuffer;
 import com.falsepattern.rple.internal.mixin.mixins.client.TessellatorMixin;
 import lombok.val;
 import lombok.var;
 import org.apache.logging.log4j.Logger;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
+import static com.falsepattern.rple.internal.LogHelper.shouldLogDebug;
+import static com.falsepattern.rple.internal.LogHelper.createLogger;
+import static com.falsepattern.rple.internal.common.config.RPLEConfig.Debug.DEBUG_COOKIE_MONSTER;
 
 /**
  * All parts of Minecraft's rendering internals expect light levels an int, but we can only fit our data into longs.
@@ -51,6 +53,8 @@ public final class CookieMonster {
 
     private static final long BROKEN_WARN_COLOR;
 
+    private static final ThreadLocal<ThreadState> THREAD_STATE = ThreadLocal.withInitial(ThreadState::new);
+
     static {
         val redBrightness = TessellatorBrightnessHelper
                 .lightLevelsToBrightnessForTessellator(0xF, 0xF);
@@ -63,26 +67,21 @@ public final class CookieMonster {
                                                                                                           blueBrightness);
     }
 
-    private static final AtomicInteger checkIndexCounter = new AtomicInteger(0);
-    private static int getCheckBits() {
-        return checkIndexCounter.getAndUpdate(x -> (x + 1) % NUM_CHECKS);
+    /**
+     * See {@link CookieMonster#inspectValue(int)}.
+     */
+    public enum IntType {
+        COOKIE,
+        VANILLA,
+        BROKEN
     }
-
-    private static class ThreadState {
-        public final int check = getCheckBits();
-        public final CircularLongBuffer lightValues = new CircularLongBuffer(NUM_INDICES);
-    }
-
-    private static final ThreadLocal<ThreadState> STATE = ThreadLocal.withInitial(ThreadState::new);
-
-    private static final AtomicBoolean WARNED_BEFORE = new AtomicBoolean(false);
 
     /**
      * @param packedLong A long value returned by {@link TessellatorBrightnessHelper}.
      * @return An opaque, temporary cookie representing the given long.
      */
     public static int packedLongToCookie(long packedLong) {
-        val state = STATE.get();
+        val state = THREAD_STATE.get();
         val index = state.lightValues.put(packedLong);
         val cookie = ((index << INDEX_SHIFT) & INDEX_MASK) | (state.check << CHECK_SHIFT) | COOKIE_BIT;
         return cookie | parity(cookie);
@@ -96,23 +95,17 @@ public final class CookieMonster {
      */
     public static long cookieToPackedLong(int cookie) {
         switch (inspectValue(cookie)) {
-            case COOKIE: {
-                return STATE.get().lightValues.get((cookie & INDEX_MASK) >>> INDEX_SHIFT);
-            }
-            case VANILLA: {
+            case COOKIE:
+                return THREAD_STATE.get().lightValues.get((cookie & INDEX_MASK) >>> INDEX_SHIFT);
+            case VANILLA:
                 // Vanilla fake-pack
                 return TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(cookie, cookie, cookie);
-            }
-            default: {
-                if (!WARNED_BEFORE.get()) {
-                    WARNED_BEFORE.set(true);
-                    //  Not throwing an exception here, this is only a graphical bug.
-                    //  Graphical bugs shouldn't cause crashes.
-                    LOG.error(new IllegalArgumentException("Illegal brightness value (did it get corrupted?) " +
-                                                           Integer.toHexString(cookie)));
+            default:
+                if (shouldLogDebug(DEBUG_COOKIE_MONSTER)) {
+                    LOG.warn("Illegal brightness value (Did a mod treat a cookie as a regular brightness value?)");
+                    LOG.trace("Stack trace:", new IllegalStateException());
                 }
                 return BROKEN_WARN_COLOR;
-            }
         }
     }
 
@@ -124,17 +117,19 @@ public final class CookieMonster {
      * brightness value, and {@link IntType#BROKEN} if it was neither.
      */
     public static IntType inspectValue(int potentialCookie) {
-        val state = STATE.get();
+        val state = THREAD_STATE.get();
         if ((potentialCookie & COOKIE_BIT) != 0 && parity(potentialCookie) == 0 && (potentialCookie & ZERO_MASK) == 0) {
             if (((potentialCookie & CHECK_MASK) >>> CHECK_SHIFT) != state.check) {
-                System.err.println("Cookie passed through thread boundary!");
+               if (shouldLogDebug(DEBUG_COOKIE_MONSTER)) {
+                   LOG.warn("Cookie passed through thread boundary{}", Compat.falseTweaksThreadedChunksEnabled() ? " (Is a mod not compatible with FalseTweaks Threaded Chunks?)" : "");
+                   LOG.trace("Stack trace:", new IllegalStateException());
+               }
             }
             return IntType.COOKIE;
-        } else if ((potentialCookie & BRIGHTNESS_MASK) == potentialCookie) {
-            return IntType.VANILLA;
-        } else {
-            return IntType.BROKEN;
         }
+        if ((potentialCookie & BRIGHTNESS_MASK) == potentialCookie)
+            return IntType.VANILLA;
+        return IntType.BROKEN;
     }
 
     /**
@@ -152,12 +147,10 @@ public final class CookieMonster {
         return y & 1;
     }
 
-    /**
-     * See {@link CookieMonster#inspectValue(int)}.
-     */
-    public enum IntType {
-        COOKIE,
-        VANILLA,
-        BROKEN
+    private static class ThreadState {
+        private static final AtomicInteger checkIndexCounter = new AtomicInteger(0);
+
+        private final int check = checkIndexCounter.getAndUpdate(x -> (x + 1) % NUM_CHECKS);
+        private final CircularLongBuffer lightValues = new CircularLongBuffer(NUM_INDICES);
     }
 }

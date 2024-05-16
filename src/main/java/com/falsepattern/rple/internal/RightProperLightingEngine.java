@@ -13,8 +13,6 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
 import lombok.NoArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import static com.falsepattern.rple.internal.Tags.*;
 
@@ -28,10 +26,6 @@ import static com.falsepattern.rple.internal.Tags.*;
 public final class RightProperLightingEngine {
     @SidedProxy(clientSide = CLIENT_PROXY_CLASS_NAME, serverSide = SERVER_PROXY_CLASS_NAME)
     public static CommonProxy PROXY;
-
-    public static Logger createLogger(String name) {
-        return LogManager.getLogger("RPLE|" + name);
-    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent evt) {

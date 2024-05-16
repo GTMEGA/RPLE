@@ -26,7 +26,7 @@ public final class RPLEGuiFactory implements SimpleGuiFactory {
 
     public static final class RPLEGuiConfig extends SimpleGuiConfig {
         public RPLEGuiConfig(GuiScreen parent) throws ConfigException {
-            super(parent, MOD_ID, MOD_NAME, RPLEConfig.class);
+            super(parent, MOD_ID, MOD_NAME, RPLEConfig.configClasses());
         }
     }
 }

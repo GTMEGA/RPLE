@@ -11,11 +11,6 @@ import com.falsepattern.rple.internal.common.util.ClassBlockList;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import net.minecraft.entity.Entity;
-import org.apache.logging.log4j.Logger;
-
-import java.util.*;
-
-import static com.falsepattern.rple.internal.RightProperLightingEngine.createLogger;
 
 @UtilityClass
 public final class EntityColorHandler {
