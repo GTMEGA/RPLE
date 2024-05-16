@@ -22,6 +22,7 @@ import static com.falsepattern.rple.internal.Tags.*;
      version = VERSION,
      name = MOD_NAME,
      acceptedMinecraftVersions = MINECRAFT_VERSION,
+     guiFactory = MOD_GUI_FACTORY_CLASS_NAME,
      dependencies = DEPENDENCIES)
 @NoArgsConstructor
 public final class RightProperLightingEngine {

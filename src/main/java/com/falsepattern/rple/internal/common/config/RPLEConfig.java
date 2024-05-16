@@ -14,9 +14,10 @@ import static com.falsepattern.rple.internal.Tags.MOD_ID;
 
 @Config(modid = MOD_ID)
 public final class RPLEConfig {
-    @Config.Comment("Set this to true if you want to enable the default lamps.\n" +
-                    "(Based on ProjectRed's lamps, but much more optimized)")
+    @Config.Comment({"Set this to true if you want to enable the default lamps.",
+                     "(Based on ProjectRed's lamps, but much more optimized)"})
     @Config.Name("craftableLamps")
+    @Config.LangKey("config.rple.craftablelamps")
     @Config.DefaultBoolean(true)
     public static boolean ENABLE_LAMPS;
 

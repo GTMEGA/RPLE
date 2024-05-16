@@ -30,3 +30,6 @@ tile.rple.lamp.orange.name=Orange Lamp
 tile.rple.lamp.orange.inverted.name=Orange Lamp (Inverted)
 tile.rple.lamp.white.name=White Lamp
 tile.rple.lamp.white.inverted.name=White Lamp (Inverted)
+
+config.rple.craftablelamps=Craftable Lamps
+config.rple.craftablelamps.tooltip=Set this to true if you want to enable the default lamps.\n(Based on ProjectRed's lamps, but much more optimized)

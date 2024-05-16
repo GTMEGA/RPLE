@@ -25,4 +25,6 @@ public final class Tags {
     public static final String PROXY_GROUP_NAME = INTERNAL_GROUP_NAME + ".proxy";
     public static final String CLIENT_PROXY_CLASS_NAME = PROXY_GROUP_NAME + ".ClientProxy";
     public static final String SERVER_PROXY_CLASS_NAME = PROXY_GROUP_NAME + ".ServerProxy";
+
+    public static final String MOD_GUI_FACTORY_CLASS_NAME = INTERNAL_GROUP_NAME + ".client.config.RPLEGuiFactory";
 }
