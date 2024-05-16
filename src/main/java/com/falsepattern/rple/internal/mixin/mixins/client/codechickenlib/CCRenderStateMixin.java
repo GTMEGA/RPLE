@@ -17,11 +17,14 @@ import org.spongepowered.asm.mixin.Shadow;
 // TODO: Suspected reason that CCL-rendered items have broken colors.
 @Mixin(value = CCRenderState.class, remap = false)
 public abstract class CCRenderStateMixin {
-    @Shadow
-    public static int brightness;
 
     @Shadow
     public static void setBrightness(int brightness) {}
+
+    @Shadow
+    public static int brightness() {
+        return 0;
+    }
 
     /**
      * @author FalsePattern
@@ -38,6 +41,6 @@ public abstract class CCRenderStateMixin {
      */
     @Overwrite
     public static void pushLightmap() {
-        ExtendedOpenGlHelper.setLightMapTextureCoordsPacked(CookieMonster.cookieToPackedLong(brightness));
+        ExtendedOpenGlHelper.setLightMapTextureCoordsPacked(CookieMonster.cookieToPackedLong(brightness()));
     }
 }

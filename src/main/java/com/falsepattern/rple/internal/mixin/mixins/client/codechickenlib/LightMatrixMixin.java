@@ -39,11 +39,11 @@ public abstract class LightMatrixMixin {
      */
     @Overwrite
     public void operate() {
-        val lc = CCRenderState.lc;
+        val lc = CCRenderState.lc();
         val a = ao(lc.side);
         val f = (a[0] * lc.fa) + (a[1] * lc.fb) + (a[2] * lc.fc) + (a[3] * lc.fd);
         val b = brightness(lc.side);
-        CCRenderState.setColour(ColourRGBA.multiplyC(CCRenderState.colour, f));
+        CCRenderState.setColour(ColourRGBA.multiplyC(CCRenderState.colour(), f));
         CCRenderState.setBrightness(CookieMonsterHelper.mixAOBrightness(b[0], b[1], b[2], b[3], lc.fa, lc.fb, lc.fc, lc.fd));
     }
 }
