@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.nio.ShortBuffer;
 
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
-import static com.falsepattern.rple.internal.LogHelper.createLogger;
+import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
 import static com.falsepattern.rple.internal.client.lightmap.LightMapPipeline.lightMapPipeline;
 import static lombok.AccessLevel.PRIVATE;
 

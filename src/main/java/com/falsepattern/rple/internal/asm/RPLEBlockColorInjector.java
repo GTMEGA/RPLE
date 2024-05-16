@@ -1,7 +1,7 @@
 package com.falsepattern.rple.internal.asm;
 
 import com.falsepattern.lib.asm.IClassNodeTransformer;
-import com.falsepattern.rple.internal.LogHelper;
+import com.falsepattern.rple.internal.common.util.LogHelper;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.asm.util.MethodDecl;
 import com.falsepattern.rple.internal.asm.util.Util;

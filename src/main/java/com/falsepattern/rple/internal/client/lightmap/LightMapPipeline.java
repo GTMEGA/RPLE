@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 import static com.falsepattern.rple.internal.RPLEDefaultValues.registerDefaultLightMaps;
-import static com.falsepattern.rple.internal.LogHelper.createLogger;
+import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
 import static com.falsepattern.rple.internal.client.lightmap.LightMapConstants.LIGHT_MAP_1D_SIZE;
 import static com.falsepattern.rple.internal.client.lightmap.LightMapConstants.LIGHT_MAP_2D_SIZE;
 import static com.falsepattern.rple.internal.common.collection.PriorityPair.wrappedWithPriority;

@@ -8,7 +8,6 @@
 
 package com.falsepattern.rple.internal.common.util;
 
-import com.falsepattern.rple.internal.LogHelper;
 import lombok.val;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +18,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.function.Function;
 
-import static com.falsepattern.rple.internal.LogHelper.createLogger;
+import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
 import static com.falsepattern.rple.internal.common.config.RPLEConfig.Debug.DEBUG_CLASS_BLOCK_LIST;
 
 public final class ClassBlockList {

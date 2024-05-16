@@ -30,7 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static com.falsepattern.rple.internal.LogHelper.createLogger;
+import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
 
 @UtilityClass
 public final class ColorConfigLoader {

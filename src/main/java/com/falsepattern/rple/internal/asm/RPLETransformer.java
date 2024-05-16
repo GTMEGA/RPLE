@@ -10,18 +10,15 @@ package com.falsepattern.rple.internal.asm;
 
 import com.falsepattern.lib.asm.IClassNodeTransformer;
 import com.falsepattern.lib.asm.SmartTransformer;
-import com.falsepattern.rple.internal.LogHelper;
-import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.falsepattern.rple.internal.LogHelper.createLogger;
+import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
 
 @Accessors(fluent = true, chain = false)
 public final class RPLETransformer implements SmartTransformer {

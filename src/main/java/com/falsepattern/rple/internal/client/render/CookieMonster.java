@@ -16,8 +16,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.falsepattern.rple.internal.LogHelper.shouldLogDebug;
-import static com.falsepattern.rple.internal.LogHelper.createLogger;
+import static com.falsepattern.rple.internal.common.util.LogHelper.shouldLogDebug;
+import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
 import static com.falsepattern.rple.internal.common.config.RPLEConfig.Debug.DEBUG_COOKIE_MONSTER;
 
 /**

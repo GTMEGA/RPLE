@@ -1,4 +1,4 @@
-package com.falsepattern.rple.internal;
+package com.falsepattern.rple.internal.common.util;
 
 import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import lombok.experimental.UtilityClass;
