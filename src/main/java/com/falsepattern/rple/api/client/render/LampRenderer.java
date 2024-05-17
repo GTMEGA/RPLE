@@ -10,6 +10,7 @@ package com.falsepattern.rple.api.client.render;
 
 import com.falsepattern.falsetweaks.api.triangulator.ToggleableTessellator;
 import com.falsepattern.rple.api.common.lamp.LampBlock;
+import com.falsepattern.rple.internal.common.util.FastThreadLocal;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -291,7 +292,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         }
     }
 
-    private static final ThreadLocal<SegmentBuffer> S_BUF = ThreadLocal.withInitial(SegmentBuffer::new);
+    private static final FastThreadLocal<SegmentBuffer> S_BUF = FastThreadLocal.withInitial(SegmentBuffer::new);
 
     private static int genSegments(SegmentBuffer sBuf, int neighbors, Sampler sampler) {
         sBuf.init();

@@ -11,6 +11,7 @@ package com.falsepattern.rple.internal.asm;
 import com.falsepattern.lib.asm.IClassNodeTransformer;
 import com.falsepattern.lib.asm.SmartTransformer;
 import com.falsepattern.rple.internal.common.config.RPLEConfig;
+import com.falsepattern.rple.internal.common.util.FastThreadLocal;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +27,7 @@ public final class RPLETransformer implements SmartTransformer {
 
     static {
         RPLEConfig.poke();
+        FastThreadLocal.setMainThread(Thread.currentThread());
     }
 
     @Getter

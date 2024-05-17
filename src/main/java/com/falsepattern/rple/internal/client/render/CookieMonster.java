@@ -9,6 +9,7 @@ package com.falsepattern.rple.internal.client.render;
 
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.collection.CircularLongBuffer;
+import com.falsepattern.rple.internal.common.util.FastThreadLocal;
 import com.falsepattern.rple.internal.mixin.mixins.client.TessellatorMixin;
 import lombok.val;
 import lombok.var;
@@ -53,7 +54,7 @@ public final class CookieMonster {
 
     private static final long BROKEN_WARN_COLOR;
 
-    private static final ThreadLocal<ThreadState> THREAD_STATE = ThreadLocal.withInitial(ThreadState::new);
+    private static final FastThreadLocal<ThreadState> THREAD_STATE = FastThreadLocal.withInitial(ThreadState::new);
 
     static {
         val redBrightness = TessellatorBrightnessHelper
