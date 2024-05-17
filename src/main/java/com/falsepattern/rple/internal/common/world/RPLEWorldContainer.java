@@ -298,7 +298,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
         if (posZ < -30000000 || posZ >= 30000000)
             return lightType.defaultLightValue();
 
-        val block = blockStorageRoot.lumi$getBlock(posX, posY, posZ);
+        val block = getBlock(chunk, posX, posY, posZ);
         if (block.getUseNeighborBrightness()) {
             var lightValue = 0;
             lightValue = Math.max(lightValue, getNeighborLightValue(chunk, lightType, posX, posY, posZ, UP));
@@ -311,6 +311,16 @@ public final class RPLEWorldContainer implements RPLEWorld {
         return lumi$getBrightness(chunk, lightType, posX, posY, posZ);
     }
     // endregion
+
+    private Block getBlock(@Nullable RPLEChunk chunk, int posX, int posY, int posZ) {
+        if (chunk != null) {
+            val subChunkPosX = posX & 15;
+            val subChunkPosZ = posZ & 15;
+            val rootChunk = chunk.lumi$root();
+            return rootChunk.lumi$getBlock(subChunkPosX, posY, subChunkPosZ);
+        }
+        return blockStorageRoot.lumi$getBlock(posX, posY, posZ);
+    }
 
     private int getNeighborLightValue(@Nullable RPLEChunk chunk, LightType lightType, int posX, int posY, int posZ, ForgeDirection direction) {
         int chunkXPre = posX >> 4;
