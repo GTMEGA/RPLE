@@ -34,20 +34,25 @@ public abstract class ShadersMixin {
     @Shadow
     public static void setProgramUniform1i(String name, int value) {}
 
-    @Inject(method = "setProgramUniform1i",
-            at = @At("HEAD"),
+    @Inject(method = "useProgram",
+            at = @At(value = "CONSTANT",
+                     args = "stringValue=lightmap"),
             require = 1)
-    private static void setProgramUniform1iHijack(String name, int value, CallbackInfo ci) {
-        if ("lightmap".equals(name)) {
-            setProgramUniform1i(RPLEShaderConstants.RED_LIGHT_MAP_UNIFORM_NAME,
-                                LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
-            setProgramUniform1i(RPLEShaderConstants.GREEN_LIGHT_MAP_UNIFORM_NAME,
-                                LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
-            setProgramUniform1i(RPLEShaderConstants.BLUE_LIGHT_MAP_UNIFORM_NAME,
-                                LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
-        } else if ("texture".equals(name)) {
-            setProgramUniform1i(RPLEShaderConstants.TEXTURING_ENABLED_ATTRIB_NAME, 1);
-        }
+    private static void setLightMapUniform(int program, CallbackInfo ci) {
+        setProgramUniform1i(RPLEShaderConstants.RED_LIGHT_MAP_UNIFORM_NAME,
+                            LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
+        setProgramUniform1i(RPLEShaderConstants.GREEN_LIGHT_MAP_UNIFORM_NAME,
+                            LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
+        setProgramUniform1i(RPLEShaderConstants.BLUE_LIGHT_MAP_UNIFORM_NAME,
+                            LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
+    }
+
+    @Inject(method = "useProgram",
+            at = @At(value = "CONSTANT",
+                     args = "stringValue=texture"),
+            require = 1)
+    private static void setTextureUniform(int program, CallbackInfo ci) {
+        setProgramUniform1i(RPLEShaderConstants.TEXTURING_ENABLED_ATTRIB_NAME, 1);
     }
 
     @Redirect(method = "createVertShader",
