@@ -40,25 +40,27 @@ public abstract class OpenGLHelperMixin {
             cancellable = true,
             require = 1)
     private static void onSet(int textureUnit, float textureU, float textureV, CallbackInfo ci) {
+        if (ExtendedOpenGlHelper.BYPASS)
+            return;
         val brightness = (int) textureU | ((int) textureV << 16);
         if (CookieMonster.inspectValue(brightness) == CookieMonster.IntType.COOKIE) {
             val packedBrightness = CookieMonster.cookieToPackedLong(brightness);
             ExtendedOpenGlHelper.setLightMapTextureCoordsPacked(packedBrightness);
             ci.cancel();
+            return;
         }
+        ExtendedOpenGlHelper.BYPASS = true;
+        ExtendedOpenGlHelper.setPackedBrightnessFromMonochrome(brightness);
         if (textureUnit == lightmapTexUnit) {
             if (Compat.shadersEnabled()) {
-                if (lightmapTexUnit != LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING)
-                    setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, textureU, textureV);
                 setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, textureU, textureV);
                 setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, textureU, textureV);
             } else {
-                if (lightmapTexUnit != LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING)
-                    setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
                 setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
                 setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
             }
         }
+        ExtendedOpenGlHelper.BYPASS = false;
     }
 
     @Redirect(method = "setLightmapTextureCoords",

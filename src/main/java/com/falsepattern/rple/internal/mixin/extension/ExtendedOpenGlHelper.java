@@ -18,7 +18,14 @@ import net.minecraft.client.renderer.OpenGlHelper;
 public final class ExtendedOpenGlHelper {
     private static long LAST_PACKED_BRIGHTNESS = 0;
 
+    public static boolean BYPASS = false;
+
+    public static void setPackedBrightnessFromMonochrome(int monochrome) {
+        LAST_PACKED_BRIGHTNESS = TessellatorBrightnessHelper.monochromeBrightnessToPackedLong(monochrome);
+    }
+
     public static void setLightMapTextureCoordsPacked(long packedBrightness) {
+        BYPASS = true;
         LAST_PACKED_BRIGHTNESS = packedBrightness;
 
         val redBrightness = TessellatorBrightnessHelper.getBrightnessRed(packedBrightness);
@@ -46,6 +53,7 @@ public final class ExtendedOpenGlHelper {
                                                   blueBrightness & 0xFFFF,
                                                   blueBrightness >>> 16);
         }
+        BYPASS = false;
     }
 
     public static long lastPackedBrightness() {
