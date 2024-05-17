@@ -28,7 +28,7 @@ public enum TargetedMod implements ITargetedMod {
     ARCHITECTURE_CRAFT("ArchitectureCraft", false, startsWith("architecturecraft-")),
     PROJECT_RED_CORE("ProjectRed Core", false, startsWith("projectred").and(contains("base"))),
     PROJECT_RED_ILLUMINATION("ProjectRed Illumination", false, startsWith("projectred").and(contains("lighting"))),
-    PROJECT_RED_COMBINED_JAR("ProjectRed Combined Jar", false, projectRedCombinedJarCondition()),
+    PROJECT_RED_COMBINED_JAR("ProjectRed Combined Jar", false, projectRedCombinedJarCondition().or(projectRedMegaJarCondition())),
     APPLIED_ENERGISTICS_2("Applied Energistics 2", false, startsWith("appliedenergistics2-")),
     ENDER_IO("Ender IO", false, startsWith("enderio")),
     STORAGE_DRAWERS("Storage Drawers", false, startsWith("storagedrawers-")),
@@ -47,5 +47,9 @@ public enum TargetedMod implements ITargetedMod {
     private static Predicate<String> projectRedCombinedJarCondition() {
         return ((Predicate<String>) str -> str.matches("projectred-\\d+\\.\\d+\\.\\d+"))
                 .or(str -> str.matches("projectred-\\d+\\.\\d+\\.\\d+pre\\d+\\.\\d+"));
+    }
+
+    private static Predicate<String> projectRedMegaJarCondition() {
+        return str -> str.matches("projectred-mc1.7.10");
     }
 }
