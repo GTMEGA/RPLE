@@ -12,11 +12,10 @@ import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
-import net.minecraft.block.Block;
-import net.minecraft.world.IBlockAccess;
-
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
 import lombok.val;
+import net.minecraft.block.Block;
+import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
@@ -42,6 +41,8 @@ public final class RPLEBlockBrightnessUtil {
         return getRGBBrightnessForTessellator(world, posX, posY, posZ, minBlockLight, minBlockLight, minBlockLight);
     }
 
+    // TODO: Wire this up to try casting "World" into RPLEClientBlockStorage
+    // TODO: The Min R/G/B logic needs to be done here instead.
     public static int getRGBBrightnessForTessellator(@NotNull IBlockAccess world,
                                                      int posX,
                                                      int posY,

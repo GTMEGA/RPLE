@@ -65,6 +65,9 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
         return rple$getChunkRootFromChunkPosIfExists(chunkPosX, chunkPosZ);
     }
 
+    // TODO: Will this break when using RPLE Threading? Do we even need this?
+    //
+    // If you do fix it, LUMINA has nearly the same code, fix it there too tbh.
     @Override
     public @Nullable RPLEChunkRoot rple$getChunkRootFromChunkPosIfExists(int chunkPosX, int chunkPosZ) {
         if (chunkProvider == null)
