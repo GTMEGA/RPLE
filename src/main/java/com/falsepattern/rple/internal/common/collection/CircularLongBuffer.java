@@ -16,22 +16,19 @@ import java.util.function.IntUnaryOperator;
 public final class CircularLongBuffer {
     private final int size;
     private final long[] buffer;
-    private final AtomicInteger counter;
+    private int counter;
 
     public CircularLongBuffer(int size) {
         this.size = size;
         this.buffer = new long[size];
-        this.counter = new AtomicInteger(0);
+        this.counter = 0;
     }
 
 
     private int getAndIncrementIndexModular() {
-        int prev, next;
-        do {
-            prev = counter.get();
-            next = (prev + 1) % size;
-        } while (!counter.compareAndSet(prev, next));
-        return prev;
+        int i = counter;
+        counter = (counter + 1) % size;
+        return i;
     }
 
     /**

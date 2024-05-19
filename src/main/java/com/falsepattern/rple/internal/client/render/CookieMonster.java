@@ -36,21 +36,29 @@ public final class CookieMonster {
     private static final Logger LOG = createLogger("CookieMonster");
 
     // Cookie format (bits):
+    // Packed long
     // 0100 0000 IIII IIII IIII IIII CCCC CCCP
     // I - index bits
     // C - check bits
     // P - parity
+    //
+    // Cookied 4 bit RGB
+    // 0110 0000 BBBB GGGG RRRR bbbb gggg rrrr
     private static final int NUM_INDICES = 0x100000;
     private static final int INDEX_SHIFT = 8;
-    private static final int PARITY_BIT = 0x00000001;
+    private static final int PARITY_BIT = 0x0000_0001;
     private static final int INDEX_MASK = (NUM_INDICES - 1) << INDEX_SHIFT;
     private static final int CHECK_SHIFT = 1;
-    private static final int NUM_CHECKS = 0b10000000;
+    private static final int NUM_CHECKS = 0b1_0000_000;
     private static final int CHECK_MASK = (NUM_CHECKS - 1) << CHECK_SHIFT;
-    private static final int COOKIE_BIT = 0x40000000;
-    private static final int ZERO_MASK = ~(PARITY_BIT | INDEX_MASK | CHECK_MASK | COOKIE_BIT);
+    private static final int COOKIE_BIT = 0x4000_0000;
+    private static final int ZERO_MASK_COOKIE = ~(PARITY_BIT | INDEX_MASK | CHECK_MASK | COOKIE_BIT);
 
-    private static final int BRIGHTNESS_MASK = 0x00FF00FF;
+    private static final int RGB_BIT = 0x2000_0000;
+    private static final int RGB_MASK = 0x00FF_FFFF;
+    private static final int ZERO_MASK_RGB = ~(COOKIE_BIT | RGB_BIT | RGB_MASK);
+
+    private static final int BRIGHTNESS_MASK = 0x00FF_00FF;
 
     private static final long BROKEN_WARN_COLOR;
 
@@ -82,10 +90,18 @@ public final class CookieMonster {
      * @return An opaque, temporary cookie representing the given long.
      */
     public static int packedLongToCookie(long packedLong) {
+        int rgb = TessellatorBrightnessHelper.tryRGBFromPackedBrightness(packedLong);
+        if (rgb != -1) {
+            return rgb | COOKIE_BIT | RGB_BIT;
+        }
         val state = THREAD_STATE.get();
         val index = state.lightValues.put(packedLong);
         val cookie = ((index << INDEX_SHIFT) & INDEX_MASK) | (state.check << CHECK_SHIFT) | COOKIE_BIT;
         return cookie | parity(cookie);
+    }
+
+    public static int rgbToCookie(int rgb) {
+        return (rgb & RGB_MASK) | COOKIE_BIT | RGB_BIT;
     }
 
     /**
@@ -97,6 +113,9 @@ public final class CookieMonster {
     public static long cookieToPackedLong(int cookie) {
         switch (inspectValue(cookie)) {
             case COOKIE:
+                if ((cookie & RGB_BIT) != 0) {
+                    return TessellatorBrightnessHelper.packedBrightnessFromRGB(cookie & RGB_MASK);
+                }
                 return THREAD_STATE.get().lightValues.get((cookie & INDEX_MASK) >>> INDEX_SHIFT);
             case VANILLA:
                 // Vanilla fake-pack
@@ -118,8 +137,16 @@ public final class CookieMonster {
      * brightness value, and {@link IntType#BROKEN} if it was neither.
      */
     public static IntType inspectValue(int potentialCookie) {
-        val state = THREAD_STATE.get();
-        if ((potentialCookie & COOKIE_BIT) != 0 && parity(potentialCookie) == 0 && (potentialCookie & ZERO_MASK) == 0) {
+        if ((potentialCookie & COOKIE_BIT) == 0) {
+            if ((potentialCookie & BRIGHTNESS_MASK) == potentialCookie)
+                return IntType.VANILLA;
+            return IntType.BROKEN;
+        }
+        if ((potentialCookie & RGB_BIT) != 0 && (potentialCookie & ZERO_MASK_RGB) == 0) {
+            return IntType.COOKIE;
+        }
+        if (parity(potentialCookie) == 0 && (potentialCookie & ZERO_MASK_COOKIE) == 0) {
+            val state = THREAD_STATE.get();
             if (((potentialCookie & CHECK_MASK) >>> CHECK_SHIFT) != state.check) {
                if (shouldLogDebug(DEBUG_COOKIE_MONSTER)) {
                    LOG.warn("Cookie passed through thread boundary{}", Compat.falseTweaksThreadedChunksEnabled() ? " (Is a mod not compatible with FalseTweaks Threaded Chunks?)" : "");
@@ -128,8 +155,6 @@ public final class CookieMonster {
             }
             return IntType.COOKIE;
         }
-        if ((potentialCookie & BRIGHTNESS_MASK) == potentialCookie)
-            return IntType.VANILLA;
         return IntType.BROKEN;
     }
 

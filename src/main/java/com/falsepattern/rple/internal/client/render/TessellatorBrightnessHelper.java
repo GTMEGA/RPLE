@@ -104,59 +104,35 @@ public final class TessellatorBrightnessHelper {
 
     //Fast paths for converting light levels to packed values
 
-    public static long packedBrightnessFrom4BitLightLevels(int sR, int sG, int sB, int bR, int bG, int bB) {
-        sR &= 0xF;
-        bR &= 0xF;
-        sG &= 0xF;
-        bG &= 0xF;
-        sB &= 0xF;
-        bB &= 0xF;
-
-        long lsR = ((long)sR) << PACKED_RED_OFFSET_SKY_4BIT;
-        long lbR = ((long)bR) << PACKED_RED_OFFSET_BLOCK_4BIT;
-        long lsG = ((long)sG) << PACKED_GREEN_OFFSET_SKY_4BIT;
-        long lbG = ((long)bG) << PACKED_GREEN_OFFSET_BLOCK_4BIT;
-        long lsB = ((long)sB) << PACKED_BLUE_OFFSET_SKY_4BIT;
-        long lbB = ((long)bB) << PACKED_BLUE_OFFSET_BLOCK_4BIT;
-        return lsR | lbR | lsG | lbG | lsB | lbB;
-    }
-
-    public static long packedBrightnessFrom4BitLightLevelsBlocks(int bR, int bG, int bB) {
-        bR &= 0xF;
-        bG &= 0xF;
-        bB &= 0xF;
-        long lbR = ((long)bR) << PACKED_RED_OFFSET_BLOCK_4BIT;
-        long lbG = ((long)bG) << PACKED_GREEN_OFFSET_BLOCK_4BIT;
-        long lbB = ((long)bB) << PACKED_BLUE_OFFSET_BLOCK_4BIT;
-        return lbR | lbG | lbB;
-    }
-
-    private static final long BLOCK_REMOVE_BITMASK = ~((0xFFL << PACKED_RED_OFFSET_BLOCK) | (0xFFL << PACKED_GREEN_OFFSET_BLOCK) | (0xFFL << PACKED_BLUE_OFFSET_BLOCK));
-
-    public static long weaveMinBlockLightLevels(long packed, int minRedBlockLight, int minGreenBlockLight, int minBlueBlockLight) {
-        //extract
-        int containedRedBlockLight = (int) ((packed >>> PACKED_RED_OFFSET_BLOCK) & 0xFF);
-        int containedGreenBlockLight = (int) ((packed >>> PACKED_GREEN_OFFSET_BLOCK) & 0xFF);
-        int containedBlueBlockLight = (int) ((packed >>> PACKED_BLUE_OFFSET_BLOCK) & 0xFF);
-
-        //align
-        minRedBlockLight = (minRedBlockLight & 0xF) << 4;
-        minGreenBlockLight = (minGreenBlockLight & 0xF) << 4;
-        minBlueBlockLight = (minBlueBlockLight & 0xF) << 4;
-
-        //max
-        int redBlockLight = Math.max(minRedBlockLight, containedRedBlockLight);
-        int greenBlockLight = Math.max(minGreenBlockLight, containedGreenBlockLight);
-        int blueBlockLight = Math.max(minBlueBlockLight, containedBlueBlockLight);
-
-        //mask out bits
-        packed &= BLOCK_REMOVE_BITMASK;
-        //weave
-        packed |= (long) redBlockLight << PACKED_RED_OFFSET_BLOCK;
-        packed |= (long) greenBlockLight << PACKED_GREEN_OFFSET_BLOCK;
-        packed |= (long) blueBlockLight << PACKED_BLUE_OFFSET_BLOCK;
-
+    public static long packedBrightnessFromRGB(int rgb) {
+        long packed = 0L;
+        packed |= (long) ((rgb >>> RGBHelper.RGB_RED_OFFSET_BLOCK) & 0xF) << PACKED_RED_OFFSET_BLOCK_4BIT;
+        packed |= (long) ((rgb >>> RGBHelper.RGB_GREEN_OFFSET_BLOCK) & 0xF) << PACKED_GREEN_OFFSET_BLOCK_4BIT;
+        packed |= (long) ((rgb >>> RGBHelper.RGB_BLUE_OFFSET_BLOCK) & 0xF) << PACKED_BLUE_OFFSET_BLOCK_4BIT;
+        packed |= (long) ((rgb >>> RGBHelper.RGB_RED_OFFSET_SKY) & 0xF) << PACKED_RED_OFFSET_SKY_4BIT;
+        packed |= (long) ((rgb >>> RGBHelper.RGB_GREEN_OFFSET_SKY) & 0xF) << PACKED_GREEN_OFFSET_SKY_4BIT;
+        packed |= (long) ((rgb >>> RGBHelper.RGB_BLUE_OFFSET_SKY) & 0xF) << PACKED_BLUE_OFFSET_SKY_4BIT;
         return packed;
+    }
+
+    private static final long PACKED_BRIGHTNESS_4BIT_LOSSY = (0xFL << PACKED_RED_OFFSET_SKY) |
+                                                             (0xFL << PACKED_RED_OFFSET_BLOCK) |
+                                                             (0xFL << PACKED_GREEN_OFFSET_SKY) |
+                                                             (0xFL << PACKED_GREEN_OFFSET_BLOCK) |
+                                                             (0xFL << PACKED_BLUE_OFFSET_SKY) |
+                                                             (0xFL << PACKED_BLUE_OFFSET_BLOCK);
+
+    public static int tryRGBFromPackedBrightness(long packed) {
+        if ((packed & PACKED_BRIGHTNESS_4BIT_LOSSY) != 0)
+            return -1;
+        int rgb = 0;
+        rgb |= ((int)(packed >>> PACKED_RED_OFFSET_BLOCK_4BIT) & 0xF) << RGBHelper.RGB_RED_OFFSET_BLOCK;
+        rgb |= ((int)(packed >>> PACKED_GREEN_OFFSET_SKY_4BIT) & 0xF) << RGBHelper.RGB_GREEN_OFFSET_SKY;
+        rgb |= ((int)(packed >>> PACKED_BLUE_OFFSET_BLOCK_4BIT) & 0xF) << RGBHelper.RGB_BLUE_OFFSET_BLOCK;
+        rgb |= ((int)(packed >>> PACKED_RED_OFFSET_SKY_4BIT) & 0xF) << RGBHelper.RGB_RED_OFFSET_SKY;
+        rgb |= ((int)(packed >>> PACKED_GREEN_OFFSET_BLOCK_4BIT) & 0xF) << RGBHelper.RGB_GREEN_OFFSET_BLOCK;
+        rgb |= ((int)(packed >>> PACKED_BLUE_OFFSET_SKY_4BIT) & 0xF) << RGBHelper.RGB_BLUE_OFFSET_SKY;
+        return rgb;
     }
 
     public static long monochromeBrightnessToPackedLong(int brightness) {
@@ -297,28 +273,6 @@ public final class TessellatorBrightnessHelper {
             }
         }
         return resultPacked;
-    }
-
-    public static long packedMax(long lightValueA, long lightValueB, long lightValueC, long lightValueD, long lightValueE) {
-        long packedResult = 0L;
-        for (int shift = 0; shift <= 40; shift += 8) {
-            int a = (int) ((lightValueA >>> shift) & 0xFF);
-            int b = (int) ((lightValueB >>> shift) & 0xFF);
-            int c = (int) ((lightValueC >>> shift) & 0xFF);
-            int d = (int) ((lightValueD >>> shift) & 0xFF);
-            int e = (int) ((lightValueE >>> shift) & 0xFF);
-
-            int max = 0;
-            //noinspection DataFlowIssue
-            max = Math.max(max, a);
-            max = Math.max(max, b);
-            max = Math.max(max, c);
-            max = Math.max(max, d);
-            max = Math.max(max, e);
-
-            packedResult |= ((long)max) << shift;
-        }
-        return packedResult;
     }
 
     /**

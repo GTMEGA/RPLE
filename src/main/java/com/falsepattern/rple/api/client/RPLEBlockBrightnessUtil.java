@@ -10,10 +10,12 @@ package com.falsepattern.rple.api.client;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.client.render.CookieMonster;
+import com.falsepattern.rple.internal.client.render.RGBHelper;
 import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.client.storage.RPLEClientBlockStorage;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
+import com.llamalad7.mixinextras.sugar.Local;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.ChunkCache;
@@ -25,6 +27,8 @@ import static com.falsepattern.rple.api.common.RPLEBlockUtil.getBlockColoredBrig
 import static com.falsepattern.rple.api.common.RPLEColorUtil.COLOR_MIN;
 import static com.falsepattern.rple.api.common.RPLEColorUtil.errorColor;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
+import static com.falsepattern.rple.internal.client.render.RGBHelper.RGB_MAX_SKYLIGHT_NO_BLOCKLIGHT;
+import static com.falsepattern.rple.internal.client.render.RGBHelper.RGB_NO_SKYLIGHT_NO_BLOCKLIGHT;
 import static com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper.PACKED_MAX_SKYLIGHT_NO_BLOCKLIGHT;
 import static com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper.PACKED_NO_SKYLIGHT_NO_BLOCKLIGHT;
 
@@ -55,20 +59,18 @@ public final class RPLEBlockBrightnessUtil {
         if (!(world instanceof RPLEBlockStorageRoot))
             return errorBrightnessForTessellator();
 
-        final long packedRGB;
         if (world instanceof RPLEClientBlockStorage) {
-            packedRGB = getPackedRGBBrightnessForTessellatorFastPath(world,
-                                                                     posX, posY, posZ,
-                                                                     minRedBlockLight, minGreenBlockLight, minBlueBlockLight);
+            return getPackedRGBBrightnessForTessellatorFastPath(world,
+                                                                posX, posY, posZ,
+                                                                minRedBlockLight, minGreenBlockLight, minBlueBlockLight);
         } else {
-            packedRGB = getPackedRGBBrightnessForTessellatorSlowPath(world,
-                                                                     posX, posY, posZ,
-                                                                     minRedBlockLight, minGreenBlockLight, minBlueBlockLight);
+            return getPackedRGBBrightnessForTessellatorSlowPath(world,
+                                                                posX, posY, posZ,
+                                                                minRedBlockLight, minGreenBlockLight, minBlueBlockLight);
         }
-        return CookieMonster.packedLongToCookie(packedRGB);
     }
 
-    private static long getPackedRGBBrightnessForTessellatorFastPath(@NotNull IBlockAccess world,
+    private static int getPackedRGBBrightnessForTessellatorFastPath(@NotNull IBlockAccess world,
                                                                      int posX,
                                                                      int posY,
                                                                      int posZ,
@@ -78,17 +80,18 @@ public final class RPLEBlockBrightnessUtil {
         val worldRoot = (RPLEBlockStorageRoot) world;
         val cbs = (RPLEClientBlockStorage) world;
         if (posY > 255) {
-            return worldRoot.lumi$hasSky() ? PACKED_MAX_SKYLIGHT_NO_BLOCKLIGHT : PACKED_NO_SKYLIGHT_NO_BLOCKLIGHT;
+            return CookieMonster.rgbToCookie(worldRoot.lumi$hasSky() ? RGB_MAX_SKYLIGHT_NO_BLOCKLIGHT : RGB_NO_SKYLIGHT_NO_BLOCKLIGHT);
         }
 
         if (posY < 0)
             posY = 0;
         val block = world.getBlock(posX, posY, posZ);
         val raw = cbs.rple$getRGBLightValue(block.getUseNeighborBrightness(), posX, posY, posZ);
-        return TessellatorBrightnessHelper.weaveMinBlockLightLevels(raw, minRedBlockLight, minGreenBlockLight, minBlueBlockLight);
+        val rgb = RGBHelper.weaveMinBlockLightLevels(raw, minRedBlockLight, minGreenBlockLight, minBlueBlockLight);;
+        return CookieMonster.rgbToCookie(rgb);
     }
 
-    private static long getPackedRGBBrightnessForTessellatorSlowPath(@NotNull IBlockAccess world,
+    private static int getPackedRGBBrightnessForTessellatorSlowPath(@NotNull IBlockAccess world,
                                                                      int posX,
                                                                      int posY,
                                                                      int posZ,
@@ -107,9 +110,10 @@ public final class RPLEBlockBrightnessUtil {
                                              .rple$getChannelBrightnessForTessellator(cg, posX, posY, posZ, minGreenBlockLight);
         final int blueBrightness = worldRoot.rple$blockStorage(BLUE_CHANNEL)
                                             .rple$getChannelBrightnessForTessellator(cb, posX, posY, posZ, minBlueBlockLight);
-        return TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
-                                                                                             greenBrightness,
-                                                                                             blueBrightness);
+        val raw = TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
+                                                                                                greenBrightness,
+                                                                                                blueBrightness);
+        return CookieMonster.packedLongToCookie(raw);
     }
 
 //    public static int getChannelLightValueForTessellator(@NotNull IBlockAccess world,

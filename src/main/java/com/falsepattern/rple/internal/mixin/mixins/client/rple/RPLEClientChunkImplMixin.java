@@ -7,6 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.rple;
 
+import com.falsepattern.rple.internal.client.render.RGBHelper;
 import com.falsepattern.rple.internal.client.storage.RPLEClientChunk;
 import com.falsepattern.rple.internal.client.storage.RPLEClientSubChunk;
 import lombok.val;
@@ -17,8 +18,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-import static com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper.PACKED_MAX_SKYLIGHT_NO_BLOCKLIGHT;
-import static com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper.PACKED_NO_SKYLIGHT_NO_BLOCKLIGHT;
+import static com.falsepattern.rple.internal.client.render.RGBHelper.RGB_MAX_SKYLIGHT_NO_BLOCKLIGHT;
+import static com.falsepattern.rple.internal.client.render.RGBHelper.RGB_NO_SKYLIGHT_NO_BLOCKLIGHT;
 
 @Unique
 @Mixin(Chunk.class)
@@ -27,22 +28,22 @@ public abstract class RPLEClientChunkImplMixin implements RPLEClientChunk {
     private ExtendedBlockStorage[] storageArrays;
 
     @Override
-    public long rple$getRGBLightValueHasSky(int subChunkPosX, int posY, int subChunkPosZ) {
+    public int rple$getRGBLightValueHasSky(int subChunkPosX, int posY, int subChunkPosZ) {
         val chunkPosY = (posY & 255) >> 4;
         val subChunk = rple$getClientSubChunkIfPrepared(chunkPosY);
         if (subChunk == null)
-            return PACKED_MAX_SKYLIGHT_NO_BLOCKLIGHT;
+            return RGB_MAX_SKYLIGHT_NO_BLOCKLIGHT;
 
         val subChunkPosY = posY & 15;
         return subChunk.rple$getRGBLightValueHasSky(subChunkPosX, subChunkPosY, subChunkPosZ);
     }
 
     @Override
-    public long rple$getRGBLightValueNoSky(int subChunkPosX, int posY, int subChunkPosZ) {
+    public int rple$getRGBLightValueNoSky(int subChunkPosX, int posY, int subChunkPosZ) {
         val chunkPosY = (posY & 255) >> 4;
         val subChunk = rple$getClientSubChunkIfPrepared(chunkPosY);
         if (subChunk == null)
-            return PACKED_NO_SKYLIGHT_NO_BLOCKLIGHT;
+            return RGB_NO_SKYLIGHT_NO_BLOCKLIGHT;
 
         val subChunkPosY = posY & 15;
         return subChunk.rple$getRGBLightValueNoSky(subChunkPosX, subChunkPosY, subChunkPosZ);

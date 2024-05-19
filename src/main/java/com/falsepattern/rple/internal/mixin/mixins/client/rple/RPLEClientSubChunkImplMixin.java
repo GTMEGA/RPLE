@@ -7,10 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.rple;
 
-import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
+import com.falsepattern.rple.internal.client.render.RGBHelper;
 import com.falsepattern.rple.internal.client.storage.RPLEClientSubChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
-import com.falsepattern.rple.internal.common.color.ColorPackingUtil;
 import lombok.val;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import org.spongepowered.asm.mixin.Dynamic;
@@ -28,21 +27,21 @@ public abstract class RPLEClientSubChunkImplMixin implements RPLEClientSubChunk 
     private RPLESubChunk rple$blueChannel;
 
     @Override
-    public long rple$getRGBLightValueHasSky(int subChunkPosX, int subChunkPosY, int subChunkPosZ) {
-        val blkR = rple$redChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
-        val blkG = rple$greenChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
-        val blkB = rple$blueChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
+    public int rple$getRGBLightValueHasSky(int subChunkPosX, int subChunkPosY, int subChunkPosZ) {
         val skyR = rple$redChannel.lumi$getSkyLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
         val skyG = rple$greenChannel.lumi$getSkyLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
         val skyB = rple$blueChannel.lumi$getSkyLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
-        return TessellatorBrightnessHelper.packedBrightnessFrom4BitLightLevels(skyR, skyG, skyB, blkR, blkG, blkB);
-    }
-
-    @Override
-    public long rple$getRGBLightValueNoSky(int subChunkPosX, int subChunkPosY, int subChunkPosZ) {
         val blkR = rple$redChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
         val blkG = rple$greenChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
         val blkB = rple$blueChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
-        return TessellatorBrightnessHelper.packedBrightnessFrom4BitLightLevelsBlocks(blkR, blkG, blkB);
+        return RGBHelper.createRGB(skyR, skyG, skyB, blkR, blkG, blkB);
+    }
+
+    @Override
+    public int rple$getRGBLightValueNoSky(int subChunkPosX, int subChunkPosY, int subChunkPosZ) {
+        val blkR = rple$redChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
+        val blkG = rple$greenChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
+        val blkB = rple$blueChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
+        return RGBHelper.createRGBBlock(blkR, blkG, blkB);
     }
 }

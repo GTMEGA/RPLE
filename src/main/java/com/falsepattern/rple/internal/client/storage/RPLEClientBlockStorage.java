@@ -15,10 +15,10 @@ public interface RPLEClientBlockStorage {
      * @implSpec useNeighborValues should get its value from: {@link Block#getUseNeighborBrightness()}
      *           falls back on {@link #rple$getRGBLightValueNoSky(boolean, int, int, int) if the world has no sky}
      */
-    long rple$getRGBLightValue(boolean useNeighborValues, int posX, int posY, int posZ);
+    int rple$getRGBLightValue(boolean useNeighborValues, int posX, int posY, int posZ);
 
     /**
      * Only ever called if the world has no sky
      */
-    long rple$getRGBLightValueNoSky(boolean useNeighborValues, int posX, int posY, int posZ);
+    int rple$getRGBLightValueNoSky(boolean useNeighborValues, int posX, int posY, int posZ);
 }

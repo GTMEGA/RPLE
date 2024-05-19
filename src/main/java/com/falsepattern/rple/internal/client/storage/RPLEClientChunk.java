@@ -11,10 +11,10 @@ public interface RPLEClientChunk {
     /**
      * Only ever called if the world has a sky
      */
-    long rple$getRGBLightValueHasSky(int subChunkPosX, int posY, int subChunkPosZ);
+    int rple$getRGBLightValueHasSky(int subChunkPosX, int posY, int subChunkPosZ);
 
     /**
      * Only ever called if the world has no sky
      */
-    long rple$getRGBLightValueNoSky(int subChunkPosX, int posY, int subChunkPosZ);
+    int rple$getRGBLightValueNoSky(int subChunkPosX, int posY, int subChunkPosZ);
 }
