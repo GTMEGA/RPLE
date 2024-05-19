@@ -10,7 +10,14 @@ package com.falsepattern.rple.internal.client.storage;
 import com.falsepattern.lumina.api.lighting.LightType;
 
 public interface RPLEClientSubChunk {
-    int rple$getRGBLightValue(int subChunkPosX, int subChunkPosY, int subChunkPosZ);
+    /**
+     * Only ever called if the world has a sky
+     */
+    long rple$getRGBLightValueHasSky(int subChunkPosX, int subChunkPosY, int subChunkPosZ);
 
-    int rple$getRGBLightValue(LightType type, int subChunkPosX, int subChunkPosY, int subChunkPosZ);
+
+    /**
+     * Only ever called if the world has no sky
+     */
+    long rple$getRGBLightValueNoSky(int subChunkPosX, int subChunkPosY, int subChunkPosZ);
 }

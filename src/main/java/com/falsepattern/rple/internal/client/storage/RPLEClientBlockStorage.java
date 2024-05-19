@@ -12,9 +12,13 @@ import net.minecraft.block.Block;
 
 public interface RPLEClientBlockStorage {
     /**
-     * @implSpec useNeighborValues should get it's value from: {@link Block#getUseNeighborBrightness()}
+     * @implSpec useNeighborValues should get its value from: {@link Block#getUseNeighborBrightness()}
+     *           falls back on {@link #rple$getRGBLightValueNoSky(boolean, int, int, int) if the world has no sky}
      */
-    int rple$getRGBLightValue(boolean useNeighborValues, int posX, int posY, int posZ);
+    long rple$getRGBLightValue(boolean useNeighborValues, int posX, int posY, int posZ);
 
-    int rple$getRGBLightValue(boolean useNeighborValues, LightType type, int posX, int posY, int posZ);
+    /**
+     * Only ever called if the world has no sky
+     */
+    long rple$getRGBLightValueNoSky(boolean useNeighborValues, int posX, int posY, int posZ);
 }
