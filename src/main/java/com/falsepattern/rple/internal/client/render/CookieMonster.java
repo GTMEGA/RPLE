@@ -62,7 +62,7 @@ public final class CookieMonster {
 
     private static final long BROKEN_WARN_COLOR;
 
-    private static final FastThreadLocal<ThreadState> THREAD_STATE = FastThreadLocal.withInitial(ThreadState::new);
+    private static final FastThreadLocal.FixedValue<ThreadState> THREAD_STATE = new FastThreadLocal.FixedValue<>(ThreadState::new);
 
     static {
         val redBrightness = TessellatorBrightnessHelper
