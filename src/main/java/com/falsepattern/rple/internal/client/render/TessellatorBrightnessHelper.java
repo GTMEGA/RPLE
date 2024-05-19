@@ -301,12 +301,12 @@ public final class TessellatorBrightnessHelper {
 
     public static long packedMax(long lightValueA, long lightValueB, long lightValueC, long lightValueD, long lightValueE) {
         long packedResult = 0L;
-        for (int shift = 0; shift < 40; shift += 4) {
-            int a = (int) ((lightValueA >>> shift) & 0xF);
-            int b = (int) ((lightValueB >>> shift) & 0xF);
-            int c = (int) ((lightValueC >>> shift) & 0xF);
-            int d = (int) ((lightValueD >>> shift) & 0xF);
-            int e = (int) ((lightValueE >>> shift) & 0xF);
+        for (int shift = 0; shift <= 40; shift += 8) {
+            int a = (int) ((lightValueA >>> shift) & 0xFF);
+            int b = (int) ((lightValueB >>> shift) & 0xFF);
+            int c = (int) ((lightValueC >>> shift) & 0xFF);
+            int d = (int) ((lightValueD >>> shift) & 0xFF);
+            int e = (int) ((lightValueE >>> shift) & 0xFF);
 
             int max = 0;
             //noinspection DataFlowIssue
