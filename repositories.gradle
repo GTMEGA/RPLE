@@ -4,8 +4,12 @@ repositories {
         url = "https://mvn.falsepattern.com/releases"
     }
     maven {
-        name = "FalsePattern GTMEGA Maven"
-        url = "https://mvn.falsepattern.com/gtmega_releases/"
+        name = "mega"
+        url = "https://mvn.falsepattern.com/gtmega_releases"
+    }
+    maven {
+        name = "mega2"
+        url = "https://mvn.falsepattern.com/gtmega_uploads"
     }
 
     mavenLocal()
