@@ -50,6 +50,6 @@ public enum TargetedMod implements ITargetedMod {
     }
 
     private static Predicate<String> projectRedMegaJarCondition() {
-        return str -> str.matches("projectred-mc1.7.10");
+        return str -> str.startsWith("projectred-mc1.7.10") || str.contains("mega");
     }
 }
