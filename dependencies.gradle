@@ -37,11 +37,8 @@ dependencies {
     // Chisel
     compileOnly("team.chisel:chisel-mc1.7.10:2.14.5-mega:dev")
 
-    // ProjectRed Core 4.7.0pre12.95
-    compileOnly(deobfCurse("projectred-core-228702:2280728"))
-
-    // ProjectRed Illumination 4.7.0pre12.95
-    compileOnly(deobfCurse("projectred-illum-229046:2280733"))
+    // ProjectRed
+    compileOnly("mega:projectred-mc1.7.10:5.0.0-mega:dev")
 
     // NotEnoughItems
     compileOnly("codechicken:notenoughitems-mc1.7.10:2.3.0-mega:dev")
@@ -49,11 +46,11 @@ dependencies {
     // CodeChickenCore
     compileOnly("codechicken:codechickencore-mc1.7.10:1.4.0-mega:dev")
 
-    // MRTJPCore 1.1.0.33-universal
-    compileOnly(deobfCurse("mrtjpcore-229002:2279413"))
+    // MRTJPCore
+    compileOnly("mega:mrtjpcore-mc1.7.10:1.2.0-mega:dev")
 
-    // ForgeMultipart 1.2.0.345
-    compileOnly(deobfCurse("multipart-229323:2242993"))
+    // ForgeMultipart
+    compileOnly("codechicken:forgemultipart-mc1.7.10:1.6.0-mega:dev")
 
     // EnderCore 1.7.10-0.2.0.39_beta
     compileOnly(deobfCurse("endercore-231868:2331048"))
@@ -61,8 +58,8 @@ dependencies {
     // Ender IO 1.7.10-2.3.0.429_beta
     compileOnly(deobfCurse("ender-io-64578:2322348"))
 
-    // Carpenter's Blocks v3.3.8.2 - MC 1.7.10
-    compileOnly(deobfCurse("carpenters-blocks-228932:2719376"))
+    // Carpenter's Blocks
+    compileOnly("mega:carpentersblocks-mc1.7.10:3.4.1-mega:dev")
 
     // ArchitectureCraft 1.7.2
     compileOnly(deobfCurse("architecturecraft-242001:2352554"))
@@ -70,8 +67,8 @@ dependencies {
     // Applied Energistics 2 rv3 beta 6
     compileOnly(deobfCurse("appliedenergistics2-223794:2296430"))
 
-    // Storage Drawers 1.10.9
-    compileOnly(deobfCurse("storagedrawers-223852:2469586"))
+    // Storage Drawers
+    compileOnly("mega:storagedrawers-mc1.7.10:1.14.1-mega:dev")
 
     // The Lord of the Rings Mod: Legacy v36.15
     compileOnly(deobfCurse("the-lord-of-the-rings-mod-legacy-423748:4091561"))
