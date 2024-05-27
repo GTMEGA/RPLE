@@ -127,10 +127,10 @@ public final class TessellatorBrightnessHelper {
             return -1;
         int rgb = 0;
         rgb |= ((int)(packed >>> PACKED_RED_OFFSET_BLOCK_4BIT) & 0xF) << RGBHelper.RGB_RED_OFFSET_BLOCK;
-        rgb |= ((int)(packed >>> PACKED_GREEN_OFFSET_SKY_4BIT) & 0xF) << RGBHelper.RGB_GREEN_OFFSET_SKY;
+        rgb |= ((int)(packed >>> PACKED_GREEN_OFFSET_BLOCK_4BIT) & 0xF) << RGBHelper.RGB_GREEN_OFFSET_BLOCK;
         rgb |= ((int)(packed >>> PACKED_BLUE_OFFSET_BLOCK_4BIT) & 0xF) << RGBHelper.RGB_BLUE_OFFSET_BLOCK;
         rgb |= ((int)(packed >>> PACKED_RED_OFFSET_SKY_4BIT) & 0xF) << RGBHelper.RGB_RED_OFFSET_SKY;
-        rgb |= ((int)(packed >>> PACKED_GREEN_OFFSET_BLOCK_4BIT) & 0xF) << RGBHelper.RGB_GREEN_OFFSET_BLOCK;
+        rgb |= ((int)(packed >>> PACKED_GREEN_OFFSET_SKY_4BIT) & 0xF) << RGBHelper.RGB_GREEN_OFFSET_SKY;
         rgb |= ((int)(packed >>> PACKED_BLUE_OFFSET_SKY_4BIT) & 0xF) << RGBHelper.RGB_BLUE_OFFSET_SKY;
         return rgb;
     }

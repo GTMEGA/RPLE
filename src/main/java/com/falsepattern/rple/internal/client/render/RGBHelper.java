@@ -47,14 +47,14 @@ public class RGBHelper {
 
     public static int weaveMinBlockLightLevels(int packed, int minRedBlockLight, int minGreenBlockLight, int minBlueBlockLight) {
         //extract
-        int containedRedBlockLight = (packed >>> RGB_RED_OFFSET_BLOCK) & 0xFF;
-        int containedGreenBlockLight = (packed >>> RGB_GREEN_OFFSET_BLOCK) & 0xFF;
-        int containedBlueBlockLight = (packed >>> RGB_BLUE_OFFSET_BLOCK) & 0xFF;
+        int containedRedBlockLight = (packed >>> RGB_RED_OFFSET_BLOCK) & 0xF;
+        int containedGreenBlockLight = (packed >>> RGB_GREEN_OFFSET_BLOCK) & 0xF;
+        int containedBlueBlockLight = (packed >>> RGB_BLUE_OFFSET_BLOCK) & 0xF;
 
         //align
-        minRedBlockLight = (minRedBlockLight & 0xF) << 4;
-        minGreenBlockLight = (minGreenBlockLight & 0xF) << 4;
-        minBlueBlockLight = (minBlueBlockLight & 0xF) << 4;
+        minRedBlockLight &= 0xF;
+        minGreenBlockLight &= 0xF;
+        minBlueBlockLight &= 0xF;
 
         //max
         int redBlockLight = Math.max(minRedBlockLight, containedRedBlockLight);
