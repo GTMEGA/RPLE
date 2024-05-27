@@ -48,6 +48,12 @@ public final class RPLEConfig {
     public static final class Debug {
         static {poke();}
 
+        @Config.Name("rgbLightOverlay")
+        @Config.Comment("Toggles rendering a light level debug overlay in the world.")
+        @Config.LangKey("config.rple.debug.rgbLightOverlay")
+        @Config.DefaultBoolean(false)
+        public static Boolean RGB_LIGHT_OVERLAY;
+
         @Config.Name("logMode")
         @Config.Comment({"Determines how the debug logging configs a treated.",
                          "[CUSTOM] User defined configs are respected",

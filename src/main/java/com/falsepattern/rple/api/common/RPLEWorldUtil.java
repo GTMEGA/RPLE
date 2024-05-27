@@ -7,7 +7,16 @@
 
 package com.falsepattern.rple.api.common;
 
+import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.client.render.LightValueOverlayRenderer;
+import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
+import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
+import lombok.val;
+import net.minecraft.world.IBlockAccess;
+
+import static com.falsepattern.rple.api.common.RPLEColorUtil.errorColor;
+import static com.falsepattern.rple.api.common.RPLEColorUtil.maxColorComponent;
+import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
 /**
  * Currently only used by {@link LightValueOverlayRenderer}
@@ -17,66 +26,53 @@ public final class RPLEWorldUtil {
 //        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
 //    }
 //
-//    public static int getChannelBlockLightValue(IBlockAccess world,
-//                                                ColorChannel channel,
-//                                                int posX,
-//                                                int posY,
-//                                                int posZ) {
-//        val worldRoot = rple$getWorldRootFromBlockAccess(world);
-//        if (worldRoot == null)
-//            return channel.componentFromColor(errorColor());
-//        return worldRoot.rple$world(channel).lumi$getBlockLightValue(posX, posY, posZ);
-//    }
-//
-//    public static int getChannelSkyLightValue(IBlockAccess world, ColorChannel channel, int posX, int posY, int posZ) {
-//        val worldRoot = rple$getWorldRootFromBlockAccess(world);
-//        if (worldRoot == null)
-//            return channel.componentFromColor(errorColor());
-//        return worldRoot.rple$world(channel).lumi$getSkyLightValue(posX, posY, posZ);
-//    }
-//
-//    public static int getGreyscaleLightValue(IBlockAccess world,
-//                                             int posX,
-//                                             int posY,
-//                                             int posZ) {
-//        val worldRoot = rple$getWorldRootFromBlockAccess(world);
-//        if (worldRoot == null)
-//            return COLOR_MIN;
-//
-//        val redLightValue = worldRoot.rple$world(RED_CHANNEL).lumi$getLightValue(posX, posY, posZ);
-//        val greenLightValue = worldRoot.rple$world(GREEN_CHANNEL).lumi$getLightValue(posX, posY, posZ);
-//        val blueLightValue = worldRoot.rple$world(BLUE_CHANNEL).lumi$getLightValue(posX, posY, posZ);
-//        return maxColorComponent(redLightValue, greenLightValue, blueLightValue);
-//    }
-//
-//
-//    public static int getGreyscaleBlockLightValue(IBlockAccess world,
-//                                                  int posX,
-//                                                  int posY,
-//                                                  int posZ) {
-//        val worldRoot = rple$getWorldRootFromBlockAccess(world);
-//        if (worldRoot == null)
-//            return COLOR_MIN;
-//
-//        val redLightValue = worldRoot.rple$world(RED_CHANNEL).lumi$getBlockLightValue(posX, posY, posZ);
-//        val greenLightValue = worldRoot.rple$world(GREEN_CHANNEL).lumi$getBlockLightValue(posX, posY, posZ);
-//        val blueLightValue = worldRoot.rple$world(BLUE_CHANNEL).lumi$getBlockLightValue(posX, posY, posZ);
-//        return maxColorComponent(redLightValue, greenLightValue, blueLightValue);
-//    }
-//
-//    public static int getGreyscaleSkyLightValue(IBlockAccess world,
-//                                                int posX,
-//                                                int posY,
-//                                                int posZ) {
-//        val worldRoot = rple$getWorldRootFromBlockAccess(world);
-//        if (worldRoot == null)
-//            return COLOR_MIN;
-//
-//        val redLightValue = worldRoot.rple$world(RED_CHANNEL).lumi$getSkyLightValue(posX, posY, posZ);
-//        val greenLightValue = worldRoot.rple$world(GREEN_CHANNEL).lumi$getSkyLightValue(posX, posY, posZ);
-//        val blueLightValue = worldRoot.rple$world(BLUE_CHANNEL).lumi$getSkyLightValue(posX, posY, posZ);
-//        return maxColorComponent(redLightValue, greenLightValue, blueLightValue);
-//    }
+    public static int getChannelBlockLightValue(IBlockAccess world,
+                                                ColorChannel channel,
+                                                int posX,
+                                                int posY,
+                                                int posZ) {
+        val worldRoot = (RPLEWorldRoot) world;
+        return worldRoot.rple$world(channel).lumi$getBlockLightValue(posX, posY, posZ);
+    }
+
+    public static int getChannelSkyLightValue(IBlockAccess world, ColorChannel channel, int posX, int posY, int posZ) {
+        val worldRoot = (RPLEWorldRoot) world;
+        return worldRoot.rple$world(channel).lumi$getSkyLightValue(posX, posY, posZ);
+    }
+
+    public static int getGreyscaleLightValue(IBlockAccess world,
+                                             int posX,
+                                             int posY,
+                                             int posZ) {
+        val worldRoot = (RPLEWorldRoot) world;
+        val redLightValue = worldRoot.rple$world(RED_CHANNEL).lumi$getLightValue(posX, posY, posZ);
+        val greenLightValue = worldRoot.rple$world(GREEN_CHANNEL).lumi$getLightValue(posX, posY, posZ);
+        val blueLightValue = worldRoot.rple$world(BLUE_CHANNEL).lumi$getLightValue(posX, posY, posZ);
+        return maxColorComponent(redLightValue, greenLightValue, blueLightValue);
+    }
+
+
+    public static int getGreyscaleBlockLightValue(IBlockAccess world,
+                                                  int posX,
+                                                  int posY,
+                                                  int posZ) {
+        val worldRoot = (RPLEWorldRoot) world;
+        val redLightValue = worldRoot.rple$world(RED_CHANNEL).lumi$getBlockLightValue(posX, posY, posZ);
+        val greenLightValue = worldRoot.rple$world(GREEN_CHANNEL).lumi$getBlockLightValue(posX, posY, posZ);
+        val blueLightValue = worldRoot.rple$world(BLUE_CHANNEL).lumi$getBlockLightValue(posX, posY, posZ);
+        return maxColorComponent(redLightValue, greenLightValue, blueLightValue);
+    }
+
+    public static int getGreyscaleSkyLightValue(IBlockAccess world,
+                                                int posX,
+                                                int posY,
+                                                int posZ) {
+        val worldRoot = (RPLEWorldRoot) world;
+        val redLightValue = worldRoot.rple$world(RED_CHANNEL).lumi$getSkyLightValue(posX, posY, posZ);
+        val greenLightValue = worldRoot.rple$world(GREEN_CHANNEL).lumi$getSkyLightValue(posX, posY, posZ);
+        val blueLightValue = worldRoot.rple$world(BLUE_CHANNEL).lumi$getSkyLightValue(posX, posY, posZ);
+        return maxColorComponent(redLightValue, greenLightValue, blueLightValue);
+    }
 //
 //    public static int getChannelLightOpacity(IBlockAccess world, ColorChannel channel, int posX, int posY, int posZ) {
 //        val worldRoot = rple$getWorldRootFromBlockAccess(world);

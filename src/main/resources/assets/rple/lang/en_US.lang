@@ -36,6 +36,8 @@ tile.rple.lamp.white.inverted.name=White Lamp (Inverted)
 config.rple.general.craftableLamps=Lamp Crafting Recipes
 config.rple.general.craftableLamps.tooltip=Set this to true if you want to enable the default lamps.\n(Based on ProjectRed's lamps, but much more optimized)
 
+config.rple.debug.rgbLightOverlay=RGB Light Overlay
+config.rple.debug.rgbLightOverlay.tooltip=Toggles rendering a light level debug overlay in the world.
 config.rple.debug.logMode=Debug Logging Mode
 config.rple.debug.logMode.tooltip=Determines how the debug logging configs a treated.\n[CUSTOM] User defined configs are respected\n[ALL] Forcibly enables all debug logging. (Most Verbose)\n[NONE] Fully disables debug logging. (Best Performance)
 config.rple.debug.forceLogToConsole=Force All Logs to Console
