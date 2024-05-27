@@ -1,12 +1,14 @@
 package com.falsepattern.rple.internal.asm;
 
-import com.falsepattern.lib.asm.IClassNodeTransformer;
+import com.falsepattern.lib.turboasm.ClassNodeHandle;
+import com.falsepattern.lib.turboasm.TurboClassTransformer;
 import com.falsepattern.rple.internal.common.util.LogHelper;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.asm.util.MethodDecl;
 import com.falsepattern.rple.internal.asm.util.Util;
 import lombok.val;
 import lombok.var;
+import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -17,7 +19,7 @@ import java.util.Map;
 
 import static com.falsepattern.rple.internal.common.config.RPLEConfig.Debug.DEBUG_ASM_TRANSFORMER;
 
-public final class RPLEBlockColorInjector implements IClassNodeTransformer {
+public final class RPLEBlockColorInjector implements TurboClassTransformer {
     // @formatter:off
     private static final String NAME_LIGHT_VALUE_DEOBF     = "getLightValue";
     private static final String NAME_LIGHT_VALUE_OBF       = "func_149750_m";
@@ -66,30 +68,42 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
     // @formatter:on
 
     @Override
-    public String getName() {
+    public String owner() {
+        return Tags.MOD_NAME;
+    }
+
+    @Override
+    public String name() {
         return "RPLEBlockColorInjector";
     }
 
     @Override
-    public boolean shouldTransform(ClassNode cn, String transformedName, boolean obfuscated) {
-        if (transformedName.startsWith(Tags.GROUP_NAME))
-            return false;
-        return isValidTarget(cn);
+    public boolean shouldTransformClass(@NotNull String className, @NotNull ClassNodeHandle classNode) {
+        return !className.startsWith(Tags.GROUP_NAME);
     }
 
     @Override
-    public void transform(ClassNode cn, String transformedName, boolean obfuscated) {
+    public boolean transformClass(@NotNull String className, @NotNull ClassNodeHandle classNode) {
+        val cn = classNode.getNode();
+        if (cn == null)
+            return false;
+        if (!isValidTarget(cn))
+            return false;
+
+        boolean modified = false;
         val methodCount = cn.methods.size();
         for (var i = 0; i < methodCount; i++) {
             var method = cn.methods.get(i);
             for (val mapping : MAPPINGS.entrySet()) {
                 if (tryTransform(cn, method, mapping.getKey(), mapping.getValue())) {
+                    modified = true;
                     if (LogHelper.shouldLogDebug(DEBUG_ASM_TRANSFORMER))
-                        RPLETransformer.LOG.debug("[BlockLightHooks] Transformed {}.{}{}", transformedName, method.name, method.desc);
+                        RPLETransformer.LOG.debug("[BlockLightHooks] Transformed {}.{}{}", className, method.name, method.desc);
                     break;
                 }
             }
         }
+        return modified;
     }
 
     private static boolean tryTransform(ClassNode cn, MethodNode method, MethodDecl decl, String newName) {
@@ -97,6 +111,7 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
             return false;
         method.name = newName;
 
+        boolean modified = false;
         val insts = method.instructions.iterator();
         while (insts.hasNext()) {
             val inst = insts.next();
@@ -107,12 +122,13 @@ public final class RPLEBlockColorInjector implements IClassNodeTransformer {
                 for (val mapping : MAPPINGS.entrySet()) {
                     if (mapping.getKey().matches(insnNode)) {
                         insnNode.name = mapping.getValue();
+                        modified = true;
                         break;
                     }
                 }
             }
         }
-        return true;
+        return modified;
     }
 
     private static boolean isBlockSubclass(String className) {

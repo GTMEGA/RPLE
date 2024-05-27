@@ -8,21 +8,18 @@
 
 package com.falsepattern.rple.internal.asm;
 
-import com.falsepattern.lib.asm.IClassNodeTransformer;
-import com.falsepattern.lib.asm.SmartTransformer;
+import com.falsepattern.lib.turboasm.MergeableTurboTransformer;
 import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import com.falsepattern.rple.internal.common.util.FastThreadLocal;
-import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
 
 @Accessors(fluent = true, chain = false)
-public final class RPLETransformer implements SmartTransformer {
+public final class RPLETransformer extends MergeableTurboTransformer {
     static final Logger LOG = createLogger("ASM");
 
     static {
@@ -30,13 +27,7 @@ public final class RPLETransformer implements SmartTransformer {
         FastThreadLocal.setMainThread(Thread.currentThread());
     }
 
-    @Getter
-    private final List<IClassNodeTransformer> transformers;
-
-    @Getter
-    private final Logger logger = LOG;
-
     public RPLETransformer() {
-        transformers = Arrays.asList(new RPLEBlockColorInjector());
+        super(Arrays.asList(new RPLEBlockColorInjector()));
     }
 }
