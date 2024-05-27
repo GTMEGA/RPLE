@@ -77,26 +77,25 @@ public abstract class RPLEClientBlockStorageImplMixin implements RPLEClientBlock
         final int lightValueZP;
         final int lightValueZN;
         if (centerSubChunkPosZ == 0) {
-            lightValueZP = centerChunk.rple$getRGBLightValueHasSky(centerChunkPosX, posY, 1);
+            lightValueZP = centerChunk.rple$getRGBLightValueHasSky(centerSubChunkPosX, posY, 1);
             val chunkXN = rple$getClientFromChunkPosIfExists(centerChunkPosX, centerChunkPosZ - 1);
             if (chunkXN == null) {
                 lightValueZN = RGB_MAX_SKYLIGHT_NO_BLOCKLIGHT;
             } else {
-                lightValueZN = chunkXN.rple$getRGBLightValueHasSky(centerChunkPosX, posY, 15);
+                lightValueZN = chunkXN.rple$getRGBLightValueHasSky(centerSubChunkPosX, posY, 15);
             }
         } else if (centerSubChunkPosZ == 15) {
             val chunkXP = rple$getClientFromChunkPosIfExists(centerChunkPosX, centerChunkPosZ + 1);
             if (chunkXP == null) {
                 lightValueZP = RGB_MAX_SKYLIGHT_NO_BLOCKLIGHT;
             } else {
-                lightValueZP = chunkXP.rple$getRGBLightValueHasSky(centerChunkPosX, posY, 0);
+                lightValueZP = chunkXP.rple$getRGBLightValueHasSky(centerSubChunkPosX, posY, 0);
             }
-            lightValueZN = centerChunk.rple$getRGBLightValueHasSky(centerChunkPosX, posY, 14);
+            lightValueZN = centerChunk.rple$getRGBLightValueHasSky(centerSubChunkPosX, posY, 14);
         } else {
             lightValueZP = centerChunk.rple$getRGBLightValueHasSky(centerSubChunkPosX, posY, centerSubChunkPosZ + 1);
             lightValueZN = centerChunk.rple$getRGBLightValueHasSky(centerSubChunkPosX, posY, centerSubChunkPosZ - 1);
         }
-
 
         return RGBHelper.rgbMax(lightValueYP,
                                 lightValueXN,
@@ -154,21 +153,21 @@ public abstract class RPLEClientBlockStorageImplMixin implements RPLEClientBlock
         final int lightValueZP;
         final int lightValueZN;
         if (centerSubChunkPosZ == 0) {
-            lightValueZP = centerChunk.rple$getRGBLightValueNoSky(centerChunkPosX, posY, 1);
+            lightValueZP = centerChunk.rple$getRGBLightValueNoSky(centerSubChunkPosX, posY, 1);
             val chunkXN = rple$getClientFromChunkPosIfExists(centerChunkPosX, centerChunkPosZ - 1);
             if (chunkXN == null) {
                 lightValueZN = RGB_NO_SKYLIGHT_NO_BLOCKLIGHT;
             } else {
-                lightValueZN = chunkXN.rple$getRGBLightValueNoSky(centerChunkPosX, posY, 15);
+                lightValueZN = chunkXN.rple$getRGBLightValueNoSky(centerSubChunkPosX, posY, 15);
             }
         } else if (centerSubChunkPosZ == 15) {
             val chunkXP = rple$getClientFromChunkPosIfExists(centerChunkPosX, centerChunkPosZ + 1);
             if (chunkXP == null) {
                 lightValueZP = RGB_NO_SKYLIGHT_NO_BLOCKLIGHT;
             } else {
-                lightValueZP = chunkXP.rple$getRGBLightValueNoSky(centerChunkPosX, posY, 0);
+                lightValueZP = chunkXP.rple$getRGBLightValueNoSky(centerSubChunkPosX, posY, 0);
             }
-            lightValueZN = centerChunk.rple$getRGBLightValueNoSky(centerChunkPosX, posY, 14);
+            lightValueZN = centerChunk.rple$getRGBLightValueNoSky(centerSubChunkPosX, posY, 14);
         } else {
             lightValueZP = centerChunk.rple$getRGBLightValueNoSky(centerSubChunkPosX, posY, centerSubChunkPosZ + 1);
             lightValueZN = centerChunk.rple$getRGBLightValueNoSky(centerSubChunkPosX, posY, centerSubChunkPosZ - 1);
