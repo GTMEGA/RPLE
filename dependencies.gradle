@@ -13,8 +13,8 @@ def deobfCurse(curseDep) {
 
 dependencies {
     // LUMINA
-    compileOnlyApi("com.falsepattern:lumina-mc1.7.10:1.0.0-rc9-1-g4fadeec:api")
-    runtimeOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc9-1-g4fadeec:dev")
+    compileOnlyApi("com.falsepattern:lumina-mc1.7.10:1.0.0-rc9-2-g692487b:api")
+    runtimeOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc9-2-g692487b:dev")
 
     // FalseTweaks
     compileOnly("com.falsepattern:falsetweaks-mc1.7.10:3.0.0-beta0004-11-g5a533cc:api")
