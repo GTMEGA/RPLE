@@ -13,23 +13,23 @@ def deobfCurse(curseDep) {
 
 dependencies {
     // LUMINA
-    compileOnlyApi("com.falsepattern:lumina-mc1.7.10:1.0.0-rc9-2-g692487b:api")
-    runtimeOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc9-2-g692487b:dev")
+    compileOnlyApi("com.falsepattern:lumina-mc1.7.10:1.0.0-rc10:api")
+    runtimeOnly("com.falsepattern:lumina-mc1.7.10:1.0.0-rc10:dev")
 
     // FalseTweaks
-    compileOnly("com.falsepattern:falsetweaks-mc1.7.10:3.0.0-beta0004-11-g5a533cc:api")
-    runtimeOnly("com.falsepattern:falsetweaks-mc1.7.10:3.0.0-beta0004-11-g5a533cc:dev")
+    compileOnly("com.falsepattern:falsetweaks-mc1.7.10:3.0.0-pre1:api")
+    runtimeOnly("com.falsepattern:falsetweaks-mc1.7.10:3.0.0-pre1:dev")
 
     // FalsePatternLib
-    compileOnly("com.falsepattern:falsepatternlib-mc1.7.10:1.2.1:api")
-    runtimeOnly("com.falsepattern:falsepatternlib-mc1.7.10:1.2.1:dev")
+    compileOnly("com.falsepattern:falsepatternlib-mc1.7.10:1.2.4:api")
+    runtimeOnly("com.falsepattern:falsepatternlib-mc1.7.10:1.2.4:dev")
 
     // JetBrains Annotations
-    compileOnly("org.jetbrains:annotations:24.0.1")
+    compileOnly("org.jetbrains:annotations:24.1.0")
 
     // Lombok
-    compileOnly("org.projectlombok:lombok:1.18.28")
-    annotationProcessor("org.projectlombok:lombok:1.18.28")
+    compileOnly("org.projectlombok:lombok:1.18.32")
+    annotationProcessor("org.projectlombok:lombok:1.18.32")
 
     // OptiFine
     compileOnly("optifine:optifine:1.7.10_hd_u_e7:dev")
