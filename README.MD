@@ -1,6 +1,4 @@
-# Right Proper Lighting Engine
-
-<a rel="logo" href="https://github.com/GTMEGA/RightProperLightingEngine"><img alt="Right Proper Lighting Engine" src="src/main/resources/assets/rple/rple_logo_small.png" /></a>
+# Right Proper Lighting Engine <img src="src/main/resources/assets/rple/rple_logo_small.png" align="right" width=150 />
 
 <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0"><img alt="CC BY-NC-ND 4.0)" style="height:50px" src="http://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-nc-nd.svg" /></a>
 
