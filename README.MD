@@ -8,7 +8,7 @@ The first right proper RGB lighting implementation in Minecraft.
 
 ## Dependencies
 
-- [LUMINA 1.0.0-rc10](https://github.com/FalsePattern/LUMINA)
+- [LUMINA 1.0.0-rc10](https://github.com/GTMEGA/LUMINA)
 - [FalseTweaks 3.0.0+](https://github.com/FalsePattern/FalseTweaks)
 - [FalsePatternLib 1.2.0+](https://github.com/FalsePattern/FalsePatternLib)
 - [UniMixins 0.1.17+](https://github.com/LegacyModdingMC/UniMixins)
