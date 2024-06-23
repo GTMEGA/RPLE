@@ -19,12 +19,15 @@ import static com.falsepattern.rple.internal.Tags.*;
 @Mod(modid = MOD_ID,
      version = VERSION,
      name = MOD_NAME,
-     acceptedMinecraftVersions = MINECRAFT_VERSION,
-     guiFactory = MOD_GUI_FACTORY_CLASS_NAME,
-     dependencies = DEPENDENCIES)
+     acceptedMinecraftVersions = "[1.7.10]",
+     guiFactory = GROUP_NAME + ".internal.client.config.RPLEGuiFactory",
+     dependencies = "required-after:lumina@[1.0.0-rc5,);" +
+             "after:falsetweaks@[2.7.0,);" + // Hard dep, but only on clientside!
+             "required-after:falsepatternlib@[1.0.0,);")
 @NoArgsConstructor
 public final class RightProperLightingEngine {
-    @SidedProxy(clientSide = CLIENT_PROXY_CLASS_NAME, serverSide = SERVER_PROXY_CLASS_NAME)
+    @SidedProxy(clientSide = GROUP_NAME + ".internal.proxy.ClientProxy",
+            serverSide = GROUP_NAME + ".internal.proxy.ServerProxy")
     public static CommonProxy PROXY;
 
     @Mod.EventHandler
