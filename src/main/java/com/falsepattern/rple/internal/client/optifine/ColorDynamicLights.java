@@ -212,12 +212,12 @@ public class ColorDynamicLights {
                 ItemBlock itemBlock = (ItemBlock) item;
                 Block block = itemBlock.field_150939_a;
                 if (block != null) {
-                    return ((RPLEBlock) block).rple$getBrightnessColor(itemStack.getItemDamage());
+                    return RPLEBlock.of(block).rple$getBrightnessColor(itemStack.getItemDamage());
                 }
             }
 
             if (item == Items.lava_bucket) {
-                return ((RPLEBlock) Blocks.lava).rple$getBrightnessColor();
+                return RPLEBlock.of(Blocks.lava).rple$getBrightnessColor();
             } else if (item == Items.blaze_rod || item == Items.blaze_powder) {
                 return DefaultColor.DIM_ORANGE;
             } else if (item == Items.glowstone_dust) {
@@ -225,7 +225,7 @@ public class ColorDynamicLights {
             } else if (item == Items.magma_cream) {
                 return DefaultColor.DIM_RED;
             } else {
-                return item == Items.nether_star ? ((RPLEBlock) Blocks.beacon).rple$getBrightnessColor()
+                return item == Items.nether_star ? RPLEBlock.of(Blocks.beacon).rple$getBrightnessColor()
                                                  : LightValueColor.LIGHT_VALUE_0;
             }
         }
@@ -235,24 +235,24 @@ public class ColorDynamicLights {
         if (entity == Minecraft.getMinecraft().renderViewEntity && !Config.isDynamicHandLight()) {
             return LightValueColor.LIGHT_VALUE_0;
         } else if (entity.isBurning()) {
-            return ((RPLEBlock) Blocks.fire).rple$getBrightnessColor();
+            return RPLEBlock.of(Blocks.fire).rple$getBrightnessColor();
         } else if (entity instanceof EntityFireball) {
-            return ((RPLEBlock) Blocks.fire).rple$getBrightnessColor();
+            return RPLEBlock.of(Blocks.fire).rple$getBrightnessColor();
         } else if (entity instanceof EntityTNTPrimed) {
-            return ((RPLEBlock) Blocks.fire).rple$getBrightnessColor();
+            return RPLEBlock.of(Blocks.fire).rple$getBrightnessColor();
         } else if (entity instanceof EntityBlaze) {
             EntityBlaze entityBlaze = (EntityBlaze) entity;
-            return entityBlaze.func_70845_n() ? ((RPLEBlock) Blocks.fire).rple$getBrightnessColor()
-                                              : ((RPLEBlock) Blocks.lava).rple$getBrightnessColor();
+            return entityBlaze.func_70845_n() ? RPLEBlock.of(Blocks.fire).rple$getBrightnessColor()
+                                              : RPLEBlock.of(Blocks.lava).rple$getBrightnessColor();
         } else if (entity instanceof EntityMagmaCube) {
             EntityMagmaCube emc = (EntityMagmaCube) entity;
-            return (double) emc.squishFactor > 0.6 ? ((RPLEBlock) Blocks.fire).rple$getBrightnessColor()
-                                                   : ((RPLEBlock) Blocks.lava).rple$getBrightnessColor();
+            return (double) emc.squishFactor > 0.6 ? RPLEBlock.of(Blocks.fire).rple$getBrightnessColor()
+                                                   : RPLEBlock.of(Blocks.lava).rple$getBrightnessColor();
         } else {
             if (entity instanceof EntityCreeper) {
                 EntityCreeper entityCreeper = (EntityCreeper) entity;
                 if (entityCreeper.getCreeperState() > 0) {
-                    return ((RPLEBlock) Blocks.fire).rple$getBrightnessColor();
+                    return RPLEBlock.of(Blocks.fire).rple$getBrightnessColor();
                 }
             }
 

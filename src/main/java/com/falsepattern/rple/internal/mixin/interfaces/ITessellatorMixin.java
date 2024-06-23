@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.interfaces;
 
-import com.falsepattern.rple.internal.client.render.RPLETessellator;
+import com.falsepattern.rple.api.client.render.RPLETessellator;
 
 import java.nio.ShortBuffer;
 

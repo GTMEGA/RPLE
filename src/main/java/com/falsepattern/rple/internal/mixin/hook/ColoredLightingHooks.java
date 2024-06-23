@@ -65,7 +65,7 @@ public final class ColoredLightingHooks {
     }
 
     public static int getLightValue(Block block) {
-        val rpleBlock = (RPLEBlock) block;
+        val rpleBlock = RPLEBlock.of(block);
         val color = rpleBlock.rple$getBrightnessColor();
         return lightValueFromColor(color);
     }
@@ -75,14 +75,14 @@ public final class ColoredLightingHooks {
                                     int posX,
                                     int posY,
                                     int posZ) {
-        val rpleBlock = (RPLEBlock) block;
+        val rpleBlock = RPLEBlock.of(block);
         val blockMeta = world.getBlockMetadata(posX, posY, posZ);
         val color = rpleBlock.rple$getBrightnessColor(world, blockMeta, posX, posY, posZ);
         return lightValueFromColor(color);
     }
 
     public static int getLightOpacity(Block block) {
-        val rpleBlock = (RPLEBlock) block;
+        val rpleBlock = RPLEBlock.of(block);
         val color = rpleBlock.rple$getTranslucencyColor();
         return lightOpacityFromColor(color);
     }
@@ -92,7 +92,7 @@ public final class ColoredLightingHooks {
                                       int posX,
                                       int posY,
                                       int posZ) {
-        val rpleBlock = (RPLEBlock) block;
+        val rpleBlock = RPLEBlock.of(block);
         val blockMeta = world.getBlockMetadata(posX, posY, posZ);
         val color = rpleBlock.rple$getTranslucencyColor(world, blockMeta, posX, posY, posZ);
         return lightOpacityFromColor(color);

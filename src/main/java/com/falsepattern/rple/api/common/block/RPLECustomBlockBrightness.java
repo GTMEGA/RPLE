@@ -14,16 +14,21 @@ import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * This interface can be implemented onto any {@link Block} or {@link TileEntity} to provide custom colored translucency.
+ * This interface can be implemented onto any {@link Block} or {@link TileEntity} to provide custom colored brightness.
  * <p>
  * If this interface is found on the target {@link Block}, the {@link TileEntity} implementation will only be used as fallback.
  *
- * @see RPLEBlockBrightnessColorProvider
+ * @see RPLECustomBlockTranslucency
  */
-public interface RPLEBlockTranslucencyColorProvider {
-    @NotNull RPLEColor rple$getCustomTranslucencyColor();
+public interface RPLECustomBlockBrightness {
+    @NotNull RPLEColor rple$getCustomBrightnessColor();
 
-    @NotNull RPLEColor rple$getCustomTranslucencyColor(int blockMeta);
+    @NotNull RPLEColor rple$getCustomBrightnessColor(int blockMeta);
 
-    @NotNull RPLEColor rple$getCustomTranslucencyColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ);
+    @NotNull
+    RPLEColor rple$getCustomBrightnessColor(@NotNull IBlockAccess world,
+                                            int blockMeta,
+                                            int posX,
+                                            int posY,
+                                            int posZ);
 }

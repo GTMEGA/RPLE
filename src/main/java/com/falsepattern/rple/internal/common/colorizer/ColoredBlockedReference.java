@@ -5,9 +5,10 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.block;
+package com.falsepattern.rple.internal.common.colorizer;
 
 import com.falsepattern.rple.api.common.color.RPLEColor;
+import com.falsepattern.rple.internal.common.block.RPLEBlockInit;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import lombok.RequiredArgsConstructor;

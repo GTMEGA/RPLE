@@ -7,8 +7,8 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common;
 
+import com.falsepattern.rple.api.common.block.RPLEBlockRenamed;
 import com.falsepattern.rple.internal.mixin.hook.ColoredLightingHooks;
-import com.falsepattern.rple.internal.mixin.interfaces.RPLERenamedBlockLightMethods;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Block.class)
 @SuppressWarnings("unused")
-public abstract class BlockMixin implements RPLERenamedBlockLightMethods {
+public abstract class BlockMixin implements RPLEBlockRenamed {
     @Shadow
     protected int lightValue;
     @Shadow

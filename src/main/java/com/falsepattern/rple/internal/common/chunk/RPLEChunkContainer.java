@@ -330,7 +330,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
                                        int subChunkPosZ) {
         // Fast-Path for World-Gen
         if (!isLightingInitialized) {
-            val block = (RPLEBlock) blockBase;
+            val block = RPLEBlock.of(blockBase);
             return channel.componentFromColor(block.rple$getRawBrightnessColor(blockMeta));
         }
 
@@ -347,7 +347,7 @@ public final class RPLEChunkContainer implements RPLEChunk {
                                     int subChunkPosZ) {
         // Fast-Path for World-Gen
         if (!isLightingInitialized) {
-            val block = (RPLEBlock) blockBase;
+            val block = RPLEBlock.of(blockBase);
             return channel.componentFromColor(block.rple$getRawOpacityColor(blockMeta));
         }
 

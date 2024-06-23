@@ -5,11 +5,11 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.block;
+package com.falsepattern.rple.internal.common.colorizer;
 
-import com.falsepattern.rple.api.common.block.RPLEBlockColorizer;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.api.common.color.RPLENamedColor;
+import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorizer;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 

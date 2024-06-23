@@ -11,7 +11,7 @@ import codechicken.multipart.TileMultipart;
 import codechicken.multipart.minecraft.IPartMeta;
 import codechicken.multipart.minecraft.McBlockPart;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
-import com.falsepattern.rple.api.common.block.RPLEBlockBrightnessColorProvider;
+import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
 import com.falsepattern.rple.api.common.color.CustomColor;
 import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.api.common.color.RPLEColor;
@@ -34,13 +34,13 @@ public final class MultiPartHelper {
 
         for (val part : multiPart.jPartList()) {
             final RPLEColor partColor;
-            if (part instanceof RPLEBlockBrightnessColorProvider) {
-                val colorProvider = (RPLEBlockBrightnessColorProvider) part;
+            if (part instanceof RPLECustomBlockBrightness) {
+                val colorProvider = (RPLECustomBlockBrightness) part;
                 partColor = colorProvider.rple$getCustomBrightnessColor();
             } else if (part instanceof McBlockPart) {
                 val partBlock = (McBlockPart) part;
                 val blockBase = partBlock.getBlock();
-                val rpleBlock = (RPLEBlock) blockBase;
+                val rpleBlock = RPLEBlock.of(blockBase);
 
                 if (part instanceof IPartMeta) {
                     val partMeta = (IPartMeta) part;

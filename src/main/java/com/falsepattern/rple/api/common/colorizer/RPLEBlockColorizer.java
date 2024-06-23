@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.api.common.block;
+package com.falsepattern.rple.api.common.colorizer;
 
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.api.common.color.RPLENamedColor;

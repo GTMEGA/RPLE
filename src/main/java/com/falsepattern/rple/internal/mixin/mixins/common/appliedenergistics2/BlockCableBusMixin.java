@@ -11,7 +11,7 @@ import appeng.block.AEBaseTileBlock;
 import appeng.block.networking.BlockCableBus;
 import appeng.parts.ICableBusContainer;
 import com.falsepattern.rple.api.common.RPLEBlockUtil;
-import com.falsepattern.rple.api.common.block.RPLEBlockBrightnessColorProvider;
+import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
 import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.mixin.interfaces.appliedenergistics2.ICableBusContainerMixin;
@@ -26,7 +26,7 @@ import static com.falsepattern.rple.api.common.color.LightValueColor.LIGHT_VALUE
 
 @Mixin(value = BlockCableBus.class,
        remap = false)
-public abstract class BlockCableBusMixin extends AEBaseTileBlock implements RPLEBlockBrightnessColorProvider {
+public abstract class BlockCableBusMixin extends AEBaseTileBlock implements RPLECustomBlockBrightness {
     public BlockCableBusMixin(Material mat) {
         super(mat);
     }

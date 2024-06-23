@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api.common.event;
 
-import com.falsepattern.rple.api.common.block.RPLEBlockColorRegistry;
+import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorRegistry;
 import cpw.mods.fml.common.eventhandler.Event;
 
 public final class BlockColorRegistrationEvent extends Event {

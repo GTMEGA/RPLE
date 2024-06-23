@@ -7,10 +7,10 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
+import com.falsepattern.rple.api.common.block.RPLEBlockRenamed;
 import com.falsepattern.rple.api.common.block.RPLEBlockRoot;
 import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.api.common.color.RPLEColor;
-import com.falsepattern.rple.internal.mixin.interfaces.RPLERenamedBlockLightMethods;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +21,7 @@ import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.RPLE_ROOT_
 @Unique
 @Mixin(value = Block.class, priority = RPLE_ROOT_MIXIN_PRIORITY)
 @SuppressWarnings("unused")
-public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot, RPLERenamedBlockLightMethods {
+public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot, RPLEBlockRenamed {
     @Override
     public short rple$getRawInternalColoredBrightness() {
         return packGreyscale(rple$renamed$getLightValue());

@@ -18,10 +18,15 @@ import net.minecraft.world.IBlockAccess;
  * <p>
  * You <b>SHOULD NOT</b> implement it yourself, but you can cast any instance of {@link Block} into it.
  *
- * @see RPLEBlockBrightnessColorProvider
- * @see RPLEBlockTranslucencyColorProvider
+ * @see RPLECustomBlockBrightness
+ * @see RPLECustomBlockTranslucency
  */
 public interface RPLEBlockRoot {
+    @SuppressWarnings("CastToIncompatibleInterface")
+    static RPLEBlockRoot of(Block block) {
+        return (RPLEBlockRoot) block;
+    }
+
     /**
      * Returns the translucency as defined by: {@link Block#getLightValue()}
      *

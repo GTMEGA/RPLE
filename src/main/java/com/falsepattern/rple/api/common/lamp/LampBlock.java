@@ -9,12 +9,12 @@
 package com.falsepattern.rple.api.common.lamp;
 
 import com.falsepattern.rple.api.common.RPLEColorUtil;
-import com.falsepattern.rple.api.common.block.RPLEBlockBrightnessColorProvider;
+import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
 import com.falsepattern.rple.api.common.color.CustomColor;
 import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.api.client.render.LampRenderer;
+import com.falsepattern.rple.internal.client.render.LampRenderer;
 import lombok.Getter;
 import lombok.val;
 import net.minecraft.block.Block;
@@ -32,7 +32,7 @@ import java.util.List;
 
 import static com.falsepattern.lib.util.RenderUtil.wrapAsClampedIcon;
 
-public abstract class LampBlock extends Block implements RPLEBlockBrightnessColorProvider {
+public abstract class LampBlock extends Block implements RPLECustomBlockBrightness {
     private static final String GLOW_RESOURCE = Tags.MOD_ID + ":glow";
     public static final int POWERED_BIT = 0b0010;
     public static final int INVERTED_BIT = 0b0001;

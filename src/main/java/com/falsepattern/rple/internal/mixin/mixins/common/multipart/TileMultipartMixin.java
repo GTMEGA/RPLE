@@ -9,8 +9,8 @@ package com.falsepattern.rple.internal.mixin.mixins.common.multipart;
 
 import codechicken.lib.world.IChunkLoadTile;
 import codechicken.multipart.TileMultipart;
-import com.falsepattern.rple.api.common.block.RPLEBlockBrightnessColorProvider;
-import com.falsepattern.rple.api.common.block.RPLEBlockTranslucencyColorProvider;
+import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
+import com.falsepattern.rple.api.common.block.RPLECustomBlockTranslucency;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.mixin.helper.MultiPartHelper;
 import net.minecraft.tileentity.TileEntity;
@@ -20,8 +20,8 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(TileMultipart.class)
 public abstract class TileMultipartMixin extends TileEntity implements IChunkLoadTile,
-                                                                       RPLEBlockBrightnessColorProvider,
-                                                                       RPLEBlockTranslucencyColorProvider {
+                                                                       RPLECustomBlockBrightness,
+                                                                       RPLECustomBlockTranslucency {
     @Override
     public @NotNull RPLEColor rple$getCustomBrightnessColor() {
         return MultiPartHelper.getMultiPartBrightnessColor(thiz());

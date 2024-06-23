@@ -20,10 +20,15 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * You <b>SHOULD NOT</b> implement it yourself, but you can cast any instance of {@link Block} into it.
  *
- * @see RPLEBlockBrightnessColorProvider
- * @see RPLEBlockTranslucencyColorProvider
+ * @see RPLECustomBlockBrightness
+ * @see RPLECustomBlockTranslucency
  */
 public interface RPLEBlock {
+    @SuppressWarnings("CastToIncompatibleInterface")
+    static RPLEBlock of(Block block) {
+        return (RPLEBlock) block;
+    }
+
     short rple$getRawBrightnessColor();
 
     short rple$getRawBrightnessColor(int blockMeta);

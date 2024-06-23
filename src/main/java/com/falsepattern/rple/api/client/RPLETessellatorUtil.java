@@ -1,12 +1,12 @@
 package com.falsepattern.rple.api.client;
 
 import com.falsepattern.lumina.api.lighting.LightType;
+import com.falsepattern.rple.api.client.render.RPLETessellator;
 import lombok.val;
 import net.minecraft.client.renderer.Tessellator;
 import org.jetbrains.annotations.NotNull;
 
 import static com.falsepattern.rple.api.client.RPLEPackedBrightnessUtil.*;
-import static com.falsepattern.rple.internal.client.render.RPLETessellator.rple$wrapTessellator;
 
 @SuppressWarnings("unused")
 public final class RPLETessellatorUtil {
@@ -55,10 +55,10 @@ public final class RPLETessellatorUtil {
     }
 
     public static void setBrightnessWithPackedBrightness(@NotNull Tessellator tess, long packedBrightness) {
-        rple$wrapTessellator(tess).rple$packedBrightness(packedBrightness);
+        RPLETessellator.of(tess).rple$packedBrightness(packedBrightness);
     }
 
     public static long getCurrentPackedBrightnessValue(@NotNull Tessellator tess) {
-        return rple$wrapTessellator(tess).rple$packedBrightness();
+        return RPLETessellator.of(tess).rple$packedBrightness();
     }
 }

@@ -5,11 +5,12 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.common.block;
+package com.falsepattern.rple.internal.common.colorizer;
 
-import com.falsepattern.rple.api.common.block.RPLEBlockColorRegistry;
-import com.falsepattern.rple.api.common.block.RPLEBlockColorizer;
 import com.falsepattern.rple.api.common.color.RPLENamedColor;
+import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorRegistry;
+import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorizer;
+import com.falsepattern.rple.internal.common.block.RPLEBlockInit;
 import com.falsepattern.rple.internal.common.config.container.BlockColorConfig;
 import com.falsepattern.rple.internal.common.config.container.BlockReference;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -25,11 +26,11 @@ import java.io.IOException;
 import java.util.IdentityHashMap;
 
 import static com.falsepattern.rple.internal.RPLEDefaultValues.*;
-import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
-import static com.falsepattern.rple.internal.common.block.NullBlockColorizer.nullBlockColorizer;
+import static com.falsepattern.rple.internal.common.colorizer.NullBlockColorizer.nullBlockColorizer;
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.loadCustomConfig;
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.saveGeneratedConfig;
 import static com.falsepattern.rple.internal.common.event.EventPoster.postBlockColorRegistrationEvent;
+import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
 import static com.falsepattern.rple.internal.common.world.RPLEWorldProvider.*;
 import static lombok.AccessLevel.PRIVATE;
 
