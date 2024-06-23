@@ -9,6 +9,7 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.block.RPLEBlockBrightnessColorProvider;
+import com.falsepattern.rple.api.common.block.RPLEBlockRoot;
 import com.falsepattern.rple.api.common.block.RPLEBlockTranslucencyColorProvider;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.common.color.ColorPackingUtil;
@@ -25,7 +26,7 @@ import org.spongepowered.asm.mixin.Unique;
 @Unique
 @Mixin(Block.class)
 @SuppressWarnings("unused")
-public abstract class RPLEBlockImplMixin implements RPLEBlock {
+public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
     private short rple$rawBaseBrightnessColor;
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
@@ -47,38 +48,6 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock {
     @Nullable
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
     private RPLEColor @Nullable [] rple$metaTranslucencyColors;
-
-    @Shadow(remap = false)
-    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
-    public abstract short rple$getRawInternalColoredBrightness();
-
-    @Shadow(remap = false)
-    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
-    public abstract short rple$getRawInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ);
-
-    @Shadow(remap = false)
-    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
-    public abstract short rple$getRawInternalColoredOpacity();
-
-    @Shadow(remap = false)
-    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
-    public abstract short rple$getRawInternalColoredOpacity(IBlockAccess world, int posX, int posY, int posZ);
-
-    @Shadow(remap = false)
-    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
-    public abstract RPLEColor rple$getInternalColoredBrightness();
-
-    @Shadow(remap = false)
-    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
-    public abstract RPLEColor rple$getInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ);
-
-    @Shadow(remap = false)
-    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
-    public abstract RPLEColor rple$getInternalColoredTranslucency();
-
-    @Shadow(remap = false)
-    @Dynamic("Implemented by: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockRootImplMixin]")
-    public abstract RPLEColor rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ);
 
     @Shadow
     public abstract boolean hasTileEntity(int metadata);
