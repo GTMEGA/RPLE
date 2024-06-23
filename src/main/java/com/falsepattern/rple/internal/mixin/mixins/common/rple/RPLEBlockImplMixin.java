@@ -7,12 +7,12 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
+import com.falsepattern.rple.api.common.RGB16Helper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.block.RPLEBlockRoot;
 import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
 import com.falsepattern.rple.api.common.block.RPLECustomBlockTranslucency;
 import com.falsepattern.rple.api.common.color.RPLEColor;
-import com.falsepattern.rple.internal.common.color.ColorPackingUtil;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
@@ -64,7 +64,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
                 val color = colorProvider.rple$getCustomBrightnessColor();
-                return ColorPackingUtil.brightnessToCache(color);
+                return RGB16Helper.brightnessToCache(color);
             } catch (Exception ignored) {
             }
         }
@@ -90,7 +90,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
                 val color = colorProvider.rple$getCustomBrightnessColor(blockMeta);
-                return ColorPackingUtil.brightnessToCache(color);
+                return RGB16Helper.brightnessToCache(color);
             } catch (Exception ignored) {
             }
         }
@@ -115,7 +115,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
                 val color = colorProvider.rple$getCustomBrightnessColor(world, blockMeta, posX, posY, posZ);
-                return ColorPackingUtil.brightnessToCache(color);
+                return RGB16Helper.brightnessToCache(color);
             } catch (Exception ignored) {
             }
         }
@@ -125,7 +125,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
                 val colorProvider = (RPLECustomBlockBrightness) tileEntity;
                 try {
                     val color = colorProvider.rple$getCustomBrightnessColor(world, blockMeta, posX, posY, posZ);
-                    return ColorPackingUtil.brightnessToCache(color);
+                    return RGB16Helper.brightnessToCache(color);
                 } catch (Exception ignored) {
                 }
             }
@@ -141,7 +141,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
                 val color = colorProvider.rple$getCustomTranslucencyColor();
-                return ColorPackingUtil.translucencyToOpacityCache(color);
+                return RGB16Helper.translucencyToOpacityCache(color);
             } catch (Exception ignored) {
             }
         }
@@ -166,7 +166,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
                 val color = colorProvider.rple$getCustomTranslucencyColor(blockMeta);
-                return ColorPackingUtil.translucencyToOpacityCache(color);
+                return RGB16Helper.translucencyToOpacityCache(color);
             } catch (Exception ignored) {
             }
         }
@@ -191,7 +191,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
                 val color = colorProvider.rple$getCustomTranslucencyColor(world, blockMeta, posX, posY, posZ);
-                return  ColorPackingUtil.translucencyToOpacityCache(color);
+                return RGB16Helper.translucencyToOpacityCache(color);
             } catch (Exception ignored) {
             }
         }
@@ -201,7 +201,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
                 val colorProvider = (RPLECustomBlockTranslucency) tileEntity;
                 try {
                     val color = colorProvider.rple$getCustomTranslucencyColor(world, blockMeta, posX, posY, posZ);
-                    return  ColorPackingUtil.translucencyToOpacityCache(color);
+                    return RGB16Helper.translucencyToOpacityCache(color);
                 } catch (Exception ignored) {
                 }
             }

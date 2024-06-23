@@ -1,14 +1,17 @@
 package com.falsepattern.rple.api.client;
 
+import com.falsepattern.lib.StableAPI;
 import com.falsepattern.rple.internal.client.render.EntityColorHandler;
 import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
+@StableAPI(since = "1.0.0")
 public final class RPLEEntityAPI {
     private RPLEEntityAPI() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
+    @StableAPI.Expose
     public static void permit(@NotNull Class<? extends Entity> entityClass) {
         EntityColorHandler.permit(entityClass);
     }
@@ -20,6 +23,7 @@ public final class RPLEEntityAPI {
      *
      * @param entityClassName The fully qualified class name
      */
+    @StableAPI.Expose
     public static void permit(@NotNull String entityClassName) {
         EntityColorHandler.permit(entityClassName);
     }

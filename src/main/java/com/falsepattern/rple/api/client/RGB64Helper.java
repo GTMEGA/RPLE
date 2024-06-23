@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.client.render;
+package com.falsepattern.rple.api.client;
 
 import lombok.experimental.UtilityClass;
 import lombok.val;
@@ -14,7 +14,7 @@ import lombok.val;
  * Utility class for managing minecraft brightness values, and packed long RGB versions of these brightness values.
  */
 @UtilityClass
-public final class TessellatorBrightnessHelper {
+public final class RGB64Helper {
     private static final int BLOCK_LIGHT_MASK = 0x000000FF;
     private static final int SKYLIGHT_MASK = 0x00FF0000;
 
@@ -106,12 +106,12 @@ public final class TessellatorBrightnessHelper {
 
     public static long packedBrightnessFromRGB(int rgb) {
         long packed = 0L;
-        packed |= (long) ((rgb >>> RGBHelper.RGB_RED_OFFSET_BLOCK) & 0xF) << PACKED_RED_OFFSET_BLOCK_4BIT;
-        packed |= (long) ((rgb >>> RGBHelper.RGB_GREEN_OFFSET_BLOCK) & 0xF) << PACKED_GREEN_OFFSET_BLOCK_4BIT;
-        packed |= (long) ((rgb >>> RGBHelper.RGB_BLUE_OFFSET_BLOCK) & 0xF) << PACKED_BLUE_OFFSET_BLOCK_4BIT;
-        packed |= (long) ((rgb >>> RGBHelper.RGB_RED_OFFSET_SKY) & 0xF) << PACKED_RED_OFFSET_SKY_4BIT;
-        packed |= (long) ((rgb >>> RGBHelper.RGB_GREEN_OFFSET_SKY) & 0xF) << PACKED_GREEN_OFFSET_SKY_4BIT;
-        packed |= (long) ((rgb >>> RGBHelper.RGB_BLUE_OFFSET_SKY) & 0xF) << PACKED_BLUE_OFFSET_SKY_4BIT;
+        packed |= (long) ((rgb >>> RGB32Helper.RGB_RED_OFFSET_BLOCK) & 0xF) << PACKED_RED_OFFSET_BLOCK_4BIT;
+        packed |= (long) ((rgb >>> RGB32Helper.RGB_GREEN_OFFSET_BLOCK) & 0xF) << PACKED_GREEN_OFFSET_BLOCK_4BIT;
+        packed |= (long) ((rgb >>> RGB32Helper.RGB_BLUE_OFFSET_BLOCK) & 0xF) << PACKED_BLUE_OFFSET_BLOCK_4BIT;
+        packed |= (long) ((rgb >>> RGB32Helper.RGB_RED_OFFSET_SKY) & 0xF) << PACKED_RED_OFFSET_SKY_4BIT;
+        packed |= (long) ((rgb >>> RGB32Helper.RGB_GREEN_OFFSET_SKY) & 0xF) << PACKED_GREEN_OFFSET_SKY_4BIT;
+        packed |= (long) ((rgb >>> RGB32Helper.RGB_BLUE_OFFSET_SKY) & 0xF) << PACKED_BLUE_OFFSET_SKY_4BIT;
         return packed;
     }
 
@@ -126,12 +126,12 @@ public final class TessellatorBrightnessHelper {
         if ((packed & PACKED_BRIGHTNESS_4BIT_LOSSY) != 0)
             return -1;
         int rgb = 0;
-        rgb |= ((int)(packed >>> PACKED_RED_OFFSET_BLOCK_4BIT) & 0xF) << RGBHelper.RGB_RED_OFFSET_BLOCK;
-        rgb |= ((int)(packed >>> PACKED_GREEN_OFFSET_BLOCK_4BIT) & 0xF) << RGBHelper.RGB_GREEN_OFFSET_BLOCK;
-        rgb |= ((int)(packed >>> PACKED_BLUE_OFFSET_BLOCK_4BIT) & 0xF) << RGBHelper.RGB_BLUE_OFFSET_BLOCK;
-        rgb |= ((int)(packed >>> PACKED_RED_OFFSET_SKY_4BIT) & 0xF) << RGBHelper.RGB_RED_OFFSET_SKY;
-        rgb |= ((int)(packed >>> PACKED_GREEN_OFFSET_SKY_4BIT) & 0xF) << RGBHelper.RGB_GREEN_OFFSET_SKY;
-        rgb |= ((int)(packed >>> PACKED_BLUE_OFFSET_SKY_4BIT) & 0xF) << RGBHelper.RGB_BLUE_OFFSET_SKY;
+        rgb |= ((int) (packed >>> PACKED_RED_OFFSET_BLOCK_4BIT) & 0xF) << RGB32Helper.RGB_RED_OFFSET_BLOCK;
+        rgb |= ((int) (packed >>> PACKED_GREEN_OFFSET_BLOCK_4BIT) & 0xF) << RGB32Helper.RGB_GREEN_OFFSET_BLOCK;
+        rgb |= ((int) (packed >>> PACKED_BLUE_OFFSET_BLOCK_4BIT) & 0xF) << RGB32Helper.RGB_BLUE_OFFSET_BLOCK;
+        rgb |= ((int) (packed >>> PACKED_RED_OFFSET_SKY_4BIT) & 0xF) << RGB32Helper.RGB_RED_OFFSET_SKY;
+        rgb |= ((int) (packed >>> PACKED_GREEN_OFFSET_SKY_4BIT) & 0xF) << RGB32Helper.RGB_GREEN_OFFSET_SKY;
+        rgb |= ((int) (packed >>> PACKED_BLUE_OFFSET_SKY_4BIT) & 0xF) << RGB32Helper.RGB_BLUE_OFFSET_SKY;
         return rgb;
     }
 

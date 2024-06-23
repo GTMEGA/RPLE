@@ -10,7 +10,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client.codechickenlib;
 import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.lighting.LightMatrix;
 import codechicken.lib.render.CCRenderState;
-import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
+import com.falsepattern.rple.api.client.RPLEAOHelper;
 import lombok.val;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -30,7 +30,7 @@ public abstract class LightMatrixMixin {
      */
     @Overwrite
     public static int interpBrightness(int brightnessA, int brightnessB, int brightnessC, int brightnessD) {
-        return CookieMonsterHelper.average(true, brightnessA, brightnessB, brightnessC, brightnessD);
+        return RPLEAOHelper.average(true, brightnessA, brightnessB, brightnessC, brightnessD);
     }
 
     /**
@@ -44,6 +44,6 @@ public abstract class LightMatrixMixin {
         val f = (a[0] * lc.fa) + (a[1] * lc.fb) + (a[2] * lc.fc) + (a[3] * lc.fd);
         val b = brightness(lc.side);
         CCRenderState.setColour(ColourRGBA.multiplyC(CCRenderState.colour(), f));
-        CCRenderState.setBrightness(CookieMonsterHelper.mixAOBrightness(b[0], b[1], b[2], b[3], lc.fa, lc.fb, lc.fc, lc.fd));
+        CCRenderState.setBrightness(RPLEAOHelper.mixAOBrightness(b[0], b[1], b[2], b[3], lc.fa, lc.fb, lc.fc, lc.fd));
     }
 }

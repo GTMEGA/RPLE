@@ -5,9 +5,9 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.api.client;
+package com.falsepattern.rple.internal.client.render;
 
-public final class RPLEShaderConstants {
+public final class ShaderConstants {
     public static final String RED_LIGHT_MAP_UNIFORM_NAME = "redLightMap";
     public static final String GREEN_LIGHT_MAP_UNIFORM_NAME = "greenLightMap";
     public static final String BLUE_LIGHT_MAP_UNIFORM_NAME = "blueLightMap";

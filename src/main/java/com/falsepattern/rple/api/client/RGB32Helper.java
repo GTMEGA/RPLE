@@ -6,9 +6,12 @@
  *
  */
 
-package com.falsepattern.rple.internal.client.render;
+package com.falsepattern.rple.api.client;
 
-public class RGBHelper {
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public final class RGB32Helper {
     public static final int RGB_RED_OFFSET_SKY = 12;
     public static final int RGB_GREEN_OFFSET_SKY = 16;
     public static final int RGB_BLUE_OFFSET_SKY = 20;

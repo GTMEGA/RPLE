@@ -8,13 +8,13 @@
 
 package com.falsepattern.rple.internal.client.optifine;
 
+import com.falsepattern.rple.api.client.CookieMonster;
+import com.falsepattern.rple.api.client.RGB64Helper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.CustomColor;
 import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.api.common.color.RPLEColor;
-import com.falsepattern.rple.internal.client.render.CookieMonster;
-import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.var;
@@ -116,15 +116,15 @@ public class ColorDynamicLights {
     private static int getCombinedLight(DoubleBrightness lightPlayer, int combinedLight) {
         if (lightPlayer.r > 0 || lightPlayer.g > 0 || lightPlayer.b > 0) {
             long splitCombined = CookieMonster.cookieToPackedLong(combinedLight);
-            int combinedR = TessellatorBrightnessHelper.getBrightnessRed(splitCombined);
-            int combinedG = TessellatorBrightnessHelper.getBrightnessGreen(splitCombined);
-            int combinedB = TessellatorBrightnessHelper.getBrightnessBlue(splitCombined);
-            int combinedSr = TessellatorBrightnessHelper.getSkyLightChannelFromBrightnessRender(combinedR);
-            int combinedSg = TessellatorBrightnessHelper.getSkyLightChannelFromBrightnessRender(combinedG);
-            int combinedSb = TessellatorBrightnessHelper.getSkyLightChannelFromBrightnessRender(combinedB);
-            int combinedBr = TessellatorBrightnessHelper.getBlockLightChannelFromBrightnessRender(combinedR);
-            int combinedBg = TessellatorBrightnessHelper.getBlockLightChannelFromBrightnessRender(combinedG);
-            int combinedBb = TessellatorBrightnessHelper.getBlockLightChannelFromBrightnessRender(combinedB);
+            int combinedR = RGB64Helper.getBrightnessRed(splitCombined);
+            int combinedG = RGB64Helper.getBrightnessGreen(splitCombined);
+            int combinedB = RGB64Helper.getBrightnessBlue(splitCombined);
+            int combinedSr = RGB64Helper.getSkyLightChannelFromBrightnessRender(combinedR);
+            int combinedSg = RGB64Helper.getSkyLightChannelFromBrightnessRender(combinedG);
+            int combinedSb = RGB64Helper.getSkyLightChannelFromBrightnessRender(combinedB);
+            int combinedBr = RGB64Helper.getBlockLightChannelFromBrightnessRender(combinedR);
+            int combinedBg = RGB64Helper.getBlockLightChannelFromBrightnessRender(combinedG);
+            int combinedBb = RGB64Helper.getBlockLightChannelFromBrightnessRender(combinedB);
             int lightPlayerR = (int) (lightPlayer.r * 16.0);
             int lightPlayerG = (int) (lightPlayer.g * 16.0);
             int lightPlayerB = (int) (lightPlayer.b * 16.0);
@@ -138,10 +138,10 @@ public class ColorDynamicLights {
                 combinedBb = lightPlayerB;
             }
             combinedLight = CookieMonster.packedLongToCookie(
-                    TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(
-                            TessellatorBrightnessHelper.channelsToBrightnessRender(combinedBr, combinedSr),
-                            TessellatorBrightnessHelper.channelsToBrightnessRender(combinedBg, combinedSg),
-                            TessellatorBrightnessHelper.channelsToBrightnessRender(combinedBb, combinedSb)));
+                    RGB64Helper.packedBrightnessFromTessellatorBrightnessChannels(
+                            RGB64Helper.channelsToBrightnessRender(combinedBr, combinedSr),
+                            RGB64Helper.channelsToBrightnessRender(combinedBg, combinedSg),
+                            RGB64Helper.channelsToBrightnessRender(combinedBb, combinedSb)));
         }
 
         return combinedLight;

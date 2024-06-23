@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
+import com.falsepattern.rple.api.client.CookieMonster;
+import com.falsepattern.rple.api.client.RGB64Helper;
 import com.falsepattern.rple.internal.client.lightmap.LightMap;
-import com.falsepattern.rple.internal.client.render.CookieMonster;
-import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
 import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorMixin;
 import lombok.val;
@@ -67,9 +67,9 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
               require = 1)
     private boolean customColor(Tessellator instance) {
         if (hasBrightness) {
-            rawBuffer[rawBufferIndex + VertexConstants.getRedIndexNoShader()] = TessellatorBrightnessHelper.getTessBrightnessRed(rple$packedBrightness);
-            rawBuffer[rawBufferIndex + VertexConstants.getGreenIndexNoShader()] = TessellatorBrightnessHelper.getTessBrightnessGreen(rple$packedBrightness);
-            rawBuffer[rawBufferIndex + VertexConstants.getBlueIndexNoShader()] = TessellatorBrightnessHelper.getTessBrightnessBlue(rple$packedBrightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getRedIndexNoShader()] = RGB64Helper.getTessBrightnessRed(rple$packedBrightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getGreenIndexNoShader()] = RGB64Helper.getTessBrightnessGreen(rple$packedBrightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getBlueIndexNoShader()] = RGB64Helper.getTessBrightnessBlue(rple$packedBrightness);
         }
         return false;
     }
@@ -80,17 +80,17 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
      */
     @Overwrite
     public void setBrightness(int brightness) {
-        rple$packedBrightness(CookieMonster.cookieToPackedLong(brightness));
+        rple$setPackedBrightness(CookieMonster.cookieToPackedLong(brightness));
     }
 
     @Override
-    public void rple$packedBrightness(long packedBrightness) {
+    public void rple$setPackedBrightness(long packedBrightness) {
         hasBrightness = true;
         rple$packedBrightness = packedBrightness;
     }
 
     @Override
-    public long rple$packedBrightness() {
+    public long rple$getPackedBrightness() {
         return rple$packedBrightness;
     }
 }

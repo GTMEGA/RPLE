@@ -5,7 +5,7 @@
  * or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
  */
 
-package com.falsepattern.rple.internal.client.render;
+package com.falsepattern.rple.api.client;
 
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.collection.CircularLongBuffer;
@@ -17,9 +17,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.falsepattern.rple.internal.common.util.LogHelper.shouldLogDebug;
-import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
 import static com.falsepattern.rple.internal.common.config.RPLEConfig.Debug.DEBUG_COOKIE_MONSTER;
+import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
+import static com.falsepattern.rple.internal.common.util.LogHelper.shouldLogDebug;
 
 /**
  * All parts of Minecraft's rendering internals expect light levels an int, but we can only fit our data into longs.
@@ -32,6 +32,7 @@ import static com.falsepattern.rple.internal.common.config.RPLEConfig.Debug.DEBU
  * Note: Cookies should be treated as opaque blobs. Do not try to unpack them manually, always go through the cookie
  * manager! Additionally, they should not be saved anywhere, as they expire very quickly.
  */
+// TODO: [COOKIE] Pull this up into API
 public final class CookieMonster {
     private static final Logger LOG = createLogger("CookieMonster");
 
@@ -65,15 +66,15 @@ public final class CookieMonster {
     private static final FastThreadLocal.FixedValue<ThreadState> THREAD_STATE = new FastThreadLocal.FixedValue<>(ThreadState::new);
 
     static {
-        val redBrightness = TessellatorBrightnessHelper
+        val redBrightness = RGB64Helper
                 .lightLevelsToBrightnessForTessellator(0xF, 0xF);
-        val greenBrightness = TessellatorBrightnessHelper
+        val greenBrightness = RGB64Helper
                 .lightLevelsToBrightnessForTessellator(0x0, 0x0);
-        val blueBrightness = TessellatorBrightnessHelper
+        val blueBrightness = RGB64Helper
                 .lightLevelsToBrightnessForTessellator(0x0, 0x0);
-        BROKEN_WARN_COLOR = TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
-                                                                                                          greenBrightness,
-                                                                                                          blueBrightness);
+        BROKEN_WARN_COLOR = RGB64Helper.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
+                                                                                          greenBrightness,
+                                                                                          blueBrightness);
     }
 
     /**
@@ -86,11 +87,11 @@ public final class CookieMonster {
     }
 
     /**
-     * @param packedLong A long value returned by {@link TessellatorBrightnessHelper}.
+     * @param packedLong A long value returned by {@link RGB64Helper}.
      * @return An opaque, temporary cookie representing the given long.
      */
     public static int packedLongToCookie(long packedLong) {
-        int rgb = TessellatorBrightnessHelper.tryRGBFromPackedBrightness(packedLong);
+        int rgb = RGB64Helper.tryRGBFromPackedBrightness(packedLong);
         if (rgb != -1) {
             return rgb | COOKIE_BIT | RGB_BIT;
         }
@@ -114,12 +115,12 @@ public final class CookieMonster {
         switch (inspectValue(cookie)) {
             case COOKIE:
                 if ((cookie & RGB_BIT) != 0) {
-                    return TessellatorBrightnessHelper.packedBrightnessFromRGB(cookie & RGB_MASK);
+                    return RGB64Helper.packedBrightnessFromRGB(cookie & RGB_MASK);
                 }
                 return THREAD_STATE.get().lightValues.get((cookie & INDEX_MASK) >>> INDEX_SHIFT);
             case VANILLA:
                 // Vanilla fake-pack
-                return TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(cookie, cookie, cookie);
+                return RGB64Helper.packedBrightnessFromTessellatorBrightnessChannels(cookie, cookie, cookie);
             default:
                 if (shouldLogDebug(DEBUG_COOKIE_MONSTER)) {
                     LOG.warn("Illegal brightness value (Did a mod treat a cookie as a regular brightness value?)");

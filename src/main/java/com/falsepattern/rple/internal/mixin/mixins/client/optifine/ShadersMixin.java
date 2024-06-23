@@ -7,10 +7,10 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
-import com.falsepattern.rple.api.client.RPLEShaderConstants;
+import com.falsepattern.rple.api.client.CookieMonster;
+import com.falsepattern.rple.api.client.RGB64Helper;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
-import com.falsepattern.rple.internal.client.render.CookieMonster;
-import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
+import com.falsepattern.rple.internal.client.render.ShaderConstants;
 import lombok.val;
 import net.minecraft.entity.EntityLivingBase;
 import org.lwjgl.opengl.ARBVertexShader;
@@ -39,11 +39,11 @@ public abstract class ShadersMixin {
                      args = "stringValue=lightmap"),
             require = 1)
     private static void setLightMapUniform(int program, CallbackInfo ci) {
-        setProgramUniform1i(RPLEShaderConstants.RED_LIGHT_MAP_UNIFORM_NAME,
+        setProgramUniform1i(ShaderConstants.RED_LIGHT_MAP_UNIFORM_NAME,
                             LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
-        setProgramUniform1i(RPLEShaderConstants.GREEN_LIGHT_MAP_UNIFORM_NAME,
+        setProgramUniform1i(ShaderConstants.GREEN_LIGHT_MAP_UNIFORM_NAME,
                             LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
-        setProgramUniform1i(RPLEShaderConstants.BLUE_LIGHT_MAP_UNIFORM_NAME,
+        setProgramUniform1i(ShaderConstants.BLUE_LIGHT_MAP_UNIFORM_NAME,
                             LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_SAMPLER);
     }
 
@@ -52,7 +52,7 @@ public abstract class ShadersMixin {
                      args = "stringValue=texture"),
             require = 1)
     private static void setTextureUniform(int program, CallbackInfo ci) {
-        setProgramUniform1i(RPLEShaderConstants.TEXTURING_ENABLED_ATTRIB_NAME, 1);
+        setProgramUniform1i(ShaderConstants.TEXTURING_ENABLED_ATTRIB_NAME, 1);
     }
 
     @Redirect(method = "createVertShader",
@@ -62,9 +62,9 @@ public abstract class ShadersMixin {
     private static ShaderLine parseLineHook(String line) {
         val sl = ShaderParser.parseLine(line);
         if (sl != null) {
-            if (sl.isAttribute(RPLEShaderConstants.EDGE_TEX_COORD_ATTRIB_NAME)) {
-                RPLEShaderConstants.useRPLEEdgeTexCoordAttrib = true;
-                RPLEShaderConstants.progUseRPLEEdgeTexCoordAttrib = true;
+            if (sl.isAttribute(ShaderConstants.EDGE_TEX_COORD_ATTRIB_NAME)) {
+                ShaderConstants.useRPLEEdgeTexCoordAttrib = true;
+                ShaderConstants.progUseRPLEEdgeTexCoordAttrib = true;
             }
         }
         return sl;
@@ -75,7 +75,7 @@ public abstract class ShadersMixin {
                      target = "Lshadersmod/client/Shaders;useMidTexCoordAttrib:Z"),
             require = 1)
     private static void initHook(CallbackInfo ci) {
-        RPLEShaderConstants.useRPLEEdgeTexCoordAttrib = false;
+        ShaderConstants.useRPLEEdgeTexCoordAttrib = false;
     }
 
     @Inject(method = "setupProgram",
@@ -87,7 +87,7 @@ public abstract class ShadersMixin {
                                        String vShaderPath,
                                        String fShaderPath,
                                        CallbackInfoReturnable<Integer> cir) {
-        RPLEShaderConstants.progUseRPLEEdgeTexCoordAttrib = false;
+        ShaderConstants.progUseRPLEEdgeTexCoordAttrib = false;
     }
 
     @Inject(method = "setupProgram",
@@ -102,11 +102,11 @@ public abstract class ShadersMixin {
                                             int programid,
                                             int vShader,
                                             int fShader) {
-        if (RPLEShaderConstants.progUseRPLEEdgeTexCoordAttrib) {
+        if (ShaderConstants.progUseRPLEEdgeTexCoordAttrib) {
             ARBVertexShader.glBindAttribLocationARB(programid,
-                                                    RPLEShaderConstants.edgeTexCoordAttrib,
-                                                    RPLEShaderConstants.EDGE_TEX_COORD_ATTRIB_NAME);
-            checkGLError(RPLEShaderConstants.EDGE_TEX_COORD_ATTRIB_NAME);
+                                                    ShaderConstants.edgeTexCoordAttrib,
+                                                    ShaderConstants.EDGE_TEX_COORD_ATTRIB_NAME);
+            checkGLError(ShaderConstants.EDGE_TEX_COORD_ATTRIB_NAME);
         }
     }
 
@@ -117,6 +117,6 @@ public abstract class ShadersMixin {
               remap = true)
     private static int getEyeBrightness(EntityLivingBase instance, float partialTick) {
         val result = instance.getBrightnessForRender(partialTick);
-        return TessellatorBrightnessHelper.getBrightestChannelFromPacked(CookieMonster.cookieToPackedLong(result));
+        return RGB64Helper.getBrightestChannelFromPacked(CookieMonster.cookieToPackedLong(result));
     }
 }

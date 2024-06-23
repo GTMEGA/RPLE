@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.storagedrawers;
 
-import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
+import com.falsepattern.rple.api.client.RPLEAOHelper;
 import com.jaquadro.minecraft.storagedrawers.util.RenderHelperAO;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -20,7 +20,7 @@ public abstract class RenderHelperAOMixin {
      */
     @Overwrite
     public static int getAOBrightness(int brightnessA, int brightnessB, int brightnessC, int brightnessD) {
-        return CookieMonsterHelper.average(true, brightnessA, brightnessB, brightnessC, brightnessD);
+        return RPLEAOHelper.average(true, brightnessA, brightnessB, brightnessC, brightnessD);
     }
 
     /**
@@ -36,7 +36,7 @@ public abstract class RenderHelperAOMixin {
                                       double weight2,
                                       double weight3,
                                       double weight4) {
-        return CookieMonsterHelper.mixAOBrightness(part1, part2, part3, part4, weight1, weight2, weight3, weight4);
+        return RPLEAOHelper.mixAOBrightness(part1, part2, part3, part4, weight1, weight2, weight3, weight4);
     }
 
     /**
@@ -50,7 +50,7 @@ public abstract class RenderHelperAOMixin {
                                       int brightTR,
                                       double lerpTB,
                                       double lerpLR) {
-        return CookieMonsterHelper.mixAOBrightness(brightTL, brightBL, brightBR, brightTR, lerpTB, lerpLR);
+        return RPLEAOHelper.mixAOBrightness(brightTL, brightBL, brightBR, brightTR, lerpTB, lerpLR);
     }
 
     /**
@@ -59,6 +59,6 @@ public abstract class RenderHelperAOMixin {
      */
     @Overwrite
     public static int mixAOBrightness(int brightMin, int brightMax, float fMin, float fMax) {
-        return CookieMonsterHelper.mixAOBrightness(brightMin, brightMax, fMin, fMax);
+        return RPLEAOHelper.mixAOBrightness(brightMin, brightMax, fMin, fMax);
     }
 }

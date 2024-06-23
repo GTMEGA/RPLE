@@ -11,9 +11,9 @@ import com.falsepattern.lumina.api.LumiAPI;
 import com.falsepattern.lumina.api.chunk.LumiChunk;
 import com.falsepattern.lumina.api.lighting.LightType;
 import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
+import com.falsepattern.rple.api.client.RGB64Helper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.ColorChannel;
-import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
@@ -280,7 +280,7 @@ public final class RPLEWorldContainer implements RPLEWorld {
         var blockLightValue = rple$getChannelLightValueForRender(chunk, BLOCK_LIGHT_TYPE, posX, posY, posZ);
         blockLightValue = Math.max(blockLightValue, minBlockLight);
         val skyLightValue = rple$getChannelLightValueForRender(chunk, SKY_LIGHT_TYPE, posX, posY, posZ);
-        return TessellatorBrightnessHelper.lightLevelsToBrightnessForTessellator(blockLightValue, skyLightValue);
+        return RGB64Helper.lightLevelsToBrightnessForTessellator(blockLightValue, skyLightValue);
     }
 
     @Override

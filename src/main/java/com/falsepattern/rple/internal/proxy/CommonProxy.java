@@ -7,13 +7,13 @@
 
 package com.falsepattern.rple.internal.proxy;
 
-import com.falsepattern.rple.api.common.lamp.LampBlock;
-import com.falsepattern.rple.api.common.lamp.LampItemBlock;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.common.block.Lamps;
-import com.falsepattern.rple.internal.common.block.RPLELampBlock;
 import com.falsepattern.rple.internal.common.config.ColorConfigLoader;
 import com.falsepattern.rple.internal.common.config.RPLEConfig;
+import com.falsepattern.rple.internal.common.lamp.LampBlock;
+import com.falsepattern.rple.internal.common.lamp.LampItemBlock;
+import com.falsepattern.rple.internal.common.lamp.Lamps;
+import com.falsepattern.rple.internal.common.lamp.RPLELampBlock;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.NoArgsConstructor;

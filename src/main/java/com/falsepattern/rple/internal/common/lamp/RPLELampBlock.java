@@ -6,9 +6,8 @@
  *
  */
 
-package com.falsepattern.rple.internal.common.block;
+package com.falsepattern.rple.internal.common.lamp;
 
-import com.falsepattern.rple.api.common.lamp.LampBlock;
 import com.falsepattern.rple.internal.Tags;
 import lombok.val;
 

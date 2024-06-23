@@ -7,15 +7,14 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.api.client.RPLEBlockBrightnessUtil;
+import com.falsepattern.rple.api.client.RPLEAOHelper;
+import com.falsepattern.rple.api.client.RPLETessBrightnessUtil;
 import com.falsepattern.rple.internal.Compat;
-import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
@@ -61,7 +60,7 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int getAoBrightness(int a, int b, int c, int d) {
-        return CookieMonsterHelper.average(true, a, b, c, d);
+        return RPLEAOHelper.average(true, a, b, c, d);
     }
 
     //Ugly evil mixin-mixin hack
@@ -89,7 +88,7 @@ public abstract class RenderBlocksMixin {
               remap = false,
               require = 3)
     private int grabDefaultLight(Block block, IBlockAccess world, int posX, int posY, int posZ) {
-        return RPLEBlockBrightnessUtil.getBlockBrightnessForTessellator(world, block, meta, posX, posY, posZ);
+        return RPLETessBrightnessUtil.getBlockBrightnessForTessellator(world, block, meta, posX, posY, posZ);
     }
 
     /**
@@ -98,7 +97,7 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int mixAoBrightness(int a, int b, int c, int d, double aMul, double bMul, double cMul, double dMul) {
-        return CookieMonsterHelper.mixAOBrightness(a, b, c, d, aMul, bMul, cMul, dMul);
+        return RPLEAOHelper.mixAOBrightness(a, b, c, d, aMul, bMul, cMul, dMul);
     }
 
     private static final float alpha = 0.7f;

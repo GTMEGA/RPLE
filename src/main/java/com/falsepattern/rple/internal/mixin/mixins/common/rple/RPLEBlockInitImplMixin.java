@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
+import com.falsepattern.rple.api.common.RGB16Helper;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.common.block.RPLEBlockInit;
-import com.falsepattern.rple.internal.common.color.ColorPackingUtil;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -65,7 +65,7 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
         if (baseColoredBrightness == null) {
             rple$rawBaseBrightnessColor = -1;
         } else {
-            rple$rawBaseBrightnessColor = ColorPackingUtil.brightnessToCache(baseColoredBrightness);
+            rple$rawBaseBrightnessColor = RGB16Helper.brightnessToCache(baseColoredBrightness);
         }
     }
 
@@ -75,7 +75,7 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
         if (baseColoredTranslucency == null) {
             rple$rawBaseOpacityColor = -1;
         } else {
-            rple$rawBaseOpacityColor = ColorPackingUtil.translucencyToOpacityCache(baseColoredTranslucency);
+            rple$rawBaseOpacityColor = RGB16Helper.translucencyToOpacityCache(baseColoredTranslucency);
         }
     }
 
@@ -91,7 +91,7 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
                 if (br == null) {
                     rple$rawMetaBrightnessColors[i] = -1;
                 } else {
-                    rple$rawMetaBrightnessColors[i] = ColorPackingUtil.brightnessToCache(br);
+                    rple$rawMetaBrightnessColors[i] = RGB16Helper.brightnessToCache(br);
                 }
             }
         }
@@ -109,7 +109,7 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
                 if (op == null) {
                     rple$rawMetaOpacityColors[i] = -1;
                 } else {
-                    rple$rawMetaOpacityColors[i] = ColorPackingUtil.translucencyToOpacityCache(op);
+                    rple$rawMetaOpacityColors[i] = RGB16Helper.translucencyToOpacityCache(op);
                 }
             }
         }

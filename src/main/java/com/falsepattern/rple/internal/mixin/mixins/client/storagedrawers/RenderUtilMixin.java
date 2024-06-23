@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.storagedrawers;
 
-import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
+import com.falsepattern.rple.api.client.RPLEAOHelper;
 import com.jaquadro.minecraft.storagedrawers.client.renderer.RenderUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -26,7 +26,7 @@ public abstract class RenderUtilMixin {
                                       int brightTR,
                                       double lerpTB,
                                       double lerpLR) {
-        return CookieMonsterHelper.mixAOBrightness(brightTL, brightBL, brightBR, brightTR, lerpTB, lerpLR);
+        return RPLEAOHelper.mixAOBrightness(brightTL, brightBL, brightBR, brightTR, lerpTB, lerpLR);
     }
 
     /**
@@ -35,6 +35,6 @@ public abstract class RenderUtilMixin {
      */
     @Overwrite
     public static int mixAOBrightness(int brightMin, int brightMax, float fMin, float fMax) {
-        return CookieMonsterHelper.mixAOBrightness(brightMin, brightMax, fMin, fMax);
+        return RPLEAOHelper.mixAOBrightness(brightMin, brightMax, fMin, fMax);
     }
 }

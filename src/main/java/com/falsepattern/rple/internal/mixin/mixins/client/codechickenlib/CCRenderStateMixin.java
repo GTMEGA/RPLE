@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.codechickenlib;
 
 import codechicken.lib.render.CCRenderState;
-import com.falsepattern.rple.internal.client.render.CookieMonster;
+import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.internal.mixin.extension.ExtendedOpenGlHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
+import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
-import com.falsepattern.rple.internal.client.render.CookieMonster;
 import com.falsepattern.rple.internal.mixin.extension.ExtendedOpenGlHelper;
 import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;

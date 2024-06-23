@@ -9,23 +9,22 @@ package com.falsepattern.rple.api.common;
 
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.client.render.LightValueOverlayRenderer;
-import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.world.IBlockAccess;
 
-import static com.falsepattern.rple.api.common.RPLEColorUtil.errorColor;
 import static com.falsepattern.rple.api.common.RPLEColorUtil.maxColorComponent;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
+// TODO: [LATER_BUT_NOT_TOO_LATER] Decide what to do?
 /**
  * Currently only used by {@link LightValueOverlayRenderer}
  */
 public final class RPLEWorldUtil {
-//    private RPLEWorldUtil() {
-//        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
-//    }
-//
+    private RPLEWorldUtil() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
     public static int getChannelBlockLightValue(IBlockAccess world,
                                                 ColorChannel channel,
                                                 int posX,

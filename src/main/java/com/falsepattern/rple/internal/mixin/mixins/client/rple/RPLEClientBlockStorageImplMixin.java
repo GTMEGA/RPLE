@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.rple;
 
-import com.falsepattern.rple.internal.client.render.RGBHelper;
+import com.falsepattern.rple.api.client.RGB32Helper;
 import com.falsepattern.rple.internal.client.storage.RPLEClientBlockStorage;
 import com.falsepattern.rple.internal.client.storage.RPLEClientChunk;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
@@ -18,8 +18,8 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-import static com.falsepattern.rple.internal.client.render.RGBHelper.RGB_MAX_SKYLIGHT_NO_BLOCKLIGHT;
-import static com.falsepattern.rple.internal.client.render.RGBHelper.RGB_NO_SKYLIGHT_NO_BLOCKLIGHT;
+import static com.falsepattern.rple.api.client.RGB32Helper.RGB_MAX_SKYLIGHT_NO_BLOCKLIGHT;
+import static com.falsepattern.rple.api.client.RGB32Helper.RGB_NO_SKYLIGHT_NO_BLOCKLIGHT;
 
 
 @Unique
@@ -97,11 +97,11 @@ public abstract class RPLEClientBlockStorageImplMixin implements RPLEClientBlock
             lightValueZN = centerChunk.rple$getRGBLightValueHasSky(centerSubChunkPosX, posY, centerSubChunkPosZ - 1);
         }
 
-        return RGBHelper.rgbMax(lightValueYP,
-                                lightValueXN,
-                                lightValueXP,
-                                lightValueZP,
-                                lightValueZN);
+        return RGB32Helper.rgbMax(lightValueYP,
+                                  lightValueXN,
+                                  lightValueXP,
+                                  lightValueZP,
+                                  lightValueZN);
     }
 
     @Override
@@ -173,11 +173,11 @@ public abstract class RPLEClientBlockStorageImplMixin implements RPLEClientBlock
             lightValueZN = centerChunk.rple$getRGBLightValueNoSky(centerSubChunkPosX, posY, centerSubChunkPosZ - 1);
         }
 
-        return RGBHelper.rgbMax(lightValueYP,
-                                lightValueXN,
-                                lightValueXP,
-                                lightValueZP,
-                                lightValueZN);
+        return RGB32Helper.rgbMax(lightValueYP,
+                                  lightValueXN,
+                                  lightValueXP,
+                                  lightValueZP,
+                                  lightValueZN);
     }
 
     @SuppressWarnings("InstanceofIncompatibleInterface")

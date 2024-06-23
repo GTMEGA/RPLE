@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.rple;
 
-import com.falsepattern.rple.internal.client.render.RGBHelper;
+import com.falsepattern.rple.api.client.RGB32Helper;
 import com.falsepattern.rple.internal.client.storage.RPLEClientSubChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
 import lombok.val;
@@ -34,7 +34,7 @@ public abstract class RPLEClientSubChunkImplMixin implements RPLEClientSubChunk 
         val blkR = rple$redChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
         val blkG = rple$greenChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
         val blkB = rple$blueChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
-        return RGBHelper.createRGB(skyR, skyG, skyB, blkR, blkG, blkB);
+        return RGB32Helper.createRGB(skyR, skyG, skyB, blkR, blkG, blkB);
     }
 
     @Override
@@ -42,6 +42,6 @@ public abstract class RPLEClientSubChunkImplMixin implements RPLEClientSubChunk 
         val blkR = rple$redChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
         val blkG = rple$greenChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
         val blkB = rple$blueChannel.lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
-        return RGBHelper.createRGBBlock(blkR, blkG, blkB);
+        return RGB32Helper.createRGBBlock(blkR, blkG, blkB);
     }
 }

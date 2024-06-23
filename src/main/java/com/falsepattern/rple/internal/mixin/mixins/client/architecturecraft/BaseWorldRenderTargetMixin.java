@@ -8,8 +8,8 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.architecturecraft;
 
 import com.falsepattern.lib.util.MathUtil;
-import com.falsepattern.rple.internal.client.render.CookieMonster;
-import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
+import com.falsepattern.rple.api.client.CookieMonster;
+import com.falsepattern.rple.api.client.RGB64Helper;
 import com.falsepattern.rple.internal.mixin.interfaces.architecturecraft.IVector3Mixin;
 import gcewing.architecture.*;
 import lombok.val;
@@ -89,9 +89,9 @@ public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
                         val brightness = CookieMonster.cookieToPackedLong(brightnessCookie);
 
                         if (brightness != 0) {
-                            val r = TessellatorBrightnessHelper.getBrightnessRed(brightness);
-                            val g = TessellatorBrightnessHelper.getBrightnessGreen(brightness);
-                            val b = TessellatorBrightnessHelper.getBrightnessBlue(brightness);
+                            val r = RGB64Helper.getBrightnessRed(brightness);
+                            val g = RGB64Helper.getBrightnessGreen(brightness);
+                            val b = RGB64Helper.getBrightnessBlue(brightness);
                             val rbR = scalarBlock(r);
                             val rbG = scalarBlock(g);
                             val rbB = scalarBlock(b);
@@ -125,7 +125,7 @@ public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
             val red = scalarsToBrightness(bR, sR);
             val green = scalarsToBrightness(bG, sG);
             val blue = scalarsToBrightness(bB, sB);
-            val packed = TessellatorBrightnessHelper.packedBrightnessFromTessellatorBrightnessChannels(red, green, blue);
+            val packed = RGB64Helper.packedBrightnessFromTessellatorBrightnessChannels(red, green, blue);
             brightnessCookie = CookieMonster.packedLongToCookie(packed);
         } else {
             brightnessCookie = block.getMixedBrightnessForBlock(world, blockPos.x, blockPos.y, blockPos.z);
@@ -135,11 +135,11 @@ public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
     }
 
     private static double scalarBlock(int brightness) {
-        return TessellatorBrightnessHelper.getBlockLightChannelFromBrightnessRender(brightness) / 240.0;
+        return RGB64Helper.getBlockLightChannelFromBrightnessRender(brightness) / 240.0;
     }
 
     private static double scalarSky(int brightness) {
-        return TessellatorBrightnessHelper.getSkyLightChannelFromBrightnessRender(brightness) / 240.0;
+        return RGB64Helper.getSkyLightChannelFromBrightnessRender(brightness) / 240.0;
     }
 
     private static int scalarsToBrightness(double block, double sky) {
@@ -147,6 +147,6 @@ public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
         sky = MathUtil.clamp(sky, 0, 1) * 240;
         val iBlock = (int) block;
         val iSky = (int) sky;
-        return TessellatorBrightnessHelper.channelsToBrightnessRender(iBlock, iSky);
+        return RGB64Helper.channelsToBrightnessRender(iBlock, iSky);
     }
 }

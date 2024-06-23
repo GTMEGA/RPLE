@@ -6,7 +6,7 @@
  *
  */
 
-package com.falsepattern.rple.api.common.lamp;
+package com.falsepattern.rple.internal.common.lamp;
 
 import lombok.val;
 import net.minecraft.block.Block;

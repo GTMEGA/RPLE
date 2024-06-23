@@ -8,11 +8,10 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.appliedenergistics2;
 
 import appeng.client.render.RenderBlocksWorkaround;
+import com.falsepattern.rple.api.client.RPLEAOHelper;
 import com.falsepattern.rple.internal.Compat;
-import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
 import lombok.val;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -47,10 +46,10 @@ public abstract class RenderBlocksWorkaroundMixin extends RenderBlocks {
                       colorBlueBottomRight,
                       textureU,
                       textureV);
-        val out = CookieMonsterHelper.mixAOBrightness(brightnessTopLeft,
-                                                      brightnessTopRight,
-                                                      brightnessBottomLeft,
-                                                      brightnessBottomRight,
+        val out = RPLEAOHelper.mixAOBrightness(brightnessTopLeft,
+                                               brightnessTopRight,
+                                               brightnessBottomLeft,
+                                               brightnessBottomRight,
                                                       textureU * textureV,
                                                       (1D - textureU) * textureV,
                                                       textureU * (1D - textureV),

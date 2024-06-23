@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.proxy;
 
-import com.falsepattern.rple.internal.client.render.LampRenderer;
+import com.falsepattern.rple.internal.client.lamp.LampRenderer;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;

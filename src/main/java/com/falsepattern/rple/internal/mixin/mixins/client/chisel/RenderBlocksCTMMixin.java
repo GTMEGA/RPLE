@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.chisel;
 
-import com.falsepattern.rple.internal.client.render.CookieMonsterHelper;
+import com.falsepattern.rple.api.client.RPLEAOHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -24,15 +24,15 @@ public abstract class RenderBlocksCTMMixin extends RenderBlocks {
     private int avg(int... brightnessValues) {
         switch (brightnessValues.length) {
             case 2:
-                return CookieMonsterHelper.average(false, brightnessValues[0], brightnessValues[1]);
+                return RPLEAOHelper.average(false, brightnessValues[0], brightnessValues[1]);
             case 4:
-                return CookieMonsterHelper.average(false,
-                                                   brightnessValues[0],
-                                                   brightnessValues[1],
-                                                   brightnessValues[2],
-                                                   brightnessValues[3]);
+                return RPLEAOHelper.average(false,
+                                            brightnessValues[0],
+                                            brightnessValues[1],
+                                            brightnessValues[2],
+                                            brightnessValues[3]);
             default:
-                return CookieMonsterHelper.average(false, brightnessValues);
+                return RPLEAOHelper.average(false, brightnessValues);
         }
     }
 }

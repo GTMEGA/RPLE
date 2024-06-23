@@ -8,9 +8,9 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.rple.api.client.RPLEShaderConstants;
+import com.falsepattern.rple.api.client.RGB64Helper;
 import com.falsepattern.rple.internal.client.lightmap.LightMap;
-import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
+import com.falsepattern.rple.internal.client.render.ShaderConstants;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
 import com.falsepattern.rple.internal.mixin.extension.ShaderVertex;
 import com.falsepattern.rple.internal.mixin.interfaces.IOptiFineTessellatorMixin;
@@ -29,7 +29,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import shadersmod.client.Shaders;
 import shadersmod.client.ShadersTess;
-import shadersmod.common.SMCLog;
 
 import java.nio.FloatBuffer;
 import java.util.Arrays;
@@ -107,13 +106,13 @@ public abstract class ShaderTessMixin {
     private static void edgeTexCoordPreDraw(int index, int size, boolean normalized, int stride, FloatBuffer buffer) {
         stride = VertexAPI.recomputeVertexInfo(18, Float.BYTES);
         ARBVertexShader.glVertexAttribPointerARB(index, size, normalized, stride, buffer);
-        if (RPLEShaderConstants.useRPLEEdgeTexCoordAttrib) {
-            ARBVertexShader.glVertexAttribPointerARB(RPLEShaderConstants.edgeTexCoordAttrib,
+        if (ShaderConstants.useRPLEEdgeTexCoordAttrib) {
+            ARBVertexShader.glVertexAttribPointerARB(ShaderConstants.edgeTexCoordAttrib,
                                                      2,
                                                      false,
                                                      stride,
                                                      (FloatBuffer) buffer.position(VertexConstants.getRpleEdgeTexUIndexShader()));
-            ARBVertexShader.glEnableVertexAttribArrayARB(RPLEShaderConstants.edgeTexCoordAttrib);
+            ARBVertexShader.glEnableVertexAttribArrayARB(ShaderConstants.edgeTexCoordAttrib);
         }
     }
 
@@ -121,8 +120,8 @@ public abstract class ShaderTessMixin {
             at = @At("RETURN"),
             require = 1)
     private static void edgeTexCoordPostDraw(Tessellator tess, CallbackInfo ci) {
-        if (RPLEShaderConstants.useRPLEEdgeTexCoordAttrib && tess.hasTexture) {
-            ARBVertexShader.glDisableVertexAttribArrayARB(RPLEShaderConstants.edgeTexCoordAttrib);
+        if (ShaderConstants.useRPLEEdgeTexCoordAttrib && tess.hasTexture) {
+            ARBVertexShader.glDisableVertexAttribArrayARB(ShaderConstants.edgeTexCoordAttrib);
         }
     }
 
@@ -290,7 +289,7 @@ public abstract class ShaderTessMixin {
 
     @Unique
     private void prepareVertex(ShaderVertex vertex, float posX, float posY, float posZ) {
-        val packed = ofTess.rple$packedBrightness();
+        val packed = ofTess.rple$getPackedBrightness();
 
         vertex.positionX(posX)
               .positionY(posY)
@@ -298,9 +297,9 @@ public abstract class ShaderTessMixin {
               .textureU(ofTess.rple$textureU())
               .textureV(ofTess.rple$textureV())
               .colorARGB(ofTess.rple$color())
-              .redLightMapUV(TessellatorBrightnessHelper.getTessBrightnessRed(packed))
-              .greenLightMapUV(TessellatorBrightnessHelper.getTessBrightnessGreen(packed))
-              .blueLightMapUV(TessellatorBrightnessHelper.getTessBrightnessBlue(packed))
+              .redLightMapUV(RGB64Helper.getTessBrightnessRed(packed))
+              .greenLightMapUV(RGB64Helper.getTessBrightnessGreen(packed))
+              .blueLightMapUV(RGB64Helper.getTessBrightnessBlue(packed))
               .entityData(Shaders.getEntityData())
               .entityData2(Shaders.getEntityData2());
 

@@ -8,7 +8,7 @@ public interface RPLETessellator {
         return (RPLETessellator) tess;
     }
 
-    void rple$packedBrightness(long packedBrightness);
+    void rple$setPackedBrightness(long packedBrightness);
 
-    long rple$packedBrightness();
+    long rple$getPackedBrightness();
 }

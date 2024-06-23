@@ -7,30 +7,31 @@
 
 package com.falsepattern.rple.internal.mixin.extension;
 
+import com.falsepattern.rple.api.client.RGB64Helper;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
-import com.falsepattern.rple.internal.client.render.TessellatorBrightnessHelper;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;
 
 @UtilityClass
+// TODO: [ENTITY] Expose this for users to set colors when rendering entities etc
 public final class ExtendedOpenGlHelper {
     private static long LAST_PACKED_BRIGHTNESS = 0;
 
     public static boolean BYPASS = false;
 
     public static void setPackedBrightnessFromMonochrome(int monochrome) {
-        LAST_PACKED_BRIGHTNESS = TessellatorBrightnessHelper.monochromeBrightnessToPackedLong(monochrome);
+        LAST_PACKED_BRIGHTNESS = RGB64Helper.monochromeBrightnessToPackedLong(monochrome);
     }
 
     public static void setLightMapTextureCoordsPacked(long packedBrightness) {
         BYPASS = true;
         LAST_PACKED_BRIGHTNESS = packedBrightness;
 
-        val redBrightness = TessellatorBrightnessHelper.getBrightnessRed(packedBrightness);
-        val greenBrightness = TessellatorBrightnessHelper.getBrightnessGreen(packedBrightness);
-        val blueBrightness = TessellatorBrightnessHelper.getBrightnessBlue(packedBrightness);
+        val redBrightness = RGB64Helper.getBrightnessRed(packedBrightness);
+        val greenBrightness = RGB64Helper.getBrightnessGreen(packedBrightness);
+        val blueBrightness = RGB64Helper.getBrightnessBlue(packedBrightness);
 
         if (Compat.shadersEnabled()) {
             OpenGlHelper.setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING,

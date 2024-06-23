@@ -6,12 +6,13 @@
  *
  */
 
-package com.falsepattern.rple.internal.common.color;
+package com.falsepattern.rple.api.common;
 
-import com.falsepattern.rple.api.common.RPLEColorUtil;
 import com.falsepattern.rple.api.common.color.RPLEColor;
+import lombok.experimental.UtilityClass;
 
-public class ColorPackingUtil {
+@UtilityClass
+public final class RGB16Helper {
     public static final int CACHE_CHANNEL_BITMASK = 0xf;
     public static final int CACHE_ENTRY_RED_OFFSET = 0;
     public static final int CACHE_ENTRY_GREEN_OFFSET = 4;

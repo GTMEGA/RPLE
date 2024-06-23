@@ -6,7 +6,7 @@
  *
  */
 
-package com.falsepattern.rple.api.common.lamp;
+package com.falsepattern.rple.internal.common.lamp;
 
 import com.falsepattern.rple.api.common.RPLEColorUtil;
 import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
@@ -14,7 +14,7 @@ import com.falsepattern.rple.api.common.color.CustomColor;
 import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.Tags;
-import com.falsepattern.rple.internal.client.render.LampRenderer;
+import com.falsepattern.rple.internal.client.lamp.LampRenderer;
 import lombok.Getter;
 import lombok.val;
 import net.minecraft.block.Block;

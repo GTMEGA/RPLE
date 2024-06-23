@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
+// TODO: [NO_COL_OBJ] Make this the common color packing util (NO MENTION OF TESSELLATOR!!)
 public final class RPLEColorUtil {
     public static final int COLOR_MIN = 0;
     public static final int COLOR_MAX = 15;

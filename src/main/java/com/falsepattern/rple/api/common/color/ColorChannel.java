@@ -9,7 +9,7 @@ package com.falsepattern.rple.api.common.color;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.falsepattern.rple.internal.common.color.ColorPackingUtil.*;
+import static com.falsepattern.rple.api.common.RGB16Helper.*;
 
 public enum ColorChannel {
     RED_CHANNEL(CACHE_ENTRY_RED_OFFSET),
