@@ -32,12 +32,16 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
     private short @Nullable [] rple$rawMetaOpacityColors;
 
     @Nullable
+    @Deprecated
     private RPLEColor rple$baseBrightnessColor;
     @Nullable
+    @Deprecated
     private RPLEColor rple$baseTranslucencyColor;
     @Nullable
+    @Deprecated
     private RPLEColor @Nullable [] rple$metaBrightnessColors;
     @Nullable
+    @Deprecated
     private RPLEColor @Nullable [] rple$metaTranslucencyColors;
 
     @Inject(method = "<init>",
@@ -113,6 +117,6 @@ public abstract class RPLEBlockInitImplMixin implements RPLEBlockInit {
 
     @Override
     public void rple$finishColorInit() {
-
+        // TODO: [NO_COL_OBJ] Remove this, or make 'finish' optimise a fast path
     }
 }

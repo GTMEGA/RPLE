@@ -11,6 +11,8 @@ import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+// TODO: [NO_COL_OBJ] Create new way to provide 'palette' colors
+// TODO: [NO_COL_OBJ] Define as HEX VALUES!!
 public enum DefaultColor implements RPLENamedColor {
     // @formatter:off
     WHITE          (15, 15, 15),

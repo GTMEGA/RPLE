@@ -10,6 +10,7 @@ package com.falsepattern.rple.api.common.color;
 import com.falsepattern.rple.api.common.RPLEColorUtil;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated
 public final class ErrorColor implements RPLENamedColor {
     private static final ErrorColor INSTANCE = new ErrorColor();
 

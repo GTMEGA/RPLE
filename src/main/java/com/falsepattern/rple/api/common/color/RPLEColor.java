@@ -7,6 +7,7 @@
 
 package com.falsepattern.rple.api.common.color;
 
+@Deprecated
 public interface RPLEColor {
     int red();
 

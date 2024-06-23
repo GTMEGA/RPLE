@@ -60,6 +60,7 @@ public interface RPLEBlockRoot {
      *
      * @return Internal brightness value
      */
+    @Deprecated
     RPLEColor rple$getInternalColoredBrightness();
 
     /**
@@ -67,6 +68,7 @@ public interface RPLEBlockRoot {
      *
      * @return Internal brightness value
      */
+    @Deprecated
     RPLEColor rple$getInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ);
 
     /**
@@ -74,6 +76,7 @@ public interface RPLEBlockRoot {
      *
      * @return Internal translucency value
      */
+    @Deprecated
     RPLEColor rple$getInternalColoredTranslucency();
 
     /**
@@ -81,5 +84,6 @@ public interface RPLEBlockRoot {
      *
      * @return Internal translucency value
      */
+    @Deprecated
     RPLEColor rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ);
 }

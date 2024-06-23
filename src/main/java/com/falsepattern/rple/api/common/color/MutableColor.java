@@ -9,6 +9,7 @@ package com.falsepattern.rple.api.common.color;
 
 import static com.falsepattern.rple.api.common.RPLEColorUtil.*;
 
+@Deprecated
 public class MutableColor implements RPLEColor {
     protected int red;
     protected int green;

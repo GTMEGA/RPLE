@@ -14,14 +14,17 @@ import org.jetbrains.annotations.NotNull;
 public interface RPLEBlockColorizer {
     @NotNull RPLEBlockColorizer brightness(int color);
 
+
     @NotNull RPLEBlockColorizer brightness(@NotNull RPLEColor color);
 
+    // TODO: [NO_COL_OBJ] Create new way to provide 'palette' colors
     @NotNull RPLEBlockColorizer brightness(@NotNull RPLENamedColor color);
 
     @NotNull RPLEBlockColorizer translucency(int color);
 
     @NotNull RPLEBlockColorizer translucency(@NotNull RPLEColor color);
 
+    // TODO: [NO_COL_OBJ] Create new way to provide 'palette' colors
     @NotNull RPLEBlockColorizer translucency(@NotNull RPLENamedColor color);
 
     void apply();

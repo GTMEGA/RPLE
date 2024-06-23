@@ -49,51 +49,83 @@ public interface RPLEBlock {
                                   int posY,
                                   int posZ);
 
-    @NotNull RPLEColor rple$getBrightnessColor();
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getBrightnessColor();
 
-    @NotNull RPLEColor rple$getBrightnessColor(int blockMeta);
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getBrightnessColor(int blockMeta);
 
-    @NotNull RPLEColor rple$getBrightnessColor(@NotNull IBlockAccess world,
-                                               int blockMeta,
-                                               int posX,
-                                               int posY,
-                                               int posZ);
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getBrightnessColor(@NotNull IBlockAccess world,
+                                      int blockMeta,
+                                      int posX,
+                                      int posY,
+                                      int posZ);
 
-    @NotNull RPLEColor rple$getTranslucencyColor();
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getTranslucencyColor();
 
-    @NotNull RPLEColor rple$getTranslucencyColor(int blockMeta);
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getTranslucencyColor(int blockMeta);
 
-    @NotNull RPLEColor rple$getTranslucencyColor(@NotNull IBlockAccess world,
-                                                 int blockMeta,
-                                                 int posX,
-                                                 int posY,
-                                                 int posZ);
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getTranslucencyColor(@NotNull IBlockAccess world,
+                                        int blockMeta,
+                                        int posX,
+                                        int posY,
+                                        int posZ);
 
-    @NotNull RPLEColor rple$getFallbackBrightnessColor();
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getFallbackBrightnessColor();
 
-    @NotNull RPLEColor rple$getFallbackBrightnessColor(int blockMeta);
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getFallbackBrightnessColor(int blockMeta);
 
-    @NotNull RPLEColor rple$getFallbackBrightnessColor(@NotNull IBlockAccess world,
-                                                       int blockMeta,
-                                                       int posX,
-                                                       int posY,
-                                                       int posZ);
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getFallbackBrightnessColor(@NotNull IBlockAccess world,
+                                              int blockMeta,
+                                              int posX,
+                                              int posY,
+                                              int posZ);
 
-    @NotNull RPLEColor rple$getFallbackTranslucencyColor();
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getFallbackTranslucencyColor();
 
-    @NotNull RPLEColor rple$getFallbackTranslucencyColor(int blockMeta);
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getFallbackTranslucencyColor(int blockMeta);
 
-    @NotNull RPLEColor rple$getFallbackTranslucencyColor(@NotNull IBlockAccess world,
-                                                         int blockMeta,
-                                                         int posX,
-                                                         int posY,
-                                                         int posZ);
+    @Deprecated
+    @NotNull
+    RPLEColor rple$getFallbackTranslucencyColor(@NotNull IBlockAccess world,
+                                                int blockMeta,
+                                                int posX,
+                                                int posY,
+                                                int posZ);
 
-    @Nullable RPLEColor rple$getConfiguredBrightnessColor();
+    @Deprecated
+    @Nullable
+    RPLEColor rple$getConfiguredBrightnessColor();
 
-    @Nullable RPLEColor rple$getConfiguredBrightnessColor(int blockMeta);
+    @Deprecated
+    @Nullable
+    RPLEColor rple$getConfiguredBrightnessColor(int blockMeta);
 
-    @Nullable RPLEColor rple$getConfiguredTranslucencyColor();
+    @Deprecated
+    @Nullable
+    RPLEColor rple$getConfiguredTranslucencyColor();
 
-    @Nullable RPLEColor rple$getConfiguredTranslucencyColor(int blockMeta);
+    @Deprecated
+    @Nullable
+    RPLEColor rple$getConfiguredTranslucencyColor(int blockMeta);
 }

@@ -9,6 +9,8 @@ package com.falsepattern.rple.api.common.color;
 
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated
+// TODO: [NO_COL_OBJ] Create new way to provide 'palette' colors
 public interface RPLENamedColor extends RPLEColor {
     @NotNull String colorDomain();
 

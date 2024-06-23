@@ -11,6 +11,7 @@ import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+// TODO: [NO_COL_OBJ] Create new way to provide 'palette' colors
 public enum LightValueColor implements RPLENamedColor {
     LIGHT_VALUE_0,
     LIGHT_VALUE_1,

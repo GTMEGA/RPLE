@@ -9,6 +9,7 @@ package com.falsepattern.rple.api.common.color;
 
 import com.falsepattern.rple.api.common.RPLEColorUtil;
 
+@Deprecated
 public class CustomColor implements RPLEColor {
     protected final int red;
     protected final int green;

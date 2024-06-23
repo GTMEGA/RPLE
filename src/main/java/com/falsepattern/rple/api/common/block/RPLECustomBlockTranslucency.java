@@ -21,10 +21,15 @@ import org.jetbrains.annotations.NotNull;
  * @see RPLECustomBlockBrightness
  */
 public interface RPLECustomBlockTranslucency {
-    @NotNull RPLEColor rple$getCustomTranslucencyColor();
+    // TODO: [NO_COL_OBJ] Make this return a short
+    @NotNull
+    RPLEColor rple$getCustomTranslucencyColor();
 
-    @NotNull RPLEColor rple$getCustomTranslucencyColor(int blockMeta);
+    // TODO: [NO_COL_OBJ] Make this return a short
+    @NotNull
+    RPLEColor rple$getCustomTranslucencyColor(int blockMeta);
 
+    // TODO: [NO_COL_OBJ] Make this return a short
     @NotNull
     RPLEColor rple$getCustomTranslucencyColor(@NotNull IBlockAccess world,
                                               int blockMeta,

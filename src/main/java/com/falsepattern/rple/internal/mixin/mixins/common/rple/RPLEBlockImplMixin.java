@@ -37,15 +37,19 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
     private short @Nullable [] rple$rawMetaOpacityColors;
 
     @Nullable
+    @Deprecated
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
     private RPLEColor rple$baseBrightnessColor;
     @Nullable
+    @Deprecated
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
     private RPLEColor rple$baseTranslucencyColor;
     @Nullable
+    @Deprecated
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
     private RPLEColor @Nullable [] rple$metaBrightnessColors;
     @Nullable
+    @Deprecated
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
     private RPLEColor @Nullable [] rple$metaTranslucencyColors;
 
