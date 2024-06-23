@@ -7,8 +7,8 @@
 
 package com.falsepattern.rple.internal.common.config.container;
 
-import com.falsepattern.rple.api.common.color.RPLEColor;
-import com.falsepattern.rple.api.common.color.RPLENamedColor;
+import com.falsepattern.rple.api.common.color.CustomPaletteColor;
+import com.falsepattern.rple.api.common.color.IPaletteColor;
 import lombok.val;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -30,7 +30,7 @@ public final class ColorPalette {
                    .removeIf(c -> !isValidPaletteColor(c.getKey(), c.getValue()));
     }
 
-    public void addPaletteColor(RPLENamedColor color) {
+    public void addPaletteColor(IPaletteColor color) {
         if (color == null)
             return;
 
@@ -46,7 +46,7 @@ public final class ColorPalette {
         if (colors.containsKey(paletteColorName))
             return;
 
-        val paletteColor = new HexColor(color);
+        val paletteColor = new HexColor(color.rgb16());
         if (isValidPaletteColor(paletteColorName, paletteColor))
             colors.put(paletteColorName, paletteColor);
     }
@@ -62,7 +62,7 @@ public final class ColorPalette {
         return Collections.unmodifiableMap(colors);
     }
 
-    public Optional<RPLEColor> colour(String colorName) {
+    public Optional<HexColor> colour(String colorName) {
         return Optional.ofNullable(colors.get(colorName));
     }
 

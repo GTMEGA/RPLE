@@ -10,11 +10,10 @@ package com.falsepattern.rple.internal.client.optifine;
 
 import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.api.client.ClientColorHelper;
+import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
-import com.falsepattern.rple.api.common.color.CustomColor;
 import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.api.common.color.LightValueColor;
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.var;
@@ -84,7 +83,7 @@ public class ColorDynamicLights {
         if (world != null) {
             for (Entity entity : (List<Entity>) world.getLoadedEntityList()) {
                 val lightLevel = getLightLevel(entity);
-                if (lightLevel.red() > 0 || lightLevel.green() > 0 || lightLevel.blue() > 0) {
+                if (ServerColorHelper.red(lightLevel) > 0 || ServerColorHelper.green(lightLevel) > 0 || ServerColorHelper.blue(lightLevel) > 0) {
                     int key = entity.getEntityId();
                     ColorDynamicLight dynamicLight = mapDynamicLights.get(key);
                     if (dynamicLight == null) {
@@ -109,7 +108,9 @@ public class ColorDynamicLights {
 
     public static int getCombinedLight(Entity entity, int combinedLight) {
         val lightPlayer = getLightLevel(entity);
-        return getCombinedLight(new DoubleBrightness(lightPlayer.red(), lightPlayer.green(), lightPlayer.blue()),
+        return getCombinedLight(new DoubleBrightness(ServerColorHelper.red(lightPlayer),
+                        ServerColorHelper.green(lightPlayer),
+                        ServerColorHelper.blue(lightPlayer)),
                                 combinedLight);
     }
 
@@ -157,9 +158,9 @@ public class ColorDynamicLights {
             for (int i = 0; i < dynamicLights.size(); ++i) {
                 ColorDynamicLight dynamicLight = dynamicLights.get(i);
                 var dynamicLightLevel = dynamicLight.getLastLightLevel();
-                double dynamicR = dynamicLightLevel.red();
-                double dynamicG = dynamicLightLevel.green();
-                double dynamicB = dynamicLightLevel.blue();
+                double dynamicR = ServerColorHelper.red(dynamicLightLevel);
+                double dynamicG = ServerColorHelper.green(dynamicLightLevel);
+                double dynamicB = ServerColorHelper.blue(dynamicLightLevel);
                 if (dynamicR > 0 || dynamicG > 0 || dynamicB > 0) {
                     double px = dynamicLight.getLastPosX();
                     double py = dynamicLight.getLastPosY();
@@ -203,9 +204,9 @@ public class ColorDynamicLights {
         return new DoubleBrightness(lightLevelMaxR, lightLevelMaxG, lightLevelMaxB);
     }
 
-    public static RPLEColor getLightLevel(ItemStack itemStack) {
+    public static short getLightLevel(ItemStack itemStack) {
         if (itemStack == null) {
-            return LightValueColor.LIGHT_VALUE_0;
+            return LightValueColor.LIGHT_VALUE_0.rgb16();
         } else {
             Item item = itemStack.getItem();
             if (item instanceof ItemBlock) {
@@ -219,21 +220,21 @@ public class ColorDynamicLights {
             if (item == Items.lava_bucket) {
                 return RPLEBlock.of(Blocks.lava).rple$getBrightnessColor();
             } else if (item == Items.blaze_rod || item == Items.blaze_powder) {
-                return DefaultColor.DIM_ORANGE;
+                return DefaultColor.DIM_ORANGE.rgb16();
             } else if (item == Items.glowstone_dust) {
-                return DefaultColor.DIM_YELLOW;
+                return DefaultColor.DIM_YELLOW.rgb16();
             } else if (item == Items.magma_cream) {
-                return DefaultColor.DIM_RED;
+                return DefaultColor.DIM_RED.rgb16();
             } else {
                 return item == Items.nether_star ? RPLEBlock.of(Blocks.beacon).rple$getBrightnessColor()
-                                                 : LightValueColor.LIGHT_VALUE_0;
+                                                 : LightValueColor.LIGHT_VALUE_0.rgb16();
             }
         }
     }
 
-    public static RPLEColor getLightLevel(Entity entity) {
+    public static short getLightLevel(Entity entity) {
         if (entity == Minecraft.getMinecraft().renderViewEntity && !Config.isDynamicHandLight()) {
-            return LightValueColor.LIGHT_VALUE_0;
+            return LightValueColor.LIGHT_VALUE_0.rgb16();
         } else if (entity.isBurning()) {
             return RPLEBlock.of(Blocks.fire).rple$getBrightnessColor();
         } else if (entity instanceof EntityFireball) {
@@ -262,9 +263,11 @@ public class ColorDynamicLights {
                 val levelMain = getLightLevel(stackMain);
                 ItemStack stackHead = player.getEquipmentInSlot(4);
                 val levelHead = getLightLevel(stackHead);
-                return new CustomColor(Math.max(levelMain.red(), levelHead.red()),
-                                       Math.max(levelMain.green(), levelHead.green()),
-                                       Math.max(levelMain.blue(), levelHead.blue()));
+                return ServerColorHelper.RGB16FromRGBChannel4Bit(
+                        Math.max(ServerColorHelper.red(levelMain), ServerColorHelper.red(levelHead)),
+                        Math.max(ServerColorHelper.green(levelMain), ServerColorHelper.green(levelHead)),
+                        Math.max(ServerColorHelper.blue(levelMain), ServerColorHelper.blue(levelHead))
+                );
             } else if (entity instanceof EntityItem) {
                 EntityItem entityItem = (EntityItem) entity;
                 ItemStack itemStack = getItemStack(entityItem);
@@ -274,7 +277,7 @@ public class ColorDynamicLights {
                 ItemStack itemStack = entityItemFrame.getDisplayedItem();
                 return getLightLevel(itemStack);
             } else {
-                return LightValueColor.LIGHT_VALUE_0;
+                return LightValueColor.LIGHT_VALUE_0.rgb16();
             }
         }
     }

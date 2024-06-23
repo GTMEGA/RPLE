@@ -9,17 +9,16 @@ package com.falsepattern.rple.internal.mixin.helper;
 
 import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.api.common.color.LightValueColor;
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import mrtjp.projectred.illumination.ILight;
 
 @UtilityClass
 public final class ProjectRedHelper {
-    public static RPLEColor getLightBrightnessColor(ILight light) {
+    public static short getLightBrightnessColor(ILight light) {
         if (!light.isOn())
-            return LightValueColor.LIGHT_VALUE_0;
+            return LightValueColor.LIGHT_VALUE_0.rgb16();
         val blockMeta = light.getColor();
-        return DefaultColor.fromVanillaBlockMeta(blockMeta);
+        return DefaultColor.fromVanillaBlockMeta(blockMeta).rgb16();
     }
 }

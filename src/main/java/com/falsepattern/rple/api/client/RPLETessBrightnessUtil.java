@@ -8,8 +8,8 @@
 package com.falsepattern.rple.api.client;
 
 import com.falsepattern.lumina.api.lighting.LightType;
+import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.client.storage.RPLEClientBlockStorage;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
@@ -21,8 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.rple.api.client.ClientColorHelper.RGB32_MAX_SKYLIGHT_NO_BLOCKLIGHT;
 import static com.falsepattern.rple.api.client.ClientColorHelper.RGB32_NO_SKYLIGHT_NO_BLOCKLIGHT;
-import static com.falsepattern.rple.api.common.RPLEColorUtil.COLOR_MIN;
-import static com.falsepattern.rple.api.common.RPLEColorUtil.errorColor;
+import static com.falsepattern.rple.api.common.ServerColorHelper.*;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
 public final class RPLETessBrightnessUtil {
@@ -128,17 +127,17 @@ public final class RPLETessBrightnessUtil {
                                                        int posX,
                                                        int posY,
                                                        int posZ) {
-        final RPLEColor blockBrightnessColor = RPLEBlock.of(block).rple$getBrightnessColor(world, blockMeta, posX, posY, posZ);
+        final short blockBrightnessColor = RPLEBlock.of(block).rple$getBrightnessColor(world, blockMeta, posX, posY, posZ);
         return createRGBBrightnessForTessellator(BLOCK_LIGHT_TYPE, blockBrightnessColor);
     }
 
     public static int errorBrightnessForTessellator() {
-        final RPLEColor lightColor = errorColor();
-        return createRGBBrightnessForTessellator(lightColor.red(), lightColor.green(), lightColor.blue());
+        final short lightColor = ServerColorHelper.ERROR_COLOR.rgb16;
+        return createRGBBrightnessForTessellator(red(lightColor), green(lightColor), blue(lightColor));
     }
 
-    public static int createRGBBrightnessForTessellator(@NotNull RPLEColor lightColor) {
-        return createRGBBrightnessForTessellator(lightColor.red(), lightColor.green(), lightColor.blue());
+    public static int createRGBBrightnessForTessellator(short lightColor) {
+        return createRGBBrightnessForTessellator(red(lightColor), green(lightColor), blue(lightColor));
     }
 
     public static int createRGBBrightnessForTessellator(int redLightValue, int greenLightValue, int blueLightValue) {
@@ -151,8 +150,8 @@ public final class RPLETessBrightnessUtil {
     }
 
     public static int createRGBBrightnessForTessellator(@NotNull LightType lightType,
-                                                        @NotNull RPLEColor lightColor) {
-        return createRGBBrightnessForTessellator(lightType, lightColor.red(), lightColor.green(), lightColor.blue());
+                                                        short lightColor) {
+        return createRGBBrightnessForTessellator(lightType, red(lightColor), green(lightColor), blue(lightColor));
     }
 
     public static int createRGBBrightnessForTessellator(@NotNull LightType lightType,
@@ -178,14 +177,14 @@ public final class RPLETessBrightnessUtil {
         }
     }
 
-    public static int createRGBBrightnessForTessellator(@NotNull RPLEColor blockLightColor,
-                                                        @NotNull RPLEColor skyLightColor) {
-        return createRGBBrightnessForTessellator(blockLightColor.red(),
-                                                 blockLightColor.green(),
-                                                 blockLightColor.blue(),
-                                                 skyLightColor.red(),
-                                                 skyLightColor.green(),
-                                                 skyLightColor.blue());
+    public static int createRGBBrightnessForTessellator(short blockLightColor,
+                                                        short skyLightColor) {
+        return createRGBBrightnessForTessellator(red(blockLightColor),
+                                                 green(blockLightColor),
+                                                 blue(blockLightColor),
+                                                 red(skyLightColor),
+                                                 green(skyLightColor),
+                                                 blue(skyLightColor));
     }
 
     public static int createRGBBrightnessForTessellator(int redBlockLight,

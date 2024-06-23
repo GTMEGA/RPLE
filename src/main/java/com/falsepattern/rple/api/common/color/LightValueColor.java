@@ -7,12 +7,12 @@
 
 package com.falsepattern.rple.api.common.color;
 
+import com.falsepattern.rple.api.common.ServerColorHelper;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-// TODO: [NO_COL_OBJ] Create new way to provide 'palette' colors
-public enum LightValueColor implements RPLENamedColor {
+public enum LightValueColor implements IPaletteColor {
     LIGHT_VALUE_0,
     LIGHT_VALUE_1,
     LIGHT_VALUE_2,
@@ -34,18 +34,13 @@ public enum LightValueColor implements RPLENamedColor {
     private static final LightValueColor[] VALUES = values();
     public static final String LIGHT_LEVEL_COLOR_DOMAIN = "light_value";
 
-    private final int red;
-    private final int green;
-    private final int blue;
-
+    private final short rgb16;
     private final String colorName;
 
     LightValueColor() {
         final int lightValue = ordinal();
 
-        this.red = lightValue;
-        this.green = lightValue;
-        this.blue = lightValue;
+        this.rgb16 = ServerColorHelper.RGB16FromRGBChannel4Bit(lightValue, lightValue, lightValue);
 
         this.colorName = String.valueOf(lightValue);
     }
@@ -60,18 +55,20 @@ public enum LightValueColor implements RPLENamedColor {
         return VALUES[index];
     }
 
-    public static @Nullable RPLEColor attemptMapToEnum(@Nullable RPLEColor color) {
-        if (color == null)
-            return null;
+    public static @Nullable LightValueColor attemptMapToEnum(short rgb16) {
         for (val otherColor : VALUES) {
-            if (color.red() == otherColor.red() &&
-                color.green() == otherColor.green() &&
-                color.blue() == otherColor.blue())
+            if (otherColor.rgb16 == rgb16)
                 return otherColor;
         }
         return null;
     }
 
+    @Override
+    public short rgb16() {
+        return rgb16;
+    }
+
+    @Override
     public @NotNull String colorName() {
         return colorName;
     }
@@ -79,17 +76,5 @@ public enum LightValueColor implements RPLENamedColor {
     @Override
     public @NotNull String colorDomain() {
         return LIGHT_LEVEL_COLOR_DOMAIN;
-    }
-
-    public int red() {
-        return red;
-    }
-
-    public int green() {
-        return green;
-    }
-
-    public int blue() {
-        return blue;
     }
 }

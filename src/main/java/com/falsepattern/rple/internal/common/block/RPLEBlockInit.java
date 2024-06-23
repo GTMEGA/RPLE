@@ -7,21 +7,16 @@
 
 package com.falsepattern.rple.internal.common.block;
 
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import org.jetbrains.annotations.Nullable;
 
 public interface RPLEBlockInit {
-    // TODO: [NO_COL_OBJ] Make this take a short
-    void rple$initBaseBrightnessColor(@Nullable RPLEColor baseColoredBrightness);
+    void rple$initBaseBrightnessColor(short baseColoredBrightness);
 
-    // TODO: [NO_COL_OBJ] Make this take a short
-    void rple$initBaseTranslucencyColor(@Nullable RPLEColor baseColoredTranslucency);
+    void rple$initBaseTranslucencyColor(short baseColoredTranslucency);
 
-    // TODO: [NO_COL_OBJ] Make this take a short array
-    void rple$initMetaBrightnessColors(@Nullable RPLEColor @Nullable [] metaColoredBrightness);
+    void rple$initMetaBrightnessColors(short @Nullable [] metaColoredBrightness);
 
-    // TODO: [NO_COL_OBJ] Make this take a short array
-    void rple$initMetaTranslucencyColors(@Nullable RPLEColor @Nullable [] metaColoredTranslucency);
+    void rple$initMetaTranslucencyColors(short @Nullable [] metaColoredTranslucency);
 
     void rple$finishColorInit();
 }

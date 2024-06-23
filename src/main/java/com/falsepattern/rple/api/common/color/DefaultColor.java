@@ -11,62 +11,55 @@ import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-// TODO: [NO_COL_OBJ] Create new way to provide 'palette' colors
-// TODO: [NO_COL_OBJ] Define as HEX VALUES!!
-public enum DefaultColor implements RPLENamedColor {
+public enum DefaultColor implements IPaletteColor {
     // @formatter:off
-    WHITE          (15, 15, 15),
-    ORANGE         (15, 12, 10),
-    MAGENTA        (15,  0, 15),
-    LIGHT_BLUE     ( 0,  8, 15),
-    YELLOW         (15, 15,  0),
-    LIME           ( 8, 15,  0),
-    PINK           (15, 10, 13),
-    GRAY           ( 5,  5,  5),
-    LIGHT_GRAY     (10, 10, 10),
-    CYAN           ( 0, 15, 15),
-    PURPLE         (10,  0, 15),
-    BLUE           ( 0,  0, 15),
-    BROWN          ( 8,  3,  0),
-    GREEN          ( 0, 15,  0),
-    RED            (15,  0,  0),
-    BLACK          ( 1,  1,  1),
+    WHITE          (0xfff),
+    ORANGE         (0xfca),
+    MAGENTA        (0xf0f),
+    LIGHT_BLUE     (0x08f),
+    YELLOW         (0xff0),
+    LIME           (0x8f0),
+    PINK           (0xfad),
+    GRAY           (0x555),
+    LIGHT_GRAY     (0xaaa),
+    CYAN           (0x0ff),
+    PURPLE         (0xa0f),
+    BLUE           (0x00f),
+    BROWN          (0x830),
+    GREEN          (0x0f0),
+    RED            (0xf00),
+    BLACK          (0x111),
 
-    DIM_WHITE      ( 8,  8,  8),
-    DIM_ORANGE     ( 8,  6,  5),
-    DIM_MAGENTA    ( 8,  0,  8),
-    DIM_LIGHT_BLUE ( 0,  4,  8),
-    DIM_YELLOW     ( 8,  8,  0),
-    DIM_LIME       ( 4,  8,  0),
-    DIM_PINK       ( 8,  5,  6),
-    DIM_GRAY       ( 3,  3,  3),
-    DIM_LIGHT_GRAY ( 5,  5,  5),
-    DIM_CYAN       ( 0,  8,  8),
-    DIM_PURPLE     ( 5,  0,  8),
-    DIM_BLUE       ( 0,  0,  8),
-    DIM_BROWN      ( 4,  2,  0),
-    DIM_GREEN      ( 0,  8,  0),
-    DIM_RED        ( 8,  0,  0),
-    DIM_BLACK      ( 1,  1,  1),
+    DIM_WHITE      (0x888),
+    DIM_ORANGE     (0x865),
+    DIM_MAGENTA    (0x808),
+    DIM_LIGHT_BLUE (0x048),
+    DIM_YELLOW     (0x880),
+    DIM_LIME       (0x480),
+    DIM_PINK       (0x856),
+    DIM_GRAY       (0x333),
+    DIM_LIGHT_GRAY (0x555),
+    DIM_CYAN       (0x088),
+    DIM_PURPLE     (0x508),
+    DIM_BLUE       (0x008),
+    DIM_BROWN      (0x420),
+    DIM_GREEN      (0x080),
+    DIM_RED        (0x800),
+    DIM_BLACK      (0x111),
 
-    TORCH_LIGHT    (13, 10,  8),
+    TORCH_LIGHT    (0xda8),
     // @formatter:on
     ;
     private static final DefaultColor[] VALUES = values();
 
     public static final String DEFAULT_COLOR_DOMAIN = "default";
 
-    private final int red;
-    private final int green;
-    private final int blue;
+    private final short rgb16;
 
     private final String colorName;
 
-    DefaultColor(int red, int green, int blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-
+    DefaultColor(int rgb16) {
+        this.rgb16 = (short) rgb16;
         this.colorName = name().toLowerCase();
     }
 
@@ -75,36 +68,26 @@ public enum DefaultColor implements RPLENamedColor {
         return VALUES[blockMeta];
     }
 
-    public static @Nullable RPLEColor attemptMapToEnum(@Nullable RPLEColor color) {
-        if (color == null)
-            return null;
-        for (val otherColor : VALUES) {
-            if (color.red() == otherColor.red() &&
-                color.green() == otherColor.green() &&
-                color.blue() == otherColor.blue())
+    public static @Nullable DefaultColor attemptMapToEnum(short rgb16) {
+        for (val otherColor: VALUES) {
+            if (otherColor.rgb16 == rgb16)
                 return otherColor;
         }
         return null;
     }
 
-    public @NotNull String colorName() {
+    @Override
+    public short rgb16() {
+        return rgb16;
+    }
+
+    @Override
+    public String colorName() {
         return colorName;
     }
 
     @Override
-    public @NotNull String colorDomain() {
+    public String colorDomain() {
         return DEFAULT_COLOR_DOMAIN;
-    }
-
-    public int red() {
-        return red;
-    }
-
-    public int green() {
-        return green;
-    }
-
-    public int blue() {
-        return blue;
     }
 }

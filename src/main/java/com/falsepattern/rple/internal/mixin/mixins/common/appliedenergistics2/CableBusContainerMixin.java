@@ -12,8 +12,7 @@ import appeng.helpers.AEMultiTile;
 import appeng.parts.CableBusContainer;
 import appeng.parts.CableBusStorage;
 import appeng.parts.ICableBusContainer;
-import com.falsepattern.rple.api.common.color.CustomColor;
-import com.falsepattern.rple.api.common.color.RPLEColor;
+import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.internal.mixin.interfaces.appliedenergistics2.ICableBusContainerMixin;
 import lombok.val;
 import lombok.var;
@@ -32,7 +31,7 @@ public abstract class CableBusContainerMixin extends CableBusStorage implements 
     public abstract AEColor getColor();
 
     @Override
-    public RPLEColor rple$getColoredBrightness() {
+    public short rple$getColoredBrightness() {
         var light = 0;
         for (val direction : ForgeDirection.values()) {
             val part = getPart(direction);
@@ -40,12 +39,12 @@ public abstract class CableBusContainerMixin extends CableBusStorage implements 
                 light = Math.max(part.getLightLevel(), light);
         }
         if (light < 1)
-            return LIGHT_VALUE_0;
+            return LIGHT_VALUE_0.rgb16();
 
         val colorRGB = getColor().mediumVariant;
         val red = (int) ((float) ((colorRGB >>> 16) & 0xFF) / 255F * (float) light) & 0xF;
         val green = (int) ((float) ((colorRGB >>> 8) & 0xFF) / 255F * (float) light) & 0xF;
         val blue = (int) ((float) (colorRGB & 0xFF) / 255F * (float) light) & 0xF;
-        return new CustomColor(red, green, blue);
+        return ServerColorHelper.RGB16FromRGBChannel4Bit(red, green, blue);
     }
 }

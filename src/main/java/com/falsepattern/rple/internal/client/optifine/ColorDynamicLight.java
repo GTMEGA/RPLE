@@ -8,9 +8,8 @@
 
 package com.falsepattern.rple.internal.client.optifine;
 
-import com.falsepattern.rple.api.common.RPLEColorUtil;
+import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.color.LightValueColor;
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import lombok.Getter;
 import lombok.val;
 import stubpackage.Config;
@@ -29,7 +28,7 @@ public class ColorDynamicLight {
     @Getter private double lastPosX = -2.1474836E9F;
     @Getter private double lastPosY = -2.1474836E9F;
     @Getter private double lastPosZ = -2.1474836E9F;
-    @Getter private RPLEColor lastLightLevel = LightValueColor.LIGHT_VALUE_0;
+    @Getter private short lastLightLevel = LightValueColor.LIGHT_VALUE_0.rgb16();
     @Getter private boolean underwater = false;
     private long timeCheckMs = 0L;
 
@@ -57,7 +56,7 @@ public class ColorDynamicLight {
         double dz = posZ - this.lastPosZ;
         double delta = 0.1;
         if (!(Math.abs(dx) <= delta) || !(Math.abs(dy) <= delta) || !(Math.abs(
-                dz) <= delta) || !RPLEColorUtil.colorEquals(this.lastLightLevel, lightLevel)) {
+                dz) <= delta) || this.lastLightLevel != lightLevel) {
             this.underwater = false;
             World world = renderGlobal.theWorld;
             if (world != null) {
@@ -66,8 +65,8 @@ public class ColorDynamicLight {
                 this.underwater = block == Blocks.water;
             }
 
-            if (!RPLEColorUtil.colorEquals(lightLevel, LightValueColor.LIGHT_VALUE_0)) {
-                int distance = RPLEColorUtil.maxColorComponent(lightLevel) + 1;
+            if (lightLevel != LightValueColor.LIGHT_VALUE_0.rgb16()) {
+                int distance = ServerColorHelper.maxColorComponent(lightLevel) + 1;
                 renderGlobal.markBlockRangeForRenderUpdate((int) (posX - distance), (int) (posY - distance), (int) (posZ - distance),
                                                            (int) (posX + distance), (int) (posY + distance), (int) (posZ + distance));
             }
@@ -81,7 +80,7 @@ public class ColorDynamicLight {
     }
 
     public void updateLitChunks(RenderGlobal renderGlobal) {
-        int distance = RPLEColorUtil.maxColorComponent(lastLightLevel) + 1;
+        int distance = ServerColorHelper.maxColorComponent(lastLightLevel) + 1;
         renderGlobal.markBlockRangeForRenderUpdate((int) (lastPosX - distance), (int) (lastPosY - distance), (int) (lastPosZ - distance),
                                                    (int) (lastPosX + distance), (int) (lastPosY + distance), (int) (lastPosZ + distance));
     }

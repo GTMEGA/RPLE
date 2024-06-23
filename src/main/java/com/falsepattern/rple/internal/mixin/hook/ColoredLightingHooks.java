@@ -10,7 +10,7 @@ package com.falsepattern.rple.internal.mixin.hook;
 import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.api.client.RPLETessBrightnessUtil;
-import com.falsepattern.rple.api.common.RPLEColorUtil;
+import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.optifine.ColorDynamicLights;
@@ -27,8 +27,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
-import static com.falsepattern.rple.api.common.RPLEColorUtil.lightOpacityFromColor;
-import static com.falsepattern.rple.api.common.RPLEColorUtil.lightValueFromColor;
+import static com.falsepattern.rple.api.common.ServerColorHelper.lightOpacityFromRGB16;
+import static com.falsepattern.rple.api.common.ServerColorHelper.lightValueFromRGB16;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
 @UtilityClass
@@ -45,7 +45,7 @@ public final class ColoredLightingHooks {
                                           .lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
         val blueLightValue = subChunkRoot.rple$subChunk(BLUE_CHANNEL)
                                          .lumi$getBlockLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
-        return RPLEColorUtil.maxColorComponent(redLightValue, greenLightValue, blueLightValue);
+        return ServerColorHelper.maxColorComponent(redLightValue, greenLightValue, blueLightValue);
     }
 
     @SuppressWarnings("CastToIncompatibleInterface")
@@ -60,13 +60,13 @@ public final class ColoredLightingHooks {
                                           .lumi$getSkyLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
         val blueLightValue = subChunkRoot.rple$subChunk(BLUE_CHANNEL)
                                          .lumi$getSkyLightValue(subChunkPosX, subChunkPosY, subChunkPosZ);
-        return RPLEColorUtil.maxColorComponent(redLightValue, greenLightValue, blueLightValue);
+        return ServerColorHelper.maxColorComponent(redLightValue, greenLightValue, blueLightValue);
     }
 
     public static int getLightValue(Block block) {
         val rpleBlock = RPLEBlock.of(block);
         val color = rpleBlock.rple$getBrightnessColor();
-        return lightValueFromColor(color);
+        return lightValueFromRGB16(color);
     }
 
     public static int getLightValue(IBlockAccess world,
@@ -77,13 +77,13 @@ public final class ColoredLightingHooks {
         val rpleBlock = RPLEBlock.of(block);
         val blockMeta = world.getBlockMetadata(posX, posY, posZ);
         val color = rpleBlock.rple$getBrightnessColor(world, blockMeta, posX, posY, posZ);
-        return lightValueFromColor(color);
+        return lightValueFromRGB16(color);
     }
 
     public static int getLightOpacity(Block block) {
         val rpleBlock = RPLEBlock.of(block);
         val color = rpleBlock.rple$getTranslucencyColor();
-        return lightOpacityFromColor(color);
+        return lightOpacityFromRGB16(color);
     }
 
     public static int getLightOpacity(IBlockAccess world,
@@ -94,7 +94,7 @@ public final class ColoredLightingHooks {
         val rpleBlock = RPLEBlock.of(block);
         val blockMeta = world.getBlockMetadata(posX, posY, posZ);
         val color = rpleBlock.rple$getTranslucencyColor(world, blockMeta, posX, posY, posZ);
-        return lightOpacityFromColor(color);
+        return lightOpacityFromRGB16(color);
     }
 
     @SideOnly(Side.CLIENT)

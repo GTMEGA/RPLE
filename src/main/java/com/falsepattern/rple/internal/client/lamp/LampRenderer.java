@@ -25,6 +25,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
+import static com.falsepattern.rple.api.common.ServerColorHelper.*;
+
 public class LampRenderer implements ISimpleBlockRenderingHandler {
     public static final int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 
@@ -58,9 +60,9 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         if (glowing) {
             val lamp = (LampBlock) block;
             val color = lamp.getColor();
-            val r = color.red() * 17;
-            val g = color.green() * 17;
-            val b = color.blue() * 17;
+            val r = red(color) * 17;
+            val g = green(color) * 17;
+            val b = blue(color) * 17;
             tessellator.setBrightness(ClientColorHelper.vanillaFromBlockSky4Bit(15, 15));
             tessellator.setColorRGBA(r, g, b, 128);
             drawGlowCube(tessellator, 0, 0, 0, 0, lamp.getGlowIcon());
@@ -112,9 +114,9 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         }
 
         val color = lamp.getColor();
-        val r = color.red() * 17;
-        val g = color.green() * 17;
-        val b = color.blue() * 17;
+        val r = red(color) * 17;
+        val g = green(color) * 17;
+        val b = blue(color) * 17;
 
         tessellator.setBrightness(ClientColorHelper.vanillaFromBlockSky4Bit(15, 15));
         tessellator.setColorOpaque(r, g, b);

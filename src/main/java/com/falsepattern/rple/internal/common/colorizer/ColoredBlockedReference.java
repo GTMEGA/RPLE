@@ -7,10 +7,11 @@
 
 package com.falsepattern.rple.internal.common.colorizer;
 
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.common.block.RPLEBlockInit;
 import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.TIntShortMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.map.hash.TIntShortHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -25,19 +26,19 @@ public final class ColoredBlockedReference {
     private final RPLEBlockInit block;
 
     @Setter
-    private @Nullable RPLEColor baseBrightnessColor;
+    private short baseBrightnessColor;
     @Setter
-    private @Nullable RPLEColor baseTranslucencyColor;
+    private short baseTranslucencyColor;
 
-    private final TIntObjectMap<RPLEColor> metaBrightnessColorsMap = new TIntObjectHashMap<>();
-    private final TIntObjectMap<RPLEColor> metaTranslucencyColorsMap = new TIntObjectHashMap<>();
+    private final TIntShortMap metaBrightnessColorsMap = new TIntShortHashMap();
+    private final TIntShortMap metaTranslucencyColorsMap = new TIntShortHashMap();
 
-    public void metaBrightnessColorsMap(int blockMeta, RPLEColor color) {
+    public void metaBrightnessColorsMap(int blockMeta, short color) {
         if (blockMeta >= 0)
             metaBrightnessColorsMap.put(blockMeta, color);
     }
 
-    public void metaTranslucencyColorsMap(int blockMeta, RPLEColor color) {
+    public void metaTranslucencyColorsMap(int blockMeta, short color) {
         if (blockMeta >= 0)
             metaTranslucencyColorsMap.put(blockMeta, color);
     }
@@ -50,7 +51,7 @@ public final class ColoredBlockedReference {
         block.rple$finishColorInit();
     }
 
-    private @Nullable RPLEColor @Nullable [] metaColorsArrayFromMap(TIntObjectMap<RPLEColor> metaColorsMap) {
+    private short @Nullable [] metaColorsArrayFromMap(TIntShortMap metaColorsMap) {
         if (metaColorsMap.isEmpty())
             return null;
         val blockMetas = metaColorsMap.keys();
@@ -61,7 +62,7 @@ public final class ColoredBlockedReference {
             return null;
 
         val metaColorsLength = maxBlockMeta + 1;
-        val metaColors = new RPLEColor[metaColorsLength];
+        val metaColors = new short[metaColorsLength];
         for (val blockMeta : blockMetas)
             metaColors[blockMeta] = metaColorsMap.get(blockMeta);
         return metaColors;

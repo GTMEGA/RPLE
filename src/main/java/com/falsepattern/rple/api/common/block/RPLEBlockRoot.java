@@ -7,7 +7,6 @@
 
 package com.falsepattern.rple.api.common.block;
 
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 
@@ -60,30 +59,26 @@ public interface RPLEBlockRoot {
      *
      * @return Internal brightness value
      */
-    @Deprecated
-    RPLEColor rple$getInternalColoredBrightness();
+    short rple$getInternalColoredBrightness();
 
     /**
      * Returns the translucency as defined by: {@link Block#getLightValue(IBlockAccess, int, int, int)}
      *
      * @return Internal brightness value
      */
-    @Deprecated
-    RPLEColor rple$getInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ);
+    short rple$getInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ);
 
     /**
      * Returns the translucency as defined by: {@link Block#getLightOpacity()}
      *
      * @return Internal translucency value
      */
-    @Deprecated
-    RPLEColor rple$getInternalColoredTranslucency();
+    short rple$getInternalColoredTranslucency();
 
     /**
      * Returns the translucency as defined by: {@link Block#getLightOpacity(IBlockAccess, int, int, int)}
      *
      * @return Internal translucency value
      */
-    @Deprecated
-    RPLEColor rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ);
+    short rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ);
 }

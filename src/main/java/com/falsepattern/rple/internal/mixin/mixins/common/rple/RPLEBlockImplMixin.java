@@ -7,12 +7,11 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
-import com.falsepattern.rple.api.common.RGB16Helper;
+import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.block.RPLEBlockRoot;
 import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
 import com.falsepattern.rple.api.common.block.RPLECustomBlockTranslucency;
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
@@ -36,23 +35,6 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
     private short @Nullable [] rple$rawMetaOpacityColors;
 
-    @Nullable
-    @Deprecated
-    @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private RPLEColor rple$baseBrightnessColor;
-    @Nullable
-    @Deprecated
-    @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private RPLEColor rple$baseTranslucencyColor;
-    @Nullable
-    @Deprecated
-    @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private RPLEColor @Nullable [] rple$metaBrightnessColors;
-    @Nullable
-    @Deprecated
-    @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
-    private RPLEColor @Nullable [] rple$metaTranslucencyColors;
-
     @Shadow
     public abstract boolean hasTileEntity(int metadata);
 
@@ -63,8 +45,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
         if (this instanceof RPLECustomBlockBrightness) {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
-                val color = colorProvider.rple$getCustomBrightnessColor();
-                return RGB16Helper.brightnessToCache(color);
+                return colorProvider.rple$getCustomBrightnessColor();
             } catch (Exception ignored) {
             }
         }
@@ -89,8 +70,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
         if (this instanceof RPLECustomBlockBrightness) {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
-                val color = colorProvider.rple$getCustomBrightnessColor(blockMeta);
-                return RGB16Helper.brightnessToCache(color);
+                return colorProvider.rple$getCustomBrightnessColor(blockMeta);
             } catch (Exception ignored) {
             }
         }
@@ -114,8 +94,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
         if (this instanceof RPLECustomBlockBrightness) {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
-                val color = colorProvider.rple$getCustomBrightnessColor(world, blockMeta, posX, posY, posZ);
-                return RGB16Helper.brightnessToCache(color);
+                return colorProvider.rple$getCustomBrightnessColor(world, blockMeta, posX, posY, posZ);
             } catch (Exception ignored) {
             }
         }
@@ -124,8 +103,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             if (tileEntity instanceof RPLECustomBlockBrightness) {
                 val colorProvider = (RPLECustomBlockBrightness) tileEntity;
                 try {
-                    val color = colorProvider.rple$getCustomBrightnessColor(world, blockMeta, posX, posY, posZ);
-                    return RGB16Helper.brightnessToCache(color);
+                    return colorProvider.rple$getCustomBrightnessColor(world, blockMeta, posX, posY, posZ);
                 } catch (Exception ignored) {
                 }
             }
@@ -140,8 +118,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
         if (this instanceof RPLECustomBlockTranslucency) {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
-                val color = colorProvider.rple$getCustomTranslucencyColor();
-                return RGB16Helper.translucencyToOpacityCache(color);
+                return colorProvider.rple$getCustomTranslucencyColor();
             } catch (Exception ignored) {
             }
         }
@@ -166,7 +143,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
                 val color = colorProvider.rple$getCustomTranslucencyColor(blockMeta);
-                return RGB16Helper.translucencyToOpacityCache(color);
+                return ServerColorHelper.RGB16OpacityTranslucentSwap(color);
             } catch (Exception ignored) {
             }
         }
@@ -191,7 +168,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
                 val color = colorProvider.rple$getCustomTranslucencyColor(world, blockMeta, posX, posY, posZ);
-                return RGB16Helper.translucencyToOpacityCache(color);
+                return ServerColorHelper.RGB16OpacityTranslucentSwap(color);
             } catch (Exception ignored) {
             }
         }
@@ -201,7 +178,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
                 val colorProvider = (RPLECustomBlockTranslucency) tileEntity;
                 try {
                     val color = colorProvider.rple$getCustomTranslucencyColor(world, blockMeta, posX, posY, posZ);
-                    return RGB16Helper.translucencyToOpacityCache(color);
+                    return ServerColorHelper.RGB16OpacityTranslucentSwap(color);
                 } catch (Exception ignored) {
                 }
             }
@@ -210,13 +187,13 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
     }
 
     @Override
-    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
-    public @NotNull RPLEColor rple$getBrightnessColor() {
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface"})
+    public short rple$getBrightnessColor() {
         if (this instanceof RPLECustomBlockBrightness) {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
                 val color = colorProvider.rple$getCustomBrightnessColor();
-                if (color != null)
+                if (color != -1)
                     return color;
             } catch (Exception ignored) {
             }
@@ -225,13 +202,13 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
     }
 
     @Override
-    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
-    public @NotNull RPLEColor rple$getBrightnessColor(int blockMeta) {
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface"})
+    public short rple$getBrightnessColor(int blockMeta) {
         if (this instanceof RPLECustomBlockBrightness) {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
                 val color = colorProvider.rple$getCustomBrightnessColor(blockMeta);
-                if (color != null)
+                if (color != -1)
                     return color;
             } catch (Exception ignored) {
             }
@@ -240,8 +217,8 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
     }
 
     @Override
-    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
-    public @NotNull RPLEColor rple$getBrightnessColor(@NotNull IBlockAccess world,
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface"})
+    public short rple$getBrightnessColor(@NotNull IBlockAccess world,
                                                       int blockMeta,
                                                       int posX,
                                                       int posY,
@@ -250,7 +227,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
                 val color = colorProvider.rple$getCustomBrightnessColor(world, blockMeta, posX, posY, posZ);
-                if (color != null)
+                if (color != -1)
                     return color;
             } catch (Exception ignored) {
             }
@@ -261,7 +238,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
                 val colorProvider = (RPLECustomBlockBrightness) tileEntity;
                 try {
                     val color = colorProvider.rple$getCustomBrightnessColor(world, blockMeta, posX, posY, posZ);
-                    if (color != null)
+                    if (color != -1)
                         return color;
                 } catch (Exception ignored) {
                 }
@@ -271,13 +248,13 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
     }
 
     @Override
-    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
-    public @NotNull RPLEColor rple$getTranslucencyColor() {
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface"})
+    public short rple$getTranslucencyColor() {
         if (this instanceof RPLECustomBlockTranslucency) {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
                 val color = colorProvider.rple$getCustomTranslucencyColor();
-                if (color != null)
+                if (color != -1)
                     return color;
             } catch (Exception ignored) {
             }
@@ -286,13 +263,13 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
     }
 
     @Override
-    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
-    public @NotNull RPLEColor rple$getTranslucencyColor(int blockMeta) {
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface"})
+    public short rple$getTranslucencyColor(int blockMeta) {
         if (this instanceof RPLECustomBlockTranslucency) {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
                 val color = colorProvider.rple$getCustomTranslucencyColor(blockMeta);
-                if (color != null)
+                if (color != -1)
                     return color;
             } catch (Exception ignored) {
             }
@@ -301,8 +278,8 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
     }
 
     @Override
-    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface", "ConstantValue"})
-    public @NotNull RPLEColor rple$getTranslucencyColor(@NotNull IBlockAccess world,
+    @SuppressWarnings({"InstanceofThis", "InstanceofIncompatibleInterface"})
+    public short rple$getTranslucencyColor(@NotNull IBlockAccess world,
                                                         int blockMeta,
                                                         int posX,
                                                         int posY,
@@ -311,7 +288,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
                 val color = colorProvider.rple$getCustomTranslucencyColor(world, blockMeta, posX, posY, posZ);
-                if (color != null)
+                if (color != -1)
                     return color;
             } catch (Exception ignored) {
             }
@@ -322,7 +299,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
                 val colorProvider = (RPLECustomBlockTranslucency) tileEntity;
                 try {
                     val color = colorProvider.rple$getCustomTranslucencyColor(world, blockMeta, posX, posY, posZ);
-                    if (color != null)
+                    if (color != -1)
                         return color;
                 } catch (Exception ignored) {
                 }
@@ -332,95 +309,95 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
     }
 
     @Override
-    public @NotNull RPLEColor rple$getFallbackBrightnessColor() {
+    public short rple$getFallbackBrightnessColor() {
         val color = rple$getConfiguredBrightnessColor();
-        if (color != null)
+        if (color != -1)
             return color;
         return rple$getInternalColoredBrightness();
     }
 
     @Override
-    public @NotNull RPLEColor rple$getFallbackBrightnessColor(int blockMeta) {
+    public short rple$getFallbackBrightnessColor(int blockMeta) {
         val color = rple$getConfiguredBrightnessColor(blockMeta);
-        if (color != null)
+        if (color != -1)
             return color;
         return rple$getInternalColoredBrightness();
     }
 
     @Override
-    public @NotNull RPLEColor rple$getFallbackBrightnessColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+    public short rple$getFallbackBrightnessColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
         val color = rple$getConfiguredBrightnessColor(blockMeta);
-        if (color != null)
+        if (color != -1)
             return color;
         return rple$getInternalColoredBrightness(world, posX, posY, posZ);
     }
 
     @Override
-    public @NotNull RPLEColor rple$getFallbackTranslucencyColor() {
+    public short rple$getFallbackTranslucencyColor() {
         val color = rple$getConfiguredTranslucencyColor();
-        if (color != null)
+        if (color != -1)
             return color;
         return rple$getInternalColoredTranslucency();
     }
 
 
     @Override
-    public @NotNull RPLEColor rple$getFallbackTranslucencyColor(int blockMeta) {
+    public short rple$getFallbackTranslucencyColor(int blockMeta) {
         val color = rple$getConfiguredTranslucencyColor(blockMeta);
-        if (color != null)
+        if (color != -1)
             return color;
         return rple$getInternalColoredTranslucency();
     }
 
     @Override
-    public @NotNull RPLEColor rple$getFallbackTranslucencyColor(@NotNull IBlockAccess world,
+    public short rple$getFallbackTranslucencyColor(@NotNull IBlockAccess world,
                                                                 int blockMeta,
                                                                 int posX,
                                                                 int posY,
                                                                 int posZ) {
         val color = rple$getConfiguredTranslucencyColor(blockMeta);
-        if (color != null)
+        if (color != -1)
             return color;
         return rple$getInternalColoredTranslucency(world, posX, posY, posZ);
     }
 
     @Override
-    public @Nullable RPLEColor rple$getConfiguredBrightnessColor() {
-        if (rple$baseBrightnessColor != null)
-            return rple$baseBrightnessColor;
-        if (rple$metaBrightnessColors == null)
-            return null;
-        if (rple$metaBrightnessColors.length < 1)
-            return null;
-        return rple$metaBrightnessColors[0];
+    public short rple$getConfiguredBrightnessColor() {
+        if (rple$rawBaseBrightnessColor != -1)
+            return rple$rawBaseBrightnessColor;
+        if (rple$rawMetaBrightnessColors == null)
+            return -1;
+        if (rple$rawMetaBrightnessColors.length < 1)
+            return -1;
+        return rple$rawMetaBrightnessColors[0];
     }
 
     @Override
-    public @Nullable RPLEColor rple$getConfiguredBrightnessColor(int blockMeta) {
-        if (rple$metaBrightnessColors == null)
-            return rple$baseBrightnessColor;
-        if (rple$metaBrightnessColors.length <= blockMeta)
-            return rple$baseBrightnessColor;
-        return rple$metaBrightnessColors[blockMeta];
+    public short rple$getConfiguredBrightnessColor(int blockMeta) {
+        if (rple$rawMetaBrightnessColors == null)
+            return rple$rawBaseBrightnessColor;
+        if (rple$rawMetaBrightnessColors.length <= blockMeta)
+            return rple$rawBaseBrightnessColor;
+        return rple$rawMetaBrightnessColors[blockMeta];
     }
 
     @Override
-    public @Nullable RPLEColor rple$getConfiguredTranslucencyColor() {
-        if (rple$baseTranslucencyColor != null)
-            return rple$baseTranslucencyColor;
-        if (rple$metaTranslucencyColors == null)
-            return null;
-        if (rple$metaTranslucencyColors.length < 1)
-            return null;
-        return rple$metaTranslucencyColors[0];
+    public short rple$getConfiguredTranslucencyColor() {
+        if (rple$rawBaseOpacityColor != -1)
+            return ServerColorHelper.RGB16OpacityTranslucentSwap(rple$rawBaseOpacityColor);
+        if (rple$rawMetaOpacityColors == null)
+            return -1;
+        if (rple$rawMetaOpacityColors.length < 1)
+            return -1;
+        return ServerColorHelper.RGB16OpacityTranslucentSwap(rple$rawMetaOpacityColors[0]);
     }
 
     @Override
-    public @Nullable RPLEColor rple$getConfiguredTranslucencyColor(int blockMeta) {
-        if (rple$metaTranslucencyColors == null)
-            return rple$baseTranslucencyColor;
-        if (rple$metaTranslucencyColors.length <= blockMeta)
-            return rple$baseTranslucencyColor;
-        return rple$metaTranslucencyColors[blockMeta];
+    public short rple$getConfiguredTranslucencyColor(int blockMeta) {
+        if (rple$rawMetaOpacityColors == null)
+            return ServerColorHelper.RGB16OpacityTranslucentSwap(rple$rawBaseOpacityColor);
+        if (rple$rawMetaOpacityColors.length <= blockMeta)
+            return ServerColorHelper.RGB16OpacityTranslucentSwap(rple$rawBaseOpacityColor);
+        return ServerColorHelper.RGB16OpacityTranslucentSwap(rple$rawMetaOpacityColors[blockMeta]);
     }
 }

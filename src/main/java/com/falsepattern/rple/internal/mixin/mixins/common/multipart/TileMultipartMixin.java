@@ -11,7 +11,6 @@ import codechicken.lib.world.IChunkLoadTile;
 import codechicken.multipart.TileMultipart;
 import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
 import com.falsepattern.rple.api.common.block.RPLECustomBlockTranslucency;
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.mixin.helper.MultiPartHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -23,17 +22,17 @@ public abstract class TileMultipartMixin extends TileEntity implements IChunkLoa
                                                                        RPLECustomBlockBrightness,
                                                                        RPLECustomBlockTranslucency {
     @Override
-    public @NotNull RPLEColor rple$getCustomBrightnessColor() {
+    public short rple$getCustomBrightnessColor() {
         return MultiPartHelper.getMultiPartBrightnessColor(thiz());
     }
 
     @Override
-    public @NotNull RPLEColor rple$getCustomBrightnessColor(int blockMeta) {
+    public short rple$getCustomBrightnessColor(int blockMeta) {
         return MultiPartHelper.getMultiPartBrightnessColor(thiz());
     }
 
     @Override
-    public @NotNull RPLEColor rple$getCustomBrightnessColor(@NotNull IBlockAccess world,
+    public short rple$getCustomBrightnessColor(@NotNull IBlockAccess world,
                                                             int blockMeta,
                                                             int posX,
                                                             int posY,
@@ -42,17 +41,17 @@ public abstract class TileMultipartMixin extends TileEntity implements IChunkLoa
     }
 
     @Override
-    public @NotNull RPLEColor rple$getCustomTranslucencyColor() {
+    public short rple$getCustomTranslucencyColor() {
         return MultiPartHelper.getMultiPartTranslucencyColor(thiz());
     }
 
     @Override
-    public @NotNull RPLEColor rple$getCustomTranslucencyColor(int blockMeta) {
+    public short rple$getCustomTranslucencyColor(int blockMeta) {
         return MultiPartHelper.getMultiPartTranslucencyColor(thiz());
     }
 
     @Override
-    public @NotNull RPLEColor rple$getCustomTranslucencyColor(@NotNull IBlockAccess world,
+    public short rple$getCustomTranslucencyColor(@NotNull IBlockAccess world,
                                                               int blockMeta,
                                                               int posX,
                                                               int posY,

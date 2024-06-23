@@ -8,11 +8,9 @@
 
 package com.falsepattern.rple.internal.common.lamp;
 
-import com.falsepattern.rple.api.common.RPLEColorUtil;
+import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
-import com.falsepattern.rple.api.common.color.CustomColor;
 import com.falsepattern.rple.api.common.color.DefaultColor;
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.client.lamp.LampRenderer;
 import lombok.Getter;
@@ -38,7 +36,7 @@ public abstract class LampBlock extends Block implements RPLECustomBlockBrightne
     public static final int INVERTED_BIT = 0b0001;
 
     @Getter
-    private final RPLEColor color;
+    private final short color;
 
     private IIcon glowIcon = null;
     private IIcon poweredIcon = null;
@@ -46,13 +44,13 @@ public abstract class LampBlock extends Block implements RPLECustomBlockBrightne
     public LampBlock(int r, int g, int b) {
         super(Material.redstoneLight);
         //RGB range checks
-        if (r < RPLEColorUtil.COLOR_MIN || r > RPLEColorUtil.COLOR_MAX)
-            throw new IllegalArgumentException("Red value must be between " + RPLEColorUtil.COLOR_MIN + " and " + RPLEColorUtil.COLOR_MAX);
-        if (g < RPLEColorUtil.COLOR_MIN || g > RPLEColorUtil.COLOR_MAX)
-            throw new IllegalArgumentException("Green value must be between " + RPLEColorUtil.COLOR_MIN + " and " + RPLEColorUtil.COLOR_MAX);
-        if (b < RPLEColorUtil.COLOR_MIN || b > RPLEColorUtil.COLOR_MAX)
-            throw new IllegalArgumentException("Blue value must be between " + RPLEColorUtil.COLOR_MIN + " and " + RPLEColorUtil.COLOR_MAX);
-        color = new CustomColor(r, g, b);
+        if (r < ServerColorHelper.COLOR_MIN || r > ServerColorHelper.COLOR_MAX)
+            throw new IllegalArgumentException("Red value must be between " + ServerColorHelper.COLOR_MIN + " and " + ServerColorHelper.COLOR_MAX);
+        if (g < ServerColorHelper.COLOR_MIN || g > ServerColorHelper.COLOR_MAX)
+            throw new IllegalArgumentException("Green value must be between " + ServerColorHelper.COLOR_MIN + " and " + ServerColorHelper.COLOR_MAX);
+        if (b < ServerColorHelper.COLOR_MIN || b > ServerColorHelper.COLOR_MAX)
+            throw new IllegalArgumentException("Blue value must be between " + ServerColorHelper.COLOR_MIN + " and " + ServerColorHelper.COLOR_MAX);
+        color = ServerColorHelper.RGB16FromRGBChannel4Bit(r, g, b);
         setHardness(0.3F);
         setStepSound(soundTypeGlass);
         setCreativeTab(CreativeTabs.tabDecorations);
@@ -143,8 +141,8 @@ public abstract class LampBlock extends Block implements RPLECustomBlockBrightne
     }
 
     @Override
-    public @NotNull RPLEColor rple$getCustomBrightnessColor() {
-        return DefaultColor.BLACK;
+    public short rple$getCustomBrightnessColor() {
+        return DefaultColor.BLACK.rgb16();
     }
 
     protected static boolean shouldGlow(int meta) {
@@ -154,12 +152,12 @@ public abstract class LampBlock extends Block implements RPLECustomBlockBrightne
     }
 
     @Override
-    public @NotNull RPLEColor rple$getCustomBrightnessColor(int blockMeta) {
-        return shouldGlow(blockMeta) ? color : DefaultColor.BLACK;
+    public short rple$getCustomBrightnessColor(int blockMeta) {
+        return shouldGlow(blockMeta) ? color : DefaultColor.BLACK.rgb16();
     }
 
     @Override
-    public @NotNull RPLEColor rple$getCustomBrightnessColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
-        return shouldGlow(blockMeta) ? color : DefaultColor.BLACK;
+    public short rple$getCustomBrightnessColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
+        return shouldGlow(blockMeta) ? color : DefaultColor.BLACK.rgb16();
     }
 }

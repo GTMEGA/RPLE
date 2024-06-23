@@ -10,7 +10,6 @@ package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 import com.falsepattern.rple.api.common.block.RPLEBlockRenamed;
 import com.falsepattern.rple.api.common.block.RPLEBlockRoot;
 import com.falsepattern.rple.api.common.color.LightValueColor;
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,23 +42,23 @@ public abstract class RPLEBlockRootImplMixin implements RPLEBlockRoot, RPLEBlock
     }
 
     @Override
-    public RPLEColor rple$getInternalColoredBrightness() {
-        return LightValueColor.fromVanillaLightValue(rple$renamed$getLightValue());
+    public short rple$getInternalColoredBrightness() {
+        return LightValueColor.fromVanillaLightValue(rple$renamed$getLightValue()).rgb16();
     }
 
     @Override
-    public RPLEColor rple$getInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ) {
-        return LightValueColor.fromVanillaLightValue(rple$renamed$getLightValue(world, posX, posY, posZ));
+    public short rple$getInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ) {
+        return LightValueColor.fromVanillaLightValue(rple$renamed$getLightValue(world, posX, posY, posZ)).rgb16();
     }
 
     @Override
-    public RPLEColor rple$getInternalColoredTranslucency() {
-        return LightValueColor.fromVanillaLightOpacity(rple$renamed$getLightOpacity());
+    public short rple$getInternalColoredTranslucency() {
+        return LightValueColor.fromVanillaLightOpacity(rple$renamed$getLightOpacity()).rgb16();
     }
 
     @Override
-    public RPLEColor rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ) {
-        return LightValueColor.fromVanillaLightOpacity(rple$renamed$getLightOpacity(world, posX, posY, posZ));
+    public short rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ) {
+        return LightValueColor.fromVanillaLightOpacity(rple$renamed$getLightOpacity(world, posX, posY, posZ)).rgb16();
     }
 
     private static short packGreyscale(int color) {

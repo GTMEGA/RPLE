@@ -7,8 +7,7 @@
 
 package com.falsepattern.rple.internal.common.colorizer;
 
-import com.falsepattern.rple.api.common.color.RPLEColor;
-import com.falsepattern.rple.api.common.color.RPLENamedColor;
+import com.falsepattern.rple.api.common.color.IPaletteColor;
 import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorizer;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -24,32 +23,22 @@ public final class NullBlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public @NotNull RPLEBlockColorizer brightness(int color) {
+    public @NotNull RPLEBlockColorizer brightness(short color) {
         return this;
     }
 
     @Override
-    public @NotNull RPLEBlockColorizer brightness(@NotNull RPLEColor color) {
+    public @NotNull RPLEBlockColorizer brightness(@NotNull IPaletteColor color) {
         return this;
     }
 
     @Override
-    public @NotNull RPLEBlockColorizer brightness(@NotNull RPLENamedColor color) {
+    public @NotNull RPLEBlockColorizer translucency(short color) {
         return this;
     }
 
     @Override
-    public @NotNull RPLEBlockColorizer translucency(int color) {
-        return this;
-    }
-
-    @Override
-    public @NotNull RPLEBlockColorizer translucency(@NotNull RPLEColor color) {
-        return this;
-    }
-
-    @Override
-    public @NotNull RPLEBlockColorizer translucency(@NotNull RPLENamedColor color) {
+    public @NotNull RPLEBlockColorizer translucency(@NotNull IPaletteColor color) {
         return this;
     }
 

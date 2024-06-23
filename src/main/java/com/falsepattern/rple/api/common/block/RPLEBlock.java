@@ -7,11 +7,9 @@
 
 package com.falsepattern.rple.api.common.block;
 
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * This interface is implemented onto the {@link Block Block Class} by RPLE.
@@ -49,83 +47,51 @@ public interface RPLEBlock {
                                   int posY,
                                   int posZ);
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getBrightnessColor();
+    short rple$getBrightnessColor();
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getBrightnessColor(int blockMeta);
+    short rple$getBrightnessColor(int blockMeta);
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getBrightnessColor(@NotNull IBlockAccess world,
+    short rple$getBrightnessColor(@NotNull IBlockAccess world,
                                       int blockMeta,
                                       int posX,
                                       int posY,
                                       int posZ);
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getTranslucencyColor();
+    short rple$getTranslucencyColor();
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getTranslucencyColor(int blockMeta);
+    short rple$getTranslucencyColor(int blockMeta);
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getTranslucencyColor(@NotNull IBlockAccess world,
+    short rple$getTranslucencyColor(@NotNull IBlockAccess world,
                                         int blockMeta,
                                         int posX,
                                         int posY,
                                         int posZ);
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getFallbackBrightnessColor();
+    short rple$getFallbackBrightnessColor();
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getFallbackBrightnessColor(int blockMeta);
+    short rple$getFallbackBrightnessColor(int blockMeta);
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getFallbackBrightnessColor(@NotNull IBlockAccess world,
+    short rple$getFallbackBrightnessColor(@NotNull IBlockAccess world,
                                               int blockMeta,
                                               int posX,
                                               int posY,
                                               int posZ);
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getFallbackTranslucencyColor();
+    short rple$getFallbackTranslucencyColor();
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getFallbackTranslucencyColor(int blockMeta);
+    short rple$getFallbackTranslucencyColor(int blockMeta);
 
-    @Deprecated
-    @NotNull
-    RPLEColor rple$getFallbackTranslucencyColor(@NotNull IBlockAccess world,
+    short rple$getFallbackTranslucencyColor(@NotNull IBlockAccess world,
                                                 int blockMeta,
                                                 int posX,
                                                 int posY,
                                                 int posZ);
 
-    @Deprecated
-    @Nullable
-    RPLEColor rple$getConfiguredBrightnessColor();
+    short rple$getConfiguredBrightnessColor();
 
-    @Deprecated
-    @Nullable
-    RPLEColor rple$getConfiguredBrightnessColor(int blockMeta);
+    short rple$getConfiguredBrightnessColor(int blockMeta);
 
-    @Deprecated
-    @Nullable
-    RPLEColor rple$getConfiguredTranslucencyColor();
+    short rple$getConfiguredTranslucencyColor();
 
-    @Deprecated
-    @Nullable
-    RPLEColor rple$getConfiguredTranslucencyColor(int blockMeta);
+    short rple$getConfiguredTranslucencyColor(int blockMeta);
 }

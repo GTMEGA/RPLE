@@ -7,8 +7,7 @@
 
 package com.falsepattern.rple.internal.common.colorizer;
 
-import com.falsepattern.rple.api.common.color.RPLEColor;
-import com.falsepattern.rple.api.common.color.RPLENamedColor;
+import com.falsepattern.rple.api.common.color.IPaletteColor;
 import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorizer;
 import com.falsepattern.rple.internal.common.config.container.BlockReference;
 import com.falsepattern.rple.internal.common.config.container.ColorReference;
@@ -29,11 +28,11 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     private final BlockReference block;
     private final Consumer<BlockColorizer> applyCallback;
 
-    private @Nullable ColorReference brightness;
-    private @Nullable ColorReference translucency;
+    private short brightness;
+    private short translucency;
 
-    private @Nullable RPLENamedColor paletteBrightness;
-    private @Nullable RPLENamedColor paletteTranslucency;
+    private @Nullable IPaletteColor paletteBrightness;
+    private @Nullable IPaletteColor paletteTranslucency;
 
     private boolean hasApplied = false;
 
@@ -41,8 +40,8 @@ public final class BlockColorizer implements RPLEBlockColorizer {
         this.block = block;
         this.applyCallback = applyCallback;
 
-        this.brightness = null;
-        this.translucency = null;
+        this.brightness = -1;
+        this.translucency = -1;
 
         this.paletteBrightness = null;
         this.paletteTranslucency = null;
@@ -51,72 +50,52 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     public Optional<BlockColorReference> brightness() {
-        if (brightness == null)
+        if (brightness == -1)
             return Optional.empty();
-        return Optional.of(wrappedBlockColor(block, brightness));
+        return Optional.of(wrappedBlockColor(block, ColorReference.paletteOrRaw(paletteBrightness, brightness)));
     }
 
     public Optional<BlockColorReference> translucency() {
-        if (translucency == null)
+        if (translucency == -1)
             return Optional.empty();
-        return Optional.of(wrappedBlockColor(block, translucency));
+        return Optional.of(wrappedBlockColor(block, ColorReference.paletteOrRaw(paletteTranslucency, translucency)));
     }
 
-    public Optional<RPLENamedColor> paletteBrightness() {
+    public Optional<IPaletteColor> paletteBrightness() {
         return Optional.ofNullable(paletteBrightness);
     }
 
-    public Optional<RPLENamedColor> paletteTranslucency() {
+    public Optional<IPaletteColor> paletteTranslucency() {
         return Optional.ofNullable(paletteTranslucency);
     }
 
     @Override
-    public @NotNull RPLEBlockColorizer brightness(int color) {
+    public @NotNull RPLEBlockColorizer brightness(short color) {
         resetBrightness();
-        this.brightness = new ColorReference(new HexColor(color));
+        this.brightness = color;
         return this;
     }
 
     @Override
-    public @NotNull RPLEBlockColorizer brightness(@NotNull RPLEColor color) {
+    public @NotNull RPLEBlockColorizer brightness(@NotNull IPaletteColor color) {
         resetBrightness();
-        if (color != null)
-            this.brightness = new ColorReference(new HexColor(color));
+        this.brightness = color.rgb16();
+        this.paletteBrightness = color;
         return this;
     }
 
     @Override
-    public @NotNull RPLEBlockColorizer brightness(@NotNull RPLENamedColor color) {
-        resetBrightness();
-        if (color != null) {
-            this.brightness = new ColorReference(color);
-            this.paletteBrightness = color;
-        }
-        return this;
-    }
-
-    @Override
-    public @NotNull RPLEBlockColorizer translucency(int color) {
+    public @NotNull RPLEBlockColorizer translucency(short color) {
         resetTranslucency();
-        this.translucency = new ColorReference(new HexColor(color));
+        this.translucency = color;
         return this;
     }
 
     @Override
-    public @NotNull RPLEBlockColorizer translucency(@NotNull RPLEColor color) {
+    public @NotNull RPLEBlockColorizer translucency(@NotNull IPaletteColor color) {
         resetTranslucency();
-        if (color != null)
-            this.translucency = new ColorReference(new HexColor(color));
-        return this;
-    }
-
-    @Override
-    public @NotNull RPLEBlockColorizer translucency(@NotNull RPLENamedColor color) {
-        resetTranslucency();
-        if (color != null) {
-            this.translucency = new ColorReference(color);
-            this.paletteTranslucency = color;
-        }
+        this.translucency = color.rgb16();
+        this.paletteTranslucency = color;
         return this;
     }
 
@@ -130,12 +109,12 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     private void resetBrightness() {
-        this.brightness = null;
+        this.brightness = -1;
         this.paletteBrightness = null;
     }
 
     private void resetTranslucency() {
-        this.translucency = null;
+        this.translucency = -1;
         this.paletteTranslucency = null;
     }
 

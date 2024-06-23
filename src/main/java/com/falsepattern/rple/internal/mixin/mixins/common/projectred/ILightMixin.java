@@ -8,7 +8,6 @@
 package com.falsepattern.rple.internal.mixin.mixins.common.projectred;
 
 import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import com.falsepattern.rple.internal.mixin.helper.ProjectRedHelper;
 import mrtjp.projectred.illumination.ILight;
 import net.minecraft.world.IBlockAccess;
@@ -20,17 +19,17 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(ILight.class)
 public interface ILightMixin extends RPLECustomBlockBrightness {
     @Override
-    default @NotNull RPLEColor rple$getCustomBrightnessColor() {
+    default short rple$getCustomBrightnessColor() {
         return ProjectRedHelper.getLightBrightnessColor((ILight) this);
     }
 
     @Override
-    default @NotNull RPLEColor rple$getCustomBrightnessColor(int blockMeta) {
+    default short rple$getCustomBrightnessColor(int blockMeta) {
         return ProjectRedHelper.getLightBrightnessColor((ILight) this);
     }
 
     @Override
-    default @NotNull RPLEColor rple$getCustomBrightnessColor(@NotNull IBlockAccess world,
+    default short rple$getCustomBrightnessColor(@NotNull IBlockAccess world,
                                                              int blockMeta,
                                                              int posX,
                                                              int posY,

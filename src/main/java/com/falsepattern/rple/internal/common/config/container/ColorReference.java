@@ -7,9 +7,9 @@
 
 package com.falsepattern.rple.internal.common.config.container;
 
-import com.falsepattern.rple.api.common.RPLEColorUtil;
-import com.falsepattern.rple.api.common.color.RPLEColor;
-import com.falsepattern.rple.api.common.color.RPLENamedColor;
+import com.falsepattern.rple.api.common.ServerColorHelper;
+import com.falsepattern.rple.api.common.color.CustomPaletteColor;
+import com.falsepattern.rple.api.common.color.IPaletteColor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -27,7 +27,11 @@ public final class ColorReference {
     @Getter
     private final boolean isValid;
 
-    public ColorReference(RPLENamedColor color) {
+    public static ColorReference paletteOrRaw(IPaletteColor palette, short raw) {
+        return palette == null ? new ColorReference(new HexColor(raw)) : new ColorReference(palette);
+    }
+
+    public ColorReference(IPaletteColor color) {
         this.uniqueColor = null;
 
         nameCheck:
@@ -89,20 +93,20 @@ public final class ColorReference {
         this.isValid = false;
     }
 
-    public RPLEColor color(ColorPalette palette) {
+    public short color(ColorPalette palette) {
         if (!isValid)
-            return RPLEColorUtil.errorColor();
+            return ServerColorHelper.ERROR_COLOR.rgb16;
 
         if (uniqueColor != null)
-            return uniqueColor;
+            return uniqueColor.rgb16();
 
         if (paletteColorName != null) {
             val paletteColor = palette.colour(paletteColorName);
             if (paletteColor.isPresent())
-                return paletteColor.get();
+                return paletteColor.get().rgb16();
         }
 
-        return RPLEColorUtil.errorColor();
+        return ServerColorHelper.ERROR_COLOR.rgb16;
     }
 
     @Override

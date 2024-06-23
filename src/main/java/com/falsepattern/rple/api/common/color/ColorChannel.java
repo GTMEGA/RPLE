@@ -7,14 +7,12 @@
 
 package com.falsepattern.rple.api.common.color;
 
-import org.jetbrains.annotations.NotNull;
-
-import static com.falsepattern.rple.api.common.RGB16Helper.*;
+import static com.falsepattern.rple.api.common.ServerColorHelper.*;
 
 public enum ColorChannel {
-    RED_CHANNEL(CACHE_ENTRY_RED_OFFSET),
-    GREEN_CHANNEL(CACHE_ENTRY_GREEN_OFFSET),
-    BLUE_CHANNEL(CACHE_ENTRY_BLUE_OFFSET),
+    RED_CHANNEL(CHANNEL_4BIT_TO_RGB16_RED),
+    GREEN_CHANNEL(CHANNEL_4BIT_TO_RGB16_GREEN),
+    BLUE_CHANNEL(CHANNEL_4BIT_TO_RGB16_BLUE),
     ;
 
     private final String name;
@@ -25,20 +23,8 @@ public enum ColorChannel {
         this.bitShift = bitShift;
     }
 
-    public int componentFromColor(@NotNull RPLEColor color) {
-        switch (this) {
-            default:
-            case RED_CHANNEL:
-                return color.red();
-            case GREEN_CHANNEL:
-                return color.green();
-            case BLUE_CHANNEL:
-                return color.blue();
-        }
-    }
-
     public int componentFromColor(short color) {
-        return ((int) color >>> bitShift) & CACHE_CHANNEL_BITMASK;
+        return ((int) color >>> bitShift) & CHANNEL_4BIT_MASK;
     }
 
     @Override

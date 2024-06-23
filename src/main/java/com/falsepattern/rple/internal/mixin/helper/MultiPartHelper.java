@@ -12,28 +12,25 @@ import codechicken.multipart.minecraft.IPartMeta;
 import codechicken.multipart.minecraft.McBlockPart;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
-import com.falsepattern.rple.api.common.color.CustomColor;
 import com.falsepattern.rple.api.common.color.LightValueColor;
-import com.falsepattern.rple.api.common.color.RPLEColor;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 import lombok.var;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 
-import static com.falsepattern.rple.api.common.RPLEColorUtil.COLOR_MIN;
-import static com.falsepattern.rple.api.common.RPLEColorUtil.clampColorComponent;
+import static com.falsepattern.rple.api.common.ServerColorHelper.*;
 
 @UtilityClass
 public final class MultiPartHelper {
     @SuppressWarnings({"InstanceofIncompatibleInterface", "CastToIncompatibleInterface"})
-    public static RPLEColor getMultiPartBrightnessColor(TileMultipart multiPart) {
+    public static short getMultiPartBrightnessColor(TileMultipart multiPart) {
         var multiPartRed = COLOR_MIN;
         var multiPartGreen = COLOR_MIN;
         var multiPartBlue = COLOR_MIN;
 
         for (val part : multiPart.jPartList()) {
-            final RPLEColor partColor;
+            final short partColor;
             if (part instanceof RPLECustomBlockBrightness) {
                 val colorProvider = (RPLECustomBlockBrightness) part;
                 partColor = colorProvider.rple$getCustomBrightnessColor();
@@ -52,19 +49,19 @@ public final class MultiPartHelper {
             } else {
                 continue;
             }
-            multiPartRed = Math.max(multiPartRed, partColor.red());
-            multiPartGreen = Math.max(multiPartGreen, partColor.green());
-            multiPartBlue = Math.max(multiPartBlue, partColor.blue());
+            multiPartRed = Math.max(multiPartRed, red(partColor));
+            multiPartGreen = Math.max(multiPartGreen, green(partColor));
+            multiPartBlue = Math.max(multiPartBlue, blue(partColor));
         }
 
-        return new CustomColor(multiPartRed, multiPartGreen, multiPartBlue);
+        return RGB16FromRGBChannel4Bit(multiPartRed, multiPartGreen, multiPartBlue);
     }
 
     /**
      * As it stands, all Multi Parts are fully translucent.
      */
-    public static RPLEColor getMultiPartTranslucencyColor(TileMultipart multiPart) {
-        return LightValueColor.LIGHT_VALUE_15;
+    public static short getMultiPartTranslucencyColor(TileMultipart multiPart) {
+        return LightValueColor.LIGHT_VALUE_15.rgb16();
     }
 
     public static int getColoredLightValue(Block vBlock, IBlockAccess world, int meta, int colorChannel, int x, int y, int z) {

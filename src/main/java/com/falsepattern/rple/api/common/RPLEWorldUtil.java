@@ -13,7 +13,7 @@ import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.world.IBlockAccess;
 
-import static com.falsepattern.rple.api.common.RPLEColorUtil.maxColorComponent;
+import static com.falsepattern.rple.api.common.ServerColorHelper.maxColorComponent;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 
 // TODO: [LATER_BUT_NOT_TOO_LATER] Decide what to do?
