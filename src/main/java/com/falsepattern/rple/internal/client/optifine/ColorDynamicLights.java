@@ -9,7 +9,7 @@
 package com.falsepattern.rple.internal.client.optifine;
 
 import com.falsepattern.rple.api.client.CookieMonster;
-import com.falsepattern.rple.api.client.RGB64Helper;
+import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.CustomColor;
 import com.falsepattern.rple.api.common.color.DefaultColor;
@@ -115,16 +115,16 @@ public class ColorDynamicLights {
 
     private static int getCombinedLight(DoubleBrightness lightPlayer, int combinedLight) {
         if (lightPlayer.r > 0 || lightPlayer.g > 0 || lightPlayer.b > 0) {
-            long splitCombined = CookieMonster.cookieToPackedLong(combinedLight);
-            int combinedR = RGB64Helper.getBrightnessRed(splitCombined);
-            int combinedG = RGB64Helper.getBrightnessGreen(splitCombined);
-            int combinedB = RGB64Helper.getBrightnessBlue(splitCombined);
-            int combinedSr = RGB64Helper.getSkyLightChannelFromBrightnessRender(combinedR);
-            int combinedSg = RGB64Helper.getSkyLightChannelFromBrightnessRender(combinedG);
-            int combinedSb = RGB64Helper.getSkyLightChannelFromBrightnessRender(combinedB);
-            int combinedBr = RGB64Helper.getBlockLightChannelFromBrightnessRender(combinedR);
-            int combinedBg = RGB64Helper.getBlockLightChannelFromBrightnessRender(combinedG);
-            int combinedBb = RGB64Helper.getBlockLightChannelFromBrightnessRender(combinedB);
+            long splitCombined = CookieMonster.RGB64FromCookie(combinedLight);
+            int combinedR = ClientColorHelper.vanillaFromRGB64Red(splitCombined);
+            int combinedG = ClientColorHelper.vanillaFromRGB64Green(splitCombined);
+            int combinedB = ClientColorHelper.vanillaFromRGB64Blue(splitCombined);
+            int combinedSr = ClientColorHelper.sky8BitFromVanilla(combinedR);
+            int combinedSg = ClientColorHelper.sky8BitFromVanilla(combinedG);
+            int combinedSb = ClientColorHelper.sky8BitFromVanilla(combinedB);
+            int combinedBr = ClientColorHelper.block8BitFromVanilla(combinedR);
+            int combinedBg = ClientColorHelper.block8BitFromVanilla(combinedG);
+            int combinedBb = ClientColorHelper.block8BitFromVanilla(combinedB);
             int lightPlayerR = (int) (lightPlayer.r * 16.0);
             int lightPlayerG = (int) (lightPlayer.g * 16.0);
             int lightPlayerB = (int) (lightPlayer.b * 16.0);
@@ -137,11 +137,11 @@ public class ColorDynamicLights {
             if (lightPlayerB > combinedBb) {
                 combinedBb = lightPlayerB;
             }
-            combinedLight = CookieMonster.packedLongToCookie(
-                    RGB64Helper.packedBrightnessFromTessellatorBrightnessChannels(
-                            RGB64Helper.channelsToBrightnessRender(combinedBr, combinedSr),
-                            RGB64Helper.channelsToBrightnessRender(combinedBg, combinedSg),
-                            RGB64Helper.channelsToBrightnessRender(combinedBb, combinedSb)));
+            combinedLight = CookieMonster.cookieFromRGB64(
+                    ClientColorHelper.RGB64FromVanillaRGB(
+                            ClientColorHelper.vanillaFromBlockSky8Bit(combinedBr, combinedSr),
+                            ClientColorHelper.vanillaFromBlockSky8Bit(combinedBg, combinedSg),
+                            ClientColorHelper.vanillaFromBlockSky8Bit(combinedBb, combinedSb)));
         }
 
         return combinedLight;

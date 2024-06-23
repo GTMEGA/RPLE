@@ -17,8 +17,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-import static com.falsepattern.rple.api.client.RGB32Helper.RGB_MAX_SKYLIGHT_NO_BLOCKLIGHT;
-import static com.falsepattern.rple.api.client.RGB32Helper.RGB_NO_SKYLIGHT_NO_BLOCKLIGHT;
+import static com.falsepattern.rple.api.client.ClientColorHelper.RGB32_MAX_SKYLIGHT_NO_BLOCKLIGHT;
+import static com.falsepattern.rple.api.client.ClientColorHelper.RGB32_NO_SKYLIGHT_NO_BLOCKLIGHT;
+
 
 @Unique
 @Mixin(Chunk.class)
@@ -31,7 +32,7 @@ public abstract class RPLEClientChunkImplMixin implements RPLEClientChunk {
         val chunkPosY = (posY & 255) >> 4;
         val subChunk = rple$getClientSubChunkIfPrepared(chunkPosY);
         if (subChunk == null)
-            return RGB_MAX_SKYLIGHT_NO_BLOCKLIGHT;
+            return RGB32_MAX_SKYLIGHT_NO_BLOCKLIGHT;
 
         val subChunkPosY = posY & 15;
         return subChunk.rple$getRGBLightValueHasSky(subChunkPosX, subChunkPosY, subChunkPosZ);
@@ -42,7 +43,7 @@ public abstract class RPLEClientChunkImplMixin implements RPLEClientChunk {
         val chunkPosY = (posY & 255) >> 4;
         val subChunk = rple$getClientSubChunkIfPrepared(chunkPosY);
         if (subChunk == null)
-            return RGB_NO_SKYLIGHT_NO_BLOCKLIGHT;
+            return RGB32_NO_SKYLIGHT_NO_BLOCKLIGHT;
 
         val subChunkPosY = posY & 15;
         return subChunk.rple$getRGBLightValueNoSky(subChunkPosX, subChunkPosY, subChunkPosZ);

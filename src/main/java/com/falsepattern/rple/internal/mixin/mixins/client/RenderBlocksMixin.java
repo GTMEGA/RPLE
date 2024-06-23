@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.api.client.RPLEAOHelper;
+import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.api.client.RPLETessBrightnessUtil;
 import com.falsepattern.rple.internal.Compat;
 import lombok.val;
@@ -60,7 +60,7 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int getAoBrightness(int a, int b, int c, int d) {
-        return RPLEAOHelper.average(true, a, b, c, d);
+        return ClientColorHelper.cookieAverage(true, a, b, c, d);
     }
 
     //Ugly evil mixin-mixin hack
@@ -97,7 +97,7 @@ public abstract class RenderBlocksMixin {
      */
     @Overwrite
     public int mixAoBrightness(int a, int b, int c, int d, double aMul, double bMul, double cMul, double dMul) {
-        return RPLEAOHelper.mixAOBrightness(a, b, c, d, aMul, bMul, cMul, dMul);
+        return ClientColorHelper.cookieMixAOBrightness(a, b, c, d, aMul, bMul, cMul, dMul);
     }
 
     private static final float alpha = 0.7f;

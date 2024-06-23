@@ -44,7 +44,7 @@ public abstract class OpenGLHelperMixin {
             return;
         val brightness = (int) textureU | ((int) textureV << 16);
         if (CookieMonster.inspectValue(brightness) == CookieMonster.IntType.COOKIE) {
-            val packedBrightness = CookieMonster.cookieToPackedLong(brightness);
+            val packedBrightness = CookieMonster.RGB64FromCookie(brightness);
             ExtendedOpenGlHelper.setLightMapTextureCoordsPacked(packedBrightness);
             ci.cancel();
             return;

@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.extension;
 
-import com.falsepattern.rple.api.client.RGB64Helper;
+import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
 import lombok.experimental.UtilityClass;
@@ -22,16 +22,16 @@ public final class ExtendedOpenGlHelper {
     public static boolean BYPASS = false;
 
     public static void setPackedBrightnessFromMonochrome(int monochrome) {
-        LAST_PACKED_BRIGHTNESS = RGB64Helper.monochromeBrightnessToPackedLong(monochrome);
+        LAST_PACKED_BRIGHTNESS = ClientColorHelper.RGB64FromVanillaMonochrome(monochrome);
     }
 
     public static void setLightMapTextureCoordsPacked(long packedBrightness) {
         BYPASS = true;
         LAST_PACKED_BRIGHTNESS = packedBrightness;
 
-        val redBrightness = RGB64Helper.getBrightnessRed(packedBrightness);
-        val greenBrightness = RGB64Helper.getBrightnessGreen(packedBrightness);
-        val blueBrightness = RGB64Helper.getBrightnessBlue(packedBrightness);
+        val redBrightness = ClientColorHelper.vanillaFromRGB64Red(packedBrightness);
+        val greenBrightness = ClientColorHelper.vanillaFromRGB64Green(packedBrightness);
+        val blueBrightness = ClientColorHelper.vanillaFromRGB64Blue(packedBrightness);
 
         if (Compat.shadersEnabled()) {
             OpenGlHelper.setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING,

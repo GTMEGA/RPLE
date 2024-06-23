@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
-import com.falsepattern.rple.api.client.RGB64Helper;
+import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.internal.client.lightmap.LightMap;
 import com.falsepattern.rple.internal.client.render.ShaderConstants;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
@@ -297,9 +297,9 @@ public abstract class ShaderTessMixin {
               .textureU(ofTess.rple$textureU())
               .textureV(ofTess.rple$textureV())
               .colorARGB(ofTess.rple$color())
-              .redLightMapUV(RGB64Helper.getTessBrightnessRed(packed))
-              .greenLightMapUV(RGB64Helper.getTessBrightnessGreen(packed))
-              .blueLightMapUV(RGB64Helper.getTessBrightnessBlue(packed))
+              .redLightMapUV(ClientColorHelper.tessFromRGB64Red(packed))
+              .greenLightMapUV(ClientColorHelper.tessFromRGB64Green(packed))
+              .blueLightMapUV(ClientColorHelper.tessFromRGB64Blue(packed))
               .entityData(Shaders.getEntityData())
               .entityData2(Shaders.getEntityData2());
 

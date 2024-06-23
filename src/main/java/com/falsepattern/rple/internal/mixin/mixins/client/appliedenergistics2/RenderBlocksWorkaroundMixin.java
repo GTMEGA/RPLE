@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.appliedenergistics2;
 
 import appeng.client.render.RenderBlocksWorkaround;
-import com.falsepattern.rple.api.client.RPLEAOHelper;
+import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.internal.Compat;
 import lombok.val;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -46,7 +46,7 @@ public abstract class RenderBlocksWorkaroundMixin extends RenderBlocks {
                       colorBlueBottomRight,
                       textureU,
                       textureV);
-        val out = RPLEAOHelper.mixAOBrightness(brightnessTopLeft,
+        val out = ClientColorHelper.cookieMixAOBrightness(brightnessTopLeft,
                                                brightnessTopRight,
                                                brightnessBottomLeft,
                                                brightnessBottomRight,

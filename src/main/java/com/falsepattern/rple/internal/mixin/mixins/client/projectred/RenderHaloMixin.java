@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.projectred;
 
 import codechicken.lib.render.CCRenderState;
-import com.falsepattern.rple.api.client.RGB64Helper;
+import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.mixin.extension.ExtendedOpenGlHelper;
 import lombok.val;
@@ -32,8 +32,8 @@ public abstract class RenderHaloMixin {
         if (glowTex == null)
             glowTex = new ResourceLocation(Tags.MOD_ID, "textures/blocks/glow_solid.png");
 
-        val brightness = RGB64Helper.lightLevelsToBrightnessForTessellator(15, 15);
-        val packedBrightness = RGB64Helper.monochromeBrightnessToPackedLong(brightness);
+        val brightness = ClientColorHelper.vanillaFromBlockSky4Bit(15, 15);
+        val packedBrightness = ClientColorHelper.RGB64FromVanillaMonochrome(brightness);
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glColor4f(1, 1, 1, 1);

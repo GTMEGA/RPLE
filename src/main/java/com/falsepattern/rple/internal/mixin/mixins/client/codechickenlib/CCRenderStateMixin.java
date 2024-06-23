@@ -32,7 +32,7 @@ public abstract class CCRenderStateMixin {
      */
     @Overwrite
     public static void pullLightmap() {
-        setBrightness(CookieMonster.packedLongToCookie(ExtendedOpenGlHelper.lastPackedBrightness()));
+        setBrightness(CookieMonster.cookieFromRGB64(ExtendedOpenGlHelper.lastPackedBrightness()));
     }
 
     /**
@@ -41,6 +41,6 @@ public abstract class CCRenderStateMixin {
      */
     @Overwrite
     public static void pushLightmap() {
-        ExtendedOpenGlHelper.setLightMapTextureCoordsPacked(CookieMonster.cookieToPackedLong(brightness()));
+        ExtendedOpenGlHelper.setLightMapTextureCoordsPacked(CookieMonster.RGB64FromCookie(brightness()));
     }
 }

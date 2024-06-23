@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.chisel;
 
-import com.falsepattern.rple.api.client.RPLEAOHelper;
+import com.falsepattern.rple.api.client.ClientColorHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.util.IIcon;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,7 +37,7 @@ public abstract class RenderBlocksEldritchMixin extends RenderBlocks {
                                                 int tc,
                                                 int td,
                                                 CallbackInfo ci) {
-        L[e] = RPLEAOHelper.average(false,
+        L[e] = ClientColorHelper.cookieAverage(false,
                                     brightnessBottomLeft,
                                     brightnessTopLeft,
                                     brightnessTopRight,

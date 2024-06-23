@@ -66,15 +66,10 @@ public final class CookieMonster {
     private static final FastThreadLocal.FixedValue<ThreadState> THREAD_STATE = new FastThreadLocal.FixedValue<>(ThreadState::new);
 
     static {
-        val redBrightness = RGB64Helper
-                .lightLevelsToBrightnessForTessellator(0xF, 0xF);
-        val greenBrightness = RGB64Helper
-                .lightLevelsToBrightnessForTessellator(0x0, 0x0);
-        val blueBrightness = RGB64Helper
-                .lightLevelsToBrightnessForTessellator(0x0, 0x0);
-        BROKEN_WARN_COLOR = RGB64Helper.packedBrightnessFromTessellatorBrightnessChannels(redBrightness,
-                                                                                          greenBrightness,
-                                                                                          blueBrightness);
+        val redBrightness = ClientColorHelper.vanillaFromBlockSky4Bit(0xF, 0xF);
+        val greenBrightness = ClientColorHelper.vanillaFromBlockSky4Bit(0x0, 0x0);
+        val blueBrightness = ClientColorHelper.vanillaFromBlockSky4Bit(0x0, 0x0);
+        BROKEN_WARN_COLOR = ClientColorHelper.RGB64FromVanillaRGB(redBrightness, greenBrightness, blueBrightness);
     }
 
     /**
@@ -87,40 +82,40 @@ public final class CookieMonster {
     }
 
     /**
-     * @param packedLong A long value returned by {@link RGB64Helper}.
+     * @param rgb64 A long value returned by {@link ClientColorHelper}.
      * @return An opaque, temporary cookie representing the given long.
      */
-    public static int packedLongToCookie(long packedLong) {
-        int rgb = RGB64Helper.tryRGBFromPackedBrightness(packedLong);
+    public static int cookieFromRGB64(long rgb64) {
+        int rgb = ClientColorHelper.tryRGB32FromRGB64(rgb64);
         if (rgb != -1) {
             return rgb | COOKIE_BIT | RGB_BIT;
         }
         val state = THREAD_STATE.get();
-        val index = state.lightValues.put(packedLong);
+        val index = state.lightValues.put(rgb64);
         val cookie = ((index << INDEX_SHIFT) & INDEX_MASK) | (state.check << CHECK_SHIFT) | COOKIE_BIT;
         return cookie | parity(cookie);
     }
 
-    public static int rgbToCookie(int rgb) {
-        return (rgb & RGB_MASK) | COOKIE_BIT | RGB_BIT;
+    public static int cookieFromRGB32(int rgb32) {
+        return (rgb32 & RGB_MASK) | COOKIE_BIT | RGB_BIT;
     }
 
     /**
-     * @param cookie A cookie returned by {@link CookieMonster#packedLongToCookie(long)}, or a vanilla minecraft brightness.
+     * @param cookie A cookie returned by {@link CookieMonster#cookieFromRGB64(long)}, or a vanilla minecraft brightness.
      * @return The long value represented by the cookie, or the vanilla minecraft brightness turned into a greyscale
      * packed long. If it's neither, then we assume that it's a corrupted cookie, and return a bright red warning color,
      * and log an error (first time only).
      */
-    public static long cookieToPackedLong(int cookie) {
+    public static long RGB64FromCookie(int cookie) {
         switch (inspectValue(cookie)) {
             case COOKIE:
                 if ((cookie & RGB_BIT) != 0) {
-                    return RGB64Helper.packedBrightnessFromRGB(cookie & RGB_MASK);
+                    return ClientColorHelper.RGB64FromRGB32(cookie & RGB_MASK);
                 }
                 return THREAD_STATE.get().lightValues.get((cookie & INDEX_MASK) >>> INDEX_SHIFT);
             case VANILLA:
                 // Vanilla fake-pack
-                return RGB64Helper.packedBrightnessFromTessellatorBrightnessChannels(cookie, cookie, cookie);
+                return ClientColorHelper.RGB64FromVanillaRGB(cookie, cookie, cookie);
             default:
                 if (shouldLogDebug(DEBUG_COOKIE_MONSTER)) {
                     LOG.warn("Illegal brightness value (Did a mod treat a cookie as a regular brightness value?)");

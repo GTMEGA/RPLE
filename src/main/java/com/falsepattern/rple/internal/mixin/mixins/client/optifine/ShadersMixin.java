@@ -8,7 +8,7 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 
 import com.falsepattern.rple.api.client.CookieMonster;
-import com.falsepattern.rple.api.client.RGB64Helper;
+import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
 import com.falsepattern.rple.internal.client.render.ShaderConstants;
 import lombok.val;
@@ -117,6 +117,6 @@ public abstract class ShadersMixin {
               remap = true)
     private static int getEyeBrightness(EntityLivingBase instance, float partialTick) {
         val result = instance.getBrightnessForRender(partialTick);
-        return RGB64Helper.getBrightestChannelFromPacked(CookieMonster.cookieToPackedLong(result));
+        return ClientColorHelper.vanillaFromRGB64Max(CookieMonster.RGB64FromCookie(result));
     }
 }
