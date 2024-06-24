@@ -8,8 +8,8 @@
 package com.falsepattern.rple.internal.common.chunk;
 
 import com.falsepattern.chunk.api.ArrayUtil;
-import com.falsepattern.lumina.api.chunk.LumiSubChunk;
-import com.falsepattern.lumina.api.lighting.LightType;
+import com.falsepattern.lumi.api.chunk.LumiSubChunk;
+import com.falsepattern.lumi.api.lighting.LightType;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.ArrayHelper;
 import lombok.Getter;

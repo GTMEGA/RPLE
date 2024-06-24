@@ -47,7 +47,7 @@ repositories {
 }
 
 dependencies {
-    apiSplit("com.falsepattern:lumina-mc1.7.10:1.0.0-rc10-4-gd1f9e5b")
+    apiSplit("com.falsepattern:lumi-mc1.7.10:1.0.0-rc11")
     implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.2.5")
     implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.0.0-pre2")
 

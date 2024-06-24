@@ -7,8 +7,8 @@
 
 package com.falsepattern.rple.internal.common.world;
 
-import com.falsepattern.lumina.api.world.LumiWorld;
-import com.falsepattern.lumina.api.world.LumiWorldProvider;
+import com.falsepattern.lumi.api.world.LumiWorld;
+import com.falsepattern.lumi.api.world.LumiWorldProvider;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Tags;
 import lombok.Getter;

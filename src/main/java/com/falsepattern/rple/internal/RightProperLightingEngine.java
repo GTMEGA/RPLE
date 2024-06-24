@@ -21,7 +21,7 @@ import static com.falsepattern.rple.internal.Tags.*;
      name = MOD_NAME,
      acceptedMinecraftVersions = "[1.7.10]",
      guiFactory = GROUP_NAME + ".internal.client.config.RPLEGuiFactory",
-     dependencies = "required-after:lumina@[1.0.0-rc5,);" +
+     dependencies = "required-after:lumi@[1.0.0-rc10,);" +
              "after:falsetweaks@[2.7.0,);" + // Hard dep, but only on clientside!
              "required-after:falsepatternlib@[1.0.0,);")
 @NoArgsConstructor

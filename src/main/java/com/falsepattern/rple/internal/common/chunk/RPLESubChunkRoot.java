@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.chunk;
 
-import com.falsepattern.lumina.api.chunk.LumiSubChunkRoot;
+import com.falsepattern.lumi.api.chunk.LumiSubChunkRoot;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 
 public interface RPLESubChunkRoot extends LumiSubChunkRoot {

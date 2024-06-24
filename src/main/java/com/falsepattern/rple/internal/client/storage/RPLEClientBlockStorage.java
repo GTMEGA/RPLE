@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.client.storage;
 
-import com.falsepattern.lumina.api.lighting.LightType;
+import com.falsepattern.lumi.api.lighting.LightType;
 import net.minecraft.block.Block;
 
 public interface RPLEClientBlockStorage {

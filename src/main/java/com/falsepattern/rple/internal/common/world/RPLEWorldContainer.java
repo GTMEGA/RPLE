@@ -7,10 +7,10 @@
 
 package com.falsepattern.rple.internal.common.world;
 
-import com.falsepattern.lumina.api.LumiAPI;
-import com.falsepattern.lumina.api.chunk.LumiChunk;
-import com.falsepattern.lumina.api.lighting.LightType;
-import com.falsepattern.lumina.api.lighting.LumiLightingEngine;
+import com.falsepattern.lumi.api.LumiAPI;
+import com.falsepattern.lumi.api.chunk.LumiChunk;
+import com.falsepattern.lumi.api.lighting.LightType;
+import com.falsepattern.lumi.api.lighting.LumiLightingEngine;
 import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.ColorChannel;
@@ -32,8 +32,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
-import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
+import static com.falsepattern.lumi.api.lighting.LightType.BLOCK_LIGHT_TYPE;
+import static com.falsepattern.lumi.api.lighting.LightType.SKY_LIGHT_TYPE;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.Tags.MOD_ID;
 import static net.minecraftforge.common.util.ForgeDirection.*;

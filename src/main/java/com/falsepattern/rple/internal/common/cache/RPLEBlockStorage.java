@@ -1,7 +1,7 @@
 package com.falsepattern.rple.internal.common.cache;
 
-import com.falsepattern.lumina.api.lighting.LightType;
-import com.falsepattern.lumina.api.storage.LumiBlockStorage;
+import com.falsepattern.lumi.api.lighting.LightType;
+import com.falsepattern.lumi.api.storage.LumiBlockStorage;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;

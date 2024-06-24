@@ -7,8 +7,8 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
-import com.falsepattern.lumina.api.chunk.LumiChunkRoot;
-import com.falsepattern.lumina.api.world.LumiWorld;
+import com.falsepattern.lumi.api.chunk.LumiChunkRoot;
+import com.falsepattern.lumi.api.world.LumiWorld;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
@@ -28,13 +28,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.falsepattern.lumina.api.init.LumiWorldInitHook.LUMI_WORLD_INIT_HOOK_INFO;
-import static com.falsepattern.lumina.api.init.LumiWorldInitHook.LUMI_WORLD_INIT_HOOK_METHOD;
+import static com.falsepattern.lumi.api.init.LumiWorldInitHook.LUMI_WORLD_INIT_HOOK_INFO;
+import static com.falsepattern.lumi.api.init.LumiWorldInitHook.LUMI_WORLD_INIT_HOOK_METHOD;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
-import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMINA_MIXIN_PRIORITY;
+import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMI_MIXIN_PRIORITY;
 
 @Unique
-@Mixin(value = World.class, priority = POST_LUMINA_MIXIN_PRIORITY)
+@Mixin(value = World.class, priority = POST_LUMI_MIXIN_PRIORITY)
 public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld, RPLEWorldRoot {
     @Shadow
     protected IChunkProvider chunkProvider;
@@ -67,7 +67,7 @@ public abstract class RPLEWorldRootImplMixin implements IBlockAccess, LumiWorld,
 
     // TODO: Will this break when using RPLE Threading? Do we even need this?
     //
-    // If you do fix it, LUMINA has nearly the same code, fix it there too tbh.
+    // If you do fix it, Lumi has nearly the same code, fix it there too tbh.
     @Override
     public @Nullable RPLEChunkRoot rple$getChunkRootFromChunkPosIfExists(int chunkPosX, int chunkPosZ) {
         if (chunkProvider == null)

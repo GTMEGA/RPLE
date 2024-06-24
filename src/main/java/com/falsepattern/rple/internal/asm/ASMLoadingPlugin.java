@@ -14,7 +14,7 @@ import static cpw.mods.fml.relauncher.IFMLLoadingPlugin.*;
 @Name(MOD_NAME + "|ASM Plugin")
 @MCVersion("1.7.10")
 @SortingIndex(Integer.MAX_VALUE)
-@TransformerExclusions("com.falsepattern.lumina.internal.asm")
+@TransformerExclusions({"com.falsepattern.lumi.internal.asm","com.falsepattern.rple.internal.asm"})
 @NoArgsConstructor
 public final class ASMLoadingPlugin implements IFMLLoadingPlugin {
     @Override

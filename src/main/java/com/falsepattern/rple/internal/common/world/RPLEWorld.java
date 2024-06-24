@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.world;
 
-import com.falsepattern.lumina.api.world.LumiWorld;
+import com.falsepattern.lumi.api.world.LumiWorld;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorage;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;

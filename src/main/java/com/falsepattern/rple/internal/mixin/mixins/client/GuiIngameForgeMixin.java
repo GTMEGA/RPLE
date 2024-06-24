@@ -8,7 +8,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.lumina.api.lighting.LightType;
+import com.falsepattern.lumi.api.lighting.LightType;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkContainer;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;

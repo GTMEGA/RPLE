@@ -8,9 +8,9 @@
 package com.falsepattern.rple.internal.common.chunk;
 
 import com.falsepattern.chunk.api.ArrayUtil;
-import com.falsepattern.lumina.api.LumiChunkAPI;
-import com.falsepattern.lumina.api.chunk.LumiChunk;
-import com.falsepattern.lumina.api.lighting.LightType;
+import com.falsepattern.lumi.api.LumiChunkAPI;
+import com.falsepattern.lumi.api.chunk.LumiChunk;
+import com.falsepattern.lumi.api.lighting.LightType;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.common.world.RPLEWorld;
@@ -24,8 +24,8 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.ByteBuffer;
 import java.util.BitSet;
 
-import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
-import static com.falsepattern.lumina.api.lighting.LightType.SKY_LIGHT_TYPE;
+import static com.falsepattern.lumi.api.lighting.LightType.BLOCK_LIGHT_TYPE;
+import static com.falsepattern.lumi.api.lighting.LightType.SKY_LIGHT_TYPE;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static com.falsepattern.rple.internal.Tags.MOD_ID;
 

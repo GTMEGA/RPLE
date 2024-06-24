@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.event;
 
-import com.falsepattern.lumina.api.event.LumiWorldProviderRegistrationEvent;
+import com.falsepattern.lumi.api.event.LumiWorldProviderRegistrationEvent;
 import com.falsepattern.rple.internal.Tags;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventBus;

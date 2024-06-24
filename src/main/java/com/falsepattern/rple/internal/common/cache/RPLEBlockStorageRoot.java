@@ -1,6 +1,6 @@
 package com.falsepattern.rple.internal.common.cache;
 
-import com.falsepattern.lumina.api.storage.LumiBlockStorageRoot;
+import com.falsepattern.lumi.api.storage.LumiBlockStorageRoot;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import org.jetbrains.annotations.NotNull;

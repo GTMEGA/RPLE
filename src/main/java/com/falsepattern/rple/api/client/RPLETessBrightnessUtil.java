@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api.client;
 
-import com.falsepattern.lumina.api.lighting.LightType;
+import com.falsepattern.lumi.api.lighting.LightType;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.internal.client.storage.RPLEClientBlockStorage;
@@ -18,7 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 
-import static com.falsepattern.lumina.api.lighting.LightType.BLOCK_LIGHT_TYPE;
+import static com.falsepattern.lumi.api.lighting.LightType.BLOCK_LIGHT_TYPE;
 import static com.falsepattern.rple.api.client.ClientColorHelper.RGB32_MAX_SKYLIGHT_NO_BLOCKLIGHT;
 import static com.falsepattern.rple.api.client.ClientColorHelper.RGB32_NO_SKYLIGHT_NO_BLOCKLIGHT;
 import static com.falsepattern.rple.api.common.ServerColorHelper.*;

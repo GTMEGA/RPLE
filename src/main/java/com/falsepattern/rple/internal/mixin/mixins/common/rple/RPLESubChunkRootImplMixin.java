@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.common.rple;
 
-import com.falsepattern.lumina.api.chunk.LumiSubChunk;
+import com.falsepattern.lumi.api.chunk.LumiSubChunk;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunk;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunkContainer;
@@ -24,13 +24,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.falsepattern.lumina.api.init.LumiExtendedBlockStorageInitHook.LUMI_EXTENDED_BLOCK_STORAGE_INIT_HOOK_INFO;
-import static com.falsepattern.lumina.api.init.LumiExtendedBlockStorageInitHook.LUMI_EXTENDED_BLOCK_STORAGE_INIT_HOOK_METHOD;
+import static com.falsepattern.lumi.api.init.LumiExtendedBlockStorageInitHook.LUMI_EXTENDED_BLOCK_STORAGE_INIT_HOOK_INFO;
+import static com.falsepattern.lumi.api.init.LumiExtendedBlockStorageInitHook.LUMI_EXTENDED_BLOCK_STORAGE_INIT_HOOK_METHOD;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
-import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMINA_MIXIN_PRIORITY;
+import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMI_MIXIN_PRIORITY;
 
 @Unique
-@Mixin(value = ExtendedBlockStorage.class, priority = POST_LUMINA_MIXIN_PRIORITY)
+@Mixin(value = ExtendedBlockStorage.class, priority = POST_LUMI_MIXIN_PRIORITY)
 public abstract class RPLESubChunkRootImplMixin implements LumiSubChunk, RPLESubChunkRoot {
     @Shadow
     @Nullable

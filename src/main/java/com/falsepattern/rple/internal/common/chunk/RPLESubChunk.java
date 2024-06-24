@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.internal.common.chunk;
 
-import com.falsepattern.lumina.api.chunk.LumiSubChunk;
+import com.falsepattern.lumi.api.chunk.LumiSubChunk;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import org.jetbrains.annotations.NotNull;
 
