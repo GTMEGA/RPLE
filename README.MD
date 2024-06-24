@@ -1,6 +1,6 @@
 # Right Proper Lighting Engine <img src="src/main/resources/assets/rple/rple_logo_small.png" align="right" width=150 />
 
-<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0"><img alt="CC BY-NC-ND 4.0)" style="height:50px" src="http://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-nc-nd.svg" /></a>
+<a rel="license" href="https://www.gnu.org/licenses/agpl-3.0.en.html"><img alt="AGPLv3 logo" style="border-width:0" src="https://www.gnu.org/graphics/agplv3-with-text-162x68.png" /></a>
 
 The first right proper RGB lighting implementation in Minecraft.
 
@@ -8,7 +8,7 @@ The first right proper RGB lighting implementation in Minecraft.
 
 ## Dependencies
 
-- [LUMINA 1.0.0-rc10](https://github.com/GTMEGA/LUMINA)
+- [Lumi 1.0.0-rc11](https://github.com/GTMEGA/Lumi)
 - [FalseTweaks 3.0.0+](https://github.com/FalsePattern/FalseTweaks)
 - [FalsePatternLib 1.2.0+](https://github.com/FalsePattern/FalsePatternLib)
 - [UniMixins 0.1.17+](https://github.com/LegacyModdingMC/UniMixins)
