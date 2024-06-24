@@ -30,7 +30,7 @@ minecraft_fp {
         rootPkg = "GROUP_NAME"
     }
     publish {
-        changelog = "https://github.com/GTMEGA/RightProperLightingEngine/releases/tag/$version"
+        changelog = "https://github.com/GTMEGA/RPLE/releases/tag/$version"
         maven {
             repoUrl = "https://mvn.falsepattern.com/releases/"
             repoName = "mavenpattern"

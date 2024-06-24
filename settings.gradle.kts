@@ -28,4 +28,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "RightProperLightingEngine"
+rootProject.name = "RPLE"
