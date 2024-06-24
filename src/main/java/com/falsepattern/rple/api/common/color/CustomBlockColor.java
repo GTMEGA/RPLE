@@ -7,26 +7,22 @@
 
 package com.falsepattern.rple.api.common.color;
 
-import lombok.RequiredArgsConstructor;
+public class CustomBlockColor implements RPLEBlockColor {
+    protected final String paletteColorName;
+    protected final short rgb16;
 
-@RequiredArgsConstructor
-public class CustomPaletteColor implements IPaletteColor {
-    public final short rgb16;
-    public final String domain;
-    public final String name;
+    public CustomBlockColor(String paletteColorName, short rgb16) {
+        this.paletteColorName = paletteColorName;
+        this.rgb16 = rgb16;
+    }
+
+    @Override
+    public String paletteColorName() {
+        return paletteColorName;
+    }
 
     @Override
     public short rgb16() {
         return rgb16;
-    }
-
-    @Override
-    public String colorDomain() {
-        return domain;
-    }
-
-    @Override
-    public String colorName() {
-        return name;
     }
 }

@@ -7,8 +7,7 @@
 
 package com.falsepattern.rple.internal.common.config.container;
 
-import com.falsepattern.rple.api.common.color.CustomPaletteColor;
-import com.falsepattern.rple.api.common.color.IPaletteColor;
+import com.falsepattern.rple.api.common.color.RPLEBlockColor;
 import lombok.val;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -30,19 +29,11 @@ public final class ColorPalette {
                    .removeIf(c -> !isValidPaletteColor(c.getKey(), c.getValue()));
     }
 
-    public void addPaletteColor(IPaletteColor color) {
+    public void addPaletteColor(RPLEBlockColor color) {
         if (color == null)
             return;
 
-        val colorDomain = color.colorDomain();
-        val colorName = color.colorName();
-
-        if (colorDomain == null || colorDomain.isEmpty())
-            return;
-        if (colorName == null || colorName.isEmpty())
-            return;
-
-        val paletteColorName = colorDomain + ":" + colorName;
+        val paletteColorName = color.paletteColorName();
         if (colors.containsKey(paletteColorName))
             return;
 

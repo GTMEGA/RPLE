@@ -8,11 +8,9 @@
 package com.falsepattern.rple.api.common.color;
 
 import com.falsepattern.rple.api.common.ServerColorHelper;
-import lombok.val;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public enum LightValueColor implements IPaletteColor {
+public enum LightValueColor implements RPLEBlockColor {
     LIGHT_VALUE_0,
     LIGHT_VALUE_1,
     LIGHT_VALUE_2,
@@ -28,21 +26,29 @@ public enum LightValueColor implements IPaletteColor {
     LIGHT_VALUE_12,
     LIGHT_VALUE_13,
     LIGHT_VALUE_14,
-    LIGHT_VALUE_15,
-    ;
+    LIGHT_VALUE_15;
 
     private static final LightValueColor[] VALUES = values();
     public static final String LIGHT_LEVEL_COLOR_DOMAIN = "light_value";
 
+    private final String paletteColorName;
     private final short rgb16;
-    private final String colorName;
 
     LightValueColor() {
         final int lightValue = ordinal();
 
         this.rgb16 = ServerColorHelper.RGB16FromRGBChannel4Bit(lightValue, lightValue, lightValue);
+        this.paletteColorName = LIGHT_LEVEL_COLOR_DOMAIN + ":" + lightValue;
+    }
 
-        this.colorName = String.valueOf(lightValue);
+    @Override
+    public String paletteColorName() {
+        return paletteColorName;
+    }
+
+    @Override
+    public short rgb16() {
+        return rgb16;
     }
 
     public static @NotNull LightValueColor fromVanillaLightValue(int vanillaLightValue) {
@@ -53,28 +59,5 @@ public enum LightValueColor implements IPaletteColor {
     public static @NotNull LightValueColor fromVanillaLightOpacity(int vanillaLightOpacity) {
         final int index = 15 - (vanillaLightOpacity & 15);
         return VALUES[index];
-    }
-
-    public static @Nullable LightValueColor attemptMapToEnum(short rgb16) {
-        for (val otherColor : VALUES) {
-            if (otherColor.rgb16 == rgb16)
-                return otherColor;
-        }
-        return null;
-    }
-
-    @Override
-    public short rgb16() {
-        return rgb16;
-    }
-
-    @Override
-    public @NotNull String colorName() {
-        return colorName;
-    }
-
-    @Override
-    public @NotNull String colorDomain() {
-        return LIGHT_LEVEL_COLOR_DOMAIN;
     }
 }

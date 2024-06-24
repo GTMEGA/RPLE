@@ -7,7 +7,7 @@
 
 package com.falsepattern.rple.api.common.colorizer;
 
-import com.falsepattern.rple.api.common.color.IPaletteColor;
+import com.falsepattern.rple.api.common.color.RPLEBlockColor;
 import org.jetbrains.annotations.NotNull;
 
 public interface RPLEBlockColorizer {
@@ -16,14 +16,16 @@ public interface RPLEBlockColorizer {
     }
     @NotNull RPLEBlockColorizer brightness(short color);
 
-    @NotNull RPLEBlockColorizer brightness(@NotNull IPaletteColor color);
+    @NotNull
+    RPLEBlockColorizer brightness(@NotNull RPLEBlockColor color);
 
     default RPLEBlockColorizer translucency(int rgb16) {
         return translucency((short)rgb16);
     }
     @NotNull RPLEBlockColorizer translucency(short color);
 
-    @NotNull RPLEBlockColorizer translucency(@NotNull IPaletteColor color);
+    @NotNull
+    RPLEBlockColorizer translucency(@NotNull RPLEBlockColor color);
 
     void apply();
 }

@@ -7,8 +7,7 @@
 
 package com.falsepattern.rple.internal.common.colorizer;
 
-import com.falsepattern.rple.api.common.color.CustomPaletteColor;
-import com.falsepattern.rple.api.common.color.IPaletteColor;
+import com.falsepattern.rple.api.common.color.RPLEBlockColor;
 import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorRegistry;
 import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorizer;
 import com.falsepattern.rple.internal.common.block.RPLEBlockInit;
@@ -263,7 +262,7 @@ public final class BlockColorManager implements RPLEBlockColorRegistry {
         }
     }
 
-    private void addPaletteColor(IPaletteColor color) {
+    private void addPaletteColor(RPLEBlockColor color) {
         config.addPaletteColor(color);
     }
 }

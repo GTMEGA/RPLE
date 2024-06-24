@@ -12,8 +12,7 @@ import static com.falsepattern.rple.api.common.ServerColorHelper.*;
 public enum ColorChannel {
     RED_CHANNEL(CHANNEL_4BIT_TO_RGB16_RED),
     GREEN_CHANNEL(CHANNEL_4BIT_TO_RGB16_GREEN),
-    BLUE_CHANNEL(CHANNEL_4BIT_TO_RGB16_BLUE),
-    ;
+    BLUE_CHANNEL(CHANNEL_4BIT_TO_RGB16_BLUE);
 
     private final String name;
     private final int bitShift;

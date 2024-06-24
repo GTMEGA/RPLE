@@ -7,9 +7,8 @@
 
 package com.falsepattern.rple.internal.common.config.container;
 
-import com.falsepattern.rple.api.common.ServerColorHelper;
-import com.falsepattern.rple.api.common.color.CustomPaletteColor;
-import com.falsepattern.rple.api.common.color.IPaletteColor;
+import com.falsepattern.rple.api.common.color.DefaultColor;
+import com.falsepattern.rple.api.common.color.RPLEBlockColor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -27,24 +26,17 @@ public final class ColorReference {
     @Getter
     private final boolean isValid;
 
-    public static ColorReference paletteOrRaw(IPaletteColor palette, short raw) {
+    public static ColorReference paletteOrRaw(RPLEBlockColor palette, short raw) {
         return palette == null ? new ColorReference(new HexColor(raw)) : new ColorReference(palette);
     }
 
-    public ColorReference(IPaletteColor color) {
+    public ColorReference(RPLEBlockColor color) {
         this.uniqueColor = null;
 
         nameCheck:
         {
-            val colorDomain = color.colorDomain();
-            val colorName = color.colorName();
 
-            if (colorDomain == null || colorDomain.isEmpty())
-                break nameCheck;
-            if (colorName == null || colorName.isEmpty())
-                break nameCheck;
-
-            val paletteColorName = colorDomain + ":" + colorName;
+            val paletteColorName = color.paletteColorName();
             if (!ColorPalette.isValidPaletteColorName(paletteColorName))
                 break nameCheck;
 
@@ -95,7 +87,7 @@ public final class ColorReference {
 
     public short color(ColorPalette palette) {
         if (!isValid)
-            return ServerColorHelper.ERROR_COLOR.rgb16;
+            return DefaultColor.ERROR.rgb16();
 
         if (uniqueColor != null)
             return uniqueColor.rgb16();
@@ -106,7 +98,7 @@ public final class ColorReference {
                 return paletteColor.get().rgb16();
         }
 
-        return ServerColorHelper.ERROR_COLOR.rgb16;
+        return DefaultColor.ERROR.rgb16();
     }
 
     @Override

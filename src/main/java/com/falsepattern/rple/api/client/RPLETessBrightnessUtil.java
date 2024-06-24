@@ -8,8 +8,8 @@
 package com.falsepattern.rple.api.client;
 
 import com.falsepattern.lumina.api.lighting.LightType;
-import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
+import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.internal.client.storage.RPLEClientBlockStorage;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
@@ -132,7 +132,7 @@ public final class RPLETessBrightnessUtil {
     }
 
     public static int errorBrightnessForTessellator() {
-        final short lightColor = ServerColorHelper.ERROR_COLOR.rgb16;
+        final short lightColor = DefaultColor.ERROR.rgb16();
         return createRGBBrightnessForTessellator(red(lightColor), green(lightColor), blue(lightColor));
     }
 

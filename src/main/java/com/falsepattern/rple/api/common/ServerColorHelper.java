@@ -8,23 +8,16 @@
 package com.falsepattern.rple.api.common;
 
 import com.falsepattern.lib.util.MathUtil;
-import com.falsepattern.rple.api.common.color.CustomPaletteColor;
 
 @SuppressWarnings("unused")
 public final class ServerColorHelper {
     public static final int COLOR_MIN = 0;
     public static final int COLOR_MAX = 15;
 
-    public static final int CHANNEL_4BIT_MASK = 0xf;
+    public static final int CHANNEL_4BIT_MASK = 0xF;
     public static final int CHANNEL_4BIT_TO_RGB16_RED = 8;
     public static final int CHANNEL_4BIT_TO_RGB16_GREEN = 4;
     public static final int CHANNEL_4BIT_TO_RGB16_BLUE = 0;
-
-    public static final CustomPaletteColor ERROR_COLOR = new CustomPaletteColor(
-            RGB16FromRGBChannel4Bit(COLOR_MAX, COLOR_MIN, COLOR_MIN),
-            "invalid_domain",
-            "invalid_name"
-    );
 
     private ServerColorHelper() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");

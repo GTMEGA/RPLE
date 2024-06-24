@@ -9,6 +9,7 @@ package com.falsepattern.rple.internal.common.config.container;
 
 import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.color.ColorChannel;
+import com.falsepattern.rple.api.common.color.DefaultColor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -20,7 +21,7 @@ import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 @Getter
 @Accessors(fluent = true, chain = false)
 public final class HexColor {
-    public static final HexColor INVALID_HEX_COLOR = new HexColor(ServerColorHelper.ERROR_COLOR.rgb16, false);
+    public static final HexColor INVALID_HEX_COLOR = new HexColor(DefaultColor.ERROR.rgb16(), false);
 
     private static final String EXPECTED_REGEX = "0x[A-F0-9]{3}$";
 
@@ -59,13 +60,13 @@ public final class HexColor {
             asColorHex = colorHex;
             isValid = true;
         } catch (IllegalArgumentException e) {
-            val errorColor = ServerColorHelper.ERROR_COLOR;
+            val errorColor = DefaultColor.ERROR.rgb16();
 
-            red = ServerColorHelper.red(errorColor.rgb16);
-            green = ServerColorHelper.green(errorColor.rgb16);
-            blue = ServerColorHelper.blue(errorColor.rgb16);
+            red = ServerColorHelper.red(errorColor);
+            green = ServerColorHelper.green(errorColor);
+            blue = ServerColorHelper.blue(errorColor);
 
-            asColorHex = colorHexFromColor(errorColor.rgb16);
+            asColorHex = colorHexFromColor(errorColor);
             isValid = false;
         }
 

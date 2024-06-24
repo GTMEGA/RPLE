@@ -7,8 +7,7 @@
 
 package com.falsepattern.rple.internal.common.config.container;
 
-import com.falsepattern.rple.api.common.color.CustomPaletteColor;
-import com.falsepattern.rple.api.common.color.IPaletteColor;
+import com.falsepattern.rple.api.common.color.RPLEBlockColor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -44,7 +43,7 @@ public final class BlockColorConfig {
         return Collections.unmodifiableMap(translucency);
     }
 
-    public void addPaletteColor(IPaletteColor color) {
+    public void addPaletteColor(RPLEBlockColor color) {
         palette.addPaletteColor(color);
     }
 
