@@ -49,7 +49,7 @@ repositories {
 dependencies {
     apiSplit("com.falsepattern:lumi-mc1.7.10:1.0.0-rc11")
     implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.2.5")
-    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.0.0-pre2")
+    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.0.0")
 
     devOnlyNonPublishable("codechicken:notenoughitems-mc1.7.10:2.3.1-mega:dev")
     runtimeOnlyNonPublishable("codechicken:codechickencore-mc1.7.10:1.4.0-mega:dev")
