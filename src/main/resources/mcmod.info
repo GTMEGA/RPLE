@@ -5,7 +5,7 @@
     "description": "Colorize your lights.",
     "version": "${modVersion}",
     "mcversion": "${minecraftVersion}",
-    "url": "https://github.com/GTMEGA/RightProperLightingEngine",
+    "url": "https://github.com/GTMEGA/RPLE",
     "updateUrl": "",
     "authorList": [
       "FalsePattern",
