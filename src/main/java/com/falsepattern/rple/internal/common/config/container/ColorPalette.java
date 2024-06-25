@@ -26,7 +26,7 @@
 
 package com.falsepattern.rple.internal.common.config.container;
 
-import com.falsepattern.rple.api.common.color.RPLEBlockColor;
+import com.falsepattern.rple.api.common.color.RPLENamedColor;
 import lombok.val;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -48,7 +48,7 @@ public final class ColorPalette {
                    .removeIf(c -> !isValidPaletteColor(c.getKey(), c.getValue()));
     }
 
-    public void addPaletteColor(RPLEBlockColor color) {
+    public void addPaletteColor(RPLENamedColor color) {
         if (color == null)
             return;
 

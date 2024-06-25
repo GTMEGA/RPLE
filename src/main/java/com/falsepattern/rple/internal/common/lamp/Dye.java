@@ -24,10 +24,23 @@
  * GNU Affero General Public License. See the full LICENSE file for details.
  */
 
-package com.falsepattern.rple.api.common.color;
+package com.falsepattern.rple.internal.common.lamp;
 
-public interface RPLEBlockColor {
-    String paletteColorName();
-
-    short rgb16();
+public enum Dye {
+    BLACK,
+    RED,
+    GREEN,
+    BROWN,
+    BLUE,
+    PURPLE,
+    CYAN,
+    SILVER,
+    GRAY,
+    PINK,
+    LIME,
+    YELLOW,
+    LIGHTBLUE,
+    MAGENTA,
+    ORANGE,
+    WHITE
 }

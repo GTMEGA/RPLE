@@ -171,7 +171,7 @@ public final class LightMapStrip implements RPLELightMapStrip {
     }
 
     @Override
-    public @NotNull RPLELightMapStrip multLightMap(@NotNull RPLELightMapStrip strip) {
+    public @NotNull RPLELightMapStrip mulLightMap(@NotNull RPLELightMapStrip strip) {
         val otherLightMapRed = strip.lightMapRedData();
         val otherLightMapGreen = strip.lightMapGreenData();
         val otherLightMapBlue = strip.lightMapBlueData();

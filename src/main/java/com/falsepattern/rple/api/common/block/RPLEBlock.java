@@ -28,6 +28,9 @@ package com.falsepattern.rple.api.common.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
+
+import com.falsepattern.lib.StableAPI;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,77 +43,102 @@ import org.jetbrains.annotations.NotNull;
  * @see RPLECustomBlockBrightness
  * @see RPLECustomBlockTranslucency
  */
+@ApiStatus.NonExtendable
+@StableAPI(since = "1.0.0")
 public interface RPLEBlock {
     @SuppressWarnings("CastToIncompatibleInterface")
+    @StableAPI.Expose
     static RPLEBlock of(Block block) {
         return (RPLEBlock) block;
     }
 
+    @StableAPI.Expose
     short rple$getRawBrightnessColor();
 
+    @StableAPI.Expose
     short rple$getRawBrightnessColor(int blockMeta);
 
+    @StableAPI.Expose
     short rple$getRawBrightnessColor(@NotNull IBlockAccess world,
                                      int blockMeta,
                                      int posX,
                                      int posY,
                                      int posZ);
 
+    @StableAPI.Expose
     short rple$getRawOpacityColor();
 
+    @StableAPI.Expose
     short rple$getRawOpacityColor(int blockMeta);
 
+    @StableAPI.Expose
     short rple$getRawOpacityColor(@NotNull IBlockAccess world,
                                   int blockMeta,
                                   int posX,
                                   int posY,
                                   int posZ);
 
+    @StableAPI.Expose
     short rple$getBrightnessColor();
 
+    @StableAPI.Expose
     short rple$getBrightnessColor(int blockMeta);
 
+    @StableAPI.Expose
     short rple$getBrightnessColor(@NotNull IBlockAccess world,
                                       int blockMeta,
                                       int posX,
                                       int posY,
                                       int posZ);
 
+    @StableAPI.Expose
     short rple$getTranslucencyColor();
 
+    @StableAPI.Expose
     short rple$getTranslucencyColor(int blockMeta);
 
+    @StableAPI.Expose
     short rple$getTranslucencyColor(@NotNull IBlockAccess world,
                                         int blockMeta,
                                         int posX,
                                         int posY,
                                         int posZ);
 
+    @StableAPI.Expose
     short rple$getFallbackBrightnessColor();
 
+    @StableAPI.Expose
     short rple$getFallbackBrightnessColor(int blockMeta);
 
+    @StableAPI.Expose
     short rple$getFallbackBrightnessColor(@NotNull IBlockAccess world,
                                               int blockMeta,
                                               int posX,
                                               int posY,
                                               int posZ);
 
+    @StableAPI.Expose
     short rple$getFallbackTranslucencyColor();
 
+    @StableAPI.Expose
     short rple$getFallbackTranslucencyColor(int blockMeta);
 
+    @StableAPI.Expose
     short rple$getFallbackTranslucencyColor(@NotNull IBlockAccess world,
                                                 int blockMeta,
                                                 int posX,
                                                 int posY,
                                                 int posZ);
 
+    @StableAPI.Expose
     short rple$getConfiguredBrightnessColor();
 
+    @StableAPI.Expose
     short rple$getConfiguredBrightnessColor(int blockMeta);
 
+    @StableAPI.Expose
     short rple$getConfiguredTranslucencyColor();
 
+    @StableAPI.Expose
     short rple$getConfiguredTranslucencyColor(int blockMeta);
 }

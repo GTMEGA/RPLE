@@ -26,22 +26,13 @@
 
 package com.falsepattern.rple.api.common.color;
 
-public class CustomBlockColor implements RPLEBlockColor {
-    protected final String paletteColorName;
-    protected final short rgb16;
+import com.falsepattern.lib.StableAPI;
 
-    public CustomBlockColor(String paletteColorName, short rgb16) {
-        this.paletteColorName = paletteColorName;
-        this.rgb16 = rgb16;
-    }
+@StableAPI(since = "1.0.0")
+public interface RPLENamedColor {
+    @StableAPI.Expose
+    String paletteColorName();
 
-    @Override
-    public String paletteColorName() {
-        return paletteColorName;
-    }
-
-    @Override
-    public short rgb16() {
-        return rgb16;
-    }
+    @StableAPI.Expose
+    short rgb16();
 }

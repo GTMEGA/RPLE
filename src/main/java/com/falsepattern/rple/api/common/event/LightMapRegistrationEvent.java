@@ -26,16 +26,20 @@
 
 package com.falsepattern.rple.api.common.event;
 
+import com.falsepattern.lib.StableAPI;
 import com.falsepattern.rple.api.client.lightmap.RPLELightMapRegistry;
 import cpw.mods.fml.common.eventhandler.Event;
 
+@StableAPI(since = "1.0.0")
 public final class LightMapRegistrationEvent extends Event {
     private final RPLELightMapRegistry registry;
 
+    @StableAPI.Internal
     public LightMapRegistrationEvent(RPLELightMapRegistry registry) {
         this.registry = registry;
     }
 
+    @StableAPI.Expose
     public RPLELightMapRegistry registry() {
         return this.registry;
     }

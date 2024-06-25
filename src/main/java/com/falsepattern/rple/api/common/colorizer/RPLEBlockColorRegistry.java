@@ -27,12 +27,18 @@
 package com.falsepattern.rple.api.common.colorizer;
 
 import net.minecraft.block.Block;
+
+import com.falsepattern.lib.StableAPI;
 import org.jetbrains.annotations.NotNull;
 
+@StableAPI(since = "1.0.0")
 public interface RPLEBlockColorRegistry {
+    @StableAPI.Expose
     @NotNull RPLEBlockColorizer colorizeBlock(@NotNull Block block);
 
+    @StableAPI.Expose
     @NotNull RPLEBlockColorizer colorizeBlock(@NotNull Block block, int blockMeta);
 
+    @StableAPI.Expose
     @NotNull RPLEBlockColorizer colorizeBlock(@NotNull String blockID);
 }

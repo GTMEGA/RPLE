@@ -26,8 +26,11 @@
 
 package com.falsepattern.rple.api.common.color;
 
+import com.falsepattern.lib.StableAPI;
+
 import static com.falsepattern.rple.api.common.ServerColorHelper.*;
 
+@StableAPI(since = "1.0.0")
 public enum ColorChannel {
     RED_CHANNEL(CHANNEL_4BIT_TO_RGB16_RED),
     GREEN_CHANNEL(CHANNEL_4BIT_TO_RGB16_GREEN),
@@ -41,6 +44,7 @@ public enum ColorChannel {
         this.bitShift = bitShift;
     }
 
+    @StableAPI.Expose
     public int componentFromColor(short color) {
         return ((int) color >>> bitShift) & CHANNEL_4BIT_MASK;
     }

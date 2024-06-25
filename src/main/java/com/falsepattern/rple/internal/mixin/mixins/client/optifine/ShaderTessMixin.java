@@ -308,7 +308,7 @@ public abstract class ShaderTessMixin {
 
     @Unique
     private void prepareVertex(ShaderVertex vertex, float posX, float posY, float posZ) {
-        val packed = ofTess.rple$getPackedBrightness();
+        val rgb64 = ofTess.rple$getRGB64Brightness();
 
         vertex.positionX(posX)
               .positionY(posY)
@@ -316,9 +316,9 @@ public abstract class ShaderTessMixin {
               .textureU(ofTess.rple$textureU())
               .textureV(ofTess.rple$textureV())
               .colorARGB(ofTess.rple$color())
-              .redLightMapUV(ClientColorHelper.tessFromRGB64Red(packed))
-              .greenLightMapUV(ClientColorHelper.tessFromRGB64Green(packed))
-              .blueLightMapUV(ClientColorHelper.tessFromRGB64Blue(packed))
+              .redLightMapUV(ClientColorHelper.tessFromRGB64Red(rgb64))
+              .greenLightMapUV(ClientColorHelper.tessFromRGB64Green(rgb64))
+              .blueLightMapUV(ClientColorHelper.tessFromRGB64Blue(rgb64))
               .entityData(Shaders.getEntityData())
               .entityData2(Shaders.getEntityData2());
 

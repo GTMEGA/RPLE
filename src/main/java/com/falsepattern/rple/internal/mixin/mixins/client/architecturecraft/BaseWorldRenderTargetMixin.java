@@ -144,8 +144,8 @@ public abstract class BaseWorldRenderTargetMixin extends BaseRenderTarget {
             val red = scalarsToBrightness(bR, sR);
             val green = scalarsToBrightness(bG, sG);
             val blue = scalarsToBrightness(bB, sB);
-            val packed = ClientColorHelper.RGB64FromVanillaRGB(red, green, blue);
-            brightnessCookie = CookieMonster.cookieFromRGB64(packed);
+            val rgb64 = ClientColorHelper.RGB64FromVanillaRGB(red, green, blue);
+            brightnessCookie = CookieMonster.cookieFromRGB64(rgb64);
         } else {
             brightnessCookie = block.getMixedBrightnessForBlock(world, blockPos.x, blockPos.y, blockPos.z);
         }

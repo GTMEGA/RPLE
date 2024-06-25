@@ -26,9 +26,12 @@
 
 package com.falsepattern.rple.api.client.lightmap;
 
+import com.falsepattern.lib.StableAPI;
 import org.jetbrains.annotations.NotNull;
 
+@StableAPI(since = "1.0.0")
 @FunctionalInterface
 public interface RPLEBlockLightMapMask extends RPLELightMapProvider {
+    @StableAPI.Expose
     boolean generateBlockLightMapMask(@NotNull RPLELightMapStrip output, float partialTick);
 }

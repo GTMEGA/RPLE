@@ -186,13 +186,13 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
         for (val mask : blockMasks) {
             tempLightMapStrip.resetLightMap();
             if (mask.generateBlockLightMapMask(tempLightMapStrip, partialTick))
-                blockLightMapStrip.multLightMap(tempLightMapStrip);
+                blockLightMapStrip.mulLightMap(tempLightMapStrip);
         }
 
         for (val mask : skyMasks) {
             tempLightMapStrip.resetLightMap();
             if (mask.generateSkyLightMapMask(tempLightMapStrip, partialTick))
-                skyLightMapStrip.multLightMap(tempLightMapStrip);
+                skyLightMapStrip.mulLightMap(tempLightMapStrip);
         }
 
         mixLightMaps();

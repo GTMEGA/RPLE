@@ -26,6 +26,9 @@
 
 package com.falsepattern.rple.api.common.block;
 
+import com.falsepattern.lib.StableAPI;
+import org.jetbrains.annotations.ApiStatus;
+
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 
@@ -39,8 +42,11 @@ import net.minecraft.world.IBlockAccess;
  * @see RPLECustomBlockBrightness
  * @see RPLECustomBlockTranslucency
  */
+@ApiStatus.NonExtendable
+@StableAPI(since = "1.0.0")
 public interface RPLEBlockRoot {
     @SuppressWarnings("CastToIncompatibleInterface")
+    @StableAPI.Expose
     static RPLEBlockRoot of(Block block) {
         return (RPLEBlockRoot) block;
     }
@@ -50,6 +56,7 @@ public interface RPLEBlockRoot {
      *
      * @return Internal brightness value
      */
+    @StableAPI.Expose
     short rple$getRawInternalColoredBrightness();
 
     /**
@@ -57,6 +64,7 @@ public interface RPLEBlockRoot {
      *
      * @return Internal brightness value
      */
+    @StableAPI.Expose
     short rple$getRawInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ);
 
     /**
@@ -64,6 +72,7 @@ public interface RPLEBlockRoot {
      *
      * @return Internal translucency value
      */
+    @StableAPI.Expose
     short rple$getRawInternalColoredOpacity();
 
     /**
@@ -71,6 +80,7 @@ public interface RPLEBlockRoot {
      *
      * @return Internal translucency value
      */
+    @StableAPI.Expose
     short rple$getRawInternalColoredOpacity(IBlockAccess world, int posX, int posY, int posZ);
 
     /**
@@ -78,6 +88,7 @@ public interface RPLEBlockRoot {
      *
      * @return Internal brightness value
      */
+    @StableAPI.Expose
     short rple$getInternalColoredBrightness();
 
     /**
@@ -85,6 +96,7 @@ public interface RPLEBlockRoot {
      *
      * @return Internal brightness value
      */
+    @StableAPI.Expose
     short rple$getInternalColoredBrightness(IBlockAccess world, int posX, int posY, int posZ);
 
     /**
@@ -92,6 +104,7 @@ public interface RPLEBlockRoot {
      *
      * @return Internal translucency value
      */
+    @StableAPI.Expose
     short rple$getInternalColoredTranslucency();
 
     /**
@@ -99,5 +112,6 @@ public interface RPLEBlockRoot {
      *
      * @return Internal translucency value
      */
+    @StableAPI.Expose
     short rple$getInternalColoredTranslucency(IBlockAccess world, int posX, int posY, int posZ);
 }

@@ -26,6 +26,7 @@
 
 package com.falsepattern.rple.api.client;
 
+import com.falsepattern.lib.StableAPI;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.collection.CircularLongBuffer;
 import com.falsepattern.rple.internal.common.util.FastThreadLocal;
@@ -51,18 +52,18 @@ import static com.falsepattern.rple.internal.common.util.LogHelper.shouldLogDebu
  * Note: Cookies should be treated as opaque blobs. Do not try to unpack them manually, always go through the cookie
  * manager! Additionally, they should not be saved anywhere, as they expire very quickly.
  */
-// TODO: [COOKIE] Pull this up into API
+@StableAPI(since = "1.0.0")
 public final class CookieMonster {
     private static final Logger LOG = createLogger("CookieMonster");
 
     // Cookie format (bits):
-    // Packed long
+    // "compressed" rgb64
     // 0100 0000 IIII IIII IIII IIII CCCC CCCP
     // I - index bits
     // C - check bits
     // P - parity
     //
-    // Cookied 4 bit RGB
+    // rgb32
     // 0110 0000 BBBB GGGG RRRR bbbb gggg rrrr
     private static final int NUM_INDICES = 0x100000;
     private static final int INDEX_SHIFT = 8;
@@ -104,6 +105,7 @@ public final class CookieMonster {
      * @param rgb64 A long value returned by {@link ClientColorHelper}.
      * @return An opaque, temporary cookie representing the given long.
      */
+    @StableAPI.Expose
     public static int cookieFromRGB64(long rgb64) {
         int rgb = ClientColorHelper.tryRGB32FromRGB64(rgb64);
         if (rgb != -1) {
@@ -115,6 +117,7 @@ public final class CookieMonster {
         return cookie | parity(cookie);
     }
 
+    @StableAPI.Expose
     public static int cookieFromRGB32(int rgb32) {
         return (rgb32 & RGB_MASK) | COOKIE_BIT | RGB_BIT;
     }
@@ -122,9 +125,10 @@ public final class CookieMonster {
     /**
      * @param cookie A cookie returned by {@link CookieMonster#cookieFromRGB64(long)}, or a vanilla minecraft brightness.
      * @return The long value represented by the cookie, or the vanilla minecraft brightness turned into a greyscale
-     * packed long. If it's neither, then we assume that it's a corrupted cookie, and return a bright red warning color,
+     * rgb64 long. If it's neither, then we assume that it's a corrupted cookie, and return a bright red warning color,
      * and log an error (first time only).
      */
+    @StableAPI.Expose
     public static long RGB64FromCookie(int cookie) {
         switch (inspectValue(cookie)) {
             case COOKIE:
@@ -151,6 +155,7 @@ public final class CookieMonster {
      * @return {@link IntType#COOKIE} if it was a correct cookie, {@link IntType#VANILLA} if it was a vanilla minecraft
      * brightness value, and {@link IntType#BROKEN} if it was neither.
      */
+    @StableAPI.Expose
     public static IntType inspectValue(int potentialCookie) {
         if ((potentialCookie & COOKIE_BIT) == 0) {
             if ((potentialCookie & BRIGHTNESS_MASK) == potentialCookie)

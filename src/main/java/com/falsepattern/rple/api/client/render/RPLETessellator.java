@@ -34,7 +34,7 @@ public interface RPLETessellator {
         return (RPLETessellator) tess;
     }
 
-    void rple$setPackedBrightness(long packedBrightness);
+    void rple$setRGB64Brightness(long rgb64);
 
-    long rple$getPackedBrightness();
+    long rple$getRGB64Brightness();
 }

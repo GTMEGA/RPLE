@@ -68,7 +68,7 @@ public abstract class RPLEClientBlockStorageImplMixin implements RPLEClientBlock
         val lightValueYP = posY == 255 ? RGB32_MAX_SKYLIGHT_NO_BLOCKLIGHT : centerChunk.rple$getRGBLightValueHasSky(centerSubChunkPosX, posY + 1, centerSubChunkPosZ);
 
         // Bottom is not used in vanilla code
-//        val lightValueYN = posY == 0 ? PACKED_NO_SKYLIGHT_NO_BLOCKLIGHT : centerChunk.rple$getRGBLightValueHasSky(centerSubChunkPosX, posY - 1, centerSubChunkPosZ);
+//        val lightValueYN = posY == 0 ? RGB32_NO_SKYLIGHT_NO_BLOCKLIGHT : centerChunk.rple$getRGBLightValueHasSky(centerSubChunkPosX, posY - 1, centerSubChunkPosZ);
 
         final int lightValueXP;
         final int lightValueXN;

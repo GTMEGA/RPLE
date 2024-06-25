@@ -26,20 +26,30 @@
 
 package com.falsepattern.rple.api.common.block;
 
+import com.falsepattern.lib.StableAPI;
+import org.jetbrains.annotations.ApiStatus;
+
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 
+@ApiStatus.NonExtendable
+@StableAPI(since = "1.0.0")
 public interface RPLEBlockRenamed {
     @SuppressWarnings("CastToIncompatibleInterface")
+    @StableAPI.Expose
     static RPLEBlockRenamed of(Block block) {
         return (RPLEBlockRenamed) block;
     }
 
+    @StableAPI.Expose
     int rple$renamed$getLightValue();
 
+    @StableAPI.Expose
     int rple$renamed$getLightValue(IBlockAccess world, int posX, int posY, int posZ);
 
+    @StableAPI.Expose
     int rple$renamed$getLightOpacity();
 
+    @StableAPI.Expose
     int rple$renamed$getLightOpacity(IBlockAccess world, int posX, int posY, int posZ);
 }

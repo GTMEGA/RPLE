@@ -26,6 +26,7 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
+import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
@@ -48,8 +49,6 @@ import static com.falsepattern.rple.internal.client.lightmap.LightMap.lightMap;
 public abstract class OpenGLHelperMixin {
     @Shadow
     public static int lightmapTexUnit;
-    @Shadow
-    private static boolean field_153215_z;
 
     @Shadow
     public static void setLightmapTextureCoords(int textureUnit, float textureU, float textureV) {}
@@ -63,23 +62,26 @@ public abstract class OpenGLHelperMixin {
             return;
         val brightness = (int) textureU | ((int) textureV << 16);
         if (CookieMonster.inspectValue(brightness) == CookieMonster.IntType.COOKIE) {
-            val packedBrightness = CookieMonster.RGB64FromCookie(brightness);
-            ExtendedOpenGlHelper.setLightMapTextureCoordsPacked(packedBrightness);
+            val rgb64 = CookieMonster.RGB64FromCookie(brightness);
+            ExtendedOpenGlHelper.setLightMapTextureCoordsRGB64(rgb64);
             ci.cancel();
             return;
         }
         ExtendedOpenGlHelper.BYPASS = true;
-        ExtendedOpenGlHelper.setPackedBrightnessFromMonochrome(brightness);
-        if (textureUnit == lightmapTexUnit) {
-            if (Compat.shadersEnabled()) {
-                setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, textureU, textureV);
-                setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, textureU, textureV);
-            } else {
-                setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
-                setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
+        try {
+            ExtendedOpenGlHelper.setLightMapTextureCoordsRGB64(ClientColorHelper.RGB64FromVanillaMonochrome(brightness));
+            if (textureUnit == lightmapTexUnit) {
+                if (Compat.shadersEnabled()) {
+                    setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, textureU, textureV);
+                    setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, textureU, textureV);
+                } else {
+                    setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
+                    setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, textureU, textureV);
+                }
             }
+        } finally {
+            ExtendedOpenGlHelper.BYPASS = false;
         }
-        ExtendedOpenGlHelper.BYPASS = false;
     }
 
     @Redirect(method = "setLightmapTextureCoords",

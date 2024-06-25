@@ -50,7 +50,7 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
     @Shadow
     private int rawBufferIndex;
 
-    private long rple$packedBrightness;
+    private long rple$rgb64;
 
     @Redirect(method = "draw",
               at = @At(value = "FIELD",
@@ -86,9 +86,9 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
               require = 1)
     private boolean customColor(Tessellator instance) {
         if (hasBrightness) {
-            rawBuffer[rawBufferIndex + VertexConstants.getRedIndexNoShader()] = ClientColorHelper.tessFromRGB64Red(rple$packedBrightness);
-            rawBuffer[rawBufferIndex + VertexConstants.getGreenIndexNoShader()] = ClientColorHelper.tessFromRGB64Green(rple$packedBrightness);
-            rawBuffer[rawBufferIndex + VertexConstants.getBlueIndexNoShader()] = ClientColorHelper.tessFromRGB64Blue(rple$packedBrightness);
+            rawBuffer[rawBufferIndex + VertexConstants.getRedIndexNoShader()] = ClientColorHelper.tessFromRGB64Red(rple$rgb64);
+            rawBuffer[rawBufferIndex + VertexConstants.getGreenIndexNoShader()] = ClientColorHelper.tessFromRGB64Green(rple$rgb64);
+            rawBuffer[rawBufferIndex + VertexConstants.getBlueIndexNoShader()] = ClientColorHelper.tessFromRGB64Blue(rple$rgb64);
         }
         return false;
     }
@@ -99,17 +99,17 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
      */
     @Overwrite
     public void setBrightness(int brightness) {
-        rple$setPackedBrightness(CookieMonster.RGB64FromCookie(brightness));
+        rple$setRGB64Brightness(CookieMonster.RGB64FromCookie(brightness));
     }
 
     @Override
-    public void rple$setPackedBrightness(long packedBrightness) {
+    public void rple$setRGB64Brightness(long rgb64) {
         hasBrightness = true;
-        rple$packedBrightness = packedBrightness;
+        rple$rgb64 = rgb64;
     }
 
     @Override
-    public long rple$getPackedBrightness() {
-        return rple$packedBrightness;
+    public long rple$getRGB64Brightness() {
+        return rple$rgb64;
     }
 }

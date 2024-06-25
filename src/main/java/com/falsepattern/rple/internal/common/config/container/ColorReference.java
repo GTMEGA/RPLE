@@ -27,7 +27,7 @@
 package com.falsepattern.rple.internal.common.config.container;
 
 import com.falsepattern.rple.api.common.color.DefaultColor;
-import com.falsepattern.rple.api.common.color.RPLEBlockColor;
+import com.falsepattern.rple.api.common.color.RPLENamedColor;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.val;
@@ -45,11 +45,11 @@ public final class ColorReference {
     @Getter
     private final boolean isValid;
 
-    public static ColorReference paletteOrRaw(RPLEBlockColor palette, short raw) {
+    public static ColorReference paletteOrRaw(RPLENamedColor palette, short raw) {
         return palette == null ? new ColorReference(new HexColor(raw)) : new ColorReference(palette);
     }
 
-    public ColorReference(RPLEBlockColor color) {
+    public ColorReference(RPLENamedColor color) {
         this.uniqueColor = null;
 
         nameCheck:

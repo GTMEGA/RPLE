@@ -26,16 +26,20 @@
 
 package com.falsepattern.rple.api.common.event;
 
+import com.falsepattern.lib.StableAPI;
 import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorRegistry;
 import cpw.mods.fml.common.eventhandler.Event;
 
+@StableAPI(since = "1.0.0")
 public final class BlockColorRegistrationEvent extends Event {
     private final RPLEBlockColorRegistry registry;
 
+    @StableAPI.Internal
     public BlockColorRegistrationEvent(RPLEBlockColorRegistry registry) {
         this.registry = registry;
     }
 
+    @StableAPI.Expose
     public RPLEBlockColorRegistry registry() {
         return this.registry;
     }

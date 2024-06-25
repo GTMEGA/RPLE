@@ -26,10 +26,12 @@
 
 package com.falsepattern.rple.api.common.color;
 
+import com.falsepattern.lib.StableAPI;
 import com.falsepattern.rple.api.common.ServerColorHelper;
 import org.jetbrains.annotations.NotNull;
 
-public enum LightValueColor implements RPLEBlockColor {
+@StableAPI(since = "1.0.0")
+public enum LightValueColor implements RPLENamedColor {
     LIGHT_VALUE_0,
     LIGHT_VALUE_1,
     LIGHT_VALUE_2,
@@ -48,6 +50,7 @@ public enum LightValueColor implements RPLEBlockColor {
     LIGHT_VALUE_15;
 
     private static final LightValueColor[] VALUES = values();
+    @StableAPI.Internal
     public static final String LIGHT_LEVEL_COLOR_DOMAIN = "light_value";
 
     private final String paletteColorName;
@@ -70,11 +73,13 @@ public enum LightValueColor implements RPLEBlockColor {
         return rgb16;
     }
 
+    @StableAPI.Expose
     public static @NotNull LightValueColor fromVanillaLightValue(int vanillaLightValue) {
         final int index = vanillaLightValue & 15;
         return VALUES[index];
     }
 
+    @StableAPI.Expose
     public static @NotNull LightValueColor fromVanillaLightOpacity(int vanillaLightOpacity) {
         final int index = 15 - (vanillaLightOpacity & 15);
         return VALUES[index];

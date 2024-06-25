@@ -26,5 +26,8 @@
 
 package com.falsepattern.rple.api.client.lightmap;
 
+import com.falsepattern.lib.StableAPI;
+
+@StableAPI(since = "1.0.0")
 public interface RPLELightMapProvider {
 }

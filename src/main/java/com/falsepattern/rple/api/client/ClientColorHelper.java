@@ -26,13 +26,13 @@
 
 package com.falsepattern.rple.api.client;
 
-import lombok.experimental.UtilityClass;
+import com.falsepattern.lib.StableAPI;
 import lombok.val;
 
 /**
- * Utility class for managing minecraft brightness values, and packed long RGB versions of these brightness values.
+ * Utility class for managing color values for rendering-related logic
  */
-@UtilityClass
+@StableAPI(since = "1.0.0")
 public final class ClientColorHelper {
     // fields
 
@@ -70,12 +70,9 @@ public final class ClientColorHelper {
     private static final int CHANNEL_8BIT_TO_RGB64_BLUE_BLOCK = 0;
     private static final int CHANNEL_4BIT_TO_RGB64_BLUE_BLOCK = 4;
 
-    private static final long RGB64_4BIT_LOSSY_CHECK_MASK = (0xFL << CHANNEL_8BIT_TO_RGB64_RED_SKY) |
-            (0xFL << CHANNEL_8BIT_TO_RGB64_RED_BLOCK) |
-            (0xFL << CHANNEL_8BIT_TO_RGB64_GREEN_SKY) |
-            (0xFL << CHANNEL_8BIT_TO_RGB64_GREEN_BLOCK) |
-            (0xFL << CHANNEL_8BIT_TO_RGB64_BLUE_SKY) |
-            (0xFL << CHANNEL_8BIT_TO_RGB64_BLUE_BLOCK);
+    private static final long RGB64_4BIT_LOSSY_CHECK_MASK =
+            (0xFL << CHANNEL_8BIT_TO_RGB64_RED_SKY) | (0xFL << CHANNEL_8BIT_TO_RGB64_RED_BLOCK) | (0xFL << CHANNEL_8BIT_TO_RGB64_GREEN_SKY) |
+            (0xFL << CHANNEL_8BIT_TO_RGB64_GREEN_BLOCK) | (0xFL << CHANNEL_8BIT_TO_RGB64_BLUE_SKY) | (0xFL << CHANNEL_8BIT_TO_RGB64_BLUE_BLOCK);
     //endregion
 
     //region RGB32 constants
@@ -87,19 +84,26 @@ public final class ClientColorHelper {
     private static final int CHANNEL_4BIT_TO_RGB32_BLUE_BLOCK = 8;
 
     private static final int RGB32_SHIFT_MAX = 20;
-    private static final int RGB32_BLOCK_REMOVE_BITMASK = ~((0xF << CHANNEL_4BIT_TO_RGB32_RED_BLOCK) | (0xF << CHANNEL_4BIT_TO_RGB32_GREEN_BLOCK) | (0xF << CHANNEL_4BIT_TO_RGB32_BLUE_BLOCK));
+    private static final int RGB32_BLOCK_REMOVE_BITMASK =
+            ~((0xF << CHANNEL_4BIT_TO_RGB32_RED_BLOCK) | (0xF << CHANNEL_4BIT_TO_RGB32_GREEN_BLOCK) | (0xF << CHANNEL_4BIT_TO_RGB32_BLUE_BLOCK));
 
-    public static final int RGB32_MAX_SKYLIGHT_NO_BLOCKLIGHT = (0xF << CHANNEL_4BIT_TO_RGB32_RED_SKY) |
-            (0xF << CHANNEL_4BIT_TO_RGB32_GREEN_SKY) |
-            (0xF << CHANNEL_4BIT_TO_RGB32_BLUE_SKY);
+    @StableAPI.Expose
+    public static final int RGB32_MAX_SKYLIGHT_NO_BLOCKLIGHT =
+            (0xF << CHANNEL_4BIT_TO_RGB32_RED_SKY) | (0xF << CHANNEL_4BIT_TO_RGB32_GREEN_SKY) | (0xF << CHANNEL_4BIT_TO_RGB32_BLUE_SKY);
 
+    @StableAPI.Expose
     public static final int RGB32_NO_SKYLIGHT_NO_BLOCKLIGHT = 0x000_000;
+
+    private ClientColorHelper() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
     //endregion
 
     // methods
 
     //region RGB32
+    @StableAPI.Expose
     public static int RGB32FromChannels4Bit(int skyR, int skyG, int skyB, int blockR, int blockG, int blockB) {
         skyR = (skyR & 0xF) << CHANNEL_4BIT_TO_RGB32_RED_SKY;
         skyG = (skyG & 0xF) << CHANNEL_4BIT_TO_RGB32_GREEN_SKY;
@@ -111,6 +115,7 @@ public final class ClientColorHelper {
         return skyR | skyG | skyB | blockR | blockG | blockB;
     }
 
+    @StableAPI.Expose
     public static int RGB32FromChannels4BitBlock(int blockR, int blockG, int blockB) {
         blockR = (blockR & 0xF) << CHANNEL_4BIT_TO_RGB32_RED_BLOCK;
         blockG = (blockG & 0xF) << CHANNEL_4BIT_TO_RGB32_GREEN_BLOCK;
@@ -119,24 +124,27 @@ public final class ClientColorHelper {
         return blockR | blockG | blockB;
     }
 
-    public static int tryRGB32FromRGB64(long packed) {
-        if ((packed & RGB64_4BIT_LOSSY_CHECK_MASK) != 0)
+    @StableAPI.Expose
+    public static int tryRGB32FromRGB64(long rgb64) {
+        if ((rgb64 & RGB64_4BIT_LOSSY_CHECK_MASK) != 0) {
             return -1;
-        int rgb = 0;
-        rgb |= ((int) (packed >>> CHANNEL_4BIT_TO_RGB64_RED_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB32_RED_BLOCK;
-        rgb |= ((int) (packed >>> CHANNEL_4BIT_TO_RGB64_GREEN_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB32_GREEN_BLOCK;
-        rgb |= ((int) (packed >>> CHANNEL_4BIT_TO_RGB64_BLUE_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB32_BLUE_BLOCK;
-        rgb |= ((int) (packed >>> CHANNEL_4BIT_TO_RGB64_RED_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB32_RED_SKY;
-        rgb |= ((int) (packed >>> CHANNEL_4BIT_TO_RGB64_GREEN_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB32_GREEN_SKY;
-        rgb |= ((int) (packed >>> CHANNEL_4BIT_TO_RGB64_BLUE_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB32_BLUE_SKY;
-        return rgb;
+        }
+        int rgb32 = 0;
+        rgb32 |= ((int) (rgb64 >>> CHANNEL_4BIT_TO_RGB64_RED_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB32_RED_BLOCK;
+        rgb32 |= ((int) (rgb64 >>> CHANNEL_4BIT_TO_RGB64_GREEN_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB32_GREEN_BLOCK;
+        rgb32 |= ((int) (rgb64 >>> CHANNEL_4BIT_TO_RGB64_BLUE_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB32_BLUE_BLOCK;
+        rgb32 |= ((int) (rgb64 >>> CHANNEL_4BIT_TO_RGB64_RED_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB32_RED_SKY;
+        rgb32 |= ((int) (rgb64 >>> CHANNEL_4BIT_TO_RGB64_GREEN_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB32_GREEN_SKY;
+        rgb32 |= ((int) (rgb64 >>> CHANNEL_4BIT_TO_RGB64_BLUE_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB32_BLUE_SKY;
+        return rgb32;
     }
 
-    public static int RGB32ClampMinBlockChannels(int packed, int minRedBlockLight, int minGreenBlockLight, int minBlueBlockLight) {
+    @StableAPI.Expose
+    public static int RGB32ClampMinBlockChannels(int rgb32, int minRedBlockLight, int minGreenBlockLight, int minBlueBlockLight) {
         //extract
-        int containedRedBlockLight = (packed >>> CHANNEL_4BIT_TO_RGB32_RED_BLOCK) & 0xF;
-        int containedGreenBlockLight = (packed >>> CHANNEL_4BIT_TO_RGB32_GREEN_BLOCK) & 0xF;
-        int containedBlueBlockLight = (packed >>> CHANNEL_4BIT_TO_RGB32_BLUE_BLOCK) & 0xF;
+        int containedRedBlockLight = (rgb32 >>> CHANNEL_4BIT_TO_RGB32_RED_BLOCK) & 0xF;
+        int containedGreenBlockLight = (rgb32 >>> CHANNEL_4BIT_TO_RGB32_GREEN_BLOCK) & 0xF;
+        int containedBlueBlockLight = (rgb32 >>> CHANNEL_4BIT_TO_RGB32_BLUE_BLOCK) & 0xF;
 
         //align
         minRedBlockLight &= 0xF;
@@ -149,15 +157,16 @@ public final class ClientColorHelper {
         int blueBlockLight = Math.max(minBlueBlockLight, containedBlueBlockLight);
 
         //mask out bits
-        packed &= RGB32_BLOCK_REMOVE_BITMASK;
+        rgb32 &= RGB32_BLOCK_REMOVE_BITMASK;
         //weave
-        packed |= redBlockLight << CHANNEL_4BIT_TO_RGB32_RED_BLOCK;
-        packed |= greenBlockLight << CHANNEL_4BIT_TO_RGB32_GREEN_BLOCK;
-        packed |= blueBlockLight << CHANNEL_4BIT_TO_RGB32_BLUE_BLOCK;
+        rgb32 |= redBlockLight << CHANNEL_4BIT_TO_RGB32_RED_BLOCK;
+        rgb32 |= greenBlockLight << CHANNEL_4BIT_TO_RGB32_GREEN_BLOCK;
+        rgb32 |= blueBlockLight << CHANNEL_4BIT_TO_RGB32_BLUE_BLOCK;
 
-        return packed;
+        return rgb32;
     }
 
+    @StableAPI.Expose
     public static int RGB32Max(int lightValueA, int lightValueB, int lightValueC, int lightValueD, int lightValueE) {
         int result = 0;
         for (int shift = 0; shift <= RGB32_SHIFT_MAX; shift += 4) {
@@ -182,24 +191,27 @@ public final class ClientColorHelper {
     //endregion
 
     //region vanilla
+
     /**
      * Packs two 0-15 values into a vanilla-style brightness value.
      */
+    @StableAPI.Expose
     public static int vanillaFromBlockSky4Bit(int blockLightValue, int skyLightValue) {
-        return (blockLightValue & 0xF) << CHANNEL_4BIT_TO_VANILLA_BLOCK |
-                (skyLightValue & 0xF) << CHANNEL_4BIT_TO_VANILLA_SKY;
+        return (blockLightValue & 0xF) << CHANNEL_4BIT_TO_VANILLA_BLOCK | (skyLightValue & 0xF) << CHANNEL_4BIT_TO_VANILLA_SKY;
     }
 
     /**
-     * The 0-15 light level inside the packed brightness.
+     * The 0-15 light level inside the vanilla brightness.
      */
+    @StableAPI.Expose
     public static int block4BitFromVanilla(int brightness) {
         return (brightness & VANILLA_BLOCK_MASK) >>> CHANNEL_4BIT_TO_VANILLA_BLOCK;
     }
 
     /**
-     * The 0-15 light level inside the packed brightness.
+     * The 0-15 light level inside the vanilla brightness.
      */
+    @StableAPI.Expose
     public static int sky4BitFromVanilla(int brightness) {
         return (brightness & VANILLA_SKY_MASK) >>> CHANNEL_4BIT_TO_VANILLA_SKY;
     }
@@ -207,192 +219,191 @@ public final class ClientColorHelper {
     /**
      * Packs two 0-240 values into a vanilla-style brightness value. Only relevant when messing with render logic.
      */
+    @StableAPI.Expose
     public static int vanillaFromBlockSky8Bit(int block, int sky) {
         return (sky & 0xFF) << CHANNEL_8BIT_TO_VANILLA_SKY | (block & 0xFF) << CHANNEL_8BIT_TO_VANILLA_BLOCK;
     }
 
     /**
-     * The raw render-specific brightness value inside the packed brightness.
+     * The raw render-specific brightness value inside the vanilla brightness.
      */
+    @StableAPI.Expose
     public static int block8BitFromVanilla(int brightness) {
         return (brightness & VANILLA_BLOCK_MASK) >>> CHANNEL_8BIT_TO_VANILLA_BLOCK;
     }
 
     /**
-     * The raw render-specific brightness value inside the packed brightness.
+     * The raw render-specific brightness value inside the vanilla brightness.
      */
+    @StableAPI.Expose
     public static int sky8BitFromVanilla(int brightness) {
         return (brightness & VANILLA_SKY_MASK) >>> CHANNEL_8BIT_TO_VANILLA_SKY;
     }
 
-    public static int vanillaFromRGB64Red(long packed) {
-        return vanillaFromCompressed((int) ((packed >>> RGB64_RED_OFFSET) & COMPRESSED_MASK));
+    @StableAPI.Expose
+    public static int vanillaFromRGB64Red(long rgb64) {
+        return vanillaFromCompressed((int) ((rgb64 >>> RGB64_RED_OFFSET) & COMPRESSED_MASK));
     }
 
-    public static int vanillaFromRGB64Green(long packed) {
-        return vanillaFromCompressed((int) ((packed >>> RGB64_GREEN_OFFSET) & COMPRESSED_MASK));
+    @StableAPI.Expose
+    public static int vanillaFromRGB64Green(long rgb64) {
+        return vanillaFromCompressed((int) ((rgb64 >>> RGB64_GREEN_OFFSET) & COMPRESSED_MASK));
     }
 
-    public static int vanillaFromRGB64Blue(long packed) {
-        return vanillaFromCompressed((int) ((packed >>> RGB64_BLUE_OFFSET) & COMPRESSED_MASK));
+    @StableAPI.Expose
+    public static int vanillaFromRGB64Blue(long rgb64) {
+        return vanillaFromCompressed((int) ((rgb64 >>> RGB64_BLUE_OFFSET) & COMPRESSED_MASK));
     }
 
     /**
      * Unpacks the given value, and gets the brightest skylight and blocklight channels as a regular brightness value.
      * Used for compatibility.
      */
-    public static int vanillaFromRGB64Max(long packed) {
-        val redCompressed = (int) ((packed >>> RGB64_RED_OFFSET) & COMPRESSED_MASK);
-        val greenCompressed = (int) ((packed >>> RGB64_GREEN_OFFSET) & COMPRESSED_MASK);
-        val blueCompressed = (int) ((packed >>> RGB64_BLUE_OFFSET) & COMPRESSED_MASK);
-        return vanillaFromCompressed(max3(redCompressed, greenCompressed, blueCompressed, COMPRESSED_SKY_MASK) |
-                max3(redCompressed, greenCompressed, blueCompressed, COMPRESSED_BLOCK_MASK));
+    @StableAPI.Expose
+    public static int vanillaFromRGB64Max(long rgb64) {
+        val redCompressed = (int) ((rgb64 >>> RGB64_RED_OFFSET) & COMPRESSED_MASK);
+        val greenCompressed = (int) ((rgb64 >>> RGB64_GREEN_OFFSET) & COMPRESSED_MASK);
+        val blueCompressed = (int) ((rgb64 >>> RGB64_BLUE_OFFSET) & COMPRESSED_MASK);
+        return vanillaFromCompressed(
+                max3(redCompressed, greenCompressed, blueCompressed, COMPRESSED_SKY_MASK) | max3(redCompressed, greenCompressed, blueCompressed, COMPRESSED_BLOCK_MASK));
     }
     //endregion
 
     //region RGB64
 
+    @StableAPI.Expose
     public static long RGB64FromVanillaRGB(int red, int green, int blue) {
-        return (long) compressedFromVanilla(red) << RGB64_RED_OFFSET |
-               (long) compressedFromVanilla(green) << RGB64_GREEN_OFFSET |
+        return (long) compressedFromVanilla(red) << RGB64_RED_OFFSET | (long) compressedFromVanilla(green) << RGB64_GREEN_OFFSET |
                (long) compressedFromVanilla(blue) << RGB64_BLUE_OFFSET;
     }
 
+    @StableAPI.Expose
     public static long RGB64FromVanillaMonochrome(int brightness) {
         val compressed = (long) compressedFromVanilla(brightness);
-        return compressed << RGB64_RED_OFFSET |
-                compressed << RGB64_GREEN_OFFSET |
-                compressed << RGB64_BLUE_OFFSET;
+        return compressed << RGB64_RED_OFFSET | compressed << RGB64_GREEN_OFFSET | compressed << RGB64_BLUE_OFFSET;
     }
 
-    //Fast paths for converting light levels to packed values
-
-    public static long RGB64FromRGB32(int rgb) {
-        long packed = 0L;
-        packed |= (long) ((rgb >>> CHANNEL_4BIT_TO_RGB32_RED_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB64_RED_BLOCK;
-        packed |= (long) ((rgb >>> CHANNEL_4BIT_TO_RGB32_GREEN_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB64_GREEN_BLOCK;
-        packed |= (long) ((rgb >>> CHANNEL_4BIT_TO_RGB32_BLUE_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB64_BLUE_BLOCK;
-        packed |= (long) ((rgb >>> CHANNEL_4BIT_TO_RGB32_RED_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB64_RED_SKY;
-        packed |= (long) ((rgb >>> CHANNEL_4BIT_TO_RGB32_GREEN_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB64_GREEN_SKY;
-        packed |= (long) ((rgb >>> CHANNEL_4BIT_TO_RGB32_BLUE_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB64_BLUE_SKY;
-        return packed;
+    @StableAPI.Expose
+    public static long RGB64FromRGB32(int rgb32) {
+        long rgb64 = 0L;
+        rgb64 |= (long) ((rgb32 >>> CHANNEL_4BIT_TO_RGB32_RED_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB64_RED_BLOCK;
+        rgb64 |= (long) ((rgb32 >>> CHANNEL_4BIT_TO_RGB32_GREEN_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB64_GREEN_BLOCK;
+        rgb64 |= (long) ((rgb32 >>> CHANNEL_4BIT_TO_RGB32_BLUE_BLOCK) & 0xF) << CHANNEL_4BIT_TO_RGB64_BLUE_BLOCK;
+        rgb64 |= (long) ((rgb32 >>> CHANNEL_4BIT_TO_RGB32_RED_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB64_RED_SKY;
+        rgb64 |= (long) ((rgb32 >>> CHANNEL_4BIT_TO_RGB32_GREEN_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB64_GREEN_SKY;
+        rgb64 |= (long) ((rgb32 >>> CHANNEL_4BIT_TO_RGB32_BLUE_SKY) & 0xF) << CHANNEL_4BIT_TO_RGB64_BLUE_SKY;
+        return rgb64;
     }
 
     /**
-     * Takes the per-channel maximum of the two packed colors.
+     * Takes the per-channel maximum of the two colors.
      */
-    public static long RGB64Max(long packedA, long packedB) {
-        //Optimized algorithm, given that internally we have a tightly packed sequence of identical elements.
+    @StableAPI.Expose
+    public static long RGB64Max(long a, long b) {
+        //Optimized algorithm, given that internally we have a tight sequence of identical elements.
+        //Hopefully, the JVM converts this into SIMD
         long result = 0L;
         for (int i = 0; i <= 40; i += 8) {
             val mask = 0xFFL << i;
-            val a = packedA & mask;
-            val b = packedB & mask;
-            result |= Math.max(a, b);
+            val cA = a & mask;
+            val cB = b & mask;
+            result |= Math.max(cA, cB);
         }
         return result;
     }
 
-    public static long RGB64MixAOBrightness(long packedA, long packedB, double aMul, double bMul) {
-        long packedResult = 0;
+    @StableAPI.Expose
+    public static long RGB64MixAOBrightness(long a, long b, double aMul, double bMul) {
+        long result = 0;
         for (int i = 0; i <= 40; i += 8) {
-            packedResult |= RGB64LerpChannel(packedA, packedB, aMul, bMul, i);
+            result |= RGB64LerpChannel(a, b, aMul, bMul, i);
         }
-        return packedResult;
+        return result;
     }
 
-    private static long RGB64LerpChannel(long packedA, long packedB, double aMul, double bMul, int offset) {
-        val a = (double) unit(packedA, offset) * aMul;
-        val b = (double) unit(packedB, offset) * bMul;
-        return (((long) (a + b)) & 0xFF) << offset;
-    }
-
-    public static long RGB64MixAOBrightness(long packedTL,
-                                            long packedBL,
-                                            long packedBR,
-                                            long packedTR,
-                                            double lerpTB,
-                                            double lerpLR) {
+    @StableAPI.Expose
+    public static long RGB64MixAOBrightness(long TL, long BL, long BR, long TR, double lerpTB, double lerpLR) {
         val lTL = (1.0 - lerpTB) * (1.0 - lerpLR);
         val lTR = (1.0 - lerpTB) * lerpLR;
         val lBL = lerpTB * (1.0 - lerpLR);
         val lBR = lerpTB * lerpLR;
-        return RGB64MixAOBrightness(packedTL, packedTR, packedBL, packedBR, lTL, lTR, lBL, lBR);
+        return RGB64MixAOBrightness(TL, TR, BL, BR, lTL, lTR, lBL, lBR);
     }
 
-    public static long RGB64MixAOBrightness(long packedA,
-                                            long packedB,
-                                            long packedC,
-                                            long packedD,
-                                            double aMul,
-                                            double bMul,
-                                            double cMul,
-                                            double dMul) {
-        long packedResult = 0;
+    @StableAPI.Expose
+    public static long RGB64MixAOBrightness(long a, long b, long c, long d, double aMul, double bMul, double cMul, double dMul) {
+        long result = 0;
         for (int i = 0; i <= 40; i += 8) {
-            packedResult |= RGB64MixAoBrightnessChannel(packedA, packedB, packedC, packedD, aMul, bMul, cMul, dMul, i);
+            result |= RGB64MixAoBrightnessChannel(a, b, c, d, aMul, bMul, cMul, dMul, i);
         }
-        return packedResult;
+        return result;
     }
 
     /**
      * Takes the average of the passed in brightnesses. Faster than doing it by hand through the API.
      */
+    @StableAPI.Expose
     public static long RGB64Average(long a, long b, boolean ignoreZero) {
-        long resultPacked = 0;
+        long result = 0;
         for (int i = 0; i <= 40; i += 8) {
-            resultPacked |= RGB64AverageChannel(a, b, i, ignoreZero);
+            result |= RGB64AverageChannel(a, b, i, ignoreZero);
         }
-        return resultPacked;
+        return result;
     }
 
     /**
      * Takes the average of the passed in brightnesses. Faster than doing it by hand through the API.
      */
+    @StableAPI.Expose
     public static long RGB64Average(long a, long b, long c, long d, boolean ignoreZero) {
-        long resultPacked = 0;
+        long result = 0;
         if (ignoreZero) {
             for (int i = 0; i <= 40; i += 8) {
-                resultPacked |= RGB64AverageChannelIgnoreZero(a, b, c, d, i);
+                result |= RGB64AverageChannelIgnoreZero(a, b, c, d, i);
             }
         } else {
             for (int i = 0; i <= 40; i += 8) {
-                resultPacked |= RGB64AverageChannel(a, b, c, d, i);
+                result |= RGB64AverageChannel(a, b, c, d, i);
             }
         }
-        return resultPacked;
+        return result;
     }
 
     /**
      * Takes the average of the passed in brightnesses. Faster than doing it by hand through the API.
      */
+    @StableAPI.Expose
     public static long RGB64Average(long[] values, int n, boolean ignoreZero) {
-        long resultPacked = 0;
+        long result = 0;
         for (int i = 0; i <= 40; i += 8) {
-            resultPacked |= RGB64AverageChannel(values, n, i, ignoreZero);
+            result |= RGB64AverageChannel(values, n, i, ignoreZero);
         }
-        return resultPacked;
+        return result;
     }
 
     //endregion
 
     //region tess
 
-    public static int tessFromRGB64Red(long packed) {
-        return tessFromVanilla(vanillaFromCompressed((int) ((packed >>> RGB64_RED_OFFSET) & COMPRESSED_MASK)));
+    @StableAPI.Expose
+    public static int tessFromRGB64Red(long rgb64) {
+        return tessFromVanilla(vanillaFromCompressed((int) ((rgb64 >>> RGB64_RED_OFFSET) & COMPRESSED_MASK)));
     }
 
-    public static int tessFromRGB64Green(long packed) {
-        return tessFromVanilla(vanillaFromCompressed((int) ((packed >>> RGB64_GREEN_OFFSET) & COMPRESSED_MASK)));
+    @StableAPI.Expose
+    public static int tessFromRGB64Green(long rgb64) {
+        return tessFromVanilla(vanillaFromCompressed((int) ((rgb64 >>> RGB64_GREEN_OFFSET) & COMPRESSED_MASK)));
     }
 
-    public static int tessFromRGB64Blue(long packed) {
-        return tessFromVanilla(vanillaFromCompressed((int) ((packed >>> RGB64_BLUE_OFFSET) & COMPRESSED_MASK)));
+    @StableAPI.Expose
+    public static int tessFromRGB64Blue(long rgb64) {
+        return tessFromVanilla(vanillaFromCompressed((int) ((rgb64 >>> RGB64_BLUE_OFFSET) & COMPRESSED_MASK)));
     }
 
-    public static int tessFromVanilla(int unpacked) {
-        val lightMapBlock = remapToShort(unpacked & 0xFF);
-        val lightMapSky = remapToShort((unpacked >> 16) & 0xFF);
+    @StableAPI.Expose
+    public static int tessFromVanilla(int vanilla) {
+        val lightMapBlock = remapToShort(vanilla & 0xFF);
+        val lightMapSky = remapToShort((vanilla >> 16) & 0xFF);
         return ((int) lightMapBlock & 0xFFFF) | ((int) lightMapSky << 16);
     }
 
@@ -404,52 +415,59 @@ public final class ClientColorHelper {
      * Convenience method, identical to {@link ClientColorHelper#RGB64Max(long, long)}, but automatically decodes and
      * encodes the input/output into cookies.
      */
+    @StableAPI.Expose
     public static int cookieMax(int cookieA, int cookieB) {
         return CookieMonster.cookieFromRGB64(RGB64Max(CookieMonster.RGB64FromCookie(cookieA), CookieMonster.RGB64FromCookie(cookieB)));
     }
 
-    public static int cookieMixAOBrightness(int brightTL, int brightBL, int brightBR, int brightTR, double lerpTB, double lerpLR) {
-        val packedTL = CookieMonster.RGB64FromCookie(brightTL);
-        val packedBL = CookieMonster.RGB64FromCookie(brightBL);
-        val packedBR = CookieMonster.RGB64FromCookie(brightBR);
-        val packedTR = CookieMonster.RGB64FromCookie(brightTR);
-        return CookieMonster.cookieFromRGB64(RGB64MixAOBrightness(packedTL, packedBL, packedBR, packedTR, lerpTB, lerpLR));
+    @StableAPI.Expose
+    public static int cookieMixAOBrightness(int cookieTL, int cookieBL, int cookieBR, int cookieTR, double lerpTB, double lerpLR) {
+        val TL = CookieMonster.RGB64FromCookie(cookieTL);
+        val BL = CookieMonster.RGB64FromCookie(cookieBL);
+        val BR = CookieMonster.RGB64FromCookie(cookieBR);
+        val TR = CookieMonster.RGB64FromCookie(cookieTR);
+        return CookieMonster.cookieFromRGB64(RGB64MixAOBrightness(TL, BL, BR, TR, lerpTB, lerpLR));
     }
 
-    public static int cookieMixAOBrightness(int a, int b, int c, int d, double aMul, double bMul, double cMul, double dMul) {
-        val packedA = CookieMonster.RGB64FromCookie(a);
-        val packedB = CookieMonster.RGB64FromCookie(b);
-        val packedC = CookieMonster.RGB64FromCookie(c);
-        val packedD = CookieMonster.RGB64FromCookie(d);
-        return CookieMonster.cookieFromRGB64(RGB64MixAOBrightness(packedA, packedB, packedC, packedD, aMul, bMul, cMul, dMul));
+    @StableAPI.Expose
+    public static int cookieMixAOBrightness(int cookieA, int cookieB, int cookieC, int cookieD, double aMul, double bMul, double cMul, double dMul) {
+        val a = CookieMonster.RGB64FromCookie(cookieA);
+        val b = CookieMonster.RGB64FromCookie(cookieB);
+        val c = CookieMonster.RGB64FromCookie(cookieC);
+        val d = CookieMonster.RGB64FromCookie(cookieD);
+        return CookieMonster.cookieFromRGB64(RGB64MixAOBrightness(a, b, c, d, aMul, bMul, cMul, dMul));
     }
 
-    public static int cookieMixAOBrightness(int a, int b, double aMul, double bMul) {
-        val packedA = CookieMonster.RGB64FromCookie(a);
-        val packedB = CookieMonster.RGB64FromCookie(b);
-        return CookieMonster.cookieFromRGB64(RGB64MixAOBrightness(packedA, packedB, aMul, bMul));
+    @StableAPI.Expose
+    public static int cookieMixAOBrightness(int cookieA, int cookieB, double aMul, double bMul) {
+        val a = CookieMonster.RGB64FromCookie(cookieA);
+        val b = CookieMonster.RGB64FromCookie(cookieB);
+        return CookieMonster.cookieFromRGB64(RGB64MixAOBrightness(a, b, aMul, bMul));
     }
 
-    public static int cookieAverage(boolean ignoreZero, int a, int b) {
-        val packedA = CookieMonster.RGB64FromCookie(a);
-        val packedB = CookieMonster.RGB64FromCookie(b);
-        return CookieMonster.cookieFromRGB64(RGB64Average(packedA, packedB, ignoreZero));
+    @StableAPI.Expose
+    public static int cookieAverage(boolean ignoreZero, int cookieA, int cookieB) {
+        val a = CookieMonster.RGB64FromCookie(cookieA);
+        val b = CookieMonster.RGB64FromCookie(cookieB);
+        return CookieMonster.cookieFromRGB64(RGB64Average(a, b, ignoreZero));
     }
 
-    public static int cookieAverage(boolean ignoreZero, int a, int b, int c, int d) {
-        val packedA = CookieMonster.RGB64FromCookie(a);
-        val packedB = CookieMonster.RGB64FromCookie(b);
-        val packedC = CookieMonster.RGB64FromCookie(c);
-        val packedD = CookieMonster.RGB64FromCookie(d);
-        return CookieMonster.cookieFromRGB64(RGB64Average(packedA, packedB, packedC, packedD, ignoreZero));
+    @StableAPI.Expose
+    public static int cookieAverage(boolean ignoreZero, int cookieA, int cookieB, int cookieC, int cookieD) {
+        val a = CookieMonster.RGB64FromCookie(cookieA);
+        val b = CookieMonster.RGB64FromCookie(cookieB);
+        val c = CookieMonster.RGB64FromCookie(cookieC);
+        val d = CookieMonster.RGB64FromCookie(cookieD);
+        return CookieMonster.cookieFromRGB64(RGB64Average(a, b, c, d, ignoreZero));
     }
 
+    @StableAPI.Expose
     public static int cookieAverage(boolean ignoreZero, int... values) {
-        long[] packed = new long[values.length];
+        long[] rgb64 = new long[values.length];
         for (int i = 0; i < values.length; i++) {
-            packed[i] = CookieMonster.RGB64FromCookie(values[i]);
+            rgb64[i] = CookieMonster.RGB64FromCookie(values[i]);
         }
-        return CookieMonster.cookieFromRGB64(RGB64Average(packed, packed.length, ignoreZero));
+        return CookieMonster.cookieFromRGB64(RGB64Average(rgb64, rgb64.length, ignoreZero));
     }
 
     //endregion
@@ -462,6 +480,12 @@ public final class ClientColorHelper {
         n = Math.min(n, 240);
         val normalized = n / 240F;
         return (short) Math.round(normalized * (Short.MAX_VALUE - Short.MIN_VALUE) + Short.MIN_VALUE);
+    }
+
+    private static long RGB64LerpChannel(long a, long b, double aMul, double bMul, int offset) {
+        val resultA = (double) unit(a, offset) * aMul;
+        val resultB = (double) unit(b, offset) * bMul;
+        return (((long) (resultA + resultB)) & 0xFF) << offset;
     }
 
     private static long RGB64AverageChannel(long a, long b, int shift, boolean ignoreZero) {
@@ -516,12 +540,12 @@ public final class ClientColorHelper {
         return (long) ((int) light & 0xFF) << shift;
     }
 
-    private static long RGB64AverageChannel(long[] packedValues, int n, int shift, boolean ignoreZero) {
+    private static long RGB64AverageChannel(long[] rgb64Values, int n, int shift, boolean ignoreZero) {
         int count = 0;
         float light = 0;
         for (int i = 0; i < n; i++) {
-            val packed = packedValues[i];
-            val value = unit(packed, shift);
+            val rgb64 = rgb64Values[i];
+            val value = unit(rgb64, shift);
             if (ignoreZero && value == 0) {
                 continue;
             }
@@ -539,24 +563,14 @@ public final class ClientColorHelper {
     }
 
     private static int compressedFromVanilla(int vanilla) {
-        return ((vanilla & VANILLA_SKY_MASK) >>> 8) |
-               (vanilla & VANILLA_BLOCK_MASK);
+        return ((vanilla & VANILLA_SKY_MASK) >>> 8) | (vanilla & VANILLA_BLOCK_MASK);
     }
 
     private static int vanillaFromCompressed(int compressed) {
-        return ((compressed & COMPRESSED_SKY_MASK) << 8) |
-               (compressed & COMPRESSED_BLOCK_MASK);
+        return ((compressed & COMPRESSED_SKY_MASK) << 8) | (compressed & COMPRESSED_BLOCK_MASK);
     }
 
-    private static long RGB64MixAoBrightnessChannel(long a,
-                                                    long b,
-                                                    long c,
-                                                    long d,
-                                                    double aMul,
-                                                    double bMul,
-                                                    double cMul,
-                                                    double dMul,
-                                                    int channel) {
+    private static long RGB64MixAoBrightnessChannel(long a, long b, long c, long d, double aMul, double bMul, double cMul, double dMul, int channel) {
         val fA = unit(a, channel) * aMul;
         val fB = unit(b, channel) * bMul;
         val fC = unit(c, channel) * cMul;

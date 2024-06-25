@@ -60,7 +60,7 @@ public final class RPLEConfig {
         @Config.LangKey("config.rple.general.craftableLamps")
         @Config.RequiresMcRestart
         @Config.DefaultBoolean(true)
-        public static boolean ENABLE_LAMPS;
+        public static boolean CRAFTABLE_LAMPS;
     }
 
     @Config(modid = MOD_ID, category = "debug")

@@ -26,7 +26,7 @@
 
 package com.falsepattern.rple.internal.common.colorizer;
 
-import com.falsepattern.rple.api.common.color.RPLEBlockColor;
+import com.falsepattern.rple.api.common.color.RPLENamedColor;
 import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorizer;
 import com.falsepattern.rple.internal.common.config.container.BlockReference;
 import com.falsepattern.rple.internal.common.config.container.ColorReference;
@@ -49,8 +49,8 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     private short brightness;
     private short translucency;
 
-    private @Nullable RPLEBlockColor paletteBrightness;
-    private @Nullable RPLEBlockColor paletteTranslucency;
+    private @Nullable RPLENamedColor paletteBrightness;
+    private @Nullable RPLENamedColor paletteTranslucency;
 
     private boolean hasApplied = false;
 
@@ -79,11 +79,11 @@ public final class BlockColorizer implements RPLEBlockColorizer {
         return Optional.of(wrappedBlockColor(block, ColorReference.paletteOrRaw(paletteTranslucency, translucency)));
     }
 
-    public Optional<RPLEBlockColor> paletteBrightness() {
+    public Optional<RPLENamedColor> paletteBrightness() {
         return Optional.ofNullable(paletteBrightness);
     }
 
-    public Optional<RPLEBlockColor> paletteTranslucency() {
+    public Optional<RPLENamedColor> paletteTranslucency() {
         return Optional.ofNullable(paletteTranslucency);
     }
 
@@ -95,7 +95,7 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public @NotNull RPLEBlockColorizer brightness(@NotNull RPLEBlockColor color) {
+    public @NotNull RPLEBlockColorizer brightness(@NotNull RPLENamedColor color) {
         resetBrightness();
         this.brightness = color.rgb16();
         this.paletteBrightness = color;
@@ -110,7 +110,7 @@ public final class BlockColorizer implements RPLEBlockColorizer {
     }
 
     @Override
-    public @NotNull RPLEBlockColorizer translucency(@NotNull RPLEBlockColor color) {
+    public @NotNull RPLEBlockColorizer translucency(@NotNull RPLENamedColor color) {
         resetTranslucency();
         this.translucency = color.rgb16();
         this.paletteTranslucency = color;

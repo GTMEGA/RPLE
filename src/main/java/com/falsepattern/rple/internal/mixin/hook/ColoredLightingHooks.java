@@ -128,8 +128,8 @@ public final class ColoredLightingHooks {
             brightness = ColorDynamicLights.getCombinedLight(posX, posY, posZ, brightness);
         }
         if (EntityColorHandler.isOnBlockList(entity.getClass())) {
-            val packedBrightness = CookieMonster.RGB64FromCookie(brightness);
-            brightness = ClientColorHelper.vanillaFromRGB64Max(packedBrightness);
+            val rgb64 = CookieMonster.RGB64FromCookie(brightness);
+            brightness = ClientColorHelper.vanillaFromRGB64Max(rgb64);
         }
         return brightness;
     }
@@ -189,11 +189,11 @@ public final class ColoredLightingHooks {
                                                      int posY,
                                                      int posZ,
                                                      int minBrightnessCookie) {
-        val packedMinBrightness = CookieMonster.RGB64FromCookie(minBrightnessCookie);
+        val rgb64MinBrightness = CookieMonster.RGB64FromCookie(minBrightnessCookie);
 
-        val minRedBrightness = ClientColorHelper.vanillaFromRGB64Red(packedMinBrightness);
-        val minGreenBrightness = ClientColorHelper.vanillaFromRGB64Green(packedMinBrightness);
-        val minBlueBrightness = ClientColorHelper.vanillaFromRGB64Blue(packedMinBrightness);
+        val minRedBrightness = ClientColorHelper.vanillaFromRGB64Red(rgb64MinBrightness);
+        val minGreenBrightness = ClientColorHelper.vanillaFromRGB64Green(rgb64MinBrightness);
+        val minBlueBrightness = ClientColorHelper.vanillaFromRGB64Blue(rgb64MinBrightness);
 
         val minRedBlockLight = ClientColorHelper.block4BitFromVanilla(minRedBrightness);
         val minGreenBlockLight = ClientColorHelper.block4BitFromVanilla(minGreenBrightness);

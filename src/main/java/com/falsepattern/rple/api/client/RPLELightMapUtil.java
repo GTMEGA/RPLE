@@ -26,11 +26,15 @@
 
 package com.falsepattern.rple.api.client;
 
+import com.falsepattern.lib.StableAPI;
 import com.falsepattern.rple.internal.client.lightmap.LightMap;
 
-@Deprecated
+/**
+ * Interop code for Neodymium.
+ */
+@StableAPI(since = "__INTERNAL__")
 public final class RPLELightMapUtil {
-    // TODO: This is the only method from the API used by Neodymium, can we give it special access to it somehow?
+    @StableAPI.Expose
     public static void enableVertexPointersVBO() {
         LightMap.lightMap().enableVertexPointersVBO();
     }

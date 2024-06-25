@@ -29,6 +29,8 @@ package com.falsepattern.rple.api.common.block;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
+
+import com.falsepattern.lib.StableAPI;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -38,9 +40,15 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see RPLECustomBlockBrightness
  */
+@StableAPI(since = "1.0.0")
 public interface RPLECustomBlockTranslucency {
+    @StableAPI.Expose
     short rple$getCustomTranslucencyColor();
+
+    @StableAPI.Expose
     short rple$getCustomTranslucencyColor(int blockMeta);
+
+    @StableAPI.Expose
     short rple$getCustomTranslucencyColor(@NotNull IBlockAccess world,
                                               int blockMeta,
                                               int posX,

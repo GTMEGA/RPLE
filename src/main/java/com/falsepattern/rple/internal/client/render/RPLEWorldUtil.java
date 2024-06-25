@@ -24,10 +24,9 @@
  * GNU Affero General Public License. See the full LICENSE file for details.
  */
 
-package com.falsepattern.rple.api.common;
+package com.falsepattern.rple.internal.client.render;
 
 import com.falsepattern.rple.api.common.color.ColorChannel;
-import com.falsepattern.rple.internal.client.render.LightValueOverlayRenderer;
 import com.falsepattern.rple.internal.common.world.RPLEWorldRoot;
 import lombok.val;
 import net.minecraft.world.IBlockAccess;

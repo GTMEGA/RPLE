@@ -26,48 +26,71 @@
 
 package com.falsepattern.rple.api.client.lightmap;
 
+import com.falsepattern.lib.StableAPI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
+@StableAPI(since = "1.0.0")
 public interface RPLELightMapStrip {
+    @StableAPI.Expose
     int LIGHT_MAP_STRIP_LENGTH = 16;
+    @StableAPI.Expose
     int LIGHT_MAP_STRIP_LIMIT = LIGHT_MAP_STRIP_LENGTH - 1;
 
+    @StableAPI.Expose
     float @NotNull [] lightMapRedData();
 
+    @StableAPI.Expose
     float @NotNull [] lightMapGreenData();
 
+    @StableAPI.Expose
     float @NotNull [] lightMapBlueData();
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip setLightMap(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float brightness);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip setLightMapRGB(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float red, float green, float blue);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip setLightMapRed(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float red);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip setLightMapGreen(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float green);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip setLightMapBlue(@Range(from = 0, to = LIGHT_MAP_STRIP_LIMIT) int index, float blue);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip fillLightMap(float brightness);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip fillLightMapRGB(float red, float green, float blue);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip fillLightMapRed(float red);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip fillLightMapGreen(float green);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip fillLightMapBlue(float blue);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip setLightMap(@NotNull RPLELightMapStrip strip);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip addLightMap(@NotNull RPLELightMapStrip strip);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip subLightMap(@NotNull RPLELightMapStrip strip);
 
-    @NotNull RPLELightMapStrip multLightMap(@NotNull RPLELightMapStrip strip);
+    @StableAPI.Expose
+    @NotNull RPLELightMapStrip mulLightMap(@NotNull RPLELightMapStrip strip);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip divLightMap(@NotNull RPLELightMapStrip strip);
 
+    @StableAPI.Expose
     @NotNull RPLELightMapStrip resetLightMap();
 }

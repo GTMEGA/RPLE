@@ -28,6 +28,7 @@ package com.falsepattern.rple.internal.client.lamp;
 
 import com.falsepattern.falsetweaks.api.triangulator.ToggleableTessellator;
 import com.falsepattern.rple.api.client.ClientColorHelper;
+import com.falsepattern.rple.api.client.RPLETessBrightnessUtil;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.lamp.LampBlock;
 import com.falsepattern.rple.internal.common.util.FastThreadLocal;
@@ -66,7 +67,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
 
         val glowing = LampBlock.isGlowing(meta);
         if (glowing)
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+            RPLETessBrightnessUtil.setLightMapTextureCoordsRGB64(ClientColorHelper.RGB64FromVanillaMonochrome(ClientColorHelper.vanillaFromBlockSky4Bit(15, 0)));
 
         val icon = block.getIcon(0, meta);
         drawCubeInventory(tessellator, renderer, block, 0, 0, 0, icon);
@@ -81,9 +82,9 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
             val r = red(color) * 17;
             val g = green(color) * 17;
             val b = blue(color) * 17;
-            tessellator.setBrightness(ClientColorHelper.vanillaFromBlockSky4Bit(15, 15));
             tessellator.setColorRGBA(r, g, b, 128);
             drawGlowCube(tessellator, 0, 0, 0, 0, lamp.getGlowIcon());
+            tessellator.setColorRGBA(255, 255, 255, 255);
         }
 
         tessellator.draw();

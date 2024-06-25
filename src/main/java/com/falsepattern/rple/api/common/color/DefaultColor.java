@@ -26,7 +26,11 @@
 
 package com.falsepattern.rple.api.common.color;
 
-public enum DefaultColor implements RPLEBlockColor {
+import com.falsepattern.lib.StableAPI;
+import org.jetbrains.annotations.ApiStatus;
+
+@StableAPI(since = "1.0.0")
+public enum DefaultColor implements RPLENamedColor {
     // @formatter:off
     WHITE         (0xFFF),
     ORANGE        (0xFCA),
@@ -69,6 +73,7 @@ public enum DefaultColor implements RPLEBlockColor {
     ;
     private static final DefaultColor[] VALUES = values();
 
+    @ApiStatus.Internal
     public static final String DEFAULT_COLOR_DOMAIN = "default";
 
     private final short rgb16;
@@ -90,11 +95,13 @@ public enum DefaultColor implements RPLEBlockColor {
         return rgb16;
     }
 
+    @StableAPI.Expose
     public static DefaultColor fromVanillaBlockMeta(int blockMeta) {
         blockMeta &= 15;
         return VALUES[blockMeta];
     }
 
+    @StableAPI.Expose
     public static DefaultColor dimFromVanillaBlockMeta(int blockMeta) {
         blockMeta &= 15;
         return VALUES[blockMeta + 16];

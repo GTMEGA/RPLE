@@ -26,20 +26,29 @@
 
 package com.falsepattern.rple.api.client.lightmap;
 
+import com.falsepattern.lib.StableAPI;
 import org.jetbrains.annotations.NotNull;
 
+@StableAPI(since = "1.0.0")
 public interface RPLELightMapRegistry {
+    @StableAPI.Expose
     void registerLightMapGenerator(@NotNull RPLELightMapGenerator generator, int priority);
 
+    @StableAPI.Expose
     void registerLightMapBase(@NotNull RPLELightMapBase base, int priority);
 
+    @StableAPI.Expose
     void registerBlockLightMapBase(@NotNull RPLEBlockLightMapBase blockBase, int priority);
 
+    @StableAPI.Expose
     void registerSkyLightMapBase(@NotNull RPLESkyLightMapBase skyBase, int priority);
 
+    @StableAPI.Expose
     void registerLightMapMask(@NotNull RPLELightMapMask mask);
 
+    @StableAPI.Expose
     void registerBlockLightMapMask(@NotNull RPLEBlockLightMapMask blockMask);
 
+    @StableAPI.Expose
     void registerSkyLightMapMask(@NotNull RPLESkyLightMapMask skyMask);
 }

@@ -41,7 +41,7 @@ import org.lwjgl.opengl.GL14;
 
 import java.awt.*;
 
-import static com.falsepattern.rple.api.common.RPLEWorldUtil.*;
+import static com.falsepattern.rple.internal.client.render.RPLEWorldUtil.*;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
 import static net.minecraft.client.Minecraft.getMinecraft;
 

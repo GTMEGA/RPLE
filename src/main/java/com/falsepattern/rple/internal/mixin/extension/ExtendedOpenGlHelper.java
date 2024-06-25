@@ -36,47 +36,34 @@ import net.minecraft.client.renderer.OpenGlHelper;
 @UtilityClass
 // TODO: [ENTITY] Expose this for users to set colors when rendering entities etc
 public final class ExtendedOpenGlHelper {
-    private static long LAST_PACKED_BRIGHTNESS = 0;
+    private static long LAST_RGB64 = 0;
 
     public static boolean BYPASS = false;
 
-    public static void setPackedBrightnessFromMonochrome(int monochrome) {
-        LAST_PACKED_BRIGHTNESS = ClientColorHelper.RGB64FromVanillaMonochrome(monochrome);
-    }
-
-    public static void setLightMapTextureCoordsPacked(long packedBrightness) {
+    public static void setLightMapTextureCoordsRGB64(long rgb64) {
         BYPASS = true;
-        LAST_PACKED_BRIGHTNESS = packedBrightness;
+        try {
+            LAST_RGB64 = rgb64;
 
-        val redBrightness = ClientColorHelper.vanillaFromRGB64Red(packedBrightness);
-        val greenBrightness = ClientColorHelper.vanillaFromRGB64Green(packedBrightness);
-        val blueBrightness = ClientColorHelper.vanillaFromRGB64Blue(packedBrightness);
+            val redBrightness = ClientColorHelper.vanillaFromRGB64Red(rgb64);
+            val greenBrightness = ClientColorHelper.vanillaFromRGB64Green(rgb64);
+            val blueBrightness = ClientColorHelper.vanillaFromRGB64Blue(rgb64);
 
-        if (Compat.shadersEnabled()) {
-            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING,
-                                                  redBrightness & 0xFFFF,
-                                                  redBrightness >>> 16);
-            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING,
-                                                  greenBrightness & 0xFFFF,
-                                                  greenBrightness >>> 16);
-            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING,
-                                                  blueBrightness & 0xFFFF,
-                                                  blueBrightness >>> 16);
-        } else {
-            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING,
-                                                  redBrightness & 0xFFFF,
-                                                  redBrightness >>> 16);
-            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING,
-                                                  greenBrightness & 0xFFFF,
-                                                  greenBrightness >>> 16);
-            OpenGlHelper.setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING,
-                                                  blueBrightness & 0xFFFF,
-                                                  blueBrightness >>> 16);
+            if (Compat.shadersEnabled()) {
+                OpenGlHelper.setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, redBrightness & 0xFFFF, redBrightness >>> 16);
+                OpenGlHelper.setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, greenBrightness & 0xFFFF, greenBrightness >>> 16);
+                OpenGlHelper.setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_SHADER_TEXTURE_COORDS_BINDING, blueBrightness & 0xFFFF, blueBrightness >>> 16);
+            } else {
+                OpenGlHelper.setLightmapTextureCoords(LightMapConstants.R_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, redBrightness & 0xFFFF, redBrightness >>> 16);
+                OpenGlHelper.setLightmapTextureCoords(LightMapConstants.G_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, greenBrightness & 0xFFFF, greenBrightness >>> 16);
+                OpenGlHelper.setLightmapTextureCoords(LightMapConstants.B_LIGHT_MAP_FIXED_TEXTURE_UNIT_BINDING, blueBrightness & 0xFFFF, blueBrightness >>> 16);
+            }
+        } finally {
+            BYPASS = false;
         }
-        BYPASS = false;
     }
 
-    public static long lastPackedBrightness() {
-        return LAST_PACKED_BRIGHTNESS;
+    public static long lastRGB64() {
+        return LAST_RGB64;
     }
 }

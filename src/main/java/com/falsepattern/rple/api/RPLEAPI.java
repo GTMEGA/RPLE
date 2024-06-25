@@ -26,12 +26,18 @@
 
 package com.falsepattern.rple.api;
 
+import com.falsepattern.lib.StableAPI;
+
 import static com.falsepattern.rple.internal.Tags.*;
 
 @SuppressWarnings("unused")
+@StableAPI(since = "1.0.0")
 public final class RPLEAPI {
+    @StableAPI.Expose
     public static final String RPLE_MOD_ID = MOD_ID;
+    @StableAPI.Expose
     public static final String RPLE_MOD_NAME = MOD_NAME;
+    @StableAPI.Expose
     public static final String RPLE_VERSION = VERSION;
 
     private RPLEAPI() {

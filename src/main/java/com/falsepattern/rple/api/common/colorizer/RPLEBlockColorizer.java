@@ -26,25 +26,34 @@
 
 package com.falsepattern.rple.api.common.colorizer;
 
-import com.falsepattern.rple.api.common.color.RPLEBlockColor;
+import com.falsepattern.lib.StableAPI;
+import com.falsepattern.rple.api.common.color.RPLENamedColor;
 import org.jetbrains.annotations.NotNull;
 
+@StableAPI(since = "1.0.0")
 public interface RPLEBlockColorizer {
+    @StableAPI.Expose
     default RPLEBlockColorizer brightness(int rgb16) {
         return brightness((short)rgb16);
     }
+
+    @StableAPI.Expose
     @NotNull RPLEBlockColorizer brightness(short color);
 
-    @NotNull
-    RPLEBlockColorizer brightness(@NotNull RPLEBlockColor color);
+    @StableAPI.Expose
+    @NotNull RPLEBlockColorizer brightness(@NotNull RPLENamedColor color);
 
+    @StableAPI.Expose
     default RPLEBlockColorizer translucency(int rgb16) {
         return translucency((short)rgb16);
     }
+
+    @StableAPI.Expose
     @NotNull RPLEBlockColorizer translucency(short color);
 
-    @NotNull
-    RPLEBlockColorizer translucency(@NotNull RPLEBlockColor color);
+    @StableAPI.Expose
+    @NotNull RPLEBlockColorizer translucency(@NotNull RPLENamedColor color);
 
+    @StableAPI.Expose
     void apply();
 }

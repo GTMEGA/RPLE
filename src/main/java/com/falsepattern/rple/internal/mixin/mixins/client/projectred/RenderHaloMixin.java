@@ -52,12 +52,12 @@ public abstract class RenderHaloMixin {
             glowTex = new ResourceLocation(Tags.MOD_ID, "textures/blocks/glow_solid.png");
 
         val brightness = ClientColorHelper.vanillaFromBlockSky4Bit(15, 15);
-        val packedBrightness = ClientColorHelper.RGB64FromVanillaMonochrome(brightness);
+        val rgb64 = ClientColorHelper.RGB64FromVanillaMonochrome(brightness);
 
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glColor4f(1, 1, 1, 1);
 
-        ExtendedOpenGlHelper.setLightMapTextureCoordsPacked(packedBrightness);
+        ExtendedOpenGlHelper.setLightMapTextureCoordsRGB64(rgb64);
         oldTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         CCRenderState.changeTexture(glowTex);
     }
