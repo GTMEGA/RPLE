@@ -251,7 +251,7 @@ public final class BlockColorManager implements RPLEBlockColorRegistry {
 
     private void setBlockBrightness(BlockColorizer.BlockColorReference blockColor) {
         if (!blockColor.isValid()) {
-            LOG.error(new IllegalArgumentException("Failed to apply invalid block brightness color"));
+            LOG.error("Failed to apply invalid block brightness color", new IllegalArgumentException());
             return;
         }
         val block = blockColor.block();
@@ -267,7 +267,7 @@ public final class BlockColorManager implements RPLEBlockColorRegistry {
 
     private void setBlockTranslucency(BlockColorizer.BlockColorReference blockColor) {
         if (!blockColor.isValid()) {
-            LOG.error(new IllegalArgumentException("Failed to apply invalid block translucency color"));
+            LOG.error("Failed to apply invalid block translucency color", new IllegalArgumentException());
             return;
         }
         val block = blockColor.block();
