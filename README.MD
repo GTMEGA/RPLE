@@ -6,6 +6,50 @@ The first right proper RGB lighting implementation in Minecraft.
 
 [Join us on Discord](https://discord.gg/h7XAeCSfbT)
 
+## Features
+
+- Fully colored lighting. Both on client AND serverside!
+- 32 different colored lamps (crafting recipes can be turned off in the config if you don't want them)
+- Colored lighting for a large set of popular mods' blocks:
+  - Advanced Solar Panels
+  - Applied Energistics 2
+  - Automagy
+  - Biblio Woods
+  - BiblioCraft
+  - Biomes O' Plenty
+  - Blood Arsenal
+  - Buildcraft
+  - Carpenter's Blocks
+  - Chisel
+  - Computronics
+  - Dragonic Evolution
+  - EnderIO
+  - Et Futurum
+  - Extra Bees
+  - Extra Utilities
+  - Forestry
+  - Gadomancy
+  - Hardcore Ender Expansion
+  - Harvest the Nether
+  - IndustrialCraft 2
+  - Magic Bees
+  - Natura
+  - OpenBlocks
+  - OpenComputers
+  - Pam's Harvestraft
+  - ProjectRed Illumination
+  - Random Things
+  - Thaumcraft
+  - Thaumic Bases
+  - Thaumic Exploration
+  - Thaumic Tinkerer
+  - The Lord of the Rings Mod
+  - Tinkers' Construct
+  - Tinkers' Mechworks
+  - Twilight Forest
+  - Witchery
+  - ZTones
+
 ## Dependencies
 
 - [Lumi 1.0.0-rc11](https://github.com/GTMEGA/Lumi)
