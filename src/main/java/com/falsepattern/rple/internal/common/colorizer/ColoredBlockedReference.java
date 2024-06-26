@@ -45,9 +45,9 @@ public final class ColoredBlockedReference {
     private final RPLEBlockInit block;
 
     @Setter
-    private short baseBrightnessColor;
+    private short baseBrightnessColor = -1;
     @Setter
-    private short baseTranslucencyColor;
+    private short baseTranslucencyColor = -1;
 
     private final TIntShortMap metaBrightnessColorsMap = new TIntShortHashMap();
     private final TIntShortMap metaTranslucencyColorsMap = new TIntShortHashMap();

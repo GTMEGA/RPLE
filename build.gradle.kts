@@ -1,6 +1,6 @@
 import com.falsepattern.fpgradle.dsl.*
 plugins {
-    id("fpgradle-minecraft") version ("0.3.2")
+    id("fpgradle-minecraft") version ("0.3.3")
 }
 
 group = "com.falsepattern"
@@ -35,6 +35,22 @@ minecraft_fp {
             repoUrl = "https://mvn.falsepattern.com/releases/"
             repoName = "mavenpattern"
         }
+        curseforge {
+            projectId = "1050511"
+            dependencies {
+                required("fplib")
+                required("falsetweaks")
+                required("lumi")
+            }
+        }
+        modrinth {
+            projectId = "glC7saXJ"
+            dependencies {
+                required("fplib")
+                required("falsetweaks")
+                required("lumi1710")
+            }
+        }
     }
 }
 
@@ -43,11 +59,10 @@ repositories {
     maven("mega", uri("https://mvn.falsepattern.com/gtmega_releases/"))
     maven("mega2", uri("https://mvn.falsepattern.com/gtmega_uploads/"))
     maven("cursemaven", uri("https://mvn.falsepattern.com/cursemaven/"))
-    mavenLocal()
 }
 
 dependencies {
-    apiSplit("com.falsepattern:lumi-mc1.7.10:1.0.0-rc11")
+    apiSplit("com.falsepattern:lumi-mc1.7.10:1.0.0")
     implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.2.5")
     implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.0.0")
 

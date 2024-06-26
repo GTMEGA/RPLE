@@ -52,7 +52,7 @@ The first right proper RGB lighting implementation in Minecraft.
 
 ## Dependencies
 
-- [Lumi 1.0.0-rc11](https://github.com/GTMEGA/Lumi)
+- [Lumi 1.0.0+](https://github.com/GTMEGA/Lumi)
 - [FalseTweaks 3.0.0+](https://github.com/FalsePattern/FalseTweaks)
 - [FalsePatternLib 1.2.0+](https://github.com/FalsePattern/FalsePatternLib)
 - [UniMixins 0.1.17+](https://github.com/LegacyModdingMC/UniMixins)
