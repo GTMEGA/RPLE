@@ -1,5 +1,7 @@
 # Right Proper Lighting Engine <img src="src/main/resources/assets/rple/rple_logo_small.png" align="right" width=150 />
 
+<sup>**[CurseForge](https://www.curseforge.com/minecraft/mc-mods/rple) | [Modrinth](https://modrinth.com/mod/rple)**</sup>
+
 <a rel="license" href="https://www.gnu.org/licenses/agpl-3.0.en.html"><img alt="AGPLv3 logo" style="border-width:0" src="https://www.gnu.org/graphics/agplv3-with-text-162x68.png" /></a>
 
 The first right proper RGB lighting implementation in Minecraft.
