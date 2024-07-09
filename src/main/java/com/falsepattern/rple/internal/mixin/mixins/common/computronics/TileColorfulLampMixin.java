@@ -31,7 +31,6 @@ public abstract class TileColorfulLampMixin implements RPLECustomBlockBrightness
         int red = ((colour >> 10) & 0x1f) >> 1;
         int green = ((colour >> 5) & 0x1f) >> 1;
         int blue = (colour & 0x1f) >> 1;
-        System.out.println("RGB: " + red + ", " + green + ", " + blue);
         return ServerColorHelper.RGB16FromRGBChannel4Bit(red, green, blue);
     }
 }
