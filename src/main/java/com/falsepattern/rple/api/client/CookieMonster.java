@@ -31,8 +31,6 @@ import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.common.collection.CircularLongBuffer;
 import com.falsepattern.rple.internal.common.util.FastThreadLocal;
 import com.falsepattern.rple.internal.mixin.mixins.client.TessellatorMixin;
-import lombok.val;
-import lombok.var;
 import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -86,9 +84,9 @@ public final class CookieMonster {
     private static final FastThreadLocal.FixedValue<ThreadState> THREAD_STATE = new FastThreadLocal.FixedValue<>(ThreadState::new);
 
     static {
-        val redBrightness = ClientColorHelper.vanillaFromBlockSky4Bit(0xF, 0xF);
-        val greenBrightness = ClientColorHelper.vanillaFromBlockSky4Bit(0x0, 0x0);
-        val blueBrightness = ClientColorHelper.vanillaFromBlockSky4Bit(0x0, 0x0);
+        final int redBrightness = ClientColorHelper.vanillaFromBlockSky4Bit(0xF, 0xF);
+        final int greenBrightness = ClientColorHelper.vanillaFromBlockSky4Bit(0x0, 0x0);
+        final int blueBrightness = ClientColorHelper.vanillaFromBlockSky4Bit(0x0, 0x0);
         BROKEN_WARN_COLOR = ClientColorHelper.RGB64FromVanillaRGB(redBrightness, greenBrightness, blueBrightness);
     }
 
@@ -111,9 +109,9 @@ public final class CookieMonster {
         if (rgb != -1) {
             return rgb | COOKIE_BIT | RGB_BIT;
         }
-        val state = THREAD_STATE.get();
-        val index = state.lightValues.put(rgb64);
-        val cookie = ((index << INDEX_SHIFT) & INDEX_MASK) | (state.check << CHECK_SHIFT) | COOKIE_BIT;
+        final ThreadState state = THREAD_STATE.get();
+        final int index = state.lightValues.put(rgb64);
+        final int cookie = ((index << INDEX_SHIFT) & INDEX_MASK) | (state.check << CHECK_SHIFT) | COOKIE_BIT;
         return cookie | parity(cookie);
     }
 
@@ -166,7 +164,7 @@ public final class CookieMonster {
             return IntType.COOKIE;
         }
         if (parity(potentialCookie) == 0 && (potentialCookie & ZERO_MASK_COOKIE) == 0) {
-            val state = THREAD_STATE.get();
+            final ThreadState state = THREAD_STATE.get();
             if (((potentialCookie & CHECK_MASK) >>> CHECK_SHIFT) != state.check) {
                if (shouldLogDebug(DEBUG_COOKIE_MONSTER)) {
                    LOG.warn("Cookie passed through thread boundary{}", Compat.falseTweaksThreadedChunksEnabled() ? " (Is a mod not compatible with FalseTweaks Threaded Chunks?)" : "");
@@ -184,7 +182,7 @@ public final class CookieMonster {
      * @return 0 if the number has even bit-parity, 1 if the number has odd bit-parity.
      */
     private static int parity(int x) {
-        var y = x ^ (x >>> 1);
+        int y = x ^ (x >>> 1);
         y ^= y >>> 2;
         y ^= y >>> 4;
         y ^= y >>> 8;

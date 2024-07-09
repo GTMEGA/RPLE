@@ -33,8 +33,8 @@ import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.internal.client.storage.RPLEClientBlockStorage;
 import com.falsepattern.rple.internal.common.cache.RPLEBlockStorageRoot;
 import com.falsepattern.rple.internal.common.chunk.RPLEChunk;
+import com.falsepattern.rple.internal.common.chunk.RPLEChunkRoot;
 import com.falsepattern.rple.internal.mixin.extension.ExtendedOpenGlHelper;
-import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
@@ -107,18 +107,18 @@ public final class RPLETessBrightnessUtil {
                                                                 int minRedBlockLight,
                                                                 int minGreenBlockLight,
                                                                 int minBlueBlockLight) {
-        val worldRoot = (RPLEBlockStorageRoot) world;
-        val cbs = (RPLEClientBlockStorage) world;
-        if (posY > 255) {
-            return CookieMonster.cookieFromRGB32(worldRoot.lumi$hasSky() ? RGB32_MAX_SKYLIGHT_NO_BLOCKLIGHT : RGB32_NO_SKYLIGHT_NO_BLOCKLIGHT);
-        }
+        final RPLEBlockStorageRoot worldRoot = (RPLEBlockStorageRoot) world;
+        final RPLEClientBlockStorage cbs = (RPLEClientBlockStorage) world;
 
+        if (posY > 255)
+            return CookieMonster.cookieFromRGB32(worldRoot.lumi$hasSky() ? RGB32_MAX_SKYLIGHT_NO_BLOCKLIGHT : RGB32_NO_SKYLIGHT_NO_BLOCKLIGHT);
         if (posY < 0)
             posY = 0;
-        val block = world.getBlock(posX, posY, posZ);
-        val raw = cbs.rple$getRGBLightValue(block.getUseNeighborBrightness(), posX, posY, posZ);
-        val rgb = ClientColorHelper.RGB32ClampMinBlockChannels(raw, minRedBlockLight, minGreenBlockLight, minBlueBlockLight);
-        ;
+
+        final Block block = world.getBlock(posX, posY, posZ);
+        final int raw = cbs.rple$getRGBLightValue(block.getUseNeighborBrightness(), posX, posY, posZ);
+        final int rgb = ClientColorHelper.RGB32ClampMinBlockChannels(raw, minRedBlockLight, minGreenBlockLight, minBlueBlockLight);
+
         return CookieMonster.cookieFromRGB32(rgb);
     }
 
@@ -130,35 +130,23 @@ public final class RPLETessBrightnessUtil {
                                                                 int minRedBlockLight,
                                                                 int minGreenBlockLight,
                                                                 int minBlueBlockLight) {
-        val worldRoot = (RPLEBlockStorageRoot) world;
+        final RPLEBlockStorageRoot worldRoot = (RPLEBlockStorageRoot) world;
+        final RPLEChunkRoot chunk = worldRoot.rple$getChunkRootFromBlockPosIfExists(posX, posZ);
 
-        val chunk = worldRoot.rple$getChunkRootFromBlockPosIfExists(posX, posZ);
-        val cr = (RPLEChunk) (chunk == null ? null : chunk.rple$chunk(RED_CHANNEL));
-        val cg = (RPLEChunk) (chunk == null ? null : chunk.rple$chunk(GREEN_CHANNEL));
-        val cb = (RPLEChunk) (chunk == null ? null : chunk.rple$chunk(BLUE_CHANNEL));
+        final RPLEChunk cr = chunk == null ? null : chunk.rple$chunk(RED_CHANNEL);
+        final RPLEChunk cg = chunk == null ? null : chunk.rple$chunk(GREEN_CHANNEL);
+        final RPLEChunk cb = chunk == null ? null : chunk.rple$chunk(BLUE_CHANNEL);
+
         final int redBrightness = worldRoot.rple$blockStorage(RED_CHANNEL)
                                            .rple$getChannelBrightnessForTessellator(cr, posX, posY, posZ, minRedBlockLight);
         final int greenBrightness = worldRoot.rple$blockStorage(GREEN_CHANNEL)
                                              .rple$getChannelBrightnessForTessellator(cg, posX, posY, posZ, minGreenBlockLight);
         final int blueBrightness = worldRoot.rple$blockStorage(BLUE_CHANNEL)
                                             .rple$getChannelBrightnessForTessellator(cb, posX, posY, posZ, minBlueBlockLight);
-        val raw = ClientColorHelper.RGB64FromVanillaRGB(redBrightness,
-                                                                                greenBrightness,
-                                                                                blueBrightness);
+
+        final long raw = ClientColorHelper.RGB64FromVanillaRGB(redBrightness, greenBrightness, blueBrightness);
         return CookieMonster.cookieFromRGB64(raw);
     }
-
-//    public static int getChannelLightValueForTessellator(@NotNull IBlockAccess world,
-//                                                         @NotNull ColorChannel channel,
-//                                                         @NotNull LightType lightType,
-//                                                         int posX,
-//                                                         int posY,
-//                                                         int posZ) {
-//        final RPLEWorldRoot worldRoot = rple$getWorldRootFromBlockAccess(world);
-//        if (worldRoot == null)
-//            return errorBrightnessForTessellator();
-//        return worldRoot.rple$getChannelLightValueForTessellator(channel, lightType, posX, posY, posZ);
-//    }
 
     @StableAPI.Expose
     public static int getBlockBrightnessForTessellator(@NotNull IBlockAccess world,

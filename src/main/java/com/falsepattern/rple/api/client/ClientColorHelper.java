@@ -27,7 +27,6 @@
 package com.falsepattern.rple.api.client;
 
 import com.falsepattern.lib.StableAPI;
-import lombok.val;
 
 /**
  * Utility class for managing color values for rendering-related logic
@@ -261,9 +260,9 @@ public final class ClientColorHelper {
      */
     @StableAPI.Expose
     public static int vanillaFromRGB64Max(long rgb64) {
-        val redCompressed = (int) ((rgb64 >>> RGB64_RED_OFFSET) & COMPRESSED_MASK);
-        val greenCompressed = (int) ((rgb64 >>> RGB64_GREEN_OFFSET) & COMPRESSED_MASK);
-        val blueCompressed = (int) ((rgb64 >>> RGB64_BLUE_OFFSET) & COMPRESSED_MASK);
+        final int redCompressed = (int) ((rgb64 >>> RGB64_RED_OFFSET) & COMPRESSED_MASK);
+        final int greenCompressed = (int) ((rgb64 >>> RGB64_GREEN_OFFSET) & COMPRESSED_MASK);
+        final int blueCompressed = (int) ((rgb64 >>> RGB64_BLUE_OFFSET) & COMPRESSED_MASK);
         return vanillaFromCompressed(
                 max3(redCompressed, greenCompressed, blueCompressed, COMPRESSED_SKY_MASK) | max3(redCompressed, greenCompressed, blueCompressed, COMPRESSED_BLOCK_MASK));
     }
@@ -279,7 +278,7 @@ public final class ClientColorHelper {
 
     @StableAPI.Expose
     public static long RGB64FromVanillaMonochrome(int brightness) {
-        val compressed = (long) compressedFromVanilla(brightness);
+        final long compressed = (long) compressedFromVanilla(brightness);
         return compressed << RGB64_RED_OFFSET | compressed << RGB64_GREEN_OFFSET | compressed << RGB64_BLUE_OFFSET;
     }
 
@@ -304,9 +303,9 @@ public final class ClientColorHelper {
         //Hopefully, the JVM converts this into SIMD
         long result = 0L;
         for (int i = 0; i <= 40; i += 8) {
-            val mask = 0xFFL << i;
-            val cA = a & mask;
-            val cB = b & mask;
+            final long mask = 0xFFL << i;
+            final long cA = a & mask;
+            final long cB = b & mask;
             result |= Math.max(cA, cB);
         }
         return result;
@@ -323,19 +322,18 @@ public final class ClientColorHelper {
 
     @StableAPI.Expose
     public static long RGB64MixAOBrightness(long TL, long BL, long BR, long TR, double lerpTB, double lerpLR) {
-        val lTL = (1.0 - lerpTB) * (1.0 - lerpLR);
-        val lTR = (1.0 - lerpTB) * lerpLR;
-        val lBL = lerpTB * (1.0 - lerpLR);
-        val lBR = lerpTB * lerpLR;
+        final double lTL = (1.0 - lerpTB) * (1.0 - lerpLR);
+        final double lTR = (1.0 - lerpTB) * lerpLR;
+        final double lBL = lerpTB * (1.0 - lerpLR);
+        final double lBR = lerpTB * lerpLR;
         return RGB64MixAOBrightness(TL, TR, BL, BR, lTL, lTR, lBL, lBR);
     }
 
     @StableAPI.Expose
     public static long RGB64MixAOBrightness(long a, long b, long c, long d, double aMul, double bMul, double cMul, double dMul) {
         long result = 0;
-        for (int i = 0; i <= 40; i += 8) {
+        for (int i = 0; i <= 40; i += 8)
             result |= RGB64MixAoBrightnessChannel(a, b, c, d, aMul, bMul, cMul, dMul, i);
-        }
         return result;
     }
 
@@ -402,8 +400,8 @@ public final class ClientColorHelper {
 
     @StableAPI.Expose
     public static int tessFromVanilla(int vanilla) {
-        val lightMapBlock = remapToShort(vanilla & 0xFF);
-        val lightMapSky = remapToShort((vanilla >> 16) & 0xFF);
+        final short lightMapBlock = remapToShort(vanilla & 0xFF);
+        final short lightMapSky = remapToShort((vanilla >> 16) & 0xFF);
         return ((int) lightMapBlock & 0xFFFF) | ((int) lightMapSky << 16);
     }
 
@@ -422,42 +420,42 @@ public final class ClientColorHelper {
 
     @StableAPI.Expose
     public static int cookieMixAOBrightness(int cookieTL, int cookieBL, int cookieBR, int cookieTR, double lerpTB, double lerpLR) {
-        val TL = CookieMonster.RGB64FromCookie(cookieTL);
-        val BL = CookieMonster.RGB64FromCookie(cookieBL);
-        val BR = CookieMonster.RGB64FromCookie(cookieBR);
-        val TR = CookieMonster.RGB64FromCookie(cookieTR);
+        final long TL = CookieMonster.RGB64FromCookie(cookieTL);
+        final long BL = CookieMonster.RGB64FromCookie(cookieBL);
+        final long BR = CookieMonster.RGB64FromCookie(cookieBR);
+        final long TR = CookieMonster.RGB64FromCookie(cookieTR);
         return CookieMonster.cookieFromRGB64(RGB64MixAOBrightness(TL, BL, BR, TR, lerpTB, lerpLR));
     }
 
     @StableAPI.Expose
     public static int cookieMixAOBrightness(int cookieA, int cookieB, int cookieC, int cookieD, double aMul, double bMul, double cMul, double dMul) {
-        val a = CookieMonster.RGB64FromCookie(cookieA);
-        val b = CookieMonster.RGB64FromCookie(cookieB);
-        val c = CookieMonster.RGB64FromCookie(cookieC);
-        val d = CookieMonster.RGB64FromCookie(cookieD);
+        final long a = CookieMonster.RGB64FromCookie(cookieA);
+        final long b = CookieMonster.RGB64FromCookie(cookieB);
+        final long c = CookieMonster.RGB64FromCookie(cookieC);
+        final long d = CookieMonster.RGB64FromCookie(cookieD);
         return CookieMonster.cookieFromRGB64(RGB64MixAOBrightness(a, b, c, d, aMul, bMul, cMul, dMul));
     }
 
     @StableAPI.Expose
     public static int cookieMixAOBrightness(int cookieA, int cookieB, double aMul, double bMul) {
-        val a = CookieMonster.RGB64FromCookie(cookieA);
-        val b = CookieMonster.RGB64FromCookie(cookieB);
+        final long a = CookieMonster.RGB64FromCookie(cookieA);
+        final long b = CookieMonster.RGB64FromCookie(cookieB);
         return CookieMonster.cookieFromRGB64(RGB64MixAOBrightness(a, b, aMul, bMul));
     }
 
     @StableAPI.Expose
     public static int cookieAverage(boolean ignoreZero, int cookieA, int cookieB) {
-        val a = CookieMonster.RGB64FromCookie(cookieA);
-        val b = CookieMonster.RGB64FromCookie(cookieB);
+        final long a = CookieMonster.RGB64FromCookie(cookieA);
+        final long b = CookieMonster.RGB64FromCookie(cookieB);
         return CookieMonster.cookieFromRGB64(RGB64Average(a, b, ignoreZero));
     }
 
     @StableAPI.Expose
     public static int cookieAverage(boolean ignoreZero, int cookieA, int cookieB, int cookieC, int cookieD) {
-        val a = CookieMonster.RGB64FromCookie(cookieA);
-        val b = CookieMonster.RGB64FromCookie(cookieB);
-        val c = CookieMonster.RGB64FromCookie(cookieC);
-        val d = CookieMonster.RGB64FromCookie(cookieD);
+        final long a = CookieMonster.RGB64FromCookie(cookieA);
+        final long b = CookieMonster.RGB64FromCookie(cookieB);
+        final long c = CookieMonster.RGB64FromCookie(cookieC);
+        final long d = CookieMonster.RGB64FromCookie(cookieD);
         return CookieMonster.cookieFromRGB64(RGB64Average(a, b, c, d, ignoreZero));
     }
 
@@ -478,13 +476,13 @@ public final class ClientColorHelper {
 
     private static short remapToShort(int n) {
         n = Math.min(n, 240);
-        val normalized = n / 240F;
+        final float normalized = n / 240F;
         return (short) Math.round(normalized * (Short.MAX_VALUE - Short.MIN_VALUE) + Short.MIN_VALUE);
     }
 
     private static long RGB64LerpChannel(long a, long b, double aMul, double bMul, int offset) {
-        val resultA = (double) unit(a, offset) * aMul;
-        val resultB = (double) unit(b, offset) * bMul;
+        final double resultA = (double) unit(a, offset) * aMul;
+        final double resultB = (double) unit(b, offset) * bMul;
         return (((long) (resultA + resultB)) & 0xFF) << offset;
     }
 
@@ -544,8 +542,8 @@ public final class ClientColorHelper {
         int count = 0;
         float light = 0;
         for (int i = 0; i < n; i++) {
-            val rgb64 = rgb64Values[i];
-            val value = unit(rgb64, shift);
+            final long rgb64 = rgb64Values[i];
+            final int value = unit(rgb64, shift);
             if (ignoreZero && value == 0) {
                 continue;
             }
@@ -571,10 +569,10 @@ public final class ClientColorHelper {
     }
 
     private static long RGB64MixAoBrightnessChannel(long a, long b, long c, long d, double aMul, double bMul, double cMul, double dMul, int channel) {
-        val fA = unit(a, channel) * aMul;
-        val fB = unit(b, channel) * bMul;
-        val fC = unit(c, channel) * cMul;
-        val fD = unit(d, channel) * dMul;
+        final double fA = unit(a, channel) * aMul;
+        final double fB = unit(b, channel) * bMul;
+        final double fC = unit(c, channel) * cMul;
+        final double fD = unit(d, channel) * dMul;
         return (long) ((int) (fA + fB + fC + fD) & 0xFF) << channel;
     }
 
