@@ -54,6 +54,7 @@ public enum TargetedMod implements ITargetedMod {
     CODE_CHICKEN_LIB("CodeChickenLib", false, startsWith("codechickenlib-").or(startsWith("codechickencore-"))),
     NOT_ENOUGH_ITEMS("NotEnoughItems", false, startsWith("NotEnoughItems-")),
     FORGE_MULTI_PART("Forge Multi Part", false, startsWith("forgemultipart-")),
+    COMPUTRONICS("Computronics", false, startsWith("Computronics-")),
     ;
 
     @Getter

@@ -404,8 +404,6 @@ public final class RPLEDefaultValues {
         registry.colorizeBlock("OpenComputers:case3").brightness(0xCCC).apply();
         registry.colorizeBlock("OpenComputers:caseCreative").brightness(0xCCC).apply();
 
-        registry.colorizeBlock("computronics:computronics.colorfulLamp").brightness(0xAAA).apply();
-
         registry.colorizeBlock("DraconicEvolution:potentiometer").brightness(0x444).apply();
         registry.colorizeBlock("DraconicEvolution:safetyFlame").brightness(0xEC0).apply();
 

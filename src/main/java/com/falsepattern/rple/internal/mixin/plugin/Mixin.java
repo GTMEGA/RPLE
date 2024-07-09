@@ -144,6 +144,10 @@ public enum Mixin implements IMixin {
     client_multipart_TileMultipartMixin(COMMON, require(FORGE_MULTI_PART), "multipart.TileMultipartMixin"),
     // endregion
 
+    // region Computronics Compatibility
+    client_computronics_TileColorfulLampMixin(COMMON, require(COMPUTRONICS), "computronics.TileColorfulLampMixin"),
+    // endregion
+
     // TODO proper category
     RenderManagerMixin(CLIENT, always(), "RenderManagerMixin")
     ;
