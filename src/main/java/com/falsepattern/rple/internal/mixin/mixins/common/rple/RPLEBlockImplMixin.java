@@ -34,6 +34,8 @@ import com.falsepattern.rple.api.common.block.RPLECustomBlockTranslucency;
 import lombok.val;
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
+
+import lombok.var;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Dynamic;
@@ -59,8 +61,6 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
 
     @Override
     public short rple$getRawBrightnessColor() {
-        if (rple$rawBaseBrightnessColor != -1)
-            return rple$rawBaseBrightnessColor;
         if (this instanceof RPLECustomBlockBrightness) {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
@@ -68,24 +68,13 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             } catch (Exception ignored) {
             }
         }
+        if (rple$rawBaseBrightnessColor != -1)
+            return rple$rawBaseBrightnessColor;
         return rple$getRawInternalColoredBrightness();
     }
 
     @Override
     public short rple$getRawBrightnessColor(int blockMeta) {
-        checkMeta:
-        {
-            if (rple$rawMetaBrightnessColors == null)
-                break checkMeta;
-            if (blockMeta < 0 || blockMeta >= rple$rawMetaBrightnessColors.length)
-                break checkMeta;
-            val brightness = rple$rawMetaBrightnessColors[blockMeta];
-            if (brightness != -1)
-                return brightness;
-        }
-        if (rple$rawBaseBrightnessColor != -1)
-            return rple$rawBaseBrightnessColor;
-
         if (this instanceof RPLECustomBlockBrightness) {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
@@ -93,11 +82,6 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             } catch (Exception ignored) {
             }
         }
-        return rple$getRawInternalColoredBrightness();
-    }
-
-    @Override
-    public short rple$getRawBrightnessColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
         checkMeta:
         {
             if (rple$rawMetaBrightnessColors == null)
@@ -110,6 +94,11 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
         }
         if (rple$rawBaseBrightnessColor != -1)
             return rple$rawBaseBrightnessColor;
+        return rple$getRawInternalColoredBrightness();
+    }
+
+    @Override
+    public short rple$getRawBrightnessColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
         if (this instanceof RPLECustomBlockBrightness) {
             val colorProvider = (RPLECustomBlockBrightness) this;
             try {
@@ -127,37 +116,38 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
                 }
             }
         }
+        checkMeta:
+        {
+            if (rple$rawMetaBrightnessColors == null)
+                break checkMeta;
+            if (blockMeta < 0 || blockMeta >= rple$rawMetaBrightnessColors.length)
+                break checkMeta;
+            val brightness = rple$rawMetaBrightnessColors[blockMeta];
+            if (brightness != -1)
+                return brightness;
+        }
+        if (rple$rawBaseBrightnessColor != -1)
+            return rple$rawBaseBrightnessColor;
         return rple$getRawInternalColoredBrightness(world, posX, posY, posZ);
     }
 
     @Override
     public short rple$getRawOpacityColor() {
-        if (rple$rawBaseOpacityColor != -1)
-            return rple$rawBaseOpacityColor;
         if (this instanceof RPLECustomBlockTranslucency) {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
-                return colorProvider.rple$getCustomTranslucencyColor();
+                val color = colorProvider.rple$getCustomTranslucencyColor();
+                return ServerColorHelper.RGB16OpacityTranslucentSwap(color);
             } catch (Exception ignored) {
             }
         }
+        if (rple$rawBaseOpacityColor != -1)
+            return rple$rawBaseOpacityColor;
         return rple$getRawInternalColoredOpacity();
     }
 
     @Override
     public short rple$getRawOpacityColor(int blockMeta) {
-        checkMeta:
-        {
-            if (rple$rawMetaOpacityColors == null)
-                break checkMeta;
-            if (blockMeta < 0 || blockMeta >= rple$rawMetaOpacityColors.length)
-                break checkMeta;
-            val opacity = rple$rawMetaOpacityColors[blockMeta];
-            if (opacity != -1)
-                return opacity;
-        }
-        if (rple$rawBaseOpacityColor != -1)
-            return rple$rawBaseOpacityColor;
         if (this instanceof RPLECustomBlockTranslucency) {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
@@ -166,11 +156,6 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
             } catch (Exception ignored) {
             }
         }
-        return rple$getRawInternalColoredOpacity();
-    }
-
-    @Override
-    public short rple$getRawOpacityColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
         checkMeta:
         {
             if (rple$rawMetaOpacityColors == null)
@@ -183,6 +168,11 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
         }
         if (rple$rawBaseOpacityColor != -1)
             return rple$rawBaseOpacityColor;
+        return rple$getRawInternalColoredOpacity();
+    }
+
+    @Override
+    public short rple$getRawOpacityColor(@NotNull IBlockAccess world, int blockMeta, int posX, int posY, int posZ) {
         if (this instanceof RPLECustomBlockTranslucency) {
             val colorProvider = (RPLECustomBlockTranslucency) this;
             try {
@@ -202,6 +192,18 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
                 }
             }
         }
+        checkMeta:
+        {
+            if (rple$rawMetaOpacityColors == null)
+                break checkMeta;
+            if (blockMeta < 0 || blockMeta >= rple$rawMetaOpacityColors.length)
+                break checkMeta;
+            val opacity = rple$rawMetaOpacityColors[blockMeta];
+            if (opacity != -1)
+                return opacity;
+        }
+        if (rple$rawBaseOpacityColor != -1)
+            return rple$rawBaseOpacityColor;
         return rple$getRawInternalColoredOpacity(world, posX, posY, posZ);
     }
 
