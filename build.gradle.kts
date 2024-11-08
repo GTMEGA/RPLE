@@ -1,5 +1,5 @@
 plugins {
-    id("fpgradle-minecraft") version ("0.7.0")
+    id("fpgradle-minecraft") version ("0.8.2")
 }
 
 group = "com.falsepattern"
@@ -73,9 +73,9 @@ repositories {
 }
 
 dependencies {
-    apiSplit("com.falsepattern:lumi-mc1.7.10:1.0.0")
-    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.2.5")
-    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.0.0")
+    apiSplit("com.falsepattern:lumi-mc1.7.10:1.0.1")
+    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.4.4")
+    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.2.2")
 
     devOnlyNonPublishable("codechicken:notenoughitems-mc1.7.10:2.3.1-mega:dev")
     runtimeOnlyNonPublishable("codechicken:codechickencore-mc1.7.10:1.4.0-mega:dev")
