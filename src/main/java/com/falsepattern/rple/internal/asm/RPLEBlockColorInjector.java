@@ -174,7 +174,9 @@ public final class RPLEBlockColorInjector implements TurboClassTransformer {
             return false;
         }
 
-        return isBlockSubclass(new ClassReader(classBytes).getSuperName());
+        val isc = isBlockSubclass(new ClassReader(classBytes).getSuperName());
+        BLOCK_SUBCLASS_MEMOIZATION.put(className, isc);
+        return isc;
     }
 
     /**
