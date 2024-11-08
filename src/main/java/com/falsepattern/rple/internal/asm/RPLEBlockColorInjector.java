@@ -137,7 +137,6 @@ public final class RPLEBlockColorInjector implements TurboClassTransformer {
             return false;
         method.name = newName;
 
-        boolean modified = false;
         val insts = method.instructions.iterator();
         while (insts.hasNext()) {
             val inst = insts.next();
@@ -148,13 +147,12 @@ public final class RPLEBlockColorInjector implements TurboClassTransformer {
                 for (val mapping : MAPPINGS.entrySet()) {
                     if (mapping.getKey().matches(insnNode)) {
                         insnNode.name = mapping.getValue();
-                        modified = true;
                         break;
                     }
                 }
             }
         }
-        return modified;
+        return true;
     }
 
     private static boolean isBlockSubclass(String className) {
