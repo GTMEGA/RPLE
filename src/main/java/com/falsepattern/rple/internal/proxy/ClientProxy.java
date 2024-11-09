@@ -26,6 +26,8 @@
 
 package com.falsepattern.rple.internal.proxy;
 
+import com.falsepattern.falsetweaks.api.dynlights.FTDynamicLights;
+import com.falsepattern.rple.internal.client.dynlights.ColorDynamicLights;
 import com.falsepattern.rple.internal.client.lamp.LampRenderer;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -48,5 +50,6 @@ public final class ClientProxy extends CommonProxy {
         super.init(evt);
         RenderingRegistry.registerBlockHandler(new LampRenderer());
         lightMapPipeline().registerLightMapProviders();
+        FTDynamicLights.registerBackend(ColorDynamicLights.INSTANCE, 500);
     }
 }

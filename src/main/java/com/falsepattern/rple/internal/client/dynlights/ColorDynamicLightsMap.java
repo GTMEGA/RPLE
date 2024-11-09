@@ -24,7 +24,7 @@
  * GNU Affero General Public License. See the full LICENSE file for details.
  */
 
-package com.falsepattern.rple.internal.client.optifine;
+package com.falsepattern.rple.internal.client.dynlights;
 
 import java.util.ArrayList;
 import java.util.HashMap;

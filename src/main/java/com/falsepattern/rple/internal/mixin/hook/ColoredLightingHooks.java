@@ -26,13 +26,14 @@
 
 package com.falsepattern.rple.internal.mixin.hook;
 
+import com.falsepattern.falsetweaks.api.dynlights.FTDynamicLights;
 import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.api.client.RPLETessBrightnessUtil;
 import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.internal.Compat;
-import com.falsepattern.rple.internal.client.optifine.ColorDynamicLights;
+import com.falsepattern.rple.internal.client.dynlights.ColorDynamicLights;
 import com.falsepattern.rple.internal.client.render.EntityColorHandler;
 import com.falsepattern.rple.internal.common.chunk.RPLESubChunkRoot;
 import cpw.mods.fml.relauncher.Side;
@@ -124,8 +125,9 @@ public final class ColoredLightingHooks {
                                                            int posZ,
                                                            int minBrightnessCookie) {
         int brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, minBrightnessCookie);
-        if (Compat.dynamicLightsEnabled()) {
-            brightness = ColorDynamicLights.getCombinedLight(posX, posY, posZ, brightness);
+        val dl = FTDynamicLights.frontend();
+        if (dl.enabled()) {
+            brightness = dl.getCombinedLight(posX, posY, posZ, brightness);
         }
         if (EntityColorHandler.isOnBlockList(entity.getClass())) {
             val rgb64 = CookieMonster.RGB64FromCookie(brightness);

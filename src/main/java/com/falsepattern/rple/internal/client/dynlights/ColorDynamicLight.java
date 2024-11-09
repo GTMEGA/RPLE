@@ -24,13 +24,13 @@
  * GNU Affero General Public License. See the full LICENSE file for details.
  */
 
-package com.falsepattern.rple.internal.client.optifine;
+package com.falsepattern.rple.internal.client.dynlights;
 
+import com.falsepattern.falsetweaks.api.dynlights.FTDynamicLights;
 import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.color.LightValueColor;
 import lombok.Getter;
 import lombok.val;
-import stubpackage.Config;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -56,7 +56,7 @@ public class ColorDynamicLight {
     }
 
     public void update(RenderGlobal renderGlobal) {
-        if (Config.isDynamicLightsFast()) {
+        if (FTDynamicLights.isDynamicLightsFast()) {
             long timeNowMs = System.currentTimeMillis();
             if (timeNowMs < this.timeCheckMs + 500L) {
                 return;
@@ -68,7 +68,7 @@ public class ColorDynamicLight {
         double posX = this.entity.posX - 0.5;
         double posY = this.entity.posY - 0.5 + this.offsetY;
         double posZ = this.entity.posZ - 0.5;
-        val lightLevel = ColorDynamicLights.getLightLevel(this.entity);
+        val lightLevel = ColorDynamicLights.INSTANCE.getLightLevelShort(this.entity);
         double dx = posX - this.lastPosX;
         double dy = posY - this.lastPosY;
         double dz = posZ - this.lastPosZ;
