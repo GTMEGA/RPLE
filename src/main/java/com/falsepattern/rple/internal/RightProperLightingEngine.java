@@ -27,6 +27,8 @@
 package com.falsepattern.rple.internal;
 
 
+import com.falsepattern.rple.internal.common.config.RPLEConfig;
+import com.falsepattern.rple.internal.common.util.FastThreadLocal;
 import com.falsepattern.rple.internal.proxy.CommonProxy;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
@@ -48,6 +50,11 @@ public final class RightProperLightingEngine {
     @SidedProxy(clientSide = GROUP_NAME + ".internal.proxy.ClientProxy",
             serverSide = GROUP_NAME + ".internal.proxy.ServerProxy")
     public static CommonProxy PROXY;
+
+    static {
+        RPLEConfig.poke();
+        FastThreadLocal.setMainThread(Thread.currentThread());
+    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent evt) {

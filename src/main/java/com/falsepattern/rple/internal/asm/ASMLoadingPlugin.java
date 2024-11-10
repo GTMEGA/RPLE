@@ -28,6 +28,8 @@ package com.falsepattern.rple.internal.asm;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
+import com.falsepattern.rple.internal.common.config.RPLEConfig;
+import com.falsepattern.rple.internal.common.util.FastThreadLocal;
 import lombok.NoArgsConstructor;
 import lombok.val;
 import org.jetbrains.annotations.Nullable;
@@ -50,7 +52,7 @@ public final class ASMLoadingPlugin implements IFMLLoadingPlugin {
     public String[] getASMTransformerClass() {
         val mixinTweakClasses = GlobalProperties.<List<String>>get(MixinServiceLaunchWrapper.BLACKBOARD_KEY_TWEAKCLASSES);
         if (mixinTweakClasses != null) {
-            mixinTweakClasses.add(MixinCompatHackTweaker.class.getName());
+            mixinTweakClasses.add("com.falsepattern.rple.internal.asm.MixinCompatHackTweaker");
         }
         return new String[0];
     }

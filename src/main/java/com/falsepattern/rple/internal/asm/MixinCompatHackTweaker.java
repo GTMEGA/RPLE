@@ -25,7 +25,7 @@ public class MixinCompatHackTweaker implements ITweaker {
 
     @Override
     public String[] getLaunchArguments() {
-        Launch.classLoader.registerTransformer(RPLETransformer.class.getName());
+        Launch.classLoader.registerTransformer("com.falsepattern.rple.internal.asm.RPLEBlockColorInjector");
         return new String[0];
     }
 }
