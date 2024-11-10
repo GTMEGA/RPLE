@@ -28,6 +28,7 @@ package com.falsepattern.rple.internal.mixin.plugin;
 
 import com.falsepattern.lib.mixin.IMixin;
 import com.falsepattern.lib.mixin.ITargetedMod;
+import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -106,7 +107,10 @@ public enum Mixin implements IMixin {
     // endregion
 
     // region Project Red Compatibility
-    common_projectred_ILightMixin(COMMON, projectRedLampsFilter(), "projectred.ILightMixin"),
+    common_projectred_ILightMixin(COMMON, projectRedILightFilter().and(condition(() -> !RPLEConfig.Compat.WEAKER_PROJECTRED_MIXINS)), "projectred.ILightMixin"),
+    common_projectred_weaker_BaseLightPartMixin(COMMON, projectRedILightFilter().and(condition(() -> RPLEConfig.Compat.WEAKER_PROJECTRED_MIXINS)), "projectred.weaker.BaseLightPartMixin"),
+    common_projectred_weaker_LightButtonPartMixin(COMMON, projectRedILightFilter().and(condition(() -> RPLEConfig.Compat.WEAKER_PROJECTRED_MIXINS)), "projectred.weaker.LightButtonPartMixin"),
+    common_projectred_weaker_TileLampMixin(COMMON, projectRedILightFilter().and(condition(() -> RPLEConfig.Compat.WEAKER_PROJECTRED_MIXINS)), "projectred.weaker.TileLampMixin"),
 
     client_projectred_RenderHaloMixin(CLIENT, projectRedLampsFilter(), "projectred.RenderHaloMixin"),
     client_projectred_LampTESRMixin(CLIENT, projectRedLampsFilter(), "projectred.LampTESRMixin"),
@@ -159,7 +163,10 @@ public enum Mixin implements IMixin {
     private final String mixin;
 
     private static Predicate<List<ITargetedMod>> projectRedLampsFilter() {
-        return require(PROJECT_RED_COMBINED_JAR).or(require(PROJECT_RED_CORE).and(require(PROJECT_RED_ILLUMINATION)));
+        return require(PROJECT_RED_OG_JAR).or(require(PROJECT_RED_MEGA_JAR)).or(require(PROJECT_RED_CORE).and(require(PROJECT_RED_ILLUMINATION)));
+    }
+    private static Predicate<List<ITargetedMod>> projectRedILightFilter() {
+        return require(PROJECT_RED_OG_JAR).or(require(PROJECT_RED_CORE).and(require(PROJECT_RED_ILLUMINATION)));
     }
 }
 

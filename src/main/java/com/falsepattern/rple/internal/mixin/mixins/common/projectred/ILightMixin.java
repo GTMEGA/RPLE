@@ -32,9 +32,7 @@ import mrtjp.projectred.illumination.ILight;
 import net.minecraft.world.IBlockAccess;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 
-@Unique
 @Mixin(ILight.class)
 public interface ILightMixin extends RPLECustomBlockBrightness {
     @Override

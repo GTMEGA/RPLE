@@ -41,7 +41,7 @@ public final class RPLEConfig {
     }
 
     public static Class<?>[] configClasses() {
-        return new Class[]{General.class, Debug.class};
+        return new Class[]{General.class, Debug.class, Compat.class};
     }
 
     @SneakyThrows
@@ -61,6 +61,17 @@ public final class RPLEConfig {
         @Config.RequiresMcRestart
         @Config.DefaultBoolean(true)
         public static boolean CRAFTABLE_LAMPS;
+    }
+
+    @Config(modid = MOD_ID, category = "compat")
+    public static final class Compat {
+        static {poke();}
+        @Config.Name("weakerProjectRedMixins")
+        @Config.Comment({"Set this to false if running on modern java"})
+        @Config.LangKey("config.rple.general.weakerProjectRed")
+        @Config.RequiresMcRestart
+        @Config.DefaultBoolean(true)
+        public static boolean WEAKER_PROJECTRED_MIXINS;
     }
 
     @Config(modid = MOD_ID, category = "debug")
