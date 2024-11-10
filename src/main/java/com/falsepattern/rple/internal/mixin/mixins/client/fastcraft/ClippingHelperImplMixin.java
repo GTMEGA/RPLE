@@ -33,7 +33,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.minecraft.client.renderer.culling.ClippingHelperImpl;
 
-@Mixin(ClippingHelperImpl.class)
+@Mixin(value = ClippingHelperImpl.class,
+       priority = 2000)
 public abstract class ClippingHelperImplMixin {
     @Redirect(method = "init",
               at = @At(value = "INVOKE",
