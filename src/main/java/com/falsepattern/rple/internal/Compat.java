@@ -33,6 +33,9 @@ import lombok.experimental.UtilityClass;
 import lombok.var;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraft.launchwrapper.LaunchClassLoader;
+
+import makamys.neodymium.Neodymium;
 import shadersmod.client.Shaders;
 import stubpackage.GlStateManager;
 
@@ -42,6 +45,7 @@ import java.io.IOException;
 public final class Compat {
     private static final boolean IS_SHADERS_MOD_PRESENT;
     private static final boolean IS_FALSETWEAKS_PRESENT;
+    private static Boolean NEODYMIUM = null;
 
     static {
         var shadersModPresent = false;
@@ -62,6 +66,23 @@ public final class Compat {
         if (IS_FALSETWEAKS_PRESENT)
             return ThreadedChunkUpdates.isEnabled();
         return false;
+    }
+
+    public static boolean neodymiumInstalled() {
+        if (NEODYMIUM != null) {
+            return NEODYMIUM;
+        }
+        try {
+            NEODYMIUM = Launch.classLoader.getClassBytes("makamys.neodymium.Neodymium") != null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            NEODYMIUM = false;
+        }
+        return NEODYMIUM;
+    }
+
+    public static boolean neodymiumActive() {
+        return neodymiumInstalled() && Neodymium.isActive();
     }
 
     @SideOnly(Side.CLIENT)

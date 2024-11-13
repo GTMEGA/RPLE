@@ -58,6 +58,7 @@ repositories {
     mavenpattern {
         content {
             includeGroup("com.falsepattern")
+            includeGroup("makamys")
         }
     }
     mega {
@@ -75,7 +76,9 @@ repositories {
 dependencies {
     apiSplit("com.falsepattern:lumi-mc1.7.10:1.0.1")
     implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.4.4")
-    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.3.2")
+    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.3.3-2-g28ce36e")
+
+    compileOnly("makamys:neodymium-mc1.7.10:0.3.3-unofficial:dev")
 
     devOnlyNonPublishable("codechicken:notenoughitems-mc1.7.10:2.3.1-mega:dev")
     runtimeOnlyNonPublishable("codechicken:codechickencore-mc1.7.10:1.4.0-mega:dev")

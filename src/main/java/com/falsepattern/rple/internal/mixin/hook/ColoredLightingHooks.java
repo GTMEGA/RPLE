@@ -125,9 +125,8 @@ public final class ColoredLightingHooks {
                                                            int posZ,
                                                            int minBrightnessCookie) {
         int brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, minBrightnessCookie);
-        val dl = FTDynamicLights.frontend();
-        if (dl.enabled()) {
-            brightness = dl.getCombinedLight(posX, posY, posZ, brightness);
+        if (FTDynamicLights.isDynamicLights()) {
+            brightness = ColorDynamicLights.INSTANCE.getCombinedLight(posX, posY, posZ, brightness);
         }
         if (EntityColorHandler.isOnBlockList(entity.getClass())) {
             val rgb64 = CookieMonster.RGB64FromCookie(brightness);

@@ -58,13 +58,43 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ColorDynamicLights implements DynamicLightsDriver {
-    public static final ColorDynamicLights INSTANCE = new ColorDynamicLights();
+    public static final ColorDynamicLights INSTANCE = new ColorDynamicLights(false);
+    private static final ColorDynamicLights FOR_WORLD = new ColorDynamicLights(true);
     private static final ColorDynamicLightsMap mapDynamicLights = new ColorDynamicLightsMap();
+    private static final ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
     private static long timeUpdateMs = 0L;
+    private final boolean forWorld;
+    private static final double MAX_DIST = 16.0;
+    private static final double MAX_DIST_SQ = MAX_DIST * MAX_DIST;
+    private static final int LIGHT_LEVEL_MAX = 15;
 
-    private ColorDynamicLights() {}
+    private static ReentrantReadWriteLock.WriteLock busyWaitWriteLock() {
+        val lock = rwLock.writeLock();
+        while (!lock.tryLock()) {
+            Thread.yield();
+        }
+        return lock;
+    }
+
+    private static ReentrantReadWriteLock.ReadLock busyWaitReadLock() {
+        val lock = rwLock.readLock();
+        while (!lock.tryLock()) {
+            Thread.yield();
+        }
+        return lock;
+    }
+
+    private ColorDynamicLights(boolean forWorld) {
+        this.forWorld = forWorld;
+    }
+
+    @Override
+    public DynamicLightsDriver forWorldMesh() {
+        return FOR_WORLD;
+    }
 
     @Override
     public boolean enabled() {
@@ -75,22 +105,28 @@ public class ColorDynamicLights implements DynamicLightsDriver {
     public void entityAdded(Entity entityIn, RenderGlobal renderGlobal) {
     }
 
+    @Override
     public void entityRemoved(Entity entityIn, RenderGlobal renderGlobal) {
-        synchronized (mapDynamicLights) {
+        val lock = busyWaitWriteLock();
+        try {
             ColorDynamicLight dynamicLight = mapDynamicLights.remove(entityIn.getEntityId());
             if (dynamicLight != null) {
                 dynamicLight.updateLitChunks(renderGlobal);
             }
+        } finally {
+            lock.unlock();
         }
     }
 
+    @Override
     public void update(RenderGlobal renderGlobal) {
         long timeNowMs = System.currentTimeMillis();
         if (timeNowMs < timeUpdateMs + 50L) {
             return;
         }
         timeUpdateMs = timeNowMs;
-        synchronized (mapDynamicLights) {
+        val lock = busyWaitWriteLock();
+        try {
             updateMapDynamicLights(renderGlobal);
             if (mapDynamicLights.size() <= 0) {
                 return;
@@ -101,6 +137,8 @@ public class ColorDynamicLights implements DynamicLightsDriver {
                 ColorDynamicLight dynamicLight = dynamicLights.get(i);
                 dynamicLight.update(renderGlobal);
             }
+        } finally {
+            lock.unlock();
         }
     }
 
@@ -108,7 +146,7 @@ public class ColorDynamicLights implements DynamicLightsDriver {
         World world = renderGlobal.theWorld;
         if (world != null) {
             for (Entity entity : world.getLoadedEntityList()) {
-                val lightLevel = getLightLevelShort(entity);
+                val lightLevel = getLightLevel(entity);
                 if (ServerColorHelper.red(lightLevel) > 0 || ServerColorHelper.green(lightLevel) > 0 || ServerColorHelper.blue(lightLevel) > 0) {
                     int key = entity.getEntityId();
                     ColorDynamicLight dynamicLight = mapDynamicLights.get(key);
@@ -129,25 +167,20 @@ public class ColorDynamicLights implements DynamicLightsDriver {
 
     @Override
     public int getCombinedLight(int x, int y, int z, int combinedLight) {
-        val lightPlayer = getLightLevelDouble(x, y, z);
+        val lightPlayer = getLightLevel(x, y, z);
         return getCombinedLight(lightPlayer, combinedLight);
     }
 
     @Override
     public int getCombinedLight(Entity entity, int combinedLight) {
-        val lightPlayer = getLightLevelShort(entity);
+        val lightPlayer = getLightLevel(entity);
         return getCombinedLight(new DoubleBrightness(ServerColorHelper.red(lightPlayer),
                         ServerColorHelper.green(lightPlayer),
                         ServerColorHelper.blue(lightPlayer)),
                                 combinedLight);
     }
 
-    @Override
-    public int getCombinedLight(double v, int i) {
-        return getCombinedLight(DoubleBrightness.monochrome(v), i);
-    }
-
-    private int getCombinedLight(DoubleBrightness lightPlayer, int combinedLight) {
+    private static int getCombinedLight(DoubleBrightness lightPlayer, int combinedLight) {
         if (lightPlayer.r > 0 || lightPlayer.g > 0 || lightPlayer.b > 0) {
             long splitCombined = CookieMonster.RGB64FromCookie(combinedLight);
             int combinedR = ClientColorHelper.vanillaFromRGB64Red(splitCombined);
@@ -181,20 +214,20 @@ public class ColorDynamicLights implements DynamicLightsDriver {
         return combinedLight;
     }
 
-    @Override
-    public double getLightLevel(int x, int y, int z) {
-        return getLightLevelDouble(x, y, z).monochrome();
-    }
-
-    private DoubleBrightness getLightLevelDouble(int x, int y, int z) {
+    private DoubleBrightness getLightLevel(int x, int y, int z) {
+        val rve = Minecraft.getMinecraft().renderViewEntity;
         double lightLevelMaxR = 0.0;
         double lightLevelMaxG = 0.0;
         double lightLevelMaxB = 0.0;
-        synchronized (mapDynamicLights) {
+        val lock = busyWaitReadLock();
+        try {
             List<ColorDynamicLight> dynamicLights = mapDynamicLights.valueList();
 
             for (int i = 0; i < dynamicLights.size(); ++i) {
                 ColorDynamicLight dynamicLight = dynamicLights.get(i);
+                if (!FTDynamicLights.isDynamicHandLight(forWorld) && dynamicLight.getEntity() == rve) {
+                    continue;
+                }
                 var dynamicLightLevel = dynamicLight.getLastLightLevel();
                 double dynamicR = ServerColorHelper.red(dynamicLightLevel);
                 double dynamicG = ServerColorHelper.green(dynamicLightLevel);
@@ -206,48 +239,60 @@ public class ColorDynamicLights implements DynamicLightsDriver {
                     double dx = (double) x - px;
                     double dy = (double) y - py;
                     double dz = (double) z - pz;
-                    double distSq = dx * dx + dy * dy + dz * dz;
                     if (dynamicLight.isUnderwater()) {
-                        dynamicR = MathUtil.clamp(dynamicR - 2, 0, 15);
-                        dynamicG = MathUtil.clamp(dynamicG - 2, 0, 15);
-                        dynamicB = MathUtil.clamp(dynamicB - 2, 0, 15);
-                        distSq *= 2.0;
+                        dynamicR = MathUtil.clamp(dynamicR - 2, 0, LIGHT_LEVEL_MAX);
+                        dynamicG = MathUtil.clamp(dynamicG - 2, 0, LIGHT_LEVEL_MAX);
+                        dynamicB = MathUtil.clamp(dynamicB - 2, 0, LIGHT_LEVEL_MAX);
+                        dx *= 2.0;
+                        dy *= 2.0;
+                        dz *= 2.0;
+                    }
+                    double lightR;
+                    double lightG;
+                    double lightB;
+
+                    if (FTDynamicLights.isCircular()) {
+                        double distSq = dx * dx + dy * dy + dz * dz;
+                        if (distSq <= MAX_DIST_SQ) {
+                            val dist = MathUtil.sqrt(distSq);
+                            lightR = MathUtil.clamp(dynamicR - dist, 0, LIGHT_LEVEL_MAX);
+                            lightG = MathUtil.clamp(dynamicG - dist, 0, LIGHT_LEVEL_MAX);
+                            lightB = MathUtil.clamp(dynamicB - dist, 0, LIGHT_LEVEL_MAX);
+                        } else {
+                            lightR = lightG = lightB = 0;
+                        }
+                    } else {
+                        dx = Math.abs(dx);
+                        dy = Math.abs(dy);
+                        dz = Math.abs(dz);
+                        double dist = Math.max(dx - 0.25, 0) + Math.max(dy - 0.25, 0) + Math.max(dz - 0.25, 0);
+                        lightR = MathUtil.clamp(dynamicR - dist, 0, LIGHT_LEVEL_MAX);
+                        lightG = MathUtil.clamp(dynamicG - dist, 0, LIGHT_LEVEL_MAX);
+                        lightB = MathUtil.clamp(dynamicB - dist, 0, LIGHT_LEVEL_MAX);
                     }
 
-                    double lightDist = Math.max(Math.max(dynamicR, dynamicG), dynamicB);
-
-                    if (distSq <= (lightDist * lightDist)) {
-                        double dist = Math.sqrt(distSq);
-                        double light = 1.0 - dist / lightDist;
-                        double lightLevelR = light * dynamicR;
-                        double lightLevelG = light * dynamicG;
-                        double lightLevelB = light * dynamicB;
-                        if (lightLevelR > lightLevelMaxR) {
-                            lightLevelMaxR = lightLevelR;
-                        }
-                        if (lightLevelG > lightLevelMaxG) {
-                            lightLevelMaxG = lightLevelG;
-                        }
-                        if (lightLevelB > lightLevelMaxB) {
-                            lightLevelMaxB = lightLevelB;
-                        }
+                    if (lightR > lightLevelMaxR) {
+                        lightLevelMaxR = lightR;
+                    }
+                    if (lightG > lightLevelMaxG) {
+                        lightLevelMaxG = lightG;
+                    }
+                    if (lightB > lightLevelMaxB) {
+                        lightLevelMaxB = lightB;
                     }
                 }
             }
+        } finally {
+            lock.unlock();
         }
 
-        lightLevelMaxR = MathUtil.clamp(lightLevelMaxR, 0, 15);
-        lightLevelMaxG = MathUtil.clamp(lightLevelMaxG, 0, 15);
-        lightLevelMaxB = MathUtil.clamp(lightLevelMaxB, 0, 15);
+        lightLevelMaxR = MathUtil.clamp(lightLevelMaxR, 0, LIGHT_LEVEL_MAX);
+        lightLevelMaxG = MathUtil.clamp(lightLevelMaxG, 0, LIGHT_LEVEL_MAX);
+        lightLevelMaxB = MathUtil.clamp(lightLevelMaxB, 0, LIGHT_LEVEL_MAX);
         return new DoubleBrightness(lightLevelMaxR, lightLevelMaxG, lightLevelMaxB);
     }
 
-    @Override
-    public int getLightLevel(ItemStack itemStack) {
-        return ServerColorHelper.maxColorComponent(getLightLevelShort(itemStack));
-    }
-
-    public short getLightLevelShort(ItemStack itemStack) {
+    private static short getLightLevel(ItemStack itemStack) {
         if (itemStack == null) {
             return LightValueColor.LIGHT_VALUE_0.rgb16();
         } else {
@@ -275,13 +320,8 @@ public class ColorDynamicLights implements DynamicLightsDriver {
         }
     }
 
-    @Override
-    public int getLightLevel(Entity entity) {
-        return ServerColorHelper.maxColorComponent(getLightLevelShort(entity));
-    }
-
-    public short getLightLevelShort(Entity entity) {
-        if (entity == Minecraft.getMinecraft().renderViewEntity && !FTDynamicLights.isDynamicHandLight()) {
+    public short getLightLevel(Entity entity) {
+        if (entity == Minecraft.getMinecraft().renderViewEntity && !FTDynamicLights.isDynamicHandLight(forWorld)) {
             return LightValueColor.LIGHT_VALUE_0.rgb16();
         } else if (entity.isBurning()) {
             return RPLEBlock.of(Blocks.fire).rple$getBrightnessColor();
@@ -308,9 +348,9 @@ public class ColorDynamicLights implements DynamicLightsDriver {
             if (entity instanceof EntityLivingBase) {
                 EntityLivingBase player = (EntityLivingBase) entity;
                 ItemStack stackMain = player.getHeldItem();
-                val levelMain = getLightLevelShort(stackMain);
+                val levelMain = getLightLevel(stackMain);
                 ItemStack stackHead = player.getEquipmentInSlot(4);
-                val levelHead = getLightLevelShort(stackHead);
+                val levelHead = getLightLevel(stackHead);
                 return ServerColorHelper.RGB16FromRGBChannel4Bit(
                         Math.max(ServerColorHelper.red(levelMain), ServerColorHelper.red(levelHead)),
                         Math.max(ServerColorHelper.green(levelMain), ServerColorHelper.green(levelHead)),
@@ -319,11 +359,11 @@ public class ColorDynamicLights implements DynamicLightsDriver {
             } else if (entity instanceof EntityItem) {
                 EntityItem entityItem = (EntityItem) entity;
                 ItemStack itemStack = getItemStack(entityItem);
-                return getLightLevelShort(itemStack);
+                return getLightLevel(itemStack);
             } else if (entity instanceof EntityItemFrame) {
                 EntityItemFrame entityItemFrame = (EntityItemFrame) entity;
                 ItemStack itemStack = entityItemFrame.getDisplayedItem();
-                return getLightLevelShort(itemStack);
+                return getLightLevel(itemStack);
             } else {
                 return LightValueColor.LIGHT_VALUE_0.rgb16();
             }
@@ -332,7 +372,8 @@ public class ColorDynamicLights implements DynamicLightsDriver {
 
     @Override
     public void removeLights(RenderGlobal renderGlobal) {
-        synchronized (mapDynamicLights) {
+        val lock = busyWaitWriteLock();
+        try {
             List<ColorDynamicLight> dynamicLights = mapDynamicLights.valueList();
 
             for (int i = 0; i < dynamicLights.size(); ++i) {
@@ -341,25 +382,32 @@ public class ColorDynamicLights implements DynamicLightsDriver {
             }
 
             dynamicLights.clear();
+        } finally {
+            lock.unlock();
         }
     }
 
     @Override
     public void clear() {
-        synchronized (mapDynamicLights) {
+        val lock = busyWaitWriteLock();
+        try {
             mapDynamicLights.clear();
+        } finally {
+            lock.unlock();
         }
     }
 
     @Override
     public int getCount() {
-        synchronized (mapDynamicLights) {
+        val lock = busyWaitReadLock();
+        try {
             return mapDynamicLights.size();
+        } finally {
+            lock.unlock();
         }
     }
 
-    @Override
-    public ItemStack getItemStack(EntityItem entityItem) {
+    private static ItemStack getItemStack(EntityItem entityItem) {
         return entityItem.getDataWatcher().getWatchableObjectItemStack(10);
     }
 
@@ -368,13 +416,5 @@ public class ColorDynamicLights implements DynamicLightsDriver {
         public final double r;
         public final double g;
         public final double b;
-
-        public double monochrome() {
-            return Math.max(r, Math.max(g, b));
-        }
-
-        public static DoubleBrightness monochrome(double value) {
-            return new DoubleBrightness(value, value, value);
-        }
     }
 }
