@@ -26,12 +26,19 @@
 
 package com.falsepattern.rple.api.client.lightmap;
 
+import com.falsepattern.lib.DeprecationDetails;
 import com.falsepattern.lib.StableAPI;
 import org.jetbrains.annotations.NotNull;
 
 @StableAPI(since = "1.0.0")
-@FunctionalInterface
 public interface RPLEBlockLightMapMask extends RPLELightMapProvider {
-    @StableAPI.Expose
-    boolean generateBlockLightMapMask(@NotNull RPLELightMapStrip output, float partialTick);
+    @Deprecated
+    @DeprecationDetails(deprecatedSince = "1.3.0")
+    default boolean generateBlockLightMapMask(@NotNull RPLELightMapStrip output, float partialTick) {
+        return false;
+    }
+
+    default void mutateBlockLightMap(@NotNull RPLELightMapStrip output, float partialTick) {
+
+    }
 }

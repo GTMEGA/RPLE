@@ -79,6 +79,12 @@ public enum Mixin implements IMixin {
     client_rple_RPLEClientSubChunkImplMixin(CLIENT, always(), "rple.RPLEClientSubChunkImplMixin"),
     // endregion
 
+    // region Hardcore Darkness
+    client_hd_GuiOptionSliderMixin(CLIENT, always(), "hd.GuiOptionSliderMixin"),
+    client_hd_WorldMixin(CLIENT, always(), "hd.WorldMixin"),
+    client_hd_WorldProviderMixin(CLIENT, always(), "hd.WorldProviderMixin"),
+    // endregion
+
     // region OptiFine Compatibility
     client_optifine_OpenGLHelperMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.OpenGLHelperMixin"),
     client_optifine_ShadersMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShadersMixin"),

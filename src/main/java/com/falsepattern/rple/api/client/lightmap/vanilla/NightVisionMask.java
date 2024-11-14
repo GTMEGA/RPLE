@@ -33,19 +33,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.MathHelper;
+
+import lombok.val;
+import lombok.var;
 import org.jetbrains.annotations.NotNull;
 
+import static com.falsepattern.rple.api.client.lightmap.RPLELightMapStrip.LIGHT_MAP_STRIP_LENGTH;
+
 public class NightVisionMask implements RPLELightMapMask {
-    @Override
-    public boolean generateBlockLightMapMask(@NotNull RPLELightMapStrip output, float partialTick) {
-        return generateNightVisionMask(output, partialTick);
-    }
-
-    @Override
-    public boolean generateSkyLightMapMask(@NotNull RPLELightMapStrip output, float partialTick) {
-        return generateNightVisionMask(output, partialTick);
-    }
-
     protected boolean generateNightVisionMask(RPLELightMapStrip output, float partialTick) {
         final EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
         if (player == null)
@@ -59,14 +55,48 @@ public class NightVisionMask implements RPLELightMapMask {
         return true;
     }
 
+    @Override
+    public void mutateBlockLightMap(@NotNull RPLELightMapStrip output, float partialTick) {
+        mutateLightMap(output, partialTick);
+    }
+
+    @Override
+    public void mutateSkyLightMap(@NotNull RPLELightMapStrip output, float partialTick) {
+        mutateLightMap(output, partialTick);
+    }
+
+    protected void mutateLightMap(RPLELightMapStrip output, float partialTick) {
+        val mc = Minecraft.getMinecraft();
+        val player = mc.thePlayer;
+        if (player == null)
+            return;
+        if (!player.isPotionActive(Potion.nightVision))
+            return;
+        val power = nightVisionBrightness(player, partialTick);
+        val powerInv = 1 - power;
+        val R = output.lightMapRedData();
+        val G = output.lightMapGreenData();
+        val B = output.lightMapBlueData();
+        for (int i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
+            var r = MathUtil.clamp(R[i], 0.0001F, 1);
+            var g = MathUtil.clamp(G[i], 0.0001F, 1);
+            var b = MathUtil.clamp(B[i], 0.0001F, 1);
+            val minInverse = Math.min(1 / r, Math.min(1 / g, 1 / b)) * power;
+            r = r * powerInv + r * minInverse;
+            g = g * powerInv + g * minInverse;
+            b = b * powerInv + b * minInverse;
+            R[i] = MathUtil.clamp(r, 0, 1);
+            G[i] = MathUtil.clamp(g, 0, 1);
+            B[i] = MathUtil.clamp(b, 0, 1);
+        }
+    }
+
     protected float nightVisionIntensity(EntityPlayer player, float partialTick) {
         return nightVisionBrightness(player, partialTick) * 3F;
     }
 
     protected float nightVisionBrightness(EntityPlayer player, float partialTick) {
-        final float duration = (float) player.getActivePotionEffect(Potion.nightVision).getDuration();
-        if (duration > 200F)
-            return 1.0F;
-        return 0.7F + MathUtil.sin((duration - partialTick) * (float) Math.PI * 0.2F) * 0.3F;
+        int i = player.getActivePotionEffect(Potion.nightVision).getDuration();
+        return i > 200 ? 1.0F : 0.7F + MathHelper.sin(((float)i - partialTick) * (float)Math.PI * 0.2F) * 0.3F;
     }
 }

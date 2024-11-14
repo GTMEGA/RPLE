@@ -27,10 +27,12 @@
 package com.falsepattern.rple.internal.proxy;
 
 import com.falsepattern.falsetweaks.api.dynlights.FTDynamicLights;
+import com.falsepattern.rple.internal.HardcoreDarkness;
 import com.falsepattern.rple.internal.client.dynlights.ColorDynamicLights;
 import com.falsepattern.rple.internal.client.lamp.LampRenderer;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import lombok.NoArgsConstructor;
@@ -43,6 +45,7 @@ public final class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent evt) {
         super.preInit(evt);
         VertexConstants.initVertexConstants();
+        FMLCommonHandler.instance().bus().register(HardcoreDarkness.INSTANCE);
     }
 
     @Override

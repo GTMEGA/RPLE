@@ -26,8 +26,9 @@
 
 package com.falsepattern.rple.api.client.lightmap;
 
-import com.falsepattern.lib.StableAPI;
+import com.falsepattern.lib.DeprecationDetails;
 
-@StableAPI(since = "1.0.0")
+@Deprecated
+@DeprecationDetails(deprecatedSince = "1.3.0")
 public interface RPLELightMapGenerator extends RPLELightMapBase, RPLELightMapMask {
 }

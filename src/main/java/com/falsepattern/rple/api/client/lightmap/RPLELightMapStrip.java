@@ -30,6 +30,8 @@ import com.falsepattern.lib.StableAPI;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
+import java.util.function.BiFunction;
+
 @StableAPI(since = "1.0.0")
 public interface RPLELightMapStrip {
     @StableAPI.Expose

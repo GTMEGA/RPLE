@@ -76,7 +76,7 @@ repositories {
 
 dependencies {
     apiSplit("com.falsepattern:lumi-mc1.7.10:1.0.1")
-    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.4.4")
+    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.4.6")
     implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.3.3-7-g664c299")
 
     compileOnly("makamys:neodymium-mc1.7.10:0.3.3-unofficial:dev")

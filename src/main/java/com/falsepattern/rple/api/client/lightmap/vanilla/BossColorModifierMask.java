@@ -30,31 +30,44 @@ import com.falsepattern.rple.api.client.lightmap.RPLELightMapMask;
 import com.falsepattern.rple.api.client.lightmap.RPLELightMapStrip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
+
+import lombok.val;
+import lombok.var;
 import org.jetbrains.annotations.NotNull;
+
+import static com.falsepattern.rple.api.client.lightmap.RPLELightMapStrip.LIGHT_MAP_STRIP_LENGTH;
 
 public class BossColorModifierMask implements RPLELightMapMask {
     @Override
-    public boolean generateBlockLightMapMask(@NotNull RPLELightMapStrip output, float partialTick) {
-        return generateBossColorModifierMask(output, partialTick);
+    public void mutateBlockLightMap(@NotNull RPLELightMapStrip output, float partialTick) {
+        mutateLightMap(output, partialTick);
     }
 
     @Override
-    public boolean generateSkyLightMapMask(@NotNull RPLELightMapStrip output, float partialTick) {
-        return generateBossColorModifierMask(output, partialTick);
+    public void mutateSkyLightMap(@NotNull RPLELightMapStrip output, float partialTick) {
+        mutateLightMap(output, partialTick);
     }
 
-    protected boolean generateBossColorModifierMask(RPLELightMapStrip output, float partialTick) {
-        final EntityRenderer entityRenderer = Minecraft.getMinecraft().entityRenderer;
-        if (entityRenderer == null)
-            return false;
+    protected void mutateLightMap(RPLELightMapStrip output, float partialTick) {
+        val entityRenderer = Minecraft.getMinecraft().entityRenderer;
+        if (entityRenderer == null || entityRenderer.bossColorModifier <= 0)
+            return;
 
-        final float intensity = bossColorModifierIntensity(entityRenderer, partialTick);
-        final float red = (1F - intensity) + 0.7F * intensity;
-        final float green = (1F - intensity) + 0.6F * intensity;
-        final float blue = (1F - intensity) + 0.6F * intensity;
-
-        output.fillLightMapRGB(red, green, blue);
-        return true;
+        val mod = entityRenderer.bossColorModifierPrev + (entityRenderer.bossColorModifier - entityRenderer.bossColorModifierPrev) * partialTick;
+        val modInv = 1 - mod;
+        val modDarkR = 0.7F * mod;
+        val modDarkGB = 0.6F * mod;
+        val R = output.lightMapRedData();
+        val G = output.lightMapGreenData();
+        val B = output.lightMapBlueData();
+        for (int i = 0; i < LIGHT_MAP_STRIP_LENGTH; i++) {
+            val r = R[i];
+            val g = G[i];
+            val b = B[i];
+            R[i] = r * modInv + r * modDarkR;
+            G[i] = g * modInv + g * modDarkGB;
+            B[i] = b * modInv + b * modDarkGB;
+        }
     }
 
     protected float bossColorModifierIntensity(EntityRenderer entityRenderer, float partialTick) {
