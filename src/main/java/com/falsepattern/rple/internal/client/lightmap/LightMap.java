@@ -84,7 +84,6 @@ public final class LightMap {
 
     public void disable() {
         resetScale();
-        unbind();
     }
 
     public void enable() {
@@ -96,12 +95,6 @@ public final class LightMap {
         rTexture.bind();
         gTexture.bind();
         bTexture.bind();
-    }
-
-    public void unbind() {
-        rTexture.unbind();
-        gTexture.unbind();
-        bTexture.unbind();
     }
 
     public void resetScale() {

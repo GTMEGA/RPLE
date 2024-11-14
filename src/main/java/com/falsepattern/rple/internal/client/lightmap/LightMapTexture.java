@@ -190,7 +190,6 @@ public final class LightMapTexture {
             GL13.glActiveTexture(shaderTextureCoordsBinding);
         } else {
             GL13.glActiveTexture(fixedTextureUnitBinding);
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
         val lastMatrixMode = GL11.glGetInteger(GL11.GL_MATRIX_MODE);
         GL11.glMatrixMode(GL11.GL_TEXTURE);

@@ -67,11 +67,9 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
 
     @Inject(method = "disableLightmap",
             at = @At("HEAD"),
-            cancellable = true,
             require = 1)
     private void disableLightMaps(double p_78463_1_, CallbackInfo ci) {
         LightMap.lightMap().disable();
-        ci.cancel();
     }
 
     @Inject(method = "enableLightmap",
