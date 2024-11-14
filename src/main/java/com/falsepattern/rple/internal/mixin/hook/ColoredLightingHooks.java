@@ -47,6 +47,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
+import static com.falsepattern.rple.api.common.ServerColorHelper.COLOR_MIN;
 import static com.falsepattern.rple.api.common.ServerColorHelper.lightOpacityFromRGB16;
 import static com.falsepattern.rple.api.common.ServerColorHelper.lightValueFromRGB16;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
@@ -124,7 +125,7 @@ public final class ColoredLightingHooks {
                                                            int posY,
                                                            int posZ,
                                                            int minBrightnessCookie) {
-        int brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ, minBrightnessCookie);
+        int brightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, minBrightnessCookie);
         if (FTDynamicLights.isDynamicLights()) {
             brightness = ColorDynamicLights.INSTANCE.getCombinedLight(posX, posY, posZ, brightness);
         }
@@ -149,7 +150,7 @@ public final class ColoredLightingHooks {
                                                                                        posX,
                                                                                        posY,
                                                                                        posZ);
-        brightnessCookie = getRGBBrightnessForTessellator(world, posX, posY, posZ, brightnessCookie);
+        brightnessCookie = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, brightnessCookie);
 
         if (brightnessCookie == 0 && block instanceof BlockSlab) {
             --posY;
@@ -163,7 +164,7 @@ public final class ColoredLightingHooks {
                                                                                        posX,
                                                                                        posY,
                                                                                        posZ);
-            brightnessCookie = getRGBBrightnessForTessellator(world, posX, posY, posZ, brightnessCookie);
+            brightnessCookie = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, brightnessCookie);
         }
 
         return brightnessCookie;
@@ -174,8 +175,8 @@ public final class ColoredLightingHooks {
                                                                int posX,
                                                                int posY,
                                                                int posZ) {
-        val brightness = getRGBBrightnessForTessellator(world, posX, posY, posZ);
-        val topBrightness = getRGBBrightnessForTessellator(world, posX, posY + 1, posZ);
+        val brightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, COLOR_MIN);
+        val topBrightness = world.getLightBrightnessForSkyBlocks(posX, posY + 1, posZ, COLOR_MIN);
         return ClientColorHelper.cookieMax(brightness, topBrightness);
     }
 
@@ -184,7 +185,9 @@ public final class ColoredLightingHooks {
         return RPLETessBrightnessUtil.getRGBBrightnessForTessellator(world, posX, posY, posZ);
     }
 
+    // Do not call this directly, use the IBlockAccess for proper chunk cache access!!!
     @SideOnly(Side.CLIENT)
+    @Deprecated
     public static int getRGBBrightnessForTessellator(IBlockAccess world,
                                                      int posX,
                                                      int posY,
