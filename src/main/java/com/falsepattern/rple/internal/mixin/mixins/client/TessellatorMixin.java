@@ -61,7 +61,7 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
     private boolean enable(Tessellator tess) {
         if (hasBrightness) {
             val shortBuffer = ((ITessellatorMixin) tess).rple$shortBuffer();
-            LightMap.lightMap().prepare();
+            LightMap.lightMap().enable();
             LightMap.lightMap().enableVertexPointers(shortBuffer);
         }
         return false;
