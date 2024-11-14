@@ -30,9 +30,13 @@ package com.falsepattern.rple.internal;
 import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import com.falsepattern.rple.internal.common.util.FastThreadLocal;
 import com.falsepattern.rple.internal.proxy.CommonProxy;
+
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
+
 import lombok.NoArgsConstructor;
 
 import static com.falsepattern.rple.internal.Tags.*;
@@ -59,6 +63,9 @@ public final class RightProperLightingEngine {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent evt) {
         PROXY.preInit(evt);
+        if (Loader.isModLoaded("hardcoredarkness")) {
+            createSidedException("Remove the Hardcore Darkness mod and restart the game!\nRPLE has built-in hardcore darkness.");
+        }
     }
 
     @Mod.EventHandler
@@ -94,5 +101,20 @@ public final class RightProperLightingEngine {
     @Mod.EventHandler
     public void serverStopped(FMLServerStoppedEvent evt) {
         PROXY.serverStopped(evt);
+    }
+
+
+    private static void createSidedException(String text) {
+        if (FMLLaunchHandler.side().isClient()) {
+            throw ClientHelper.createException(text);
+        } else {
+            throw new Error(text);
+        }
+    }
+
+    private static class ClientHelper {
+        private static RuntimeException createException(String text) {
+            return new MultiLineLoadingException(text);
+        }
     }
 }
