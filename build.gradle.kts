@@ -71,12 +71,13 @@ repositories {
             includeGroup("optifine")
         }
     }
+    exclusive(ivy("https://mvn.falsepattern.com/releases/mirror/", "[orgPath]/[artifact]-[revision].[ext]"), "mirror")
 }
 
 dependencies {
     apiSplit("com.falsepattern:lumi-mc1.7.10:1.0.1")
     implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.4.4")
-    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.3.3-2-g28ce36e")
+    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.3.3-4-g4f3e9ce")
 
     compileOnly("makamys:neodymium-mc1.7.10:0.3.3-unofficial:dev")
 
@@ -104,4 +105,8 @@ dependencies {
     compileOnly(deobfCurse("appliedenergistics2-223794:2296430"))
     // The Lord of the Rings Mod: Legacy v36.15
     compileOnly(deobfCurse("the-lord-of-the-rings-mod-legacy-423748:4091561"))
+
+    compileOnly("mirror:AM2.5:LTS-1.6.7-dev")
+
+    runtimeOnlyNonPublishable(deobfCurse("animationapi-77191:2221721"))
 }

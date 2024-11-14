@@ -56,6 +56,7 @@ public enum TargetedMod implements ITargetedMod {
     NOT_ENOUGH_ITEMS("NotEnoughItems", false, contains("NotEnoughItems-")),
     FORGE_MULTI_PART("Forge Multi Part", false, contains("forgemultipart-")),
     COMPUTRONICS("Computronics", false, contains("Computronics-")),
+    AM25("Ars Magica 2.5", false, contains("am2.5")),
     ;
 
     @Getter

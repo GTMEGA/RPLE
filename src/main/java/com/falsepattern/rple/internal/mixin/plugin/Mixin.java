@@ -151,6 +151,10 @@ public enum Mixin implements IMixin {
     client_computronics_TileColorfulLampMixin(COMMON, require(COMPUTRONICS), "computronics.TileColorfulLampMixin"),
     // endregion
 
+    // region Ars Magica 2.5 Compatibility
+    client_am25_AMParticleMixin(CLIENT, require(AM25), "am25.AMParticleMixin"),
+    // endregion
+
     // TODO proper category
     RenderManagerMixin(CLIENT, always(), "RenderManagerMixin")
     ;
