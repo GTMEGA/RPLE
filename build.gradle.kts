@@ -105,6 +105,8 @@ dependencies {
     compileOnly(deobfCurse("appliedenergistics2-223794:2296430"))
     // The Lord of the Rings Mod: Legacy v36.15
     compileOnly(deobfCurse("the-lord-of-the-rings-mod-legacy-423748:4091561"))
+    // HBM NTM 1.0.27_X5027
+    compileOnly(deobfCurse("hbm-ntm-235439:5534354"))
 
     compileOnly("mirror:AM2.5:LTS-1.6.7-dev")
 

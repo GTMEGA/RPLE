@@ -161,6 +161,9 @@ public enum Mixin implements IMixin {
     client_am25_AMParticleMixin(CLIENT, require(AM25), "am25.AMParticleMixin"),
     // endregion
 
+    // region HBM NTM Compatibility
+    client_hbm_VertInfoMixin(CLIENT, require(HBM_NTM), "hbm.VertInfoMixin"),
+
     // TODO proper category
     RenderManagerMixin(CLIENT, always(), "RenderManagerMixin")
     ;
