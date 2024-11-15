@@ -286,7 +286,8 @@ public class ColorDynamicLights implements DynamicLightsDriver {
         return new DoubleBrightness(lightLevelMaxR, lightLevelMaxG, lightLevelMaxB);
     }
 
-    private static short getLightLevel(ItemStack itemStack) {
+    // Note: Public for easier compat with https://github.com/Tesseract4D/OffhandLights, do not refactor.
+    public static short getLightLevel(ItemStack itemStack) {
         if (itemStack == null) {
             return LightValueColor.LIGHT_VALUE_0.rgb16();
         } else {
