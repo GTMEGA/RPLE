@@ -79,6 +79,9 @@ dependencies {
     implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.4.6")
     implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.4.0")
 
+    // Keep in sync with FalseTweaks!
+    implementation("it.unimi.dsi:fastutil:8.5.13")
+
     compileOnly("makamys:neodymium-mc1.7.10:0.3.3-unofficial:dev")
 
     devOnlyNonPublishable("codechicken:notenoughitems-mc1.7.10:2.3.1-mega:dev")
