@@ -83,6 +83,7 @@ public enum Mixin implements IMixin {
     client_hd_GuiOptionSliderMixin(CLIENT, always(), "hd.GuiOptionSliderMixin"),
     client_hd_WorldMixin(CLIENT, always(), "hd.WorldMixin"),
     client_hd_WorldProviderMixin(CLIENT, always(), "hd.WorldProviderMixin"),
+    client_hd_WorldProviderHellMixin(CLIENT, always(), "hd.WorldProviderHellMixin"),
     // endregion
 
     // region OptiFine Compatibility

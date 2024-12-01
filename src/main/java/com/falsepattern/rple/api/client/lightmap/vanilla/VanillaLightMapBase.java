@@ -43,6 +43,7 @@ import static com.falsepattern.rple.api.client.lightmap.RPLELightMapStrip.LIGHT_
 public class VanillaLightMapBase implements RPLELightMapBase {
     protected static final int NETHER_DIMENSION_ID = -1;
     protected static final int END_DIMENSION_ID = 1;
+    private static final float DARK_NETHER_REVERSAL = 1 / 0.9f;
 
     @Override
     public boolean generateBlockLightMapBase(@NotNull RPLELightMapStrip output, float partialTick) {
@@ -62,7 +63,7 @@ public class VanillaLightMapBase implements RPLELightMapBase {
                 brightness += 0.03F;
             } else {
                 if (RPLEConfig.HD.DARK_NETHER && dim == NETHER_DIMENSION_ID) {
-                    brightness = 0;
+                    brightness = (brightness - 0.1f) * DARK_NETHER_REVERSAL;
                 }
             }
             output.setLightMap(i, MathUtil.clamp(brightness, 0, 1));
@@ -86,6 +87,11 @@ public class VanillaLightMapBase implements RPLELightMapBase {
             } else {
                 output.fillLightMapRGB(0.22F, 0.28F, 0.25F);
             }
+            return true;
+        }
+
+        if (worldProvider.dimensionId == NETHER_DIMENSION_ID && hd && RPLEConfig.HD.DARK_END) {
+            output.fillLightMapRGB(0, 0, 0);
             return true;
         }
 
