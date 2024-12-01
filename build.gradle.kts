@@ -76,13 +76,13 @@ repositories {
 
 dependencies {
     apiSplit("com.falsepattern:lumi-mc1.7.10:1.0.2")
-    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.4.6")
-    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.5.0")
+    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.4.7")
+    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.6.0")
 
     // Keep in sync with FalseTweaks!
     implementation("it.unimi.dsi:fastutil:8.5.13")
 
-    compileOnly("makamys:neodymium-mc1.7.10:0.3.3-unofficial:dev")
+    compileOnly("makamys:neodymium-mc1.7.10:0.4.0-unofficial:dev")
 
     devOnlyNonPublishable("codechicken:notenoughitems-mc1.7.10:2.3.1-mega:dev")
     runtimeOnlyNonPublishable("codechicken:codechickencore-mc1.7.10:1.4.0-mega:dev")
@@ -110,8 +110,6 @@ dependencies {
     compileOnly(deobfCurse("the-lord-of-the-rings-mod-legacy-423748:4091561"))
     // HBM NTM 1.0.27_X5027
     compileOnly(deobfCurse("hbm-ntm-235439:5534354"))
-    runtimeOnlyNonPublishable(deobfCurse("thaumcraft-223628:2227552"))
-    runtimeOnlyNonPublishable(deobfCurse("baubles-227083:2224857"))
 
     compileOnly("mirror:AM2.5:LTS-1.6.7-dev")
 }

@@ -47,8 +47,8 @@ import static com.falsepattern.rple.internal.Tags.*;
      acceptedMinecraftVersions = "[1.7.10]",
      guiFactory = GROUP_NAME + ".internal.client.config.RPLEGuiFactory",
      dependencies = "required-after:lumi@[1.0.2,);" +
-             "after:falsetweaks@[3.5.0,);" + // Hard dep, but only on clientside!
-             "required-after:falsepatternlib@[1.4.6,);")
+             "after:falsetweaks@[3.6.0,);" + // Hard dep, but only on clientside!
+             "required-after:falsepatternlib@[1.4.7,);")
 @NoArgsConstructor
 public final class RightProperLightingEngine {
     @SidedProxy(clientSide = GROUP_NAME + ".internal.proxy.ClientProxy",
