@@ -82,7 +82,11 @@ public final class LightMap {
         bTexture.toggleEnabled(enabled);
     }
 
-    public void prepare() {
+    public void disable() {
+        resetScale();
+    }
+
+    public void enable() {
         rescale();
         bind();
     }
@@ -91,6 +95,12 @@ public final class LightMap {
         rTexture.bind();
         gTexture.bind();
         bTexture.bind();
+    }
+
+    public void resetScale() {
+        rTexture.resetScale();
+        gTexture.resetScale();
+        bTexture.resetScale();
     }
 
     public void rescale() {

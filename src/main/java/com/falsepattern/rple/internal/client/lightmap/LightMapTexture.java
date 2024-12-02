@@ -175,6 +175,29 @@ public final class LightMapTexture {
         GL13.glActiveTexture(lastActiveTexture);
     }
 
+    public void unbind() {
+        if (!Compat.shadersEnabled()) {
+            val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+            GL13.glActiveTexture(fixedTextureUnitBinding);
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+            GL13.glActiveTexture(lastActiveTexture);
+        }
+    }
+
+    public void resetScale() {
+        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+        if (Compat.shadersEnabled()) {
+            GL13.glActiveTexture(shaderTextureCoordsBinding);
+        } else {
+            GL13.glActiveTexture(fixedTextureUnitBinding);
+        }
+        val lastMatrixMode = GL11.glGetInteger(GL11.GL_MATRIX_MODE);
+        GL11.glMatrixMode(GL11.GL_TEXTURE);
+        GL11.glLoadIdentity();
+        GL11.glMatrixMode(lastMatrixMode);
+        GL13.glActiveTexture(lastActiveTexture);
+    }
+
     public void rescale() {
         val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
         if (Compat.shadersEnabled()) {

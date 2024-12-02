@@ -26,6 +26,7 @@
 
 package com.falsepattern.rple.internal.client.lightmap;
 
+import com.falsepattern.lib.util.MathUtil;
 import com.falsepattern.rple.api.client.lightmap.*;
 import com.falsepattern.rple.internal.common.collection.PriorityPair;
 import lombok.NoArgsConstructor;
@@ -53,10 +54,10 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
 
     private final Set<RPLELightMapProvider> lightMapProviders = Collections.newSetFromMap(new IdentityHashMap<>());
 
-    private final Set<PriorityPair<RPLEBlockLightMapBase>> blockBases = new TreeSet<>();
-    private final Set<PriorityPair<RPLESkyLightMapBase>> skyBases = new TreeSet<>();
-    private final List<RPLEBlockLightMapMask> blockMasks = new ArrayList<>();
-    private final List<RPLESkyLightMapMask> skyMasks = new ArrayList<>();
+    private final List<PriorityPair<RPLEBlockLightMapBase>> blockBases = new ArrayList<>();
+    private final List<PriorityPair<RPLESkyLightMapBase>> skyBases = new ArrayList<>();
+    private final List<PriorityPair<RPLEBlockLightMapMask>> blockMasks = new ArrayList<>();
+    private final List<PriorityPair<RPLESkyLightMapMask>> skyMasks = new ArrayList<>();
 
     private final LightMapStrip blockLightMapStrip = new LightMapStrip();
     private final LightMapStrip skyLightMapStrip = new LightMapStrip();
@@ -87,18 +88,24 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
         } else {
             LOG.info("Registered {} light map providers", totalLightMapProviders);
         }
+
+        blockBases.sort(Comparator.naturalOrder());
+        skyBases.sort(Comparator.naturalOrder());
+        blockMasks.sort(Comparator.naturalOrder());
+        skyMasks.sort(Comparator.naturalOrder());
     }
 
     // region Registration
     @Override
+    @Deprecated
     public void registerLightMapGenerator(@NotNull RPLELightMapGenerator generator, int priority) {
         if (!registerLightMapProvider(generator))
             return;
 
         blockBases.add(wrappedWithPriority(generator, priority));
         skyBases.add(wrappedWithPriority(generator, priority));
-        blockMasks.add(generator);
-        skyMasks.add(generator);
+        blockMasks.add(wrappedWithPriority(generator, priority));
+        skyMasks.add(wrappedWithPriority(generator, priority));
     }
 
     @Override
@@ -127,28 +134,28 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
     }
 
     @Override
-    public void registerLightMapMask(@NotNull RPLELightMapMask mask) {
+    public void registerLightMapMask(@NotNull RPLELightMapMask mask, int sortOrder) {
         if (!registerLightMapProvider(mask))
             return;
 
-        blockMasks.add(mask);
-        skyMasks.add(mask);
+        blockMasks.add(wrappedWithPriority(mask, sortOrder));
+        skyMasks.add(wrappedWithPriority(mask, sortOrder));
     }
 
     @Override
-    public void registerBlockLightMapMask(@NotNull RPLEBlockLightMapMask blockMask) {
+    public void registerBlockLightMapMask(@NotNull RPLEBlockLightMapMask blockMask, int sortOrder) {
         if (!registerLightMapProvider(blockMask))
             return;
 
-        blockMasks.add(blockMask);
+        blockMasks.add(wrappedWithPriority(blockMask, sortOrder));
     }
 
     @Override
-    public void registerSkyLightMapMask(@NotNull RPLESkyLightMapMask skyMask) {
+    public void registerSkyLightMapMask(@NotNull RPLESkyLightMapMask skyMask, int sortOrder) {
         if (!registerLightMapProvider(skyMask))
             return;
 
-        skyMasks.add(skyMask);
+        skyMasks.add(wrappedWithPriority(skyMask, sortOrder));
     }
 
     private boolean registerLightMapProvider(RPLELightMapProvider provider) {
@@ -185,14 +192,23 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
 
         for (val mask : blockMasks) {
             tempLightMapStrip.resetLightMap();
-            if (mask.generateBlockLightMapMask(tempLightMapStrip, partialTick))
+            val m = mask.value();
+            //noinspection deprecation
+            if (m.generateBlockLightMapMask(tempLightMapStrip, partialTick))
                 blockLightMapStrip.mulLightMap(tempLightMapStrip);
+            else
+                m.mutateBlockLightMap(blockLightMapStrip, partialTick);
+
         }
 
         for (val mask : skyMasks) {
             tempLightMapStrip.resetLightMap();
-            if (mask.generateSkyLightMapMask(tempLightMapStrip, partialTick))
+            val m = mask.value();
+            //noinspection deprecation
+            if (m.generateSkyLightMapMask(tempLightMapStrip, partialTick))
                 skyLightMapStrip.mulLightMap(tempLightMapStrip);
+            else
+                m.mutateSkyLightMap(skyLightMapStrip, partialTick);
         }
 
         mixLightMaps();
@@ -214,28 +230,20 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
             val blockIndex = index % LIGHT_MAP_1D_SIZE;
             val skyIndex = index / LIGHT_MAP_1D_SIZE;
 
-            var red = blockLightMapRed[blockIndex] + skyLightMapRed[skyIndex];
-            var green = blockLightMapGreen[blockIndex] + skyLightMapGreen[skyIndex];
-            var blue = blockLightMapBlue[blockIndex] + skyLightMapBlue[skyIndex];
+            val bR = MathUtil.clamp(blockLightMapRed[blockIndex], 0, 1);
+            val bG = MathUtil.clamp(blockLightMapGreen[blockIndex], 0, 1);
+            val bB = MathUtil.clamp(blockLightMapBlue[blockIndex], 0, 1);
 
-            red = gammaCorrect(red, gamma);
-            green = gammaCorrect(green, gamma);
-            blue = gammaCorrect(blue, gamma);
+            val sR = MathUtil.clamp(skyLightMapRed[skyIndex], 0, 1);
+            val sG = MathUtil.clamp(skyLightMapGreen[skyIndex], 0, 1);
+            val sB = MathUtil.clamp(skyLightMapBlue[skyIndex], 0, 1);
 
-            mixedLightMapData[index] = colorToInt(red, green, blue);
+            val r = MathUtil.clamp(bR + sR, 0, 1);
+            val g = MathUtil.clamp(bG + sG, 0, 1);
+            val b = MathUtil.clamp(bB + sB, 0, 1);
+
+            mixedLightMapData[index] = colorToInt(r, g, b);
         }
-    }
-
-    private static float gammaCorrect(float color, float gamma) {
-        color = clamp(color);
-
-        var colorPreGamma = 1F - color;
-        colorPreGamma = 1F - (colorPreGamma * colorPreGamma * colorPreGamma * colorPreGamma);
-
-        color = (color * (1F - gamma)) + (colorPreGamma * gamma);
-        color = (color * 0.96F) + 0.03F;
-
-        return color;
     }
 
     private static float clamp(float value) {

@@ -52,45 +52,34 @@ public abstract class GuiIngameForgeMixin extends GuiIngame {
 
     @Redirect(method = "renderHUDText",
               at = @At(value = "INVOKE",
-                       target = "Lnet/minecraft/client/multiplayer/WorldClient;blockExists(III)Z",
-                       ordinal = 0),
-              require = 1)
-    private boolean hijackBlockInfo(WorldClient instance, int x, int y, int z) {
-        return false;
-    }
-
-    @Redirect(method = "renderHUDText",
-              at = @At(value = "INVOKE",
                        target = "Ljava/util/ArrayList;add(Ljava/lang/Object;)Z",
-                       ordinal = 1),
+                       ordinal = 0),
               slice = @Slice(from = @At(value = "INVOKE",
                                         target = "Lnet/minecraft/client/multiplayer/WorldClient;blockExists(III)Z",
                                         ordinal = 0)),
               require = 1)
     private boolean customData(ArrayList<String> left, Object e) {
+        val original = (String) e;
+        val startOffset = original.indexOf(" bl: ");
+        val prefix = original.substring(0, startOffset);
+        left.add(prefix);
         int x = MathHelper.floor_double(mc.thePlayer.posX);
         int y = MathHelper.floor_double(mc.thePlayer.posY);
         int z = MathHelper.floor_double(mc.thePlayer.posZ);
-        if (mc.theWorld != null && mc.theWorld.blockExists(x, y, z)) {
-            val chunk = mc.theWorld.getChunkFromBlockCoords(x, z);
-            val cx = x & 15;
-            val cz = z & 15;
-            val r = ((RPLEChunkRoot)chunk).rple$chunk(ColorChannel.RED_CHANNEL);
-            val g = ((RPLEChunkRoot)chunk).rple$chunk(ColorChannel.GREEN_CHANNEL);
-            val b = ((RPLEChunkRoot)chunk).rple$chunk(ColorChannel.BLUE_CHANNEL);
-            val br = r.lumi$getBrightness(LightType.BLOCK_LIGHT_TYPE, cx, y, cz);
-            val bg = g.lumi$getBrightness(LightType.BLOCK_LIGHT_TYPE, cx, y, cz);
-            val bb = b.lumi$getBrightness(LightType.BLOCK_LIGHT_TYPE, cx, y, cz);
-            val sr = r.lumi$getBrightness(LightType.SKY_LIGHT_TYPE, cx, y, cz);
-            val sg = g.lumi$getBrightness(LightType.SKY_LIGHT_TYPE, cx, y, cz);
-            val sb = b.lumi$getBrightness(LightType.SKY_LIGHT_TYPE, cx, y, cz);
-            left.add(String.format("lc: %d b: %s",
-                                   chunk.getTopFilledSegment() + 15,
-                                   chunk.getBiomeGenForWorldCoords(cx, cz, mc.theWorld.getWorldChunkManager()).biomeName));
-            left.add(String.format("B r: %d g: %d b: %d", br, bg, bb));
-            left.add(String.format("S r: %d g: %d b: %d", sr, sg, sb));
-            return true;
-        }
-        return false;
+        val chunk = mc.theWorld.getChunkFromBlockCoords(x, z);
+        val cx = x & 15;
+        val cz = z & 15;
+        val r = ((RPLEChunkRoot)chunk).rple$chunk(ColorChannel.RED_CHANNEL);
+        val g = ((RPLEChunkRoot)chunk).rple$chunk(ColorChannel.GREEN_CHANNEL);
+        val b = ((RPLEChunkRoot)chunk).rple$chunk(ColorChannel.BLUE_CHANNEL);
+        val br = r.lumi$getBrightness(LightType.BLOCK_LIGHT_TYPE, cx, y, cz);
+        val bg = g.lumi$getBrightness(LightType.BLOCK_LIGHT_TYPE, cx, y, cz);
+        val bb = b.lumi$getBrightness(LightType.BLOCK_LIGHT_TYPE, cx, y, cz);
+        val sr = r.lumi$getBrightness(LightType.SKY_LIGHT_TYPE, cx, y, cz);
+        val sg = g.lumi$getBrightness(LightType.SKY_LIGHT_TYPE, cx, y, cz);
+        val sb = b.lumi$getBrightness(LightType.SKY_LIGHT_TYPE, cx, y, cz);
+        left.add(String.format("B r: %d g: %d b: %d", br, bg, bb));
+        left.add(String.format("S r: %d g: %d b: %d", sr, sg, sb));
+        return true;
     }
 }

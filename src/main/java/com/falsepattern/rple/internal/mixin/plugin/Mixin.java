@@ -28,6 +28,7 @@ package com.falsepattern.rple.internal.mixin.plugin;
 
 import com.falsepattern.lib.mixin.IMixin;
 import com.falsepattern.lib.mixin.ITargetedMod;
+import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -78,13 +79,19 @@ public enum Mixin implements IMixin {
     client_rple_RPLEClientSubChunkImplMixin(CLIENT, always(), "rple.RPLEClientSubChunkImplMixin"),
     // endregion
 
+    // region Hardcore Darkness
+    client_hd_GuiOptionSliderMixin(CLIENT, always(), "hd.GuiOptionSliderMixin"),
+    client_hd_WorldMixin(CLIENT, always(), "hd.WorldMixin"),
+    client_hd_WorldProviderMixin(CLIENT, always(), "hd.WorldProviderMixin"),
+    client_hd_WorldProviderHellMixin(CLIENT, always(), "hd.WorldProviderHellMixin"),
+    // endregion
+
     // region OptiFine Compatibility
     client_optifine_OpenGLHelperMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.OpenGLHelperMixin"),
     client_optifine_ShadersMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShadersMixin"),
     client_optifine_ShaderTessMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShaderTessMixin"),
     client_optifine_OptiFineTessellatorMixin(CLIENT, require(OPTIFINE_WITH_SHADERS).and(avoid(OPTIFINE_WITHOUT_SHADERS)), "optifine.OptiFineTessellatorMixin"),
     client_optifine_OptiFineTessellator_NonShaderMixin(CLIENT, require(OPTIFINE_WITHOUT_SHADERS).and(avoid(OPTIFINE_WITH_SHADERS)), "optifine.OptiFineTessellator_NonShaderMixin"),
-    client_optifine_DynamicLightsMixin(CLIENT, require(OPTIFINE_WITH_SHADERS).or(require(OPTIFINE_WITHOUT_SHADERS)), "optifine.DynamicLightsMixin"),
     // endregion
 
     //region FastCraft Compatibility
@@ -107,7 +114,10 @@ public enum Mixin implements IMixin {
     // endregion
 
     // region Project Red Compatibility
-    common_projectred_ILightMixin(COMMON, projectRedLampsFilter(), "projectred.ILightMixin"),
+    common_projectred_ILightMixin(COMMON, projectRedILightFilter().and(condition(() -> !RPLEConfig.Compat.WEAKER_PROJECTRED_MIXINS)), "projectred.ILightMixin"),
+    common_projectred_weaker_BaseLightPartMixin(COMMON, projectRedILightFilter().and(condition(() -> RPLEConfig.Compat.WEAKER_PROJECTRED_MIXINS)), "projectred.weaker.BaseLightPartMixin"),
+    common_projectred_weaker_LightButtonPartMixin(COMMON, projectRedILightFilter().and(condition(() -> RPLEConfig.Compat.WEAKER_PROJECTRED_MIXINS)), "projectred.weaker.LightButtonPartMixin"),
+    common_projectred_weaker_TileLampMixin(COMMON, projectRedILightFilter().and(condition(() -> RPLEConfig.Compat.WEAKER_PROJECTRED_MIXINS)), "projectred.weaker.TileLampMixin"),
 
     client_projectred_RenderHaloMixin(CLIENT, projectRedLampsFilter(), "projectred.RenderHaloMixin"),
     client_projectred_LampTESRMixin(CLIENT, projectRedLampsFilter(), "projectred.LampTESRMixin"),
@@ -148,6 +158,13 @@ public enum Mixin implements IMixin {
     client_computronics_TileColorfulLampMixin(COMMON, require(COMPUTRONICS), "computronics.TileColorfulLampMixin"),
     // endregion
 
+    // region Ars Magica 2.5 Compatibility
+    client_am25_AMParticleMixin(CLIENT, require(AM25), "am25.AMParticleMixin"),
+    // endregion
+
+    // region HBM NTM Compatibility
+    client_hbm_VertInfoMixin(CLIENT, require(HBM_NTM), "hbm.VertInfoMixin"),
+
     // TODO proper category
     RenderManagerMixin(CLIENT, always(), "RenderManagerMixin")
     ;
@@ -160,7 +177,10 @@ public enum Mixin implements IMixin {
     private final String mixin;
 
     private static Predicate<List<ITargetedMod>> projectRedLampsFilter() {
-        return require(PROJECT_RED_COMBINED_JAR).or(require(PROJECT_RED_CORE).and(require(PROJECT_RED_ILLUMINATION)));
+        return require(PROJECT_RED_OG_JAR).or(require(PROJECT_RED_MEGA_JAR)).or(require(PROJECT_RED_CORE).and(require(PROJECT_RED_ILLUMINATION)));
+    }
+    private static Predicate<List<ITargetedMod>> projectRedILightFilter() {
+        return require(PROJECT_RED_OG_JAR).or(require(PROJECT_RED_CORE).and(require(PROJECT_RED_ILLUMINATION)));
     }
 }
 

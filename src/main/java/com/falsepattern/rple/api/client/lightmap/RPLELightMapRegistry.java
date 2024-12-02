@@ -26,12 +26,14 @@
 
 package com.falsepattern.rple.api.client.lightmap;
 
+import com.falsepattern.lib.DeprecationDetails;
 import com.falsepattern.lib.StableAPI;
 import org.jetbrains.annotations.NotNull;
 
 @StableAPI(since = "1.0.0")
 public interface RPLELightMapRegistry {
-    @StableAPI.Expose
+    @Deprecated
+    @DeprecationDetails(deprecatedSince = "1.3.0")
     void registerLightMapGenerator(@NotNull RPLELightMapGenerator generator, int priority);
 
     @StableAPI.Expose
@@ -43,12 +45,30 @@ public interface RPLELightMapRegistry {
     @StableAPI.Expose
     void registerSkyLightMapBase(@NotNull RPLESkyLightMapBase skyBase, int priority);
 
-    @StableAPI.Expose
-    void registerLightMapMask(@NotNull RPLELightMapMask mask);
+    @Deprecated
+    @DeprecationDetails(deprecatedSince = "1.3.0")
+    default void registerLightMapMask(@NotNull RPLELightMapMask mask) {
+        registerLightMapMask(mask, 1000);
+    }
 
     @StableAPI.Expose
-    void registerBlockLightMapMask(@NotNull RPLEBlockLightMapMask blockMask);
+    void registerLightMapMask(@NotNull RPLELightMapMask mask, int sortOrder);
+
+    @Deprecated
+    @DeprecationDetails(deprecatedSince = "1.3.0")
+    default void registerBlockLightMapMask(@NotNull RPLEBlockLightMapMask blockMask) {
+        registerBlockLightMapMask(blockMask, 1000);
+    }
 
     @StableAPI.Expose
-    void registerSkyLightMapMask(@NotNull RPLESkyLightMapMask skyMask);
+    void registerBlockLightMapMask(@NotNull RPLEBlockLightMapMask blockMask, int sortOrder);
+
+    @Deprecated
+    @DeprecationDetails(deprecatedSince = "1.3.0")
+    default void registerSkyLightMapMask(@NotNull RPLESkyLightMapMask skyMask) {
+        registerSkyLightMapMask(skyMask, 1000);
+    }
+
+    @StableAPI.Expose
+    void registerSkyLightMapMask(@NotNull RPLESkyLightMapMask skyMask, int sortOrder);
 }

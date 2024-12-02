@@ -26,26 +26,25 @@
 
 package com.falsepattern.rple.internal.asm;
 
-import com.falsepattern.lib.turboasm.ClassNodeHandle;
-import com.falsepattern.lib.turboasm.TurboClassTransformer;
-import com.falsepattern.rple.internal.common.util.LogHelper;
 import com.falsepattern.rple.internal.Tags;
 import com.falsepattern.rple.internal.asm.util.MethodDecl;
 import com.falsepattern.rple.internal.asm.util.Util;
 import lombok.val;
 import lombok.var;
-import org.jetbrains.annotations.NotNull;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import net.minecraft.launchwrapper.IClassTransformer;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.falsepattern.rple.internal.common.config.RPLEConfig.Debug.DEBUG_ASM_TRANSFORMER;
-
-public final class RPLEBlockColorInjector implements TurboClassTransformer {
+public final class RPLEBlockColorInjector implements IClassTransformer {
     // @formatter:off
     private static final String NAME_LIGHT_VALUE_DEOBF     = "getLightValue";
     private static final String NAME_LIGHT_VALUE_OBF       = "func_149750_m";
@@ -74,6 +73,8 @@ public final class RPLEBlockColorInjector implements TurboClassTransformer {
     };
     private static final int POTENTIAL_CANDIDATE_COUNT = POTENTIAL_CANDIDATES.length;
 
+    private static final Logger LOG = LogManager.getLogger("RPLE Block Color Injector");
+
     private static final Map<MethodDecl, String> MAPPINGS;
     static {
         MAPPINGS = new HashMap<>();
@@ -86,6 +87,7 @@ public final class RPLEBlockColorInjector implements TurboClassTransformer {
     }
 
     private static final String INTERNAL_BLOCK = "net/minecraft/block/Block";
+    private static final String BLOCK = "net.minecraft.block.Block";
     private static final Map<String, Boolean> BLOCK_SUBCLASS_MEMOIZATION = new HashMap<>(1024, 0.2F);
     static {
         BLOCK_SUBCLASS_MEMOIZATION.put(INTERNAL_BLOCK, true);
@@ -94,27 +96,18 @@ public final class RPLEBlockColorInjector implements TurboClassTransformer {
     // @formatter:on
 
     @Override
-    public String owner() {
-        return Tags.MOD_NAME;
-    }
+    public byte[] transform(String name, String transformedName, byte[] basicClass) {
+        if (basicClass == null || transformedName.startsWith(Tags.GROUP_NAME) || transformedName.equals(BLOCK)) {
+            return basicClass;
+        }
+        if (!isBlockSubclass(transformedName.replace('.', '/'))) {
+            return basicClass;
+        }
+        val cn = new ClassNode();
 
-    @Override
-    public String name() {
-        return "RPLEBlockColorInjector";
-    }
-
-    @Override
-    public boolean shouldTransformClass(@NotNull String className, @NotNull ClassNodeHandle classNode) {
-        return !className.startsWith(Tags.GROUP_NAME);
-    }
-
-    @Override
-    public boolean transformClass(@NotNull String className, @NotNull ClassNodeHandle classNode) {
-        val cn = classNode.getNode();
-        if (cn == null)
-            return false;
+        new ClassReader(basicClass).accept(cn, 0);
         if (!isValidTarget(cn))
-            return false;
+            return basicClass;
 
         boolean modified = false;
         val methodCount = cn.methods.size();
@@ -123,13 +116,17 @@ public final class RPLEBlockColorInjector implements TurboClassTransformer {
             for (val mapping : MAPPINGS.entrySet()) {
                 if (tryTransform(cn, method, mapping.getKey(), mapping.getValue())) {
                     modified = true;
-                    if (LogHelper.shouldLogDebug(DEBUG_ASM_TRANSFORMER))
-                        RPLETransformer.LOG.debug("[BlockLightHooks] Transformed {}.{}{}", className, method.name, method.desc);
                     break;
                 }
             }
         }
-        return modified;
+        if (modified) {
+            final ClassWriter writer = new ClassWriter(0);
+            cn.accept(writer);
+            return writer.toByteArray();
+        } else {
+            return basicClass;
+        }
     }
 
     private static boolean tryTransform(ClassNode cn, MethodNode method, MethodDecl decl, String newName) {
@@ -137,7 +134,6 @@ public final class RPLEBlockColorInjector implements TurboClassTransformer {
             return false;
         method.name = newName;
 
-        boolean modified = false;
         val insts = method.instructions.iterator();
         while (insts.hasNext()) {
             val inst = insts.next();
@@ -148,13 +144,12 @@ public final class RPLEBlockColorInjector implements TurboClassTransformer {
                 for (val mapping : MAPPINGS.entrySet()) {
                     if (mapping.getKey().matches(insnNode)) {
                         insnNode.name = mapping.getValue();
-                        modified = true;
                         break;
                     }
                 }
             }
         }
-        return modified;
+        return true;
     }
 
     private static boolean isBlockSubclass(String className) {
@@ -176,7 +171,9 @@ public final class RPLEBlockColorInjector implements TurboClassTransformer {
             return false;
         }
 
-        return isBlockSubclass(new ClassReader(classBytes).getSuperName());
+        val isc = isBlockSubclass(new ClassReader(classBytes).getSuperName());
+        BLOCK_SUBCLASS_MEMOIZATION.put(className, isc);
+        return isc;
     }
 
     /**
@@ -188,7 +185,7 @@ public final class RPLEBlockColorInjector implements TurboClassTransformer {
             var method = cn.methods.get(i);
             for (int j = 0; j < POTENTIAL_CANDIDATE_COUNT; j++) {
                 if (POTENTIAL_CANDIDATES[j].matches(method))
-                    return isBlockSubclass(cn.superName);
+                    return true;
             }
         }
         return false;

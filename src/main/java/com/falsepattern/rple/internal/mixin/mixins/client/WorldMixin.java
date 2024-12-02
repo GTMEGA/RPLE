@@ -40,6 +40,7 @@ public abstract class WorldMixin implements IBlockAccess {
      * @author FalsePattern
      * @reason Colorize
      */
+    @Deprecated //Suppressing warning
     @Overwrite
     @SideOnly(Side.CLIENT)
     public int getLightBrightnessForSkyBlocks(int posX, int posY, int posZ, int cookieMinBlockLight) {

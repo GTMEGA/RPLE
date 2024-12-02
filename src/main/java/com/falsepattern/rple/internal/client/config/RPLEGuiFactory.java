@@ -27,11 +27,20 @@
 package com.falsepattern.rple.internal.client.config;
 
 import com.falsepattern.lib.config.ConfigException;
-import com.falsepattern.lib.config.SimpleGuiConfig;
+import com.falsepattern.lib.config.ConfigurationManager;
 import com.falsepattern.lib.config.SimpleGuiFactory;
 import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import lombok.NoArgsConstructor;
+import lombok.val;
+
 import net.minecraft.client.gui.GuiScreen;
+
+import cpw.mods.fml.client.config.DummyConfigElement;
+import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.IConfigElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.falsepattern.rple.internal.Tags.MOD_ID;
 import static com.falsepattern.rple.internal.Tags.MOD_NAME;
@@ -50,9 +59,25 @@ public final class RPLEGuiFactory implements SimpleGuiFactory {
         return RPLEGuiConfig.class;
     }
 
-    public static final class RPLEGuiConfig extends SimpleGuiConfig {
+    public static final class RPLEGuiConfig extends GuiConfig {
         public RPLEGuiConfig(GuiScreen parent) throws ConfigException {
-            super(parent, MOD_ID, MOD_NAME, RPLEConfig.configClasses());
+            super(parent, getConfigElements(), MOD_ID, false, false, MOD_NAME + "Configuration");
+        }
+        @SuppressWarnings({"rawtypes"})
+        private static List<IConfigElement> getConfigElements() throws ConfigException {
+            val result = new ArrayList<IConfigElement>();
+            result.add(category("general", RPLEConfig.General.class));
+            result.add(category("debug", RPLEConfig.Debug.class));
+            result.add(category("compat", RPLEConfig.Compat.class));
+            result.add(category("hd", RPLEConfig.HD.class));
+            return result;
+        }
+
+        @SuppressWarnings({"rawtypes", "unchecked"})
+        private static IConfigElement category(String name, Class<?> klass) throws ConfigException {
+            return new DummyConfigElement.DummyCategoryElement(name,
+                                                               "config.rple." + name + ".category",
+                                                               ConfigurationManager.getConfigElementsMulti(klass));
         }
     }
 }

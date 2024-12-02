@@ -41,7 +41,7 @@ public final class RPLEConfig {
     }
 
     public static Class<?>[] configClasses() {
-        return new Class[]{General.class, Debug.class};
+        return new Class[]{General.class, Debug.class, Compat.class, HD.class};
     }
 
     @SneakyThrows
@@ -61,6 +61,17 @@ public final class RPLEConfig {
         @Config.RequiresMcRestart
         @Config.DefaultBoolean(true)
         public static boolean CRAFTABLE_LAMPS;
+    }
+
+    @Config(modid = MOD_ID, category = "compat")
+    public static final class Compat {
+        static {poke();}
+        @Config.Name("weakerProjectRedMixins")
+        @Config.Comment({"Set this to false if running on modern java"})
+        @Config.LangKey("config.rple.compat.weakerProjectRed")
+        @Config.RequiresMcRestart
+        @Config.DefaultBoolean(true)
+        public static boolean WEAKER_PROJECTRED_MIXINS;
     }
 
     @Config(modid = MOD_ID, category = "debug")
@@ -109,6 +120,75 @@ public final class RPLEConfig {
         @Config.LangKey("config.rple.debug.classBlockList")
         @Config.DefaultBoolean(false)
         public static boolean DEBUG_CLASS_BLOCK_LIST;
+    }
+
+    @Config(modid = MOD_ID, category = "hardcore_darkness")
+    @Config.Synchronize
+    public static final class HD {
+        static {
+            poke();
+        }
+
+        @Config.Name("mode")
+        @Config.Comment({
+                "Disabled: No hardcore darkness",
+                "BlockOnly: No minimum block light, normal skylight",
+                "DynamicMoonlight: No minimum block light, skylight is dependent on moon phase",
+                "Both: No minimum sky & block light"
+        })
+        @Config.LangKey("config.rple.hd.mode")
+        @Config.DefaultEnum("Disabled")
+        public static Mode MODE;
+
+        @Config.Name("darkNether")
+        @Config.Comment({
+                "Whether the Nether is also supposed to have its minimum light removed"
+        })
+        @Config.LangKey("config.rple.hd.darkNether")
+        @Config.DefaultBoolean(true)
+        public static boolean DARK_NETHER;
+
+        @Config.Name("darkEnd")
+        @Config.Comment({
+                "Whether the End is also supposed to have its minimum light removed"
+        })
+        @Config.LangKey("config.rple.hd.darkEnd")
+        @Config.DefaultBoolean(false)
+        public static boolean DARK_END;
+
+        @Config.Name("gammaOverride")
+        @Config.Comment({
+                "Setting this to something other than -1 will lock the gamma config settings to that value. (0.0 - 1.0)"
+        })
+        @Config.LangKey("config.rple.hd.gamma")
+        @Config.RangeDouble(min = -1.0, max = 1.0)
+        @Config.DefaultDouble(0)
+        public static double GAMMA_OVERRIDE;
+
+        @Config.Name("moonLightList")
+        @Config.Comment({
+                "In mode 2 this list defines how much skylight there is when 0%/25%/50%/75%/100% of the moon is visible. (Values go from 0 (Total Darkness) to 1 (Total Brightness))."
+        })
+        @Config.LangKey("config.rple.hd.moonLight")
+        @Config.RangeDouble(min = 0, max = 1)
+        @Config.ListFixedLength
+        @Config.DefaultDoubleList({0, 0.075, 0.15, 0.225, 0.3})
+        public static double[] MOON_LIGHT_LIST;
+
+        @Config.Name("dimensionBlacklist")
+        @Config.Comment({
+                "A list of dimension ids in which Hardcore Darkness will be completely disabled."
+        })
+        @Config.DefaultIntList({})
+        @Config.ListMaxLength(value = Integer.MAX_VALUE)
+        public static int[] DIMENSION_BLACKLIST;
+
+        public enum Mode {
+            Disabled,
+            BlockOnly,
+            DynamicMoonlight,
+            Both
+        }
     }
 
     public enum LogMode {CUSTOM, ALL, NONE}

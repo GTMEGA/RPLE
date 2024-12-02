@@ -49,8 +49,7 @@ public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRender
               require = 2)
     @SideOnly(Side.CLIENT)
     public int cacheTessellatorBrightness(World world, int posX, int posY, int posZ, int minBrightnessCookie) {
-        val tessellatorBrightness =
-                ColoredLightingHooks.getRGBBrightnessForTessellator(world, posX, posY, posZ, minBrightnessCookie);
+        val tessellatorBrightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, minBrightnessCookie);
         EnderIOHelper.cacheTessellatorBrightness(tessellatorBrightness);
         return tessellatorBrightness;
     }

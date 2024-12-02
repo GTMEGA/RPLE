@@ -65,12 +65,19 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
         LightMap.lightMap().generateTextures();
     }
 
+    @Inject(method = "disableLightmap",
+            at = @At("HEAD"),
+            require = 1)
+    private void disableLightMaps(double p_78463_1_, CallbackInfo ci) {
+        LightMap.lightMap().disable();
+    }
+
     @Inject(method = "enableLightmap",
             at = @At("HEAD"),
             cancellable = true,
             require = 1)
     private void enableLightMaps(double p_78463_1_, CallbackInfo ci) {
-        LightMap.lightMap().prepare();
+        LightMap.lightMap().enable();
         ci.cancel();
     }
 

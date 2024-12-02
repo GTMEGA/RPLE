@@ -3,6 +3,8 @@ package com.falsepattern.rple.internal.mixin.mixins.common.computronics;
 import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLECustomBlockBrightness;
 import net.minecraft.world.IBlockAccess;
+
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,7 +28,7 @@ public abstract class TileColorfulLampMixin implements RPLECustomBlockBrightness
     }
 
     @Override
-    public short rple$getCustomBrightnessColor(IBlockAccess access, int meta, int posX, int posY, int posZ) {
+    public short rple$getCustomBrightnessColor(@NotNull IBlockAccess access, int meta, int posX, int posY, int posZ) {
         short colour = (short) this.getLampColor();
         int red = ((colour >> 10) & 0x1f) >> 1;
         int green = ((colour >> 5) & 0x1f) >> 1;

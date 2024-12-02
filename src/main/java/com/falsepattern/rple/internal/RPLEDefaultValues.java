@@ -28,6 +28,7 @@ package com.falsepattern.rple.internal;
 
 import com.falsepattern.rple.api.client.lightmap.RPLELightMapRegistry;
 import com.falsepattern.rple.api.client.lightmap.vanilla.BossColorModifierMask;
+import com.falsepattern.rple.api.client.lightmap.vanilla.GammaMask;
 import com.falsepattern.rple.api.client.lightmap.vanilla.NightVisionMask;
 import com.falsepattern.rple.api.client.lightmap.vanilla.VanillaLightMapBase;
 import com.falsepattern.rple.api.common.color.DefaultColor;
@@ -48,9 +49,10 @@ import static net.minecraft.init.Blocks.*;
 @UtilityClass
 public final class RPLEDefaultValues {
     public static void registerDefaultLightMaps(RPLELightMapRegistry registry) {
-        registry.registerLightMapBase(new VanillaLightMapBase(), 1000);
-        registry.registerLightMapMask(new NightVisionMask());
-        registry.registerLightMapMask(new BossColorModifierMask());
+        registry.registerLightMapBase(new VanillaLightMapBase(), 10000);
+        registry.registerLightMapMask(new BossColorModifierMask(), 20000);
+        registry.registerLightMapMask(new NightVisionMask(), 30000);
+        registry.registerLightMapMask(new GammaMask(), 40000);
     }
 
     public static void preloadDefaultColorPalette(BlockColorConfig config) {

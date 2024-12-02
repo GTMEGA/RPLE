@@ -24,14 +24,19 @@
  * GNU Affero General Public License. See the full LICENSE file for details.
  */
 
-package com.falsepattern.rple.internal.client.optifine;
+package com.falsepattern.rple.internal.client.dynlights;
 
+import com.falsepattern.falsetweaks.api.dynlights.DynamicLightsDriver;
+import com.falsepattern.falsetweaks.api.dynlights.FTDynamicLights;
+import com.falsepattern.lib.util.MathUtil;
 import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.api.common.color.LightValueColor;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import lombok.var;
@@ -53,53 +58,91 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import stubpackage.Config;
 
-import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class ColorDynamicLights {
-    private static final ColorDynamicLightsMap mapDynamicLights = new ColorDynamicLightsMap();
+public class ColorDynamicLights implements DynamicLightsDriver {
+    public static final ColorDynamicLights INSTANCE = new ColorDynamicLights(false);
+    private static final ColorDynamicLights FOR_WORLD = new ColorDynamicLights(true);
+    private static final Int2ObjectMap<ColorDynamicLight> mapDynamicLights = new Int2ObjectArrayMap<>();
+    private static final ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
     private static long timeUpdateMs = 0L;
+    private final boolean forWorld;
+    private static final double MAX_DIST = 16.0;
+    private static final double MAX_DIST_SQ = MAX_DIST * MAX_DIST;
+    private static final int LIGHT_LEVEL_MAX = 15;
 
-    public ColorDynamicLights() {
+    private static ReentrantReadWriteLock.WriteLock busyWaitWriteLock() {
+        val lock = rwLock.writeLock();
+        while (!lock.tryLock()) {
+            Thread.yield();
+        }
+        return lock;
     }
 
-    public static void entityAdded(Entity entityIn, RenderGlobal renderGlobal) {
+    private static ReentrantReadWriteLock.ReadLock busyWaitReadLock() {
+        val lock = rwLock.readLock();
+        while (!lock.tryLock()) {
+            Thread.yield();
+        }
+        return lock;
     }
 
-    public static void entityRemoved(Entity entityIn, RenderGlobal renderGlobal) {
-        synchronized (mapDynamicLights) {
+    private ColorDynamicLights(boolean forWorld) {
+        this.forWorld = forWorld;
+    }
+
+    @Override
+    public DynamicLightsDriver forWorldMesh() {
+        return FOR_WORLD;
+    }
+
+    @Override
+    public boolean enabled() {
+        return FTDynamicLights.isDynamicLights();
+    }
+
+    @Override
+    public void entityAdded(Entity entityIn, RenderGlobal renderGlobal) {
+    }
+
+    @Override
+    public void entityRemoved(Entity entityIn, RenderGlobal renderGlobal) {
+        val lock = busyWaitWriteLock();
+        try {
             ColorDynamicLight dynamicLight = mapDynamicLights.remove(entityIn.getEntityId());
             if (dynamicLight != null) {
                 dynamicLight.updateLitChunks(renderGlobal);
             }
+        } finally {
+            lock.unlock();
         }
     }
 
-    public static void update(RenderGlobal renderGlobal) {
+    @Override
+    public void update(RenderGlobal renderGlobal) {
         long timeNowMs = System.currentTimeMillis();
         if (timeNowMs < timeUpdateMs + 50L) {
             return;
         }
         timeUpdateMs = timeNowMs;
-        synchronized (mapDynamicLights) {
+        val lock = busyWaitWriteLock();
+        try {
             updateMapDynamicLights(renderGlobal);
-            if (mapDynamicLights.size() <= 0) {
-                return;
+            if (!mapDynamicLights.isEmpty()) {
+                for (val dynamicLight: mapDynamicLights.values()) {
+                    dynamicLight.update(renderGlobal);
+                }
             }
-            List<ColorDynamicLight> dynamicLights = mapDynamicLights.valueList();
-
-            for (int i = 0; i < dynamicLights.size(); ++i) {
-                ColorDynamicLight dynamicLight = dynamicLights.get(i);
-                dynamicLight.update(renderGlobal);
-            }
+        } finally {
+            lock.unlock();
         }
     }
 
-    private static void updateMapDynamicLights(RenderGlobal renderGlobal) {
+    private void updateMapDynamicLights(RenderGlobal renderGlobal) {
         World world = renderGlobal.theWorld;
         if (world != null) {
-            for (Entity entity : (List<Entity>) world.getLoadedEntityList()) {
+            for (Entity entity : world.getLoadedEntityList()) {
                 val lightLevel = getLightLevel(entity);
                 if (ServerColorHelper.red(lightLevel) > 0 || ServerColorHelper.green(lightLevel) > 0 || ServerColorHelper.blue(lightLevel) > 0) {
                     int key = entity.getEntityId();
@@ -119,12 +162,14 @@ public class ColorDynamicLights {
         }
     }
 
-    public static int getCombinedLight(int x, int y, int z, int combinedLight) {
+    @Override
+    public int getCombinedLight(int x, int y, int z, int combinedLight) {
         val lightPlayer = getLightLevel(x, y, z);
         return getCombinedLight(lightPlayer, combinedLight);
     }
 
-    public static int getCombinedLight(Entity entity, int combinedLight) {
+    @Override
+    public int getCombinedLight(Entity entity, int combinedLight) {
         val lightPlayer = getLightLevel(entity);
         return getCombinedLight(new DoubleBrightness(ServerColorHelper.red(lightPlayer),
                         ServerColorHelper.green(lightPlayer),
@@ -166,15 +211,17 @@ public class ColorDynamicLights {
         return combinedLight;
     }
 
-    private static DoubleBrightness getLightLevel(int x, int y, int z) {
+    private DoubleBrightness getLightLevel(int x, int y, int z) {
+        val rve = Minecraft.getMinecraft().renderViewEntity;
         double lightLevelMaxR = 0.0;
         double lightLevelMaxG = 0.0;
         double lightLevelMaxB = 0.0;
-        synchronized (mapDynamicLights) {
-            List<ColorDynamicLight> dynamicLights = mapDynamicLights.valueList();
-
-            for (int i = 0; i < dynamicLights.size(); ++i) {
-                ColorDynamicLight dynamicLight = dynamicLights.get(i);
+        val lock = busyWaitReadLock();
+        try {
+            for (val dynamicLight: mapDynamicLights.values()) {
+                if (!FTDynamicLights.isDynamicHandLight(forWorld) && dynamicLight.getEntity() == rve) {
+                    continue;
+                }
                 var dynamicLightLevel = dynamicLight.getLastLightLevel();
                 double dynamicR = ServerColorHelper.red(dynamicLightLevel);
                 double dynamicG = ServerColorHelper.green(dynamicLightLevel);
@@ -186,42 +233,60 @@ public class ColorDynamicLights {
                     double dx = (double) x - px;
                     double dy = (double) y - py;
                     double dz = (double) z - pz;
-                    double distSq = dx * dx + dy * dy + dz * dz;
-                    if (dynamicLight.isUnderwater() && !Config.isClearWater()) {
-                        dynamicR = Config.limit(dynamicR - 2, 0, 15);
-                        dynamicG = Config.limit(dynamicG - 2, 0, 15);
-                        dynamicB = Config.limit(dynamicB - 2, 0, 15);
-                        distSq *= 2.0;
+                    if (dynamicLight.isUnderwater()) {
+                        dynamicR = MathUtil.clamp(dynamicR - 2, 0, LIGHT_LEVEL_MAX);
+                        dynamicG = MathUtil.clamp(dynamicG - 2, 0, LIGHT_LEVEL_MAX);
+                        dynamicB = MathUtil.clamp(dynamicB - 2, 0, LIGHT_LEVEL_MAX);
+                        dx *= 2.0;
+                        dy *= 2.0;
+                        dz *= 2.0;
+                    }
+                    double lightR;
+                    double lightG;
+                    double lightB;
+
+                    if (FTDynamicLights.isCircular()) {
+                        double distSq = dx * dx + dy * dy + dz * dz;
+                        if (distSq <= MAX_DIST_SQ) {
+                            val dist = MathUtil.sqrt(distSq);
+                            lightR = MathUtil.clamp(dynamicR - dist, 0, LIGHT_LEVEL_MAX);
+                            lightG = MathUtil.clamp(dynamicG - dist, 0, LIGHT_LEVEL_MAX);
+                            lightB = MathUtil.clamp(dynamicB - dist, 0, LIGHT_LEVEL_MAX);
+                        } else {
+                            lightR = lightG = lightB = 0;
+                        }
+                    } else {
+                        dx = Math.abs(dx);
+                        dy = Math.abs(dy);
+                        dz = Math.abs(dz);
+                        double dist = Math.max(dx - 0.25, 0) + Math.max(dy - 0.25, 0) + Math.max(dz - 0.25, 0);
+                        lightR = MathUtil.clamp(dynamicR - dist, 0, LIGHT_LEVEL_MAX);
+                        lightG = MathUtil.clamp(dynamicG - dist, 0, LIGHT_LEVEL_MAX);
+                        lightB = MathUtil.clamp(dynamicB - dist, 0, LIGHT_LEVEL_MAX);
                     }
 
-                    double lightDist = Math.max(Math.max(dynamicR, dynamicG), dynamicB);
-
-                    if (distSq <= (lightDist * lightDist)) {
-                        double dist = Math.sqrt(distSq);
-                        double light = 1.0 - dist / lightDist;
-                        double lightLevelR = light * dynamicR;
-                        double lightLevelG = light * dynamicG;
-                        double lightLevelB = light * dynamicB;
-                        if (lightLevelR > lightLevelMaxR) {
-                            lightLevelMaxR = lightLevelR;
-                        }
-                        if (lightLevelG > lightLevelMaxG) {
-                            lightLevelMaxG = lightLevelG;
-                        }
-                        if (lightLevelB > lightLevelMaxB) {
-                            lightLevelMaxB = lightLevelB;
-                        }
+                    if (lightR > lightLevelMaxR) {
+                        lightLevelMaxR = lightR;
+                    }
+                    if (lightG > lightLevelMaxG) {
+                        lightLevelMaxG = lightG;
+                    }
+                    if (lightB > lightLevelMaxB) {
+                        lightLevelMaxB = lightB;
                     }
                 }
             }
+        } finally {
+            lock.unlock();
         }
 
-        lightLevelMaxR = Config.limit(lightLevelMaxR, 0, 15);
-        lightLevelMaxG = Config.limit(lightLevelMaxG, 0, 15);
-        lightLevelMaxB = Config.limit(lightLevelMaxB, 0, 15);
+        lightLevelMaxR = MathUtil.clamp(lightLevelMaxR, 0, LIGHT_LEVEL_MAX);
+        lightLevelMaxG = MathUtil.clamp(lightLevelMaxG, 0, LIGHT_LEVEL_MAX);
+        lightLevelMaxB = MathUtil.clamp(lightLevelMaxB, 0, LIGHT_LEVEL_MAX);
         return new DoubleBrightness(lightLevelMaxR, lightLevelMaxG, lightLevelMaxB);
     }
 
+    // Note: Public for easier compat with https://github.com/Tesseract4D/OffhandLights, do not refactor.
     public static short getLightLevel(ItemStack itemStack) {
         if (itemStack == null) {
             return LightValueColor.LIGHT_VALUE_0.rgb16();
@@ -250,8 +315,8 @@ public class ColorDynamicLights {
         }
     }
 
-    public static short getLightLevel(Entity entity) {
-        if (entity == Minecraft.getMinecraft().renderViewEntity && !Config.isDynamicHandLight()) {
+    public short getLightLevel(Entity entity) {
+        if (entity == Minecraft.getMinecraft().renderViewEntity && !FTDynamicLights.isDynamicHandLight(forWorld)) {
             return LightValueColor.LIGHT_VALUE_0.rgb16();
         } else if (entity.isBurning()) {
             return RPLEBlock.of(Blocks.fire).rple$getBrightnessColor();
@@ -300,32 +365,41 @@ public class ColorDynamicLights {
         }
     }
 
-    public static void removeLights(RenderGlobal renderGlobal) {
-        synchronized (mapDynamicLights) {
-            List<ColorDynamicLight> dynamicLights = mapDynamicLights.valueList();
-
-            for (int i = 0; i < dynamicLights.size(); ++i) {
-                ColorDynamicLight dynamicLight = dynamicLights.get(i);
+    @Override
+    public void removeLights(RenderGlobal renderGlobal) {
+        val lock = busyWaitWriteLock();
+        try {
+            for (val dynamicLight: mapDynamicLights.values()) {
                 dynamicLight.updateLitChunks(renderGlobal);
             }
 
-            dynamicLights.clear();
-        }
-    }
-
-    public static void clear() {
-        synchronized (mapDynamicLights) {
             mapDynamicLights.clear();
+        } finally {
+            lock.unlock();
         }
     }
 
-    public static int getCount() {
-        synchronized (mapDynamicLights) {
+    @Override
+    public void clear() {
+        val lock = busyWaitWriteLock();
+        try {
+            mapDynamicLights.clear();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public int getCount() {
+        val lock = busyWaitReadLock();
+        try {
             return mapDynamicLights.size();
+        } finally {
+            lock.unlock();
         }
     }
 
-    public static ItemStack getItemStack(EntityItem entityItem) {
+    private static ItemStack getItemStack(EntityItem entityItem) {
         return entityItem.getDataWatcher().getWatchableObjectItemStack(10);
     }
 
