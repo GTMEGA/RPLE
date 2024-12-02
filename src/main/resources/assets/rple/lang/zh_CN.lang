@@ -1,4 +1,4 @@
-# Block
+# Blocks
 tile.rple.lamp.black.name=黑色灯  
 tile.rple.lamp.black.inverted.name=黑色灯（反相）  
 tile.rple.lamp.dark_gray.name=深灰色灯  
@@ -63,3 +63,39 @@ tile.rple.lamp.cyan.name=青色灯
 tile.rple.lamp.cyan.inverted.name=青色灯（反相）  
 tile.rple.lamp.bright_pink.name=亮粉色灯  
 tile.rple.lamp.bright_pink.inverted.name=亮粉色灯（反相）
+
+# Configs
+config.rple.general.category=常规
+config.rple.general.category.tooltip=常规设置
+config.rple.general.craftableLamps=灯合成配方
+config.rple.general.craftableLamps.tooltip=如果想启用默认灯，请将此项设置为 true。\n（基于 ProjectRed 的灯具，但是优化更好）
+
+
+config.rple.compat.category=兼容性
+config.rple.compat.category.tooltip=模组兼容性设置
+config.rple.compat.weakerProjectRed=较弱的 ProjectRed Mixins
+config.rple.compat.weakerProjectRed.tooltip=在使用 Java17+ 时禁用此选项，以使用较强的 mixins 为 ProjectRed 修补颜色。
+
+config.rple.debug.category=调试
+config.rple.debug.category.tooltip=额外的调试选项
+config.rple.debug.rgbLightOverlay=RGB 光照覆盖
+config.rple.debug.rgbLightOverlay.tooltip=Toggles rendering a light level debug overlay in the world.
+config.rple.debug.logMode=Debug Logging Mode
+config.rple.debug.logMode.tooltip=Determines how the debug logging configs a treated.\n[CUSTOM] User defined configs are respected\n[ALL] Forcibly enables all debug logging. (Most Verbose)\n[NONE] Fully disables debug logging. (Best Performance)
+config.rple.debug.forceLogToConsole=Force All Logs to Console
+config.rple.debug.forceLogToConsole.tooltip=Forces logs at levels [DEBUG] and [TRACE] to appear in the console.\nUsually, these will only appear in your 'fml-client-*.log' file.
+config.rple.debug.asmTransformer=ASM Transformer Logging
+config.rple.debug.asmTransformer.tooltip=Toggles ASM transformation logging.
+config.rple.debug.cookieMonster=Cookie Monster Logging
+config.rple.debug.cookieMonster.tooltip=Toggles the logging of the Cookie Monster class, which handles the 'packing' of brightness values for rendering.
+config.rple.debug.classBlockList=Entity Class Blocking Logging
+config.rple.debug.classBlockList.tooltip=Toggles the logging of classes being blocked or permitted to handle cookie brightness. This relates to the colorization of entities and particles.
+
+config.rple.hd.category=Hardcore Darkness
+config.rple.hd.category.tooltip=Miscellaneous settings for the hardcore darkness module
+config.rple.hd.mode=Mode
+config.rple.hd.darkNether=Dark Nether
+config.rple.hd.darkEnd=Dark End
+config.rple.hd.gamma=Gamma override
+config.rple.hd.moonLight=Moon light list
+config.rple.hd.dimensionBlacklist=Dimension blacklist
