@@ -57,7 +57,8 @@ public enum TargetedMod implements ITargetedMod {
     FORGE_MULTI_PART("Forge Multi Part", false, contains("forgemultipart-")),
     COMPUTRONICS("Computronics", false, contains("Computronics-")),
     AM25("Ars Magica 2.5", false, contains("am2.5")),
-    HBM_NTM("HBM NuclearTech", false, contains("hbm-ntm"))
+    HBM_NTM("HBM NuclearTech", false, contains("hbm-ntm")),
+    FAIRYLIGHTS("Fairy Lights", false, contains("fairylights-")),
     ;
 
     @Getter

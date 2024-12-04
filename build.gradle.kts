@@ -110,6 +110,8 @@ dependencies {
     compileOnly(deobfCurse("the-lord-of-the-rings-mod-legacy-423748:4091561"))
     // HBM NTM 1.0.27_X5027
     compileOnly(deobfCurse("hbm-ntm-235439:5534354"))
+    // Fairy Lights 1.4.0
+    compileOnly(deobfCurse("fairylights-233342:2270358"))
 
     compileOnly("mirror:AM2.5:LTS-1.6.7-dev")
 }

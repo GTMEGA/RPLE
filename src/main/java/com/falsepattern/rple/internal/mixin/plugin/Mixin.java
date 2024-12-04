@@ -164,6 +164,12 @@ public enum Mixin implements IMixin {
 
     // region HBM NTM Compatibility
     client_hbm_VertInfoMixin(CLIENT, require(HBM_NTM), "hbm.VertInfoMixin"),
+    // endregion
+
+    // region Fairy Lights Compatibility
+    client_fairylights_ModelConnectionMixin(CLIENT, require(FAIRYLIGHTS), "fairylights.ModelConnectionMixin"),
+    client_fairylights_ConnectionRendererMixin(CLIENT, require(FAIRYLIGHTS), "fairylights.ConnectionRendererMixin"),
+    // endregion
 
     // TODO proper category
     RenderManagerMixin(CLIENT, always(), "RenderManagerMixin")
