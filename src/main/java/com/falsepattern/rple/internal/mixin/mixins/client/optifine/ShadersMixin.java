@@ -29,6 +29,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client.optifine;
 import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
+import com.falsepattern.rple.internal.client.optifine.RPLEShaderPack;
 import com.falsepattern.rple.internal.client.render.ShaderConstants;
 import lombok.val;
 import net.minecraft.entity.EntityLivingBase;
@@ -42,6 +43,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import shadersmod.client.ShaderLine;
+import shadersmod.client.ShaderPackDefault;
 import shadersmod.client.ShaderParser;
 import shadersmod.client.Shaders;
 
@@ -52,6 +54,33 @@ public abstract class ShadersMixin {
 
     @Shadow
     public static void setProgramUniform1i(String name, int value) {}
+
+    @Shadow
+    static String packNameDefault;
+
+    @Redirect(method = "listOfShaders",
+              at = @At(value = "FIELD",
+                       target = "Lshadersmod/client/Shaders;packNameDefault:Ljava/lang/String;"),
+              require = 1)
+    private static String hijackDefaultShader() {
+        return RPLEShaderPack.NAME;
+    }
+
+    @Redirect(method = "loadShaderPack",
+              at = @At(value = "FIELD",
+                       target = "Lshadersmod/client/Shaders;packNameDefault:Ljava/lang/String;"),
+              require = 2)
+    private static String hijackDefaultShader2() {
+        return RPLEShaderPack.NAME;
+    }
+
+    @Redirect(method = "loadShaderPack",
+              at = @At(value = "NEW",
+                       target = "()Lshadersmod/client/ShaderPackDefault;"),
+              require = 1)
+    private static ShaderPackDefault injectRPLEShader() {
+        return new RPLEShaderPack();
+    }
 
     @Inject(method = "useProgram",
             at = @At(value = "CONSTANT",

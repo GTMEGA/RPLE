@@ -88,6 +88,7 @@ public enum Mixin implements IMixin {
 
     // region OptiFine Compatibility
     client_optifine_OpenGLHelperMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.OpenGLHelperMixin"),
+    client_optifine_ShaderMacrosMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShaderMacrosMixin"),
     client_optifine_ShadersMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShadersMixin"),
     client_optifine_ShaderTessMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShaderTessMixin"),
     client_optifine_OptiFineTessellatorMixin(CLIENT, require(OPTIFINE_WITH_SHADERS).and(avoid(OPTIFINE_WITHOUT_SHADERS)), "optifine.OptiFineTessellatorMixin"),
