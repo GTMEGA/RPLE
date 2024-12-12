@@ -26,9 +26,12 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.projectred;
 
+import codechicken.lib.render.CCRenderState;
 import mrtjp.projectred.illumination.LampTESR$;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraftforge.client.IItemRenderer;
+
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -38,7 +41,26 @@ public abstract class LampTESRMixin extends TileEntitySpecialRenderer implements
     @Redirect(method = "render$1(DDDDLnet/minecraft/item/ItemStack;)V",
               at = @At(value = "INVOKE", target = "Lcodechicken/lib/render/CCRenderState;pullLightmap()V"),
               remap = false,
-              require = 1)
+              require = 0,
+              expect = 0)
     private void skipPullingLightCoords() {
+    }
+
+    @Dynamic
+    @Redirect(method = "render$1(DDDDLnet/minecraft/item/ItemStack;)V",
+              at = @At(value = "INVOKE", target = "Lcodechicken/lib/render/CCRenderState;pullLightmap()V"),
+              remap = false,
+              require = 0,
+              expect = 0)
+    private void skipPullingLightCoordsGTNH1(CCRenderState instance) {
+    }
+
+    @Dynamic
+    @Redirect(method = "render$1(DDDDLnet/minecraft/item/ItemStack;)V",
+              at = @At(value = "INVOKE", target = "Lcodechicken/lib/render/CCRenderState;pullLightmapInstance()V"),
+              remap = false,
+              require = 0,
+              expect = 0)
+    private void skipPullingLightCoordsGTNH2(CCRenderState instance) {
     }
 }

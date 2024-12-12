@@ -58,7 +58,7 @@ public abstract class RenderMixin {
 
     @ModifyConstant(method = "func_147906_a",
                     constant = @Constant(intValue = 553648127))
-    private static int strideSizeInts(int constant) {
+    private int strideSizeInts(int constant) {
         return -1;
     }
 }

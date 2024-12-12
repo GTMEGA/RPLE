@@ -63,7 +63,7 @@ repositories {
     }
     mega {
         content {
-            includeGroups("mega", "codechicken", "team.chisel")
+            includeGroups("codechicken")
         }
     }
     maven("mega2", "https://mvn.falsepattern.com/gtmega_uploads/") {
@@ -89,15 +89,22 @@ dependencies {
 
     compileOnly("optifine:optifine:1.7.10_hd_u_e7:dev")
 
-    compileOnly("team.chisel:chisel-mc1.7.10:2.14.7-mega:dev")
-    compileOnly("mega:carpentersblocks-mc1.7.10:3.4.1-mega:dev")
-
-    compileOnly("mega:storagedrawers-mc1.7.10:1.14.1-mega:dev")
-
-    compileOnly("mega:projectred-mc1.7.10:5.0.0-mega:dev")
-    compileOnly("mega:mrtjpcore-mc1.7.10:1.2.1-mega:dev")
-    compileOnly("codechicken:forgemultipart-mc1.7.10:1.6.2-mega:dev")
-
+    // CCLib Unofficial 1.1.5.5
+    compileOnly(deobfCurse("codechickenlib-746280:4192688"))
+    // Chisel 2.9.5.11
+    compileOnly(deobfCurse("chisel-235279:2287442"))
+    // Carpenter's Blocks 3.3.8.2
+    compileOnly(deobfCurse("carpentersblocks-228932:2719376"))
+    // Storage Drawers 1.10.9
+    compileOnly(deobfCurse("storagedrawers-223852:2469586"))
+    // Project Red 4.7.0pre12.95 Core
+    compileOnly(deobfCurse("projectredbase-228702:2280728"))
+    // Project Red 4.7.0pre12.95 Illumination
+    compileOnly(deobfCurse("projectredlighting-229046:2280733"))
+    // MrTJPCore 1.1.0.33
+    compileOnly(deobfCurse("mrtjpcore-229002:2279413"))
+    // Forge Multipart 1.2.0.345
+    compileOnly(deobfCurse("forgemultipart-229323:2242993"))
     // EnderCore 1.7.10-0.2.0.39_beta
     compileOnly(deobfCurse("endercore-231868:2331048"))
     // Ender IO 1.7.10-2.3.0.429_beta

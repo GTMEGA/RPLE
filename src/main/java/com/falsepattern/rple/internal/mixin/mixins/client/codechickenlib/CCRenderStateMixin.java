@@ -29,23 +29,35 @@ package com.falsepattern.rple.internal.mixin.mixins.client.codechickenlib;
 import codechicken.lib.render.CCRenderState;
 import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.internal.mixin.extension.ExtendedOpenGlHelper;
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 // TODO: Suspected reason that CCL-rendered items have broken colors.
 @Mixin(value = CCRenderState.class, remap = false)
 public abstract class CCRenderStateMixin {
-    @Shadow
-    public static void setBrightness(int brightness) {}
-
     /**
      * @author FalsePattern
      * @reason Colorize
      */
     @Overwrite
     public static void pullLightmap() {
-        setBrightness(CookieMonster.cookieFromRGB64(ExtendedOpenGlHelper.lastRGB64()));
+        stubpackage.codechicken.lib.render.CCRenderState.setBrightness(CookieMonster.cookieFromRGB64(ExtendedOpenGlHelper.lastRGB64()));
+    }
+
+    @Inject(method = "pullLightmapInstance",
+            at = @At("HEAD"),
+            cancellable = true,
+            require = 0,
+            expect = 0)
+    private void hijackPullLightmapInstance(CallbackInfo ci) {
+        //noinspection DataFlowIssue
+        ((nhstubs.stubpackage.codechicken.lib.render.CCRenderState)(Object)this).setBrightnessInstance(CookieMonster.cookieFromRGB64(ExtendedOpenGlHelper.lastRGB64()));
+        ci.cancel();
     }
 
     /**
@@ -55,5 +67,16 @@ public abstract class CCRenderStateMixin {
     @Overwrite
     public static void pushLightmap() {
         ExtendedOpenGlHelper.setLightMapTextureCoordsRGB64(CookieMonster.RGB64FromCookie(stubpackage.codechicken.lib.render.CCRenderState.brightness));
+    }
+
+    @Inject(method = "pushLightmapInstance",
+            at = @At("HEAD"),
+            cancellable = true,
+            require = 0,
+            expect = 0)
+    private void hijackPushLightmapInstance(CallbackInfo ci) {
+        //noinspection DataFlowIssue
+        ExtendedOpenGlHelper.setLightMapTextureCoordsRGB64(CookieMonster.RGB64FromCookie(((nhstubs.stubpackage.codechicken.lib.render.CCRenderState)(Object)this).brightness));
+        ci.cancel();
     }
 }

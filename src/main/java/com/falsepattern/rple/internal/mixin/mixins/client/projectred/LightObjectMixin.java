@@ -26,7 +26,9 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client.projectred;
 
+import codechicken.lib.render.CCRenderState;
 import mrtjp.projectred.illumination.LightObject;
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -36,7 +38,26 @@ public abstract class LightObjectMixin {
     @Redirect(method = "renderInv",
               at = @At(value = "INVOKE", target = "Lcodechicken/lib/render/CCRenderState;pullLightmap()V"),
               remap = false,
-              require = 1)
+              require = 0,
+              expect = 0)
     private void skipPullingLightCoords() {
+    }
+
+    @Dynamic
+    @Redirect(method = "renderInv",
+              at = @At(value = "INVOKE", target = "Lcodechicken/lib/render/CCRenderState;pullLightmap()V"),
+              remap = false,
+              require = 0,
+              expect = 0)
+    private void skipPullingLightCoordsGTNH1(CCRenderState instance) {
+    }
+
+    @Dynamic
+    @Redirect(method = "renderInv",
+              at = @At(value = "INVOKE", target = "Lcodechicken/lib/render/CCRenderState;pullLightmapInstance()V"),
+              remap = false,
+              require = 0,
+              expect = 0)
+    private void skipPullingLightCoordsGTNH2(CCRenderState instance) {
     }
 }
