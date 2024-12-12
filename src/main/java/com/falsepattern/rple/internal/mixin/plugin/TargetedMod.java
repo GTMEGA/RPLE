@@ -48,6 +48,7 @@ public enum TargetedMod implements ITargetedMod {
     PROJECT_RED_CORE("ProjectRed Core", false, contains("projectred").and(contains("base"))),
     PROJECT_RED_ILLUMINATION("ProjectRed Illumination", false, contains("projectred").and(contains("lighting"))),
     PROJECT_RED_MEGA_JAR("ProjectRed MEGA Jar", false, projectRedMegaJarCondition()),
+    PROJECT_RED_GTNH_JAR("ProjectRed GTNH Jar", false, projectRedGTNHJarCondition()),
     PROJECT_RED_OG_JAR("ProjectRed Combined Jar", false, projectRedCombinedJarCondition()),
     APPLIED_ENERGISTICS_2("Applied Energistics 2", false, contains("appliedenergistics2-")),
     ENDER_IO("Ender IO", false, contains("enderio")),
@@ -74,6 +75,10 @@ public enum TargetedMod implements ITargetedMod {
     }
 
     private static Predicate<String> projectRedMegaJarCondition() {
-        return str -> str.contains("projectred-mc1.7.10") || str.contains("mega");
+        return str -> str.contains("projectred-mc1.7.10") && str.contains("mega");
+    }
+
+    private static Predicate<String> projectRedGTNHJarCondition() {
+        return str -> str.contains("projred-") && str.contains("gtnh");
     }
 }

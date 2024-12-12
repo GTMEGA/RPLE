@@ -184,10 +184,10 @@ public enum Mixin implements IMixin {
     private final String mixin;
 
     private static Predicate<List<ITargetedMod>> projectRedLampsFilter() {
-        return require(PROJECT_RED_OG_JAR).or(require(PROJECT_RED_MEGA_JAR)).or(require(PROJECT_RED_CORE).and(require(PROJECT_RED_ILLUMINATION)));
+        return require(PROJECT_RED_OG_JAR).or(require(PROJECT_RED_GTNH_JAR)).or(require(PROJECT_RED_MEGA_JAR)).or(require(PROJECT_RED_CORE).and(require(PROJECT_RED_ILLUMINATION)));
     }
     private static Predicate<List<ITargetedMod>> projectRedILightFilter() {
-        return require(PROJECT_RED_OG_JAR).or(require(PROJECT_RED_CORE).and(require(PROJECT_RED_ILLUMINATION)));
+        return require(PROJECT_RED_OG_JAR).or(require(PROJECT_RED_GTNH_JAR)).or(require(PROJECT_RED_CORE).and(require(PROJECT_RED_ILLUMINATION)));
     }
 }
 
