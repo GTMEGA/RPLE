@@ -34,6 +34,9 @@ import lombok.val;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = LightMatrix.class, remap = false)
 public abstract class LightMatrixMixin {
@@ -52,17 +55,17 @@ public abstract class LightMatrixMixin {
         return ClientColorHelper.cookieAverage(true, brightnessA, brightnessB, brightnessC, brightnessD);
     }
 
-    /**
-     * @author FalsePattern
-     * @reason Colorize
-     */
-    @Overwrite
-    public void operate() {
+    @Inject(method = "operate",
+            at = @At("HEAD"),
+            cancellable = true,
+            require = 1)
+    private void replaceOperate(CallbackInfo ci) {
         val lc = stubpackage.codechicken.lib.render.CCRenderState.lc;
         val a = ao(lc.side);
         val f = (a[0] * lc.fa) + (a[1] * lc.fb) + (a[2] * lc.fc) + (a[3] * lc.fd);
         val b = brightness(lc.side);
         CCRenderState.setColour(ColourRGBA.multiplyC(stubpackage.codechicken.lib.render.CCRenderState.colour, f));
         CCRenderState.setBrightness(ClientColorHelper.cookieMixAOBrightness(b[0], b[1], b[2], b[3], lc.fa, lc.fb, lc.fc, lc.fd));
+        ci.cancel();
     }
 }
