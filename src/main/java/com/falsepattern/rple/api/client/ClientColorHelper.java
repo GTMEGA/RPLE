@@ -27,6 +27,8 @@
 package com.falsepattern.rple.api.client;
 
 import com.falsepattern.lib.StableAPI;
+import it.unimi.dsi.fastutil.ints.Int2IntFunction;
+import it.unimi.dsi.fastutil.longs.Long2LongFunction;
 
 /**
  * Utility class for managing color values for rendering-related logic
@@ -307,6 +309,16 @@ public final class ClientColorHelper {
             final long cA = a & mask;
             final long cB = b & mask;
             result |= Math.max(cA, cB);
+        }
+        return result;
+    }
+
+    @StableAPI.Expose(since = "1.5.0")
+    public static long RGB64ForEach(long x, Int2IntFunction f) {
+        long result = 0L;
+        for (int i = 0; i <= 40; i += 8) {
+            final long c = (x >>> i) & 0xFFL;
+            result |= (f.applyAsInt((int) c) & 0xFFL) << i;
         }
         return result;
     }

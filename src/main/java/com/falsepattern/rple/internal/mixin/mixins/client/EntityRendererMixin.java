@@ -26,14 +26,23 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
+import com.falsepattern.rple.api.client.ClientColorHelper;
+import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.internal.client.lightmap.LightMap;
 import com.falsepattern.rple.internal.client.render.LightValueOverlayRenderer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
+
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import lombok.val;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -101,5 +110,25 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
     private void renderLightValueOverlay(float partialTickTime, long expectedFrameDoneTimeNs, CallbackInfo ci) {
         if (RGB_LIGHT_OVERLAY)
             LightValueOverlayRenderer.renderLightValueOverlay();
+    }
+
+    @WrapOperation(method = "renderRainSnow",
+                   at = @At(value = "INVOKE",
+                            target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V",
+                            ordinal = 1),
+                   require = 1)
+    private void suppressSetBrightness(Tessellator instance, int light, Operation<Void> original) {
+
+    }
+    @WrapOperation(method = "renderRainSnow",
+            at = @At(value = "INVOKE",
+                     target = "Lnet/minecraft/client/multiplayer/WorldClient;getLightBrightnessForSkyBlocks(IIII)I",
+                     ordinal = 1),
+            require = 1)
+    private int fixSnow1(WorldClient instance, int x, int y, int z, int min, Operation<Integer> original, @Local Tessellator tessellator) {
+        val brightness = original.call(instance, x, y, z, min);
+        val shifted = CookieMonster.cookieFromRGB64(ClientColorHelper.RGB64ForEach(CookieMonster.RGB64FromCookie(brightness), c -> (c * 3 + 0xf0) / 4));
+        tessellator.setBrightness(shifted);
+        return 0;
     }
 }
