@@ -49,6 +49,7 @@ public abstract class CCRenderStateMixin {
         stubpackage.codechicken.lib.render.CCRenderState.setBrightness(CookieMonster.cookieFromRGB64(ExtendedOpenGlHelper.lastRGB64()));
     }
 
+    @Dynamic
     @Inject(method = "pullLightmapInstance",
             at = @At("HEAD"),
             cancellable = true,
@@ -69,6 +70,7 @@ public abstract class CCRenderStateMixin {
         ExtendedOpenGlHelper.setLightMapTextureCoordsRGB64(CookieMonster.RGB64FromCookie(stubpackage.codechicken.lib.render.CCRenderState.brightness));
     }
 
+    @Dynamic
     @Inject(method = "pushLightmapInstance",
             at = @At("HEAD"),
             cancellable = true,

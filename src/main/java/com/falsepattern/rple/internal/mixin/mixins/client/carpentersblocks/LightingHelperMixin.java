@@ -31,7 +31,8 @@ import com.falsepattern.rple.api.client.ClientColorHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-@Mixin(LightingHelper.class)
+@Mixin(value = LightingHelper.class,
+       remap = false)
 public abstract class LightingHelperMixin {
     /**
      * @author FalsePattern

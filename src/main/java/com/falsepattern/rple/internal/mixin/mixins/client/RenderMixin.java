@@ -39,7 +39,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(Render.class)
 public abstract class RenderMixin {
     @Redirect(method = "func_147906_a",
-              at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glDisable(I)V"),
+              at = @At(value = "INVOKE",
+                       target = "Lorg/lwjgl/opengl/GL11;glDisable(I)V",
+                       remap = false),
               require = 1)
     private void disableTexture(int cap) {
         GL11.glDisable(cap);
@@ -48,7 +50,9 @@ public abstract class RenderMixin {
     }
 
     @Redirect(method = "func_147906_a",
-              at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glEnable(I)V"),
+              at = @At(value = "INVOKE",
+                       target = "Lorg/lwjgl/opengl/GL11;glEnable(I)V",
+                       remap = false),
               require = 1)
     private void enableTexture(int cap) {
         GL11.glEnable(cap);

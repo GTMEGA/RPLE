@@ -38,7 +38,7 @@ import team.chisel.client.render.RenderBlocksEldritch;
 
 @Mixin(RenderBlocksEldritch.class)
 public abstract class RenderBlocksEldritchMixin extends RenderBlocks {
-    @Shadow
+    @Shadow(remap = false)
     int[] L;
 
     @Inject(method = "setupSides",

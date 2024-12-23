@@ -56,7 +56,7 @@ public abstract class RPLEBlockImplMixin implements RPLEBlock, RPLEBlockRoot {
     @Dynamic("Initialized in: [com.falsepattern.rple.internal.mixin.mixins.common.rple.RPLEBlockInitImplMixin]")
     private short @Nullable [] rple$rawMetaOpacityColors;
 
-    @Shadow
+    @Shadow(remap = false)
     public abstract boolean hasTileEntity(int metadata);
 
     @Override

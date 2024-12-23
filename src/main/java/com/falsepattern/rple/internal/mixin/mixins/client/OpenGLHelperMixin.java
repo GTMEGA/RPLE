@@ -86,7 +86,8 @@ public abstract class OpenGLHelperMixin {
 
     @Redirect(method = "setLightmapTextureCoords",
               at = @At(value = "INVOKE",
-                       target = "Lorg/lwjgl/opengl/GL13;glMultiTexCoord2f(IFF)V"),
+                       target = "Lorg/lwjgl/opengl/GL13;glMultiTexCoord2f(IFF)V",
+                       remap = false),
               require = 1)
     private static void testA(int target, float s, float t) {
         zamnza(target, s, t);
@@ -94,7 +95,8 @@ public abstract class OpenGLHelperMixin {
 
     @Redirect(method = "setLightmapTextureCoords",
               at = @At(value = "INVOKE",
-                       target = "Lorg/lwjgl/opengl/ARBMultitexture;glMultiTexCoord2fARB(IFF)V"),
+                       target = "Lorg/lwjgl/opengl/ARBMultitexture;glMultiTexCoord2fARB(IFF)V",
+                       remap = false),
               require = 1)
     private static void testB(int target, float s, float t) {
         zamnza(target, s, t);
