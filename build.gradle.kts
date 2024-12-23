@@ -75,20 +75,22 @@ repositories {
 }
 
 dependencies {
-    apiSplit("com.falsepattern:lumi-mc1.7.10:1.0.2")
-    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.4.7")
-    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.6.0")
+    apiSplit("com.falsepattern:lumi-mc1.7.10:1.1.0")
+    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.5.4")
+    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.7.6")
 
     // Keep in sync with FalseTweaks!
     implementation("it.unimi.dsi:fastutil:8.5.13")
 
     compileOnly("makamys:neodymium-mc1.7.10:0.4.0-unofficial:dev")
 
-    devOnlyNonPublishable("codechicken:notenoughitems-mc1.7.10:2.3.1-mega:dev")
+    runtimeOnlyNonPublishable("codechicken:notenoughitems-mc1.7.10:2.4.1-mega:dev")
     runtimeOnlyNonPublishable("codechicken:codechickencore-mc1.7.10:1.4.0-mega:dev")
 
     compileOnly("optifine:optifine:1.7.10_hd_u_e7:dev")
 
+    // NEI 1.0.5.120
+    compileOnly(deobfCurse("notenoughitems-222211:2302312"))
     // CCLib Unofficial 1.1.5.5
     compileOnly(deobfCurse("codechickenlib-746280:4192688"))
     // Chisel 2.9.5.11
