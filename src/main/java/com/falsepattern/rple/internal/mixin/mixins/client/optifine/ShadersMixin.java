@@ -100,6 +100,23 @@ public abstract class ShadersMixin {
             require = 1)
     private static void setTextureUniform(int program, CallbackInfo ci) {
         setProgramUniform1i(ShaderConstants.TEXTURING_ENABLED_ATTRIB_NAME, 1);
+        setProgramUniform1i(ShaderConstants.TEX_0_UNIFORM_NAME, ShaderConstants.TEX_0_UNIFORM_VALUE);
+    }
+
+    @Inject(method = "useProgram",
+            at = @At(value = "CONSTANT",
+                     args = "stringValue=normals"),
+            require = 1)
+    private static void setNormalsUniform(int program, CallbackInfo ci) {
+        setProgramUniform1i(ShaderConstants.TEX_1_UNIFORM_NAME, ShaderConstants.TEX_1_UNIFORM_VALUE);
+    }
+
+    @Inject(method = "useProgram",
+            at = @At(value = "CONSTANT",
+                     args = "stringValue=specular"),
+            require = 1)
+    private static void setSpecularUniform(int program, CallbackInfo ci) {
+        setProgramUniform1i(ShaderConstants.TEX_2_UNIFORM_NAME, ShaderConstants.TEX_2_UNIFORM_VALUE);
     }
 
     @Redirect(method = "createVertShader",

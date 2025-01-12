@@ -36,4 +36,12 @@ public final class ShaderConstants {
     public static boolean progUseRPLEEdgeTexCoordAttrib = false;
 
     public static final String TEXTURING_ENABLED_ATTRIB_NAME = "rple_texturingEnabled";
+
+    public static final int TEX_0_UNIFORM_VALUE = 0;
+    public static final int TEX_1_UNIFORM_VALUE = 2;
+    public static final int TEX_2_UNIFORM_VALUE = 3;
+
+    public static final String TEX_0_UNIFORM_NAME = "albedoTex";
+    public static final String TEX_1_UNIFORM_NAME = "normalTex";
+    public static final String TEX_2_UNIFORM_NAME = "specularTex";
 }
