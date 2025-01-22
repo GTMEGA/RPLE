@@ -59,7 +59,7 @@ public abstract class LampBlock extends Block implements RPLECustomBlockBrightne
     private IIcon poweredIcon = null;
 
     public LampBlock(int r, int g, int b) {
-        super(Material.redstoneLight);
+        super(Material.rock);
         //RGB range checks
         if (r < ServerColorHelper.COLOR_MIN || r > ServerColorHelper.COLOR_MAX)
             throw new IllegalArgumentException("Red value must be between " + ServerColorHelper.COLOR_MIN + " and " + ServerColorHelper.COLOR_MAX);
