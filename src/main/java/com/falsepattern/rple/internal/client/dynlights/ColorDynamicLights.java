@@ -34,6 +34,7 @@ import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.api.common.color.LightValueColor;
+import com.falsepattern.rple.internal.common.colorizer.BlockColorManager;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import cpw.mods.fml.common.registry.EntityRegistry;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -297,71 +300,28 @@ public class ColorDynamicLights implements DynamicLightsDriver {
                 if (block != null) {
                     return RPLEBlock.of(block).rple$getBrightnessColor(itemStack.getItemDamage());
                 }
+                return LightValueColor.LIGHT_VALUE_0.rgb16();
             }
-
-            if (item == Items.lava_bucket) {
-                return RPLEBlock.of(Blocks.lava).rple$getBrightnessColor();
-            } else if (item == Items.blaze_rod || item == Items.blaze_powder) {
-                return DefaultColor.DIM_ORANGE.rgb16();
-            } else if (item == Items.glowstone_dust) {
-                return DefaultColor.DIM_YELLOW.rgb16();
-            } else if (item == Items.magma_cream) {
-                return DefaultColor.DIM_RED.rgb16();
-            } else {
-                return item == Items.nether_star ? RPLEBlock.of(Blocks.beacon).rple$getBrightnessColor()
-                                                 : LightValueColor.LIGHT_VALUE_0.rgb16();
+            for (val colorizer: BlockColorManager.blockColorManager().itemColorizers()) {
+                val color = colorizer.function().get(itemStack);
+                if (color == -1) {
+                    continue;
+                }
+                return color;
             }
+            return LightValueColor.LIGHT_VALUE_0.rgb16();
         }
     }
 
     public short getLightLevel(Entity entity) {
-        if (entity == Minecraft.getMinecraft().renderViewEntity && !FTDynamicLights.isDynamicHandLight(forWorld)) {
-            return LightValueColor.LIGHT_VALUE_0.rgb16();
-        } else if (entity.isBurning()) {
-            return RPLEBlock.of(Blocks.fire).rple$getBrightnessColor();
-        } else if (entity instanceof EntityFireball) {
-            return RPLEBlock.of(Blocks.fire).rple$getBrightnessColor();
-        } else if (entity instanceof EntityTNTPrimed) {
-            return RPLEBlock.of(Blocks.fire).rple$getBrightnessColor();
-        } else if (entity instanceof EntityBlaze) {
-            EntityBlaze entityBlaze = (EntityBlaze) entity;
-            return entityBlaze.func_70845_n() ? RPLEBlock.of(Blocks.fire).rple$getBrightnessColor()
-                                              : RPLEBlock.of(Blocks.lava).rple$getBrightnessColor();
-        } else if (entity instanceof EntityMagmaCube) {
-            EntityMagmaCube emc = (EntityMagmaCube) entity;
-            return (double) emc.squishFactor > 0.6 ? RPLEBlock.of(Blocks.fire).rple$getBrightnessColor()
-                                                   : RPLEBlock.of(Blocks.lava).rple$getBrightnessColor();
-        } else {
-            if (entity instanceof EntityCreeper) {
-                EntityCreeper entityCreeper = (EntityCreeper) entity;
-                if (entityCreeper.getCreeperState() > 0) {
-                    return RPLEBlock.of(Blocks.fire).rple$getBrightnessColor();
-                }
+        for (val colorizer: BlockColorManager.blockColorManager().entityColorizers()) {
+            val color = colorizer.function().get(entity, forWorld);
+            if (color == -1) {
+                continue;
             }
-
-            if (entity instanceof EntityLivingBase) {
-                EntityLivingBase player = (EntityLivingBase) entity;
-                ItemStack stackMain = player.getHeldItem();
-                val levelMain = getLightLevel(stackMain);
-                ItemStack stackHead = player.getEquipmentInSlot(4);
-                val levelHead = getLightLevel(stackHead);
-                return ServerColorHelper.RGB16FromRGBChannel4Bit(
-                        Math.max(ServerColorHelper.red(levelMain), ServerColorHelper.red(levelHead)),
-                        Math.max(ServerColorHelper.green(levelMain), ServerColorHelper.green(levelHead)),
-                        Math.max(ServerColorHelper.blue(levelMain), ServerColorHelper.blue(levelHead))
-                );
-            } else if (entity instanceof EntityItem) {
-                EntityItem entityItem = (EntityItem) entity;
-                ItemStack itemStack = getItemStack(entityItem);
-                return getLightLevel(itemStack);
-            } else if (entity instanceof EntityItemFrame) {
-                EntityItemFrame entityItemFrame = (EntityItemFrame) entity;
-                ItemStack itemStack = entityItemFrame.getDisplayedItem();
-                return getLightLevel(itemStack);
-            } else {
-                return LightValueColor.LIGHT_VALUE_0.rgb16();
-            }
+            return color;
         }
+        return LightValueColor.LIGHT_VALUE_0.rgb16();
     }
 
     @Override
@@ -398,7 +358,7 @@ public class ColorDynamicLights implements DynamicLightsDriver {
         }
     }
 
-    private static ItemStack getItemStack(EntityItem entityItem) {
+    public static ItemStack getItemStack(EntityItem entityItem) {
         return entityItem.getDataWatcher().getWatchableObjectItemStack(10);
     }
 

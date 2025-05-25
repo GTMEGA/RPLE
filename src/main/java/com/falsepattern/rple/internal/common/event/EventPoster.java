@@ -27,10 +27,15 @@ package com.falsepattern.rple.internal.common.event;
 
 import com.falsepattern.rple.api.client.lightmap.RPLELightMapRegistry;
 import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorRegistry;
+import com.falsepattern.rple.api.common.entity.RPLEEntityColorRegistry;
 import com.falsepattern.rple.api.common.event.BlockColorRegistrationEvent;
+import com.falsepattern.rple.api.common.event.EntityColorRegistrationEvent;
+import com.falsepattern.rple.api.common.event.ItemColorRegistrationEvent;
 import com.falsepattern.rple.api.common.event.LightMapRegistrationEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventBus;
+
+import com.falsepattern.rple.api.common.item.RPLEItemColorRegistry;
 import lombok.experimental.UtilityClass;
 import lombok.val;
 
@@ -43,6 +48,16 @@ public final class EventPoster {
 
     public static void postBlockColorRegistrationEvent(RPLEBlockColorRegistry registry) {
         val evt = new BlockColorRegistrationEvent(registry);
+        fmlCommonBus().post(evt);
+    }
+
+    public static void postItemColorRegistrationEvent(RPLEItemColorRegistry registry) {
+        val evt = new ItemColorRegistrationEvent(registry);
+        fmlCommonBus().post(evt);
+    }
+
+    public static void postEntityColorRegistrationEvent(RPLEEntityColorRegistry registry) {
+        val evt = new EntityColorRegistrationEvent(registry);
         fmlCommonBus().post(evt);
     }
 

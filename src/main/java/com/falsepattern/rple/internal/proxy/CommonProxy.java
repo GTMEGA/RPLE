@@ -25,16 +25,37 @@
 
 package com.falsepattern.rple.internal.proxy;
 
+import com.falsepattern.falsetweaks.api.dynlights.FTDynamicLights;
+import com.falsepattern.rple.api.common.ServerColorHelper;
+import com.falsepattern.rple.api.common.block.RPLEBlock;
+import com.falsepattern.rple.api.common.color.DefaultColor;
+import com.falsepattern.rple.api.common.color.LightValueColor;
+import com.falsepattern.rple.api.common.event.EntityColorRegistrationEvent;
+import com.falsepattern.rple.api.common.event.ItemColorRegistrationEvent;
+import com.falsepattern.rple.internal.client.dynlights.ColorDynamicLights;
 import com.falsepattern.rple.internal.common.config.ColorConfigLoader;
 import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import com.falsepattern.rple.internal.common.lamp.LampBlock;
 import com.falsepattern.rple.internal.common.lamp.LampItemBlock;
 import com.falsepattern.rple.internal.common.lamp.Lamps;
 import com.falsepattern.rple.internal.common.lamp.RPLELampBlock;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.NoArgsConstructor;
 import lombok.val;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityMagmaCube;
+import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

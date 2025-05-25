@@ -26,40 +26,61 @@
 package com.falsepattern.rple.internal.common.colorizer;
 
 import com.falsepattern.rple.api.common.color.RPLENamedColor;
+import com.falsepattern.rple.api.common.entity.EntityColorizerFunction;
+import com.falsepattern.rple.api.common.item.ItemColorizerFunction;
 import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorRegistry;
 import com.falsepattern.rple.api.common.colorizer.RPLEBlockColorizer;
+import com.falsepattern.rple.api.common.entity.RPLEEntityColorRegistry;
+import com.falsepattern.rple.api.common.item.RPLEItemColorRegistry;
 import com.falsepattern.rple.internal.common.block.RPLEBlockInit;
 import com.falsepattern.rple.internal.common.config.container.BlockColorConfig;
 import com.falsepattern.rple.internal.common.config.container.BlockReference;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.val;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
+import java.util.List;
 
 import static com.falsepattern.rple.internal.RPLEDefaultValues.*;
 import static com.falsepattern.rple.internal.common.colorizer.NullBlockColorizer.nullBlockColorizer;
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.loadCustomConfig;
 import static com.falsepattern.rple.internal.common.config.ColorConfigLoader.saveGeneratedConfig;
 import static com.falsepattern.rple.internal.common.event.EventPoster.postBlockColorRegistrationEvent;
+import static com.falsepattern.rple.internal.common.event.EventPoster.postEntityColorRegistrationEvent;
+import static com.falsepattern.rple.internal.common.event.EventPoster.postItemColorRegistrationEvent;
 import static com.falsepattern.rple.internal.common.util.LogHelper.createLogger;
 import static com.falsepattern.rple.internal.common.world.RPLEWorldProvider.*;
 import static lombok.AccessLevel.PRIVATE;
 
 @Accessors(fluent = true, chain = false)
 @NoArgsConstructor(access = PRIVATE)
-public final class BlockColorManager implements RPLEBlockColorRegistry {
+public final class BlockColorManager implements RPLEBlockColorRegistry, RPLEItemColorRegistry, RPLEEntityColorRegistry {
     private static final Logger LOG = createLogger("BlockColorManager");
 
     private static final BlockColorManager INSTANCE = new BlockColorManager();
 
     private BlockColorConfig config;
+
+    @Getter
+    private final List<Colorizer<ItemColorizerFunction>> itemColorizers = new ArrayList<>();
+    @Getter
+    private final List<Colorizer<EntityColorizerFunction>> entityColorizers = new ArrayList<>();
 
     private boolean registryLocked = false;
 
@@ -77,6 +98,10 @@ public final class BlockColorManager implements RPLEBlockColorRegistry {
         registerDefaultBlockBrightnessColors(this);
         registerDefaultBlockTranslucencyColors(this);
         postBlockColorRegistrationEvent(this);
+        if ( FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+            postItemColorRegistrationEvent(this);
+            postEntityColorRegistrationEvent(this);
+        }
 
         try {
             saveGeneratedConfig(config);
@@ -282,5 +307,15 @@ public final class BlockColorManager implements RPLEBlockColorRegistry {
 
     private void addPaletteColor(RPLENamedColor color) {
         config.addPaletteColor(color);
+    }
+
+    @Override
+    public void registerItemColorCallback(ItemColorizerFunction callback, int sortingIndex) {
+        itemColorizers.add(new Colorizer<>(callback, sortingIndex));
+    }
+
+    @Override
+    public void registerEntityColorCallback(EntityColorizerFunction callback, int sortingIndex) {
+        entityColorizers.add(new Colorizer<>(callback, sortingIndex));
     }
 }

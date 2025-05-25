@@ -27,7 +27,6 @@ package com.falsepattern.rple.api.client;
 
 import com.falsepattern.lib.StableAPI;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
-import it.unimi.dsi.fastutil.longs.Long2LongFunction;
 
 /**
  * Utility class for managing color values for rendering-related logic
