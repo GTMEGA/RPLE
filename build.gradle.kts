@@ -63,7 +63,7 @@ repositories {
     }
     mega {
         content {
-            includeGroups("codechicken")
+            includeGroups("codechicken", "mega")
         }
     }
     maven("mega2", "https://mvn.falsepattern.com/gtmega_uploads/") {
@@ -75,14 +75,14 @@ repositories {
 }
 
 dependencies {
-    apiSplit("com.falsepattern:lumi-mc1.7.10:1.1.0")
-    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.5.4")
-    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.7.6")
+    apiSplit("com.falsepattern:lumi-mc1.7.10:1.2.0")
+    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.5.5")
+    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.9.6")
 
     // Keep in sync with FalseTweaks!
-    implementation("it.unimi.dsi:fastutil:8.5.13")
+    implementation("it.unimi.dsi:fastutil:8.5.15")
 
-    compileOnly("makamys:neodymium-mc1.7.10:0.4.0-unofficial:dev")
+    devOnlyNonPublishable("makamys:neodymium-mc1.7.10:0.4.3-unofficial:dev")
 
     runtimeOnlyNonPublishable("codechicken:notenoughitems-mc1.7.10:2.4.1-mega:dev")
     runtimeOnlyNonPublishable("codechicken:codechickencore-mc1.7.10:1.4.0-mega:dev")
