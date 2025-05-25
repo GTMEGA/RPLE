@@ -1,7 +1,7 @@
 /*
  * Right Proper Lighting Engine
  *
- * Copyright (C) 2023-2024 FalsePattern, Ven
+ * Copyright (C) 2023-2025 FalsePattern, Ven
  * All Rights Reserved
  *
  * The above copyright notice and this permission notice
@@ -9,8 +9,7 @@
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * the Free Software Foundation, only version 3 of the License.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
