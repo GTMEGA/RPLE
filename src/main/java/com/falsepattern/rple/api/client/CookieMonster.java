@@ -56,7 +56,7 @@ public final class CookieMonster {
 
     // Cookie format (bits):
     // "compressed" rgb64
-    // 0100 0000 IIII IIII IIII IIII CCCC CCCP
+    // 0100 IIII IIII IIII IIII IIII CCCC CCCP
     // I - index bits
     // C - check bits
     // P - parity
