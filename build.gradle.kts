@@ -1,5 +1,5 @@
 plugins {
-    id("com.falsepattern.fpgradle-mc") version ("0.15.1")
+    id("com.falsepattern.fpgradle-mc") version ("1.1.1")
 }
 
 group = "com.falsepattern"
@@ -71,7 +71,7 @@ repositories {
             includeGroup("optifine")
         }
     }
-    exclusive(ivy("https://mvn.falsepattern.com/releases/mirror/", "[orgPath]/[artifact]-[revision].[ext]"), "mirror")
+    exclusive(ivy("fp_mirror", "https://mvn.falsepattern.com/releases/mirror/", "[orgPath]/[artifact]-[revision].[ext]"), "mirror")
 }
 
 dependencies {
