@@ -32,7 +32,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.MathHelper;
 
 import lombok.val;
 import lombok.var;
@@ -95,7 +94,6 @@ public class NightVisionMask implements RPLELightMapMask {
     }
 
     protected float nightVisionBrightness(EntityPlayer player, float partialTick) {
-        int i = player.getActivePotionEffect(Potion.nightVision).getDuration();
-        return i > 200 ? 1.0F : 0.7F + MathHelper.sin(((float)i - partialTick) * (float)Math.PI * 0.2F) * 0.3F;
+        return Minecraft.getMinecraft().entityRenderer.getNightVisionBrightness(player, partialTick);
     }
 }
