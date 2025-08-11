@@ -76,8 +76,8 @@ repositories {
 
 dependencies {
     apiSplit("com.falsepattern:lumi-mc1.7.10:1.2.0")
-    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.5.5")
-    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.9.6")
+    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.8.1")
+    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.9.7")
 
     // Keep in sync with FalseTweaks!
     implementation("it.unimi.dsi:fastutil:8.5.15")
