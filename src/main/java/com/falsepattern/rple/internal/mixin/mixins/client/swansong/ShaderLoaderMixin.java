@@ -23,50 +23,23 @@
  * GNU Affero General Public License. See the full LICENSE file for details.
  */
 
-package com.falsepattern.rple.internal.mixin.interfaces;
+package com.falsepattern.rple.internal.mixin.mixins.client.swansong;
 
-import shadersmod.client.ShadersTess;
+import com.ventooth.swansong.shader.loader.ShaderLoader;
+import com.ventooth.swansong.shader.preprocessor.MacroBuilder;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-public interface IOptiFineTessellatorMixin extends ITessellatorMixin {
-    void rple$rawBuffer(int[] rawBuffer);
-
-    int[] rple$rawBuffer();
-
-    void rple$bufferSize(int rawBufferSize);
-
-    int rple$bufferSize();
-
-    void rple$incrementRawBufferIndex(int increment);
-
-    int rple$rawBufferIndex();
-
-    int rple$drawMode();
-
-    int rple$draw();
-
-    void rple$isDrawing(boolean isDrawing);
-
-    void rple$incrementAddedVertices(int increment);
-
-    int rple$addedVertices();
-
-    void rple$incrementVertexCount(int increment);
-
-    double rple$posXOffset();
-
-    double rple$posYOffset();
-
-    double rple$posZOffset();
-
-    double rple$textureU();
-
-    double rple$textureV();
-
-    int rple$color();
-
-    boolean rple$hasBrightness();
-
-    void rple$hasNormals(boolean hasNormals);
-
-    ShadersTess rple$shaderTessellator();
+@Mixin(value = ShaderLoader.class,
+       remap = false)
+public class ShaderLoaderMixin {
+    @Inject(method = "addBuiltinMacros",
+            at = @At("HEAD"),
+            require = 1)
+    private void addRPLEMacros(MacroBuilder builder, CallbackInfo ci) {
+        builder.add("RPLE");
+        builder.add("RPLE_API_VERSION", 1);
+    }
 }

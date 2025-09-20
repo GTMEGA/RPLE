@@ -26,9 +26,15 @@
 package com.falsepattern.rple.internal.mixin.interfaces;
 
 import com.falsepattern.rple.api.client.render.RPLETessellator;
+import net.minecraft.client.renderer.Tessellator;
 
 import java.nio.ShortBuffer;
 
 public interface ITessellatorMixin extends RPLETessellator {
+    @SuppressWarnings("CastToIncompatibleInterface")
+    static ITessellatorMixin of(Tessellator thiz) {
+        return (ITessellatorMixin) thiz;
+    }
+
     ShortBuffer rple$shortBuffer();
 }

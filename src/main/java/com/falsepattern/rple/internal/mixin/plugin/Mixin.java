@@ -56,11 +56,6 @@ public enum Mixin implements IMixin {
     client_RenderBlocksMixin(CLIENT, always(), "RenderBlocksMixin"),
     client_TessellatorMixin(CLIENT, always(), "TessellatorMixin"),
     client_WorldMixin(CLIENT, always(), "WorldMixin"),
-
-    client_RendererLivingEntityMixin(CLIENT, always(), "RendererLivingEntityMixin"),
-    client_RenderMixin(CLIENT, always(), "RenderMixin"),
-
-    client_Tessellator_NonOptiFineMixin(CLIENT, avoid(OPTIFINE_WITH_SHADERS).and(avoid(OPTIFINE_WITHOUT_SHADERS)), "Tessellator_NonOptiFineMixin"),
     // endregion
 
     // region Right Proper Lighting Engine Implementation
@@ -83,15 +78,6 @@ public enum Mixin implements IMixin {
     client_hd_WorldMixin(CLIENT, always(), "hd.WorldMixin"),
     client_hd_WorldProviderMixin(CLIENT, always(), "hd.WorldProviderMixin"),
     client_hd_WorldProviderHellMixin(CLIENT, always(), "hd.WorldProviderHellMixin"),
-    // endregion
-
-    // region OptiFine Compatibility
-    client_optifine_OpenGLHelperMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.OpenGLHelperMixin"),
-    client_optifine_ShaderMacrosMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShaderMacrosMixin"),
-    client_optifine_ShadersMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShadersMixin"),
-    client_optifine_ShaderTessMixin(CLIENT, require(OPTIFINE_WITH_SHADERS), "optifine.ShaderTessMixin"),
-    client_optifine_OptiFineTessellatorMixin(CLIENT, require(OPTIFINE_WITH_SHADERS).and(avoid(OPTIFINE_WITHOUT_SHADERS)), "optifine.OptiFineTessellatorMixin"),
-    client_optifine_OptiFineTessellator_NonShaderMixin(CLIENT, require(OPTIFINE_WITHOUT_SHADERS).and(avoid(OPTIFINE_WITH_SHADERS)), "optifine.OptiFineTessellator_NonShaderMixin"),
     // endregion
 
     //region FastCraft Compatibility
@@ -146,10 +132,6 @@ public enum Mixin implements IMixin {
     client_codechickenlib_LightMatrixMixin(CLIENT, require(CODE_CHICKEN_LIB), "codechickenlib.LightMatrixMixin"),
     // endregion
 
-    // region Not Enough Items Compatibility
-    client_notenoughitems_WorldOverlayRenderer(CLIENT, require(NOT_ENOUGH_ITEMS), "notenoughitems.WorldOverlayRendererMixin"),
-    // endregion
-
     // region Forge Multi Part Compatibility
     client_multipart_TileMultipartMixin(COMMON, require(FORGE_MULTI_PART), "multipart.TileMultipartMixin"),
     // endregion
@@ -169,6 +151,17 @@ public enum Mixin implements IMixin {
     // region Fairy Lights Compatibility
     client_fairylights_ModelConnectionMixin(CLIENT, require(FAIRYLIGHTS), "fairylights.ModelConnectionMixin"),
     client_fairylights_ConnectionRendererMixin(CLIENT, require(FAIRYLIGHTS), "fairylights.ConnectionRendererMixin"),
+    // endregion
+
+    // region SwanSong
+    client_swansong_ShaderTessMixin(CLIENT, require(SWANSONG), "swansong.ShaderTessMixin"),
+    client_swansong_ShaderVertMixin(CLIENT, require(SWANSONG), "swansong.ShaderVertMixin"),
+    client_swansong_ShaderSamplers$BuilderMixin(CLIENT, require(SWANSONG), "swansong.ShaderSamplers$BuilderMixin"),
+    client_swansong_ShaderLoaderMixin(CLIENT, require(SWANSONG), "swansong.ShaderLoaderMixin"),
+    // endregion
+
+    // region OpenBlocks
+    client_openblocks_RenderManagerMixin(CLIENT, require(SWANSONG), "openblocks.TileEntityTrophyRendererMixin"),
     // endregion
 
     // TODO proper category

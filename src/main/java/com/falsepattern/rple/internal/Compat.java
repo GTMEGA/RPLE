@@ -26,33 +26,31 @@
 package com.falsepattern.rple.internal;
 
 import com.falsepattern.falsetweaks.api.ThreadedChunkUpdates;
+import com.ventooth.swansong.pbr.PBRTextureEngine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import lombok.experimental.UtilityClass;
 import lombok.var;
+import makamys.neodymium.Neodymium;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.launchwrapper.Launch;
-import net.minecraft.launchwrapper.LaunchClassLoader;
-
-import makamys.neodymium.Neodymium;
-import shadersmod.client.Shaders;
-import stubpackage.GlStateManager;
 
 import java.io.IOException;
 
 @UtilityClass
 public final class Compat {
-    private static final boolean IS_SHADERS_MOD_PRESENT;
+    private static final boolean IS_SWANSONG_PRESENT;
     private static final boolean IS_FALSETWEAKS_PRESENT;
     private static Boolean NEODYMIUM = null;
 
     static {
-        var shadersModPresent = false;
+        var swanSongPresent = false;
         try {
-            shadersModPresent = Launch.classLoader.getClassBytes("shadersmod.client.Shaders") != null;
+            swanSongPresent = Launch.classLoader.getClassBytes("com.ventooth.swansong.SwanSong") != null;
         } catch (IOException ignored) {
         }
-        IS_SHADERS_MOD_PRESENT = shadersModPresent;
+        IS_SWANSONG_PRESENT = swanSongPresent;
         var falseTweaksPresent = false;
         try {
             falseTweaksPresent = Launch.classLoader.getClassBytes("com.falsepattern.falsetweaks.FalseTweaks") != null;
@@ -86,17 +84,12 @@ public final class Compat {
 
     @SideOnly(Side.CLIENT)
     public static boolean shadersEnabled() {
-        return IS_SHADERS_MOD_PRESENT && ShadersCompat.shaderPackLoaded();
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void toggleLightMapShaders(boolean state) {
-        ShadersCompat.toggleLightMap(state);
+        return IS_SWANSONG_PRESENT;
     }
 
     @SideOnly(Side.CLIENT)
     public static void optiFineSetActiveTexture(int texture) {
-        ShadersCompat.setActiveTexture(texture);
+        SwanSongCompat.isDefaultTexUnit(OpenGlHelper.defaultTexUnit == texture);
     }
 
     @SideOnly(Side.CLIENT)
@@ -107,21 +100,9 @@ public final class Compat {
         return Tessellator.instance;
     }
 
-    private static class ShadersCompat {
-        public static void toggleLightMap(boolean state) {
-            if (state) {
-                Shaders.enableLightmap();
-            } else {
-                Shaders.disableLightmap();
-            }
-        }
-
-        public static void setActiveTexture(int texture) {
-            GlStateManager.activeTextureUnit = texture;
-        }
-
-        public static boolean shaderPackLoaded() {
-            return Shaders.shaderPackLoaded;
+    private static class SwanSongCompat {
+        public static void isDefaultTexUnit(boolean toggle) {
+            PBRTextureEngine.isDefaultTexUnit(toggle);
         }
     }
 }

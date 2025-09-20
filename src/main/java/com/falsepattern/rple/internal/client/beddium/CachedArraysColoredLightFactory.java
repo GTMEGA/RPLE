@@ -23,20 +23,14 @@
  * GNU Affero General Public License. See the full LICENSE file for details.
  */
 
-package com.falsepattern.rple.internal.mixin.helper;
+package com.falsepattern.rple.internal.client.beddium;
 
-import com.falsepattern.rple.internal.client.render.ShaderConstants;
-import lombok.experimental.UtilityClass;
+import com.ventooth.beddium.api.cache.CachedArrays;
+import com.ventooth.beddium.api.cache.CachedArraysFactory;
 
-import static shadersmod.client.Shaders.setProgramUniform1i;
-
-@UtilityClass
-public final class ShaderRenderHelper {
-    public static void enableTexturing() {
-        setProgramUniform1i(ShaderConstants.TEXTURING_ENABLED_ATTRIB_NAME, 1);
-    }
-
-    public static void disableTexturing() {
-        setProgramUniform1i(ShaderConstants.TEXTURING_ENABLED_ATTRIB_NAME, 0);
+public class CachedArraysColoredLightFactory implements CachedArraysFactory {
+    @Override
+    public CachedArrays create(int capacity) {
+        return new CachedArraysColoredLight(capacity);
     }
 }

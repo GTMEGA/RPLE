@@ -32,7 +32,6 @@ import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
-import com.falsepattern.rple.api.common.color.DefaultColor;
 import com.falsepattern.rple.api.common.color.LightValueColor;
 import com.falsepattern.rple.internal.common.colorizer.BlockColorManager;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
@@ -44,32 +43,23 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityMagmaCube;
-import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ColorDynamicLights implements DynamicLightsDriver {
-    public static final ColorDynamicLights INSTANCE = new ColorDynamicLights(false);
-    private static final ColorDynamicLights FOR_WORLD = new ColorDynamicLights(true);
+    public static final ColorDynamicLights INSTANCE = new ColorDynamicLights();
     private static final Int2ObjectMap<ColorDynamicLight> mapDynamicLights = new Int2ObjectArrayMap<>();
     private static final ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
     private static long timeUpdateMs = 0L;
-    private final boolean forWorld;
     private static final double MAX_DIST = 16.0;
     private static final double MAX_DIST_SQ = MAX_DIST * MAX_DIST;
     private static final int LIGHT_LEVEL_MAX = 15;
@@ -90,13 +80,15 @@ public class ColorDynamicLights implements DynamicLightsDriver {
         return lock;
     }
 
-    private ColorDynamicLights(boolean forWorld) {
-        this.forWorld = forWorld;
+    private ColorDynamicLights() {
+        FMLCommonHandler.instance().bus().register(this);
     }
 
-    @Override
-    public DynamicLightsDriver forWorldMesh() {
-        return FOR_WORLD;
+    @SubscribeEvent
+    public void onReload(ConfigChangedEvent e) {
+        if (e.modID.equals("falsetweaks")) {
+            removeLights(Minecraft.getMinecraft().renderGlobal);
+        }
     }
 
     @Override
@@ -143,23 +135,46 @@ public class ColorDynamicLights implements DynamicLightsDriver {
 
     private void updateMapDynamicLights(RenderGlobal renderGlobal) {
         World world = renderGlobal.theWorld;
-        if (world != null) {
+        if (world == null) {
+            removeLights(renderGlobal);
+        }
+        if (world == null) {
+            return;
+        }
+        val lightEntity = FTDynamicLights.isDynamicEntityLight();
+        val lightHand = FTDynamicLights.isDynamicHandLight();
+        if (lightEntity && lightHand) {
             for (Entity entity : world.getLoadedEntityList()) {
-                val lightLevel = getLightLevel(entity);
-                if (ServerColorHelper.red(lightLevel) > 0 || ServerColorHelper.green(lightLevel) > 0 || ServerColorHelper.blue(lightLevel) > 0) {
-                    int key = entity.getEntityId();
-                    ColorDynamicLight dynamicLight = mapDynamicLights.get(key);
-                    if (dynamicLight == null) {
-                        dynamicLight = new ColorDynamicLight(entity);
-                        mapDynamicLights.put(key, dynamicLight);
-                    }
-                } else {
-                    int key = entity.getEntityId();
-                    ColorDynamicLight dynamicLight = mapDynamicLights.remove(key);
-                    if (dynamicLight != null) {
-                        dynamicLight.updateLitChunks(renderGlobal);
-                    }
+                updateMapDynamicLightsEntity(renderGlobal, entity);
+            }
+        } else if (lightHand) {
+            val player = Minecraft.getMinecraft().renderViewEntity;
+            if (player != null) {
+                updateMapDynamicLightsEntity(renderGlobal, player);
+            }
+        } else {
+            val player = Minecraft.getMinecraft().renderViewEntity;
+            for (Entity entity : world.getLoadedEntityList()) {
+                if (entity != player) {
+                    updateMapDynamicLightsEntity(renderGlobal, entity);
                 }
+            }
+        }
+    }
+    private void updateMapDynamicLightsEntity(RenderGlobal renderGlobal, Entity entity) {
+        val lightLevel = getLightLevel(entity);
+        if (ServerColorHelper.red(lightLevel) > 0 || ServerColorHelper.green(lightLevel) > 0 || ServerColorHelper.blue(lightLevel) > 0) {
+            int key = entity.getEntityId();
+            ColorDynamicLight dynamicLight = mapDynamicLights.get(key);
+            if (dynamicLight == null) {
+                dynamicLight = new ColorDynamicLight(entity);
+                mapDynamicLights.put(key, dynamicLight);
+            }
+        } else {
+            int key = entity.getEntityId();
+            ColorDynamicLight dynamicLight = mapDynamicLights.remove(key);
+            if (dynamicLight != null) {
+                dynamicLight.updateLitChunks(renderGlobal);
             }
         }
     }
@@ -221,7 +236,8 @@ public class ColorDynamicLights implements DynamicLightsDriver {
         val lock = busyWaitReadLock();
         try {
             for (val dynamicLight: mapDynamicLights.values()) {
-                if (!FTDynamicLights.isDynamicHandLight(forWorld) && dynamicLight.getEntity() == rve) {
+                val isHand = dynamicLight.getEntity() == rve;
+                if ((isHand && !FTDynamicLights.isDynamicHandLight()) || (!isHand && !FTDynamicLights.isDynamicEntityLight())) {
                     continue;
                 }
                 var dynamicLightLevel = dynamicLight.getLastLightLevel();
@@ -315,7 +331,7 @@ public class ColorDynamicLights implements DynamicLightsDriver {
 
     public short getLightLevel(Entity entity) {
         for (val colorizer: BlockColorManager.blockColorManager().entityColorizers()) {
-            val color = colorizer.function().get(entity, forWorld);
+            val color = colorizer.function().get(entity);
             if (color == -1) {
                 continue;
             }

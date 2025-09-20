@@ -65,7 +65,7 @@ public final class LightMapTexture {
                                      .order(ByteOrder.nativeOrder())
                                      .asIntBuffer();
             FIXED_VERTEX_STRIDE = VertexAPI.recomputeVertexInfo(8, 4);
-            SHADER_VERTEX_STRIDE = VertexAPI.recomputeVertexInfo(18, 4);
+            SHADER_VERTEX_STRIDE = VertexAPI.recomputeVertexInfo(20, 4);
         }
         val textureID = GL11.glGenTextures();
 

@@ -25,8 +25,8 @@
 
 package com.falsepattern.rple.internal.mixin.mixins.client;
 
-import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.api.client.ClientColorHelper;
+import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.internal.client.lightmap.LightMap;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
 import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorMixin;
@@ -36,12 +36,18 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.nio.ShortBuffer;
 
 
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin implements ITessellatorMixin {
+    @Shadow
+    private static ShortBuffer shortBuffer;
+
     @Shadow
     private int[] rawBuffer;
     @Shadow
@@ -49,6 +55,7 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
     @Shadow
     private int rawBufferIndex;
 
+    @Unique
     private long rple$rgb64;
 
     @Redirect(method = "draw",
@@ -99,6 +106,11 @@ public abstract class TessellatorMixin implements ITessellatorMixin {
     @Overwrite
     public void setBrightness(int brightness) {
         rple$setRGB64Brightness(CookieMonster.RGB64FromCookie(brightness));
+    }
+
+    @Override
+    public ShortBuffer rple$shortBuffer() {
+        return shortBuffer;
     }
 
     @Override

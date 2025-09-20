@@ -30,11 +30,6 @@ public final class ShaderConstants {
     public static final String GREEN_LIGHT_MAP_UNIFORM_NAME = "greenLightMap";
     public static final String BLUE_LIGHT_MAP_UNIFORM_NAME = "blueLightMap";
 
-    public static final String EDGE_TEX_COORD_ATTRIB_NAME = "rple_edgeTexCoord";
-    public static final int edgeTexCoordAttrib = 13;
-    public static boolean useRPLEEdgeTexCoordAttrib = false;
-    public static boolean progUseRPLEEdgeTexCoordAttrib = false;
-
     public static final String TEXTURING_ENABLED_ATTRIB_NAME = "rple_texturingEnabled";
 
     public static final int TEX_0_UNIFORM_VALUE = 0;

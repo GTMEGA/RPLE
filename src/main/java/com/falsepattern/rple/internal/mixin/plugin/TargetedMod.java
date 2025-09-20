@@ -32,14 +32,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.function.Predicate;
 
 import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.contains;
-import static com.falsepattern.lib.mixin.ITargetedMod.PredicateHelpers.startsWith;
-import static com.falsepattern.rple.internal.mixin.plugin.Extras.OPTIFINE_SHADERSMOD_VERSIONS;
 
 @RequiredArgsConstructor
 public enum TargetedMod implements ITargetedMod {
-    OPTIFINE_WITHOUT_SHADERS("OptiFine without shaders", false,
-                             contains("optifine").and(OPTIFINE_SHADERSMOD_VERSIONS.negate())),
-    OPTIFINE_WITH_SHADERS("OptiFine with shaders", false, contains("optifine").and(OPTIFINE_SHADERSMOD_VERSIONS)),
     FASTCRAFT("FastCraft", false, contains("fastcraft")),
     CHISEL("Chisel", false, contains("chisel")),
     CARPENTERS_BLOCKS("Carpenter's Blocks", false, str -> str.matches("[cC]arpenter'?s( |-|_|%20|\\+)?[bB]locks.*")),
@@ -59,6 +54,8 @@ public enum TargetedMod implements ITargetedMod {
     AM25("Ars Magica 2.5", false, contains("am2.5")),
     HBM_NTM("HBM NuclearTech", false, contains("hbm-ntm")),
     FAIRYLIGHTS("Fairy Lights", false, contains("fairylights-")),
+    SWANSONG("SWANSONG", false, contains("swansong-")),
+    OPEN_BLOCKS("OpenBlocks", false, contains("openblocks-")),
     ;
 
     @Getter

@@ -1,5 +1,5 @@
 plugins {
-    id("com.falsepattern.fpgradle-mc") version ("0.15.1")
+    id("com.falsepattern.fpgradle-mc") version ("1.1.3")
 }
 
 group = "com.falsepattern"
@@ -55,39 +55,35 @@ minecraft_fp {
 
 repositories {
     cursemavenEX()
-    mavenpattern {
-        content {
-            includeGroup("com.falsepattern")
-            includeGroup("makamys")
-        }
-    }
-    mega {
-        content {
-            includeGroups("codechicken", "mega")
-        }
-    }
-    maven("mega2", "https://mvn.falsepattern.com/gtmega_uploads/") {
-        content {
-            includeGroup("optifine")
-        }
-    }
-    exclusive(ivy("https://mvn.falsepattern.com/releases/mirror/", "[orgPath]/[artifact]-[revision].[ext]"), "mirror")
+    exclusive(mega(), "codechicken", "mega")
+    exclusive(mavenpattern(), "com.falsepattern", "makamys", "org.embeddedt.celeritas")
+    exclusive(ivy("mavenpattern_mirror", "https://mvn.falsepattern.com/releases/mirror/", "[orgPath]/[artifact]-[revision].[ext]"), "mirror")
+    exclusive(venmaven(), "com.ventooth")
 }
 
 dependencies {
+    compileOnly("com.ventooth:swansong-mc1.7.10:1.0.0:dev")
+    compileOnly("org.joml:joml:1.10.8")
+
     apiSplit("com.falsepattern:lumi-mc1.7.10:1.2.0")
-    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.5.5")
-    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:3.9.6")
+    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.9.0")
+    implementationSplit("com.falsepattern:falsetweaks-mc1.7.10:4.0.0")
+
+    val beddiumVersion = "1.0.0"
+    val beddiumVersionJ21 = "$beddiumVersion-j21"
+    val beddiumVersionJ8 = "$beddiumVersion-j8"
+    compileOnly("com.ventooth:beddium-mc1.7.10:$beddiumVersionJ8:dev")
+    modernJavaPatchDeps("com.ventooth:beddium-mc1.7.10:$beddiumVersionJ21:dev") {
+        excludeDeps()
+    }
 
     // Keep in sync with FalseTweaks!
-    implementation("it.unimi.dsi:fastutil:8.5.15")
+    implementation("it.unimi.dsi:fastutil:8.5.16")
 
-    devOnlyNonPublishable("makamys:neodymium-mc1.7.10:0.4.3-unofficial:dev")
+    compileOnly("makamys:neodymium-mc1.7.10:0.4.3-unofficial:dev")
 
     runtimeOnlyNonPublishable("codechicken:notenoughitems-mc1.7.10:2.4.1-mega:dev")
     runtimeOnlyNonPublishable("codechicken:codechickencore-mc1.7.10:1.4.0-mega:dev")
-
-    compileOnly("optifine:optifine:1.7.10_hd_u_e7:dev")
 
     // NEI 1.0.5.120
     compileOnly(deobfCurse("notenoughitems-222211:2302312"))
@@ -121,6 +117,10 @@ dependencies {
     compileOnly(deobfCurse("hbm-ntm-235439:5534354"))
     // Fairy Lights 1.4.0
     compileOnly(deobfCurse("fairylights-233342:2270358"))
+    // OpenModsLib-1.7.10-0.10-deobf.jar
+    compileOnly("curse.maven:openmodslib-228815:2386729")
+    // OpenBlocks-1.7.10-1.6-deobf.jar
+    compileOnly("curse.maven:openblocks-228816:2386734")
 
     compileOnly("mirror:AM2.5:LTS-1.6.7-dev")
 }

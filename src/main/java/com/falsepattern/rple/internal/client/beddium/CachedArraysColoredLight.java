@@ -23,22 +23,39 @@
  * GNU Affero General Public License. See the full LICENSE file for details.
  */
 
-package com.falsepattern.rple.internal.mixin.mixins.client;
+package com.falsepattern.rple.internal.client.beddium;
 
-import com.falsepattern.rple.internal.mixin.interfaces.ITessellatorMixin;
-import net.minecraft.client.renderer.Tessellator;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import com.falsepattern.rple.api.client.CookieMonster;
+import com.ventooth.beddium.api.cache.CachedArrays;
+import lombok.val;
 
-import java.nio.ShortBuffer;
+import java.util.Arrays;
 
-@Mixin(Tessellator.class)
-public abstract class Tessellator_NonOptiFineMixin implements ITessellatorMixin {
-    @Shadow
-    private static ShortBuffer shortBuffer;
+public class CachedArraysColoredLight extends CachedArrays {
+    private final long[] combinedLights;
+
+    public CachedArraysColoredLight(int capacity) {
+        super(capacity);
+        combinedLights = new long[capacity];
+        Arrays.fill(combinedLights, -1);
+    }
+
+    public void reset() {
+        super.reset();
+        Arrays.fill(combinedLights, -1);
+    }
 
     @Override
-    public ShortBuffer rple$shortBuffer() {
-        return shortBuffer;
+    public int getLight(int index) {
+        val l = combinedLights[index];
+        if (l == -1) {
+            return -1;
+        }
+        return CookieMonster.cookieFromRGB64(l);
+    }
+
+    @Override
+    public void putLight(int index, int value) {
+        combinedLights[index] = CookieMonster.RGB64FromCookie(value);
     }
 }

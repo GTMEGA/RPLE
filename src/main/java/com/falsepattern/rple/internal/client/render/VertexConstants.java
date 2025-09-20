@@ -36,7 +36,7 @@ public final class VertexConstants {
      * Overrides Vanilla value
      */
     @Getter
-    private static int redIndexNoShader = 7;
+    private static int redIndexNoShader;
     /**
      * Grabbed from FalseTweaks
      */
@@ -47,16 +47,12 @@ public final class VertexConstants {
      */
     @Getter
     private static int blueIndexNoShader;
-    @Getter
-    private static int rpleEdgeTexUIndexNoShader;
-    @Getter
-    private static int rpleEdgeTexVIndexNoShader;
 
     /**
      * Overrides OptiFine value
      */
     @Getter
-    private static int redIndexShader = 6;
+    private static int redIndexShader;
     /**
      * Grabbed from FalseTweaks
      */
@@ -67,24 +63,16 @@ public final class VertexConstants {
      */
     @Getter
     private static int blueIndexShader;
-    @Getter
-    private static int rpleEdgeTexUIndexShader;
-    @Getter
-    private static int rpleEdgeTexVIndexShader;
 
     public static void initVertexConstants() {
-        val noShaderBuf = new int[4];
-        val shaderBuf = new int[4];
-        VertexAPI.allocateExtraVertexSlots(4, noShaderBuf, shaderBuf);
+        val noShaderBuf = new int[2];
+        val shaderBuf = new int[2];
+        VertexAPI.allocateExtraVertexSlots(2, noShaderBuf, shaderBuf);
         redIndexNoShader = 7;
         greenIndexNoShader = noShaderBuf[0];
         blueIndexNoShader = noShaderBuf[1];
-        rpleEdgeTexUIndexNoShader = noShaderBuf[2];
-        rpleEdgeTexVIndexNoShader = noShaderBuf[3];
         redIndexShader = 6;
         greenIndexShader = shaderBuf[0];
         blueIndexShader = shaderBuf[1];
-        rpleEdgeTexUIndexShader = shaderBuf[2];
-        rpleEdgeTexVIndexShader = shaderBuf[3];
     }
 }

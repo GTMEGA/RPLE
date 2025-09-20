@@ -31,10 +31,10 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.entity.Entity;
 
 /**
- * @since 1.6.0
+ * @since 1.7.0
  */
 @ApiStatus.OverrideOnly
 @FunctionalInterface
 public interface EntityColorizerFunction {
-    short get(@NotNull Entity entity, boolean forWorldMesh);
+    short get(@NotNull Entity entity);
 }

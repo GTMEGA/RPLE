@@ -107,8 +107,9 @@ public final class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void handleEntityColors(EntityColorRegistrationEvent e) {
-        e.registry().registerEntityColorCallback((entity, forWorldMesh) -> {
-            if (entity == Minecraft.getMinecraft().renderViewEntity && !FTDynamicLights.isDynamicHandLight(forWorldMesh)) {
+        e.registry().registerEntityColorCallback((entity) -> {
+            val isHand = entity == Minecraft.getMinecraft().renderViewEntity;
+            if ((isHand && !FTDynamicLights.isDynamicHandLight()) || (!isHand && !FTDynamicLights.isDynamicEntityLight())) {
                 return LightValueColor.LIGHT_VALUE_0.rgb16();
             }
             if (entity instanceof RPLECustomEntityBrightness) {
