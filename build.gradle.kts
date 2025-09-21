@@ -40,6 +40,9 @@ minecraft_fp {
                 required("fplib")
                 required("falsetweaks")
                 required("lumi")
+                optional("mcpatcher")
+                optional("beddium")
+                optional("swansong")
             }
         }
         modrinth {
@@ -48,6 +51,9 @@ minecraft_fp {
                 required("fplib")
                 required("falsetweaks")
                 required("lumi1710")
+                optional("mcpatcher")
+                optional("beddium")
+                optional("swansong")
             }
         }
     }
