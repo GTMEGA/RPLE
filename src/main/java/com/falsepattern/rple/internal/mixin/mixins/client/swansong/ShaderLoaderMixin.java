@@ -34,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = ShaderLoader.class,
        remap = false)
-public class ShaderLoaderMixin {
+public abstract class ShaderLoaderMixin {
     @Inject(method = "addBuiltinMacros",
             at = @At("HEAD"),
             require = 1)

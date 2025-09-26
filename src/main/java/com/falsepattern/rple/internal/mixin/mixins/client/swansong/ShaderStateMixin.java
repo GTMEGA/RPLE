@@ -35,7 +35,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(value = ShaderState.class,
        remap = false)
-public class ShaderStateMixin {
+public abstract class ShaderStateMixin {
     @ModifyVariable(method = "eyeBrightnessFromRaw",
                     at = @At("HEAD"),
                     ordinal = 0,
