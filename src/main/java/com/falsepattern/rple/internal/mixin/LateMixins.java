@@ -23,37 +23,25 @@
  * GNU Affero General Public License. See the full LICENSE file for details.
  */
 
-package com.falsepattern.rple.internal.mixin.plugin;
+package com.falsepattern.rple.internal.mixin;
 
-import com.falsepattern.lib.mixin.IMixin;
-import com.falsepattern.lib.mixin.IMixinPlugin;
-import com.falsepattern.lib.mixin.ITargetedMod;
-import com.falsepattern.rple.internal.common.util.LogHelper;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.apache.logging.log4j.Logger;
+import com.gtnewhorizon.gtnhmixins.ILateMixinLoader;
+import com.gtnewhorizon.gtnhmixins.LateMixin;
+import com.gtnewhorizon.gtnhmixins.builders.IMixins;
+import org.jetbrains.annotations.NotNull;
 
-@NoArgsConstructor
-public final class MixinPlugin implements IMixinPlugin {
-    public static final int RPLE_INIT_MIXIN_PRIORITY = 980;
-    public static final int RPLE_ROOT_MIXIN_PRIORITY = 990;
-    public static final int POST_LUMI_MIXIN_PRIORITY = 1010;
+import java.util.List;
+import java.util.Set;
 
-    @Getter
-    private final Logger logger = LogHelper.createLogger("Mixins");
-
+@LateMixin
+public class LateMixins implements ILateMixinLoader {
     @Override
-    public ITargetedMod[] getTargetedModEnumValues() {
-        return TargetedMod.values();
+    public String getMixinConfig() {
+        return "mixins.rple.late.json";
     }
 
     @Override
-    public IMixin[] getMixinEnumValues() {
-        return Mixin.values();
-    }
-
-    @Override
-    public boolean useNewFindJar() {
-        return true;
+    public @NotNull List<String> getMixins(Set<String> loadedMods) {
+        return IMixins.getLateMixins(Mixin.class, loadedMods);
     }
 }

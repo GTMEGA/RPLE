@@ -27,8 +27,9 @@ package com.falsepattern.rple.internal.asm;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
-import com.falsepattern.rple.internal.common.config.RPLEConfig;
-import com.falsepattern.rple.internal.common.util.FastThreadLocal;
+import com.falsepattern.rple.internal.mixin.Mixin;
+import com.gtnewhorizon.gtnhmixins.IEarlyMixinLoader;
+import com.gtnewhorizon.gtnhmixins.builders.IMixins;
 import lombok.NoArgsConstructor;
 import lombok.val;
 import org.jetbrains.annotations.Nullable;
@@ -37,6 +38,7 @@ import org.spongepowered.asm.service.mojang.MixinServiceLaunchWrapper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.falsepattern.rple.internal.Tags.MOD_NAME;
 import static cpw.mods.fml.relauncher.IFMLLoadingPlugin.*;
@@ -46,7 +48,7 @@ import static cpw.mods.fml.relauncher.IFMLLoadingPlugin.*;
 @SortingIndex(Integer.MAX_VALUE)
 @TransformerExclusions({"com.falsepattern.lumi.internal.asm","com.falsepattern.rple.internal.asm"})
 @NoArgsConstructor
-public final class ASMLoadingPlugin implements IFMLLoadingPlugin {
+public final class ASMLoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
     @Override
     public String[] getASMTransformerClass() {
         val mixinTweakClasses = GlobalProperties.<List<String>>get(MixinServiceLaunchWrapper.BLACKBOARD_KEY_TWEAKCLASSES);
@@ -73,5 +75,15 @@ public final class ASMLoadingPlugin implements IFMLLoadingPlugin {
     @Override
     public @Nullable String getAccessTransformerClass() {
         return null;
+    }
+
+    @Override
+    public String getMixinConfig() {
+        return "mixins.rple.early.json";
+    }
+
+    @Override
+    public List<String> getMixins(Set<String> loadedCoreMods) {
+        return IMixins.getEarlyMixins(Mixin.class, loadedCoreMods);
     }
 }

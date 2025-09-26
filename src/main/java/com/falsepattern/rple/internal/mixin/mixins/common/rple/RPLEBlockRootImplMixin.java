@@ -33,7 +33,7 @@ import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.RPLE_ROOT_MIXIN_PRIORITY;
+import static com.falsepattern.rple.internal.mixin.Mixin.RPLE_ROOT_MIXIN_PRIORITY;
 
 @Unique
 @Mixin(value = Block.class, priority = RPLE_ROOT_MIXIN_PRIORITY)

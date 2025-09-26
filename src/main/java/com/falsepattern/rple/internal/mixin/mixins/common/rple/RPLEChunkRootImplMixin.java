@@ -45,7 +45,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import static com.falsepattern.lumi.api.init.LumiChunkInitHook.LUMI_CHUNK_INIT_HOOK_INFO;
 import static com.falsepattern.lumi.api.init.LumiChunkInitHook.LUMI_CHUNK_INIT_HOOK_METHOD;
 import static com.falsepattern.rple.api.common.color.ColorChannel.*;
-import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.POST_LUMI_MIXIN_PRIORITY;
+import static com.falsepattern.rple.internal.mixin.Mixin.POST_LUMI_MIXIN_PRIORITY;
 
 @Unique
 @Mixin(value = Chunk.class, priority = POST_LUMI_MIXIN_PRIORITY)

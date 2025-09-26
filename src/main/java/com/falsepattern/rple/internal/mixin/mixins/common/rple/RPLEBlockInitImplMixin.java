@@ -37,7 +37,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.falsepattern.rple.internal.mixin.plugin.MixinPlugin.RPLE_INIT_MIXIN_PRIORITY;
+import static com.falsepattern.rple.internal.mixin.Mixin.RPLE_INIT_MIXIN_PRIORITY;
 
 @Unique
 @Mixin(value = Block.class, priority = RPLE_INIT_MIXIN_PRIORITY)

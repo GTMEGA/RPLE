@@ -15,7 +15,6 @@ minecraft_fp {
     }
     mixin {
         pkg = "internal.mixin.mixins"
-        pluginClass = "internal.mixin.plugin.MixinPlugin"
     }
     core {
         accessTransformerFile = "rple_at.cfg"
