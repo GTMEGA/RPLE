@@ -158,6 +158,7 @@ public enum Mixin implements IMixin {
     client_swansong_ShaderVertMixin(CLIENT, require(SWANSONG), "swansong.ShaderVertMixin"),
     client_swansong_ShaderSamplers$BuilderMixin(CLIENT, require(SWANSONG), "swansong.ShaderSamplers$BuilderMixin"),
     client_swansong_ShaderLoaderMixin(CLIENT, require(SWANSONG), "swansong.ShaderLoaderMixin"),
+    client_swansong_ShaderStateMixin(CLIENT, require(SWANSONG), "swansong.ShaderStateMixin"),
     // endregion
 
     // region OpenBlocks
