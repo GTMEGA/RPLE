@@ -29,6 +29,8 @@ import com.falsepattern.falsetweaks.api.ThreadedChunkUpdates;
 import com.ventooth.swansong.pbr.PBRTextureEngine;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import com.ventooth.swansong.shader.ShaderEngine;
 import lombok.experimental.UtilityClass;
 import lombok.var;
 import makamys.neodymium.Neodymium;
@@ -84,7 +86,11 @@ public final class Compat {
 
     @SideOnly(Side.CLIENT)
     public static boolean shadersEnabled() {
-        return IS_SWANSONG_PRESENT;
+        if (IS_SWANSONG_PRESENT) {
+            return SwanSongCompat.initialized();
+        } else {
+            return false;
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -103,6 +109,10 @@ public final class Compat {
     private static class SwanSongCompat {
         public static void isDefaultTexUnit(boolean toggle) {
             PBRTextureEngine.isDefaultTexUnit(toggle);
+        }
+
+        public static boolean initialized() {
+            return ShaderEngine.isInitialized();
         }
     }
 }
