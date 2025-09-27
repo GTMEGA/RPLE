@@ -523,8 +523,6 @@ public final class RPLEDefaultValues {
         registry.colorizeBlock("etfuturum:amethyst_cluster_2:10").brightness(0x435).apply();
         registry.colorizeBlock("etfuturum:amethyst_cluster_2:11").brightness(0x435).apply();
 
-        registry.colorizeBlock("etfuturum:amethyst_cluster_2:11").brightness(0x435).apply();
-
         registry.colorizeBlock("hbm:tile.reinforced_light").brightness(0xCC7).apply();
         registry.colorizeBlock("hbm:tile.asphalt_light").brightness(0xCC7).apply();
         registry.colorizeBlock("hbm:tile.reinforced_lamp_on").brightness(0xCC7).apply();
