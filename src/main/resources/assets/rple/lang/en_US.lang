@@ -74,6 +74,8 @@ config.rple.compat.category=Compat
 config.rple.compat.category.tooltip=Mod compatibility settings
 config.rple.compat.weakerProjectRed=Weaker ProjectRed Mixins
 config.rple.compat.weakerProjectRed.tooltip=Disable this on modern java to use a more aggressive mixin for patching color into ProjectRed.
+config.rple.compat.fasterGlStateTracking=Faster GL State Tracking
+config.rple.compat.fasterGlStateTracking.tooltip=Faster but potentially less compatible tracking for GL State.
 
 config.rple.debug.category=Debug
 config.rple.debug.category.tooltip=Extra debugging options

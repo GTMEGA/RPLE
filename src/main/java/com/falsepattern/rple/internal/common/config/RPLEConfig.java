@@ -71,6 +71,13 @@ public final class RPLEConfig {
         @Config.RequiresMcRestart
         @Config.DefaultBoolean(true)
         public static boolean WEAKER_PROJECTRED_MIXINS;
+
+        @Config.Name("fasterGlStateTracking")
+        @Config.Comment({"Faster but potentially less compatible tracking for GL State."})
+        @Config.LangKey("config.rple.compat.fasterGlStateTracking")
+        @Config.RequiresMcRestart
+        @Config.DefaultBoolean(true)
+        public static boolean FASTER_GL_STATE_TRACKING;
     }
 
     @Config(modid = MOD_ID, category = "debug")
