@@ -329,6 +329,7 @@ public class ColorDynamicLights implements DynamicLightsDriver {
         }
     }
 
+    //Patched by https://github.com/Tesseract4D/OffhandLights/
     public short getLightLevel(Entity entity) {
         for (val colorizer: BlockColorManager.blockColorManager().entityColorizers()) {
             val color = colorizer.function().get(entity);
