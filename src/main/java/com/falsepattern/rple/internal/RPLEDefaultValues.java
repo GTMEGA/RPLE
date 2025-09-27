@@ -522,6 +522,64 @@ public final class RPLEDefaultValues {
         registry.colorizeBlock("etfuturum:amethyst_cluster_2:9").brightness(0x435).apply();
         registry.colorizeBlock("etfuturum:amethyst_cluster_2:10").brightness(0x435).apply();
         registry.colorizeBlock("etfuturum:amethyst_cluster_2:11").brightness(0x435).apply();
+
+        registry.colorizeBlock("etfuturum:amethyst_cluster_2:11").brightness(0x435).apply();
+
+        registry.colorizeBlock("hbm:tile.reinforced_light").brightness(0xCC7).apply();
+        registry.colorizeBlock("hbm:tile.asphalt_light").brightness(0xCC7).apply();
+        registry.colorizeBlock("hbm:tile.reinforced_lamp_on").brightness(0xCC7).apply();
+        registry.colorizeBlock("hbm:tile.lamp_tritium_green_on").brightness(0x1C1).apply();
+        registry.colorizeBlock("hbm:tile.lamp_tritium_blue_on").brightness(0x11D).apply();
+        registry.colorizeBlock("hbm:tile.spotlight_incandescent").brightness(0xDCC).apply();
+        registry.colorizeBlock("hbm:tile.spotlight_fluoro").brightness(0xEEF).apply();
+        registry.colorizeBlock("hbm:tile.spotlight_halogen").brightness(0xFDE).apply();
+        registry.colorizeBlock("hbm:tile.floodlight").brightness(0xEDD).apply();
+        registry.colorizeBlock("hbm:tile.floodlight_beam").brightness(0xEDD).apply();
+        registry.colorizeBlock("hbm:tile.lantern").brightness(0xFEE).apply();
+        registry.colorizeBlock("hbm:tile.lamp_demon").brightness(0x79B).apply();
+        registry.colorizeBlock("hbm:tile.ore_gneiss_schrabidium").brightness(0x529).apply();
+        registry.colorizeBlock("hbm:tile.ore_nether_schrabidium").brightness(0x529).apply();
+        registry.colorizeBlock("hbm:tile.ore_sellafield_schrabidium").brightness(0x529).apply();
+        registry.colorizeBlock("hbm:tile.ore_volcano").brightness(0xE80).apply();
+        registry.colorizeBlock("hbm:tile.volcanic_lava_block").brightness(0xE80).apply();
+        registry.colorizeBlock("hbm:tile.volcano_core").brightness(0xD70).apply();
+        registry.colorizeBlock("hbm:tile.volcano_rad_core").brightness(0x4C5).apply();
+        registry.colorizeBlock("hbm:tile.brick_jungle_lava").brightness(0xE80).apply();
+        registry.colorizeBlock("hbm:tile.block_meteor_molten").brightness(0xB60).apply();
+        registry.colorizeBlock("hbm:tile.ore_nether_coal").brightness(0xEC0).apply();
+        registry.colorizeBlock("hbm:tile.brick_jungle_ooze").brightness(0x061).apply();
+        registry.colorizeBlock("hbm:tile.toxic_block").brightness(0x193).apply();
+        registry.colorizeBlock("hbm:tile.brick_jungle_mystic").brightness(0x515).apply();
+        registry.colorizeBlock("hbm:tile.acid_block").brightness(0x414).apply();
+        registry.colorizeBlock("hbm:tile.rad_lava_block").brightness(0xED1).apply();
+        registry.colorizeBlock("hbm:tile.schrabidic_block").brightness(0x135).apply();
+        registry.colorizeBlock("hbm:tile.vine_phosphor").brightness(0x152).apply();
+        registry.colorizeBlock("hbm:tile.corium_block").brightness(0x431).apply();
+        registry.colorizeBlock("hbm:tile.ore_sellafield_radgem").brightness(0x020).apply();
+        registry.colorizeBlock("hbm:tile.mush").brightness(0x2A2).apply();
+        registry.colorizeBlock("hbm:tile.balefire").brightness(0xAE7).apply();
+        registry.colorizeBlock("hbm:tile.fire_digamma").brightness(0xE62).apply();
+        registry.colorizeBlock("hbm:tile.digamma_matter").brightness(0x631).apply();
+        registry.colorizeBlock("hbm:tile.mush_block").brightness(0x6E6).apply();
+        registry.colorizeBlock("hbm:tile.mush_block_stem").brightness(0x6E6).apply();
+        registry.colorizeBlock("hbm:tile.waste_mycelium").brightness(0x161).apply();
+        registry.colorizeBlock("hbm:tile.deco_crt:0").brightness(0x222).apply();
+        registry.colorizeBlock("hbm:tile.deco_crt:2").brightness(0x131).apply();
+        registry.colorizeBlock("hbm:tile.deco_crt:9").brightness(0x131).apply();
+        registry.colorizeBlock("hbm:tile.radar_screen").brightness(0x242).apply();
+        registry.colorizeBlock("hbm:tile.deco_crt:3").brightness(0x115).apply();
+        registry.colorizeBlock("hbm:tile.deco_crt:13").brightness(0x115).apply();
+        registry.colorizeBlock("hbm:tile.machine_furnace_brick_on").brightness(0xD97).apply();
+        registry.colorizeBlock("hbm:tile.radio_torch_sender").brightness(0x820).apply();
+        registry.colorizeBlock("hbm:tile.radio_torch_receiver").brightness(0x820).apply();
+        registry.colorizeBlock("hbm:tile.radio_torch_logic").brightness(0x820).apply();
+        registry.colorizeBlock("hbm:tile.radio_torch_reader").brightness(0x808).apply();
+        registry.colorizeBlock("hbm:tile.radio_torch_controller").brightness(0x808).apply();
+        registry.colorizeBlock("hbm:tile.radio_torch_counter").brightness(0x27A).apply();
+        registry.colorizeBlock("hbm:tile.plasma").brightness(0xF0F).apply();
+        registry.colorizeBlock("hbm:tile.lantern_behemoth").brightness(0x622).apply();
+
+
     }
 
     public static void registerDefaultBlockTranslucencyColors(RPLEBlockColorRegistry registry) {
@@ -569,6 +627,13 @@ public final class RPLEDefaultValues {
         registry.colorizeBlock(stained_glass_pane, 14).translucency(RED).apply();
         registry.colorizeBlock(stained_glass_pane, 15).translucency(BLACK).apply();
 
-        registry.colorizeBlock("etfuturum:slime").translucency(LIME).apply();
+        registry.colorizeBlock("hbm:tile.reinforced_laminate").translucency(LIME).apply();
+        registry.colorizeBlock("hbm:tile.reinforced_laminate_pane").translucency(CYAN).apply();
+        registry.colorizeBlock("hbm:tile.glass_uranium").translucency(YELLOW).apply();
+        registry.colorizeBlock("hbm:tile.glass_trinitite").translucency(LIME).apply();
+        registry.colorizeBlock("hbm:tile.glass_polonium").translucency(RED).apply();
+        registry.colorizeBlock("hbm:tile.glass_ash").translucency(BLACK).apply();
+
+
     }
 }
