@@ -27,6 +27,7 @@ package com.falsepattern.rple.internal.asm;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
+import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import com.falsepattern.rple.internal.mixin.Mixin;
 import com.gtnewhorizon.gtnhmixins.IEarlyMixinLoader;
 import com.gtnewhorizon.gtnhmixins.builders.IMixins;
@@ -54,6 +55,9 @@ public final class ASMLoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoa
         val mixinTweakClasses = GlobalProperties.<List<String>>get(MixinServiceLaunchWrapper.BLACKBOARD_KEY_TWEAKCLASSES);
         if (mixinTweakClasses != null) {
             mixinTweakClasses.add("com.falsepattern.rple.internal.asm.MixinCompatHackTweaker");
+        }
+        if (RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+            return new String[]{"com.falsepattern.rple.internal.asm.TextureStateTrackerInjector"};
         }
         return new String[0];
     }

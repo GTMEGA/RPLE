@@ -29,6 +29,7 @@ import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.api.client.CookieMonster;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.lightmap.LightMapConstants;
+import com.falsepattern.rple.internal.client.lightmap.LightMapStateMachine;
 import com.falsepattern.rple.internal.mixin.extension.ExtendedOpenGlHelper;
 import lombok.val;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -112,23 +113,10 @@ public abstract class OpenGLHelperMixin {
      * @author FalsePattern
      * @reason Colorize
      */
-    @Overwrite
-    public static void setActiveTexture(int texture) {
-        val shadersEnabled = Compat.shadersEnabled();
-        val lastTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
-
-        if (lastTexture == lightmapTexUnit && texture != lightmapTexUnit) {
-            val isTexture2DEnabled = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
-            if (isTexture2DEnabled || !shadersEnabled) {
-                GL11.glEnable(GL11.GL_TEXTURE_2D);
-            } else {
-                GL11.glDisable(GL11.GL_TEXTURE_2D);
-            }
-
-            lightMap().toggleEnabled(isTexture2DEnabled);
-        }
-        if (shadersEnabled)
-            Compat.optiFineSetActiveTexture(texture);
-        GL13.glActiveTexture(texture);
+    @Inject(method = "setActiveTexture",
+            at = @At("HEAD"),
+            require = 1)
+    private static void preSetActiveTexture(int texture, CallbackInfo ci) {
+        LightMapStateMachine.setActiveTexture(texture);
     }
 }
