@@ -29,6 +29,7 @@ import com.falsepattern.falsetweaks.api.triangulator.VertexAPI;
 import com.falsepattern.rple.api.common.color.ColorChannel;
 import com.falsepattern.rple.internal.Compat;
 import com.falsepattern.rple.internal.client.render.VertexConstants;
+import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.lwjgl.opengl.ARBMultitexture;
@@ -69,7 +70,7 @@ public final class LightMapTexture {
         }
         val textureID = GL11.glGenTextures();
 
-        val lastTextureName = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+        SlowGlStateTracker.pushTextureName();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
@@ -77,7 +78,7 @@ public final class LightMapTexture {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, lastTextureName);
+        SlowGlStateTracker.popTextureName();
 
         final int colorBitMask;
         final int fixedTextureUnitBinding;
@@ -128,7 +129,7 @@ public final class LightMapTexture {
         }
         PIXEL_BUFFER.flip();
 
-        val lastTextureName = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+        SlowGlStateTracker.pushTextureName();
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D,
@@ -141,14 +142,14 @@ public final class LightMapTexture {
                           GL11.GL_UNSIGNED_BYTE,
                           PIXEL_BUFFER);
 
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, lastTextureName);
+        SlowGlStateTracker.popTextureName();
     }
 
     public void toggleEnabled(boolean enabled) {
         if (Compat.shadersEnabled())
             return;
 
-        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+        SlowGlStateTracker.pushActiveTexture();
 
         GL13.glActiveTexture(fixedTextureUnitBinding);
         if (enabled) {
@@ -157,11 +158,11 @@ public final class LightMapTexture {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
         }
 
-        GL13.glActiveTexture(lastActiveTexture);
+        SlowGlStateTracker.popActiveTexture();
     }
 
     public void bind() {
-        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+        SlowGlStateTracker.pushActiveTexture();
         if (Compat.shadersEnabled()) {
             GL13.glActiveTexture(shaderTextureSamplerBinding);
         } else {
@@ -171,34 +172,34 @@ public final class LightMapTexture {
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 
-        GL13.glActiveTexture(lastActiveTexture);
+        SlowGlStateTracker.popActiveTexture();
     }
 
     public void unbind() {
         if (!Compat.shadersEnabled()) {
-            val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+            SlowGlStateTracker.pushActiveTexture();
             GL13.glActiveTexture(fixedTextureUnitBinding);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
-            GL13.glActiveTexture(lastActiveTexture);
+            SlowGlStateTracker.popActiveTexture();
         }
     }
 
     public void resetScale() {
-        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+        SlowGlStateTracker.pushActiveTexture();
         if (Compat.shadersEnabled()) {
             GL13.glActiveTexture(shaderTextureCoordsBinding);
         } else {
             GL13.glActiveTexture(fixedTextureUnitBinding);
         }
-        val lastMatrixMode = GL11.glGetInteger(GL11.GL_MATRIX_MODE);
+        SlowGlStateTracker.pushMatrixMode();
         GL11.glMatrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
-        GL11.glMatrixMode(lastMatrixMode);
-        GL13.glActiveTexture(lastActiveTexture);
+        SlowGlStateTracker.popMatrixMode();
+        SlowGlStateTracker.popActiveTexture();
     }
 
     public void rescale() {
-        val lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+        SlowGlStateTracker.pushActiveTexture();
         if (Compat.shadersEnabled()) {
             GL13.glActiveTexture(shaderTextureCoordsBinding);
         } else {
@@ -206,18 +207,18 @@ public final class LightMapTexture {
             GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
 
-        val lastMatrixMode = GL11.glGetInteger(GL11.GL_MATRIX_MODE);
+        SlowGlStateTracker.pushMatrixMode();
         GL11.glMatrixMode(GL11.GL_TEXTURE);
         GL11.glLoadIdentity();
         GL11.glScalef(LIGHT_MAP_TEXTURE_SCALE, LIGHT_MAP_TEXTURE_SCALE, 1F);
         GL11.glTranslatef(LIGHT_MAP_TEXTURE_TRANSLATION, LIGHT_MAP_TEXTURE_TRANSLATION, 0F);
 
-        GL11.glMatrixMode(lastMatrixMode);
-        GL13.glActiveTexture(lastActiveTexture);
+        SlowGlStateTracker.popMatrixMode();
+        SlowGlStateTracker.popActiveTexture();
     }
 
     public void enableVertexPointer(ShortBuffer buffer) {
-        val lastClientActiveTexture = GL11.glGetInteger(GL13.GL_CLIENT_ACTIVE_TEXTURE);
+        SlowGlStateTracker.pushClientActiveTexture();
         if (Compat.shadersEnabled()) {
             GL13.glClientActiveTexture(shaderTextureCoordsBinding);
             buffer.position(shaderVertexPosition);
@@ -230,21 +231,21 @@ public final class LightMapTexture {
 
         GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 
-        GL13.glClientActiveTexture(lastClientActiveTexture);
+        SlowGlStateTracker.popClientActiveTexture();
     }
 
     public void enableVertexPointerVBO() {
-        val lastClientActiveTexture = GL11.glGetInteger(GL13.GL_CLIENT_ACTIVE_TEXTURE);
+        SlowGlStateTracker.pushClientActiveTexture();
         GL13.glClientActiveTexture(shaderTextureCoordsBinding);
         GL11.glTexCoordPointer(2, GL11.GL_SHORT, SHADER_VERTEX_STRIDE, shaderVertexPosition * 2L);
 
         GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 
-        GL13.glClientActiveTexture(lastClientActiveTexture);
+        SlowGlStateTracker.popClientActiveTexture();
     }
 
     public void disableVertexPointer() {
-        val lastClientActiveTexture = GL11.glGetInteger(GL13.GL_CLIENT_ACTIVE_TEXTURE);
+        SlowGlStateTracker.pushClientActiveTexture();
         if (Compat.shadersEnabled()) {
             GL13.glClientActiveTexture(shaderTextureCoordsBinding);
         } else {
@@ -253,7 +254,7 @@ public final class LightMapTexture {
 
         GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 
-        GL13.glClientActiveTexture(lastClientActiveTexture);
+        SlowGlStateTracker.popClientActiveTexture();
     }
 
     public void setCoords(short block, short sky) {
@@ -261,6 +262,63 @@ public final class LightMapTexture {
             ARBMultitexture.glMultiTexCoord2sARB(shaderTextureCoordsBinding, block, sky);
         } else {
             ARBMultitexture.glMultiTexCoord2sARB(fixedTextureUnitBinding, block, sky);
+        }
+    }
+
+    // TODO: DELETE once FASTER_GL_STATE_TRACKING is removed
+    @Deprecated
+    private static class SlowGlStateTracker {
+        private static int lastTextureName = 0;
+        private static int lastActiveTexture = 0;
+        private static int lastClientActiveTexture = 0;
+        private static int lastMatrixMode = 0;
+
+        private static void pushTextureName() {
+            if (!RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+                lastTextureName = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+            }
+        }
+
+        private static void popTextureName() {
+            if (!RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+                GL11.glBindTexture(GL11.GL_TEXTURE_2D, lastTextureName);
+            }
+        }
+
+        private static void pushActiveTexture() {
+            if (!RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+                lastActiveTexture = GL11.glGetInteger(GL13.GL_ACTIVE_TEXTURE);
+            }
+        }
+
+        private static void popActiveTexture() {
+            if (!RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+                GL13.glActiveTexture(lastActiveTexture);
+            }
+        }
+
+        private static void pushClientActiveTexture() {
+            if (!RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+                lastClientActiveTexture = GL11.glGetInteger(GL13.GL_CLIENT_ACTIVE_TEXTURE);
+            }
+        }
+
+        private static void popClientActiveTexture() {
+            if (!RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+                GL13.glClientActiveTexture(lastClientActiveTexture);
+            }
+        }
+
+        private static void pushMatrixMode() {
+            if (!RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+                lastMatrixMode = GL11.glGetInteger(GL11.GL_MATRIX_MODE);
+            }
+        }
+
+        private static void popMatrixMode() {
+            if (!RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+                GL11.glMatrixMode(lastMatrixMode);
+            }
         }
     }
 }

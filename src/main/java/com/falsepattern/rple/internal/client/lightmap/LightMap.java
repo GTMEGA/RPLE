@@ -26,9 +26,12 @@
 package com.falsepattern.rple.internal.client.lightmap;
 
 import com.falsepattern.rple.internal.Compat;
+import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import lombok.NoArgsConstructor;
 import lombok.val;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import java.nio.ShortBuffer;
 
@@ -63,6 +66,8 @@ public final class LightMap {
 
         texturesGenerated = true;
         LOG.info("Created LightMap");
+
+        clearBindTexture2D();
     }
 
     public void update(float partialTick) {
@@ -70,12 +75,18 @@ public final class LightMap {
         rTexture.update(pixels);
         gTexture.update(pixels);
         bTexture.update(pixels);
+
+        clearBindTexture2D();
     }
 
     public void toggleEnabled(boolean enabled) {
         rTexture.toggleEnabled(enabled);
         gTexture.toggleEnabled(enabled);
         bTexture.toggleEnabled(enabled);
+
+        if (!Compat.shadersEnabled()) {
+            clearActiveTexture();
+        }
     }
 
     public void disable() {
@@ -91,35 +102,81 @@ public final class LightMap {
         rTexture.bind();
         gTexture.bind();
         bTexture.bind();
+
+        clearActiveTexture();
     }
 
     public void resetScale() {
         rTexture.resetScale();
         gTexture.resetScale();
         bTexture.resetScale();
+
+        clearMatrixMode();
+        clearActiveTexture();
     }
 
     public void rescale() {
         rTexture.rescale();
         gTexture.rescale();
         bTexture.rescale();
+
+        clearMatrixMode();
+        clearActiveTexture();
     }
 
     public void enableVertexPointers(ShortBuffer buffer) {
         rTexture.enableVertexPointer(buffer);
         gTexture.enableVertexPointer(buffer);
         bTexture.enableVertexPointer(buffer);
+
+        clearActiveClientTexture();
     }
 
     public void enableVertexPointersVBO() {
         rTexture.enableVertexPointerVBO();
         gTexture.enableVertexPointerVBO();
         bTexture.enableVertexPointerVBO();
+
+        clearActiveClientTexture();
     }
 
     public void disableVertexPointers() {
         rTexture.disableVertexPointer();
         gTexture.disableVertexPointer();
         bTexture.disableVertexPointer();
+
+        clearActiveClientTexture();
+    }
+
+    // TODO: INLINE once FASTER_GL_STATE_TRACKING is removed
+    @Deprecated
+    private static void clearBindTexture2D() {
+        if (RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        }
+    }
+
+    // TODO: INLINE once FASTER_GL_STATE_TRACKING is removed
+    @Deprecated
+    private static void clearMatrixMode() {
+        if (RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+            GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        }
+    }
+
+    // TODO: INLINE once FASTER_GL_STATE_TRACKING is removed
+    @Deprecated
+    private static void clearActiveTexture() {
+        if (RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+            GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        }
+    }
+
+    // TODO: INLINE once FASTER_GL_STATE_TRACKING is removed
+    @Deprecated
+    private static void clearActiveClientTexture() {
+        if (RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+            GL13.glClientActiveTexture(GL13.GL_TEXTURE0);
+        }
     }
 }

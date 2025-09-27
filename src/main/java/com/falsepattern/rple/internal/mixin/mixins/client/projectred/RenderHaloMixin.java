@@ -28,6 +28,7 @@ package com.falsepattern.rple.internal.mixin.mixins.client.projectred;
 import codechicken.lib.render.CCRenderState;
 import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.internal.Tags;
+import com.falsepattern.rple.internal.common.config.RPLEConfig;
 import com.falsepattern.rple.internal.mixin.extension.ExtendedOpenGlHelper;
 import lombok.val;
 import mrtjp.projectred.core.RenderHalo$;
@@ -41,6 +42,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = RenderHalo$.class, remap = false)
 public abstract class RenderHaloMixin {
     private static ResourceLocation glowTex;
+
+    // TODO: DELETE once FASTER_GL_STATE_TRACKING is removed
     private int oldTexture;
 
     @Inject(method = "prepareRenderState()V",
@@ -57,7 +60,12 @@ public abstract class RenderHaloMixin {
         GL11.glColor4f(1, 1, 1, 1);
 
         ExtendedOpenGlHelper.setLightMapTextureCoordsRGB64(rgb64);
-        oldTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+
+        // TODO: DELETE once FASTER_GL_STATE_TRACKING is removed
+        if (!RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+            oldTexture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+        }
+
         CCRenderState.changeTexture(glowTex);
     }
 
@@ -65,7 +73,11 @@ public abstract class RenderHaloMixin {
             at = @At("RETURN"),
             require = 1)
     private void restoreFixColor(CallbackInfo ci) {
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, oldTexture);
+        // TODO: DELETE once FASTER_GL_STATE_TRACKING is removed
+        if (!RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, oldTexture);
+        }
+
         GL11.glPopAttrib();
     }
 }
