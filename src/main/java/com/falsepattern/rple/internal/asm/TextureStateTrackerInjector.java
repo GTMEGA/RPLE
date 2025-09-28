@@ -32,7 +32,6 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.IntInsnNode;
-import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -40,6 +39,8 @@ import net.minecraft.launchwrapper.IClassTransformer;
 public class TextureStateTrackerInjector implements IClassTransformer {
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
+        if (basicClass == null)
+            return null;
         if (transformedName.startsWith("com.falsepattern.rple.") ||
             transformedName.startsWith("org.lwjgl.") ||
             transformedName.startsWith("org.lwjglx."))
