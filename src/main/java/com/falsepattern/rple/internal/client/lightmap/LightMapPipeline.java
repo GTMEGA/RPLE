@@ -214,6 +214,10 @@ public final class LightMapPipeline implements RPLELightMapRegistry {
         return mixedLightMapData;
     }
 
+    public int[] mixedLightMapData() {
+        return mixedLightMapData;
+    }
+
     private void mixLightMaps() {
         val blockLightMapRed = blockLightMapStrip.lightMapRedData();
         val blockLightMapGreen = blockLightMapStrip.lightMapGreenData();
