@@ -585,8 +585,11 @@ public final class RPLEDefaultValues {
         for (val blockObj : blockRegistry) {
             val block = (Block) blockObj;
             val blockId = GameRegistry.findUniqueIdentifierFor(block);
+            if (blockId == null)
+                continue;
             if (!"minecraft".equals(blockId.modId))
                 continue;
+
             val translucency = fromVanillaLightOpacity(block.getLightOpacity());
             registry.colorizeBlock(block).translucency(translucency).apply();
         }
