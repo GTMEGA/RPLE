@@ -25,7 +25,7 @@
 
 package com.falsepattern.rple.internal.client.lamp;
 
-import com.falsepattern.falsetweaks.api.triangulator.ToggleableTessellator;
+import com.falsepattern.falsetweaks.api.PassTrackingTessellator;
 import com.falsepattern.rple.api.client.ClientColorHelper;
 import com.falsepattern.rple.api.client.RPLETessBrightnessUtil;
 import com.falsepattern.rple.internal.Compat;
@@ -36,7 +36,6 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import lombok.val;
 import lombok.var;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
@@ -102,7 +101,7 @@ public class LampRenderer implements ISimpleBlockRenderingHandler {
         val lamp = (LampBlock) block;
         val tessellator = Compat.tessellator();
 
-        val renderPass = ((ToggleableTessellator) tessellator).pass();
+        val renderPass = ((PassTrackingTessellator) tessellator).pass();
         if (renderPass == 0)
             return renderer.renderStandardBlock(lamp, x, y, z);
 

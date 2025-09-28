@@ -48,7 +48,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 // TODO: [PRE_RELEASE] Fluid translucency tweaks belong in FalseTweaks
 @Deprecated
 @Mixin(value = RenderBlocks.class,
-       priority = 1001) //overwriting FalseTweaks mixAOBrightness
+       priority = 1001) //overwriting FalseTweaks getAOBrightness
 public abstract class RenderBlocksMixin {
     @Shadow
     public IBlockAccess blockAccess;
@@ -81,34 +81,6 @@ public abstract class RenderBlocksMixin {
     @Overwrite
     public int getAoBrightness(int a, int b, int c, int d) {
         return ClientColorHelper.cookieAverage(true, a, b, c, d);
-    }
-
-    //Ugly evil mixin-mixin hack
-    private int meta;
-    private static final String GMBFBO = "getMixedBrightnessForBlockOffset(IIILorg/joml/Vector3ic;ZLcom/falsepattern/falsetweaks/modules/triangulator/renderblocks/Facing$Direction;)I";
-
-    @Dynamic
-    @Redirect(method = GMBFBO,
-              at = @At(value = "INVOKE",
-                       target = "Lnet/minecraft/world/IBlockAccess;getBlock(III)Lnet/minecraft/block/Block;",
-                       ordinal = 0,
-                       remap = true),
-              remap = false,
-              require = 1)
-    private Block grabDefaultLightMeta(IBlockAccess instance, int x, int y, int z) {
-        meta = instance.getBlockMetadata(x, y, z);
-        return instance.getBlock(x, y, z);
-    }
-
-    @Dynamic
-    @Redirect(method = GMBFBO,
-              at = @At(value = "INVOKE",
-                       target = "Lnet/minecraft/block/Block;getLightValue(Lnet/minecraft/world/IBlockAccess;III)I",
-                       remap = true),
-              remap = false,
-              require = 3)
-    private int grabDefaultLight(Block block, IBlockAccess world, int posX, int posY, int posZ) {
-        return RPLETessBrightnessUtil.getBlockBrightnessForTessellator(world, block, meta, posX, posY, posZ);
     }
 
     /**

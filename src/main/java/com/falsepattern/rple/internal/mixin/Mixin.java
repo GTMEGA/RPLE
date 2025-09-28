@@ -81,7 +81,8 @@ public enum Mixin implements IMixins {
                                   "OpenGLHelperMixin",
                                   "RenderBlocksMixin",
                                   "TessellatorMixin",
-                                  "WorldMixin")),
+                                  "WorldMixin",
+                                  "falsetweaks.BrightnessMathMixin")),
 
     Base_RpleImplementation(Phase.EARLY,
                             common("rple.RPLEBlockInitImplMixin",
