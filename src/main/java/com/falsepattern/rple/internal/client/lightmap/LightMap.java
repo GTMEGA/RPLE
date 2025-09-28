@@ -168,7 +168,7 @@ public final class LightMap {
     @Deprecated
     private static void clearActiveTexture() {
         if (RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
-            GL11.glMatrixMode(GL11.GL_MODELVIEW);
+            GL13.glActiveTexture(GL13.GL_TEXTURE0);
         }
     }
 
