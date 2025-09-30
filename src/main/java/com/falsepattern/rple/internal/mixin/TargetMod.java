@@ -42,7 +42,6 @@ public enum TargetMod implements ITargetMod {
     ArsMagica2("am2.AMCore"),
     FairyLights("com.pau101.fairylights.FairyLights"),
     FastCraft("fastcraft.Tweaker"),
-    MultiPart("codechicken.multipart.handler.MultipartMod"),
     OpenBlocks("openblocks.OpenBlocks"),
     SwanSong("com.ventooth.swansong.SwanSong"),
     //regular mods
@@ -52,6 +51,7 @@ public enum TargetMod implements ITargetMod {
     CodeChickenLib("codechicken.lib.math.MathHelper"),
     Computronics("pl.asie.computronics.Computronics"),
     EnderIO("crazypants.enderio.EnderIO"),
+    MultiPart("codechicken.multipart.handler.MultipartMod"),
     NuclearTech("com.hbm.main.MainRegistry"),
     ProjectRedCore("mrtjp.projectred.ProjectRedCore"),
     ProjectRedCoreMEGA("mrtjp.projectred.ProjectRedCore", b -> b.testModAnnotation(null, null, v -> v.toLowerCase().contains("mega"))),

@@ -157,7 +157,7 @@ public enum Mixin implements IMixins {
                      client("fastcraft.ClippingHelperImplMixin",
                             "fastcraft.FrustumMixin")),
 
-    Compat_MultiPart(Phase.EARLY,
+    Compat_MultiPart(Phase.LATE,
                      require(MultiPart),
                      common("multipart.TileMultipartMixin")),
 
