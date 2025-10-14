@@ -31,6 +31,8 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 
@@ -62,23 +64,34 @@ public class TextureStateTrackerInjector implements IClassTransformer {
                     "org.lwjglx.opengl.GL11".equals(mInsn.owner))
                     continue;
                 val isEnable = "glEnable".equals(mInsn.name);
-                val isDisable = "glDisable".equals(mInsn.name);
-                if (!isEnable && !isDisable)
-                    continue;
+                if (isEnable || "glDisable".equals(mInsn.name)) {
+                    val previous = mInsn.getPrevious();
 
-                val previous = mInsn.getPrevious();
+                    if (previous.getOpcode() != Opcodes.SIPUSH && !(previous instanceof IntInsnNode))
+                        continue;
 
-                if (previous.getOpcode() != Opcodes.SIPUSH && !(previous instanceof IntInsnNode))
-                    continue;
+                    val intInsn = (IntInsnNode) previous;
+                    if (intInsn.operand != GL11.GL_TEXTURE_2D)
+                        continue;
 
-                val intInsn = (IntInsnNode) previous;
-                if (intInsn.operand != GL11.GL_TEXTURE_2D)
-                    continue;
-
-                iter.previous();
-                iter.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/falsepattern/rple/internal/client/lightmap/LightMapStateMachine", isEnable ? "enableTex" : "disableTex", "()V", false));
-                iter.next();
-                modified = true;
+                    iter.previous();
+                    iter.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
+                                                "com/falsepattern/rple/internal/client/lightmap/LightMapStateMachine",
+                                                isEnable ? "enableTex" : "disableTex",
+                                                "()V",
+                                                false));
+                    iter.next();
+                    modified = true;
+                } else if ("glMatrixMode".equals(mInsn.name)) {
+                    iter.previous();
+                    iter.add(new InsnNode(Opcodes.DUP));
+                    iter.add(new FieldInsnNode(Opcodes.PUTSTATIC,
+                                               "com/falsepattern/rple/internal/client/lightmap/LightMap",
+                                               "extMatrixMode",
+                                               "I"));
+                    iter.next();
+                    modified = true;
+                }
             }
         }
         if (modified) {

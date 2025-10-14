@@ -52,6 +52,9 @@ public final class LightMap {
 
     private boolean texturesGenerated = false;
 
+    //written by ASM
+    public static int extMatrixMode = GL11.GL_MODELVIEW;
+
     public static LightMap lightMap() {
         return INSTANCE;
     }
@@ -160,7 +163,7 @@ public final class LightMap {
     @Deprecated
     private static void clearMatrixMode() {
         if (RPLEConfig.Compat.FASTER_GL_STATE_TRACKING) {
-            GL11.glMatrixMode(GL11.GL_MODELVIEW);
+            GL11.glMatrixMode(extMatrixMode);
         }
     }
 
