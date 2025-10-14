@@ -49,6 +49,7 @@ import static com.falsepattern.rple.internal.mixin.TargetMod.CarpentersBlocks;
 import static com.falsepattern.rple.internal.mixin.TargetMod.Chisel;
 import static com.falsepattern.rple.internal.mixin.TargetMod.CodeChickenLib;
 import static com.falsepattern.rple.internal.mixin.TargetMod.Computronics;
+import static com.falsepattern.rple.internal.mixin.TargetMod.DSurround;
 import static com.falsepattern.rple.internal.mixin.TargetMod.EnderIO;
 import static com.falsepattern.rple.internal.mixin.TargetMod.FairyLights;
 import static com.falsepattern.rple.internal.mixin.TargetMod.FastCraft;
@@ -141,6 +142,10 @@ public enum Mixin implements IMixins {
     Compat_Computronics(Phase.LATE,
                         require(Computronics),
                         common("computronics.TileColorfulLampMixin")),
+
+    Compat_DynSurround(Phase.LATE,
+                       require(DSurround),
+                       client("dsurround.StormRendererMixin")),
 
     Compat_EnderIO(Phase.LATE,
                    require(EnderIO),

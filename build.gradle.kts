@@ -126,6 +126,8 @@ dependencies {
     compileOnly("curse.maven:openmodslib-228815:2386729")
     // OpenBlocks-1.7.10-1.6-deobf.jar
     compileOnly("curse.maven:openblocks-228816:2386734")
+    // Dynamic Surroundings 1.0.6.4
+    compileOnly(deobfCurse("dynamic-surroundings-238891:2642381"))
 
     compileOnly("mirror:AM2.5:LTS-1.6.7-dev")
 }

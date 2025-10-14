@@ -115,15 +115,19 @@ public abstract class EntityRendererMixin implements IResourceManagerReloadListe
                    at = @At(value = "INVOKE",
                             target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V",
                             ordinal = 1),
-                   require = 1)
+                   // DynamicSurroundings replaces the whole method
+                   require = 0,
+                   expect = 0)
     private void suppressSetBrightness(Tessellator instance, int light, Operation<Void> original) {
 
     }
     @WrapOperation(method = "renderRainSnow",
-            at = @At(value = "INVOKE",
-                     target = "Lnet/minecraft/client/multiplayer/WorldClient;getLightBrightnessForSkyBlocks(IIII)I",
-                     ordinal = 1),
-            require = 1)
+                   at = @At(value = "INVOKE",
+                            target = "Lnet/minecraft/client/multiplayer/WorldClient;getLightBrightnessForSkyBlocks(IIII)I",
+                            ordinal = 1),
+                   // DynamicSurroundings replaces the whole method
+                   require = 0,
+                   expect = 0)
     private int fixSnow1(WorldClient instance, int x, int y, int z, int min, Operation<Integer> original, @Local Tessellator tessellator) {
         val brightness = original.call(instance, x, y, z, min);
         val shifted = CookieMonster.cookieFromRGB64(ClientColorHelper.RGB64ForEach(CookieMonster.RGB64FromCookie(brightness), c -> (c * 3 + 0xf0) / 4));

@@ -50,6 +50,7 @@ public enum TargetMod implements ITargetMod {
     Chisel("team.chisel.Chisel"),
     CodeChickenLib("codechicken.lib.math.MathHelper"),
     Computronics("pl.asie.computronics.Computronics"),
+    DSurround("org.blockartistry.mod.DynSurround.Module"),
     EnderIO("crazypants.enderio.EnderIO"),
     MultiPart("codechicken.multipart.handler.MultipartMod"),
     NuclearTech("com.hbm.main.MainRegistry"),
