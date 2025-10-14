@@ -67,12 +67,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.ventooth:swansong-mc1.7.10:1.2.0:dev")
+    compileOnly("com.ventooth:swansong-mc1.7.10:1.2.1:dev")
     compileOnly("org.joml:joml:1.10.8")
 
     apiSplit("com.falsepattern:lumi-mc1.7.10:1.2.0")
-    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.9.0")
-    implementation("com.falsepattern:falsetweaks-mc1.7.10:4.1.0:dev")
+    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.9.1")
+    implementation("com.falsepattern:falsetweaks-mc1.7.10:4.1.2:dev")
 
     val beddiumVersion = "1.0.0"
     val beddiumVersionJ21 = "$beddiumVersion-j21"
