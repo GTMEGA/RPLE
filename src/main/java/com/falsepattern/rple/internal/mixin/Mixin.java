@@ -78,6 +78,7 @@ public enum Mixin implements IMixins {
                                   "ChunkCacheMixin",
                                   "EntityMixin",
                                   "EntityRendererMixin",
+                                  "EntityRendererMixin_Weather",
                                   "GuiIngameForgeMixin",
                                   "OpenGLHelperMixin",
                                   "RenderBlocksMixin",
