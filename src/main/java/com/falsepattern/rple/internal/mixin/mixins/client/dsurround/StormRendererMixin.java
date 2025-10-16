@@ -44,7 +44,6 @@ public abstract class StormRendererMixin {
                    at = @At(value = "INVOKE",
                             target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V",
                             ordinal = 1),
-                   remap = false,
                    require = 1)
     private void suppressSetBrightness(Tessellator instance, int light, Operation<Void> original) {
 
