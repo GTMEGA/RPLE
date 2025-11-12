@@ -128,6 +128,7 @@ public enum Mixin implements IMixins {
 
     Compat_CarpentersBlocks(Phase.LATE,
                             require(CarpentersBlocks),
+                            common("carpentersblocks.TEBaseMixin"),
                             client("carpentersblocks.LightingHelperMixin")),
 
     Compat_Chisel(Phase.LATE,
