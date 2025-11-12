@@ -26,6 +26,7 @@
 package com.falsepattern.rple.internal.proxy;
 
 import com.falsepattern.falsetweaks.api.dynlights.FTDynamicLights;
+import com.falsepattern.falsetweaks.modules.dynlights.base.OffhandMod;
 import com.falsepattern.rple.api.common.ServerColorHelper;
 import com.falsepattern.rple.api.common.block.RPLEBlock;
 import com.falsepattern.rple.api.common.color.DefaultColor;
@@ -46,6 +47,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 import lombok.NoArgsConstructor;
 import lombok.val;
+import lombok.var;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -55,6 +57,7 @@ import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMagmaCube;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -149,16 +152,17 @@ public final class ClientProxy extends CommonProxy {
                 }
             }
             if (entity instanceof EntityLivingBase) {
-                EntityLivingBase player = (EntityLivingBase) entity;
-                ItemStack stackMain = player.getHeldItem();
+                EntityLivingBase living = (EntityLivingBase) entity;
+                ItemStack stackMain = living.getHeldItem();
                 val levelMain = ColorDynamicLights.getLightLevel(stackMain);
-                ItemStack stackHead = player.getEquipmentInSlot(4);
+                ItemStack stackHead = living.getEquipmentInSlot(4);
                 val levelHead = ColorDynamicLights.getLightLevel(stackHead);
-                return ServerColorHelper.RGB16FromRGBChannel4Bit(
-                        Math.max(ServerColorHelper.red(levelMain), ServerColorHelper.red(levelHead)),
-                        Math.max(ServerColorHelper.green(levelMain), ServerColorHelper.green(levelHead)),
-                        Math.max(ServerColorHelper.blue(levelMain), ServerColorHelper.blue(levelHead))
-                                                                );
+                var level = ServerColorHelper.max(levelMain, levelHead);
+                if (living instanceof EntityPlayer) {
+                    val levelOffhand = ColorDynamicLights.getLightLevel(OffhandMod.CURRENT.getOffhandItem((EntityPlayer) living));
+                    level = ServerColorHelper.max(level, levelOffhand);
+                }
+                return level;
             }
             if (entity instanceof EntityItemFrame) {
                 EntityItemFrame entityItemFrame = (EntityItemFrame) entity;

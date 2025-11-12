@@ -115,4 +115,8 @@ public final class ServerColorHelper {
     public static int maxColorComponent(int red, int green, int blue) {
         return Math.max(red, Math.max(green, blue));
     }
+
+    public static short max(short a, short b) {
+        return RGB16FromRGBChannel4Bit(Math.max(red(a), red(b)), Math.max(green(a), green(b)), Math.max(blue(a), blue(b)));
+    }
 }
