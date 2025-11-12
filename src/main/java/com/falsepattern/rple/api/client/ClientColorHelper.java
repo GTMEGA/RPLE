@@ -389,6 +389,14 @@ public final class ClientColorHelper {
         return result;
     }
 
+    public static long RGB64Mul(long x, float f) {
+        long result = 0;
+        for (int i = 0; i <= 40; i += 8) {
+            result |= RGB64MulChannel(x, i, f);
+        }
+        return result;
+    }
+
     //endregion
 
     //region tess
@@ -478,6 +486,10 @@ public final class ClientColorHelper {
         return CookieMonster.cookieFromRGB64(RGB64Average(rgb64, rgb64.length, ignoreZero));
     }
 
+    public static int cookieMul(int cookie, float f) {
+        return CookieMonster.cookieFromRGB64(RGB64Mul(CookieMonster.RGB64FromCookie(cookie), f));
+    }
+
     //endregion
 
     // private
@@ -564,6 +576,11 @@ public final class ClientColorHelper {
             light /= count;
         }
         return (long) ((int) light & 0xFF) << shift;
+    }
+
+    private static long RGB64MulChannel(long x, int shift, float f) {
+        float res = unit(x, shift) * f;
+        return (long)((int)res & 0xFF) << shift;
     }
 
     private static int max3(int red, int green, int blue, int mask) {

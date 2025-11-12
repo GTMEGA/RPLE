@@ -45,6 +45,7 @@ import static com.falsepattern.lib.mixin.v2.MixinHelper.require;
 import static com.falsepattern.rple.internal.mixin.TargetMod.AppliedEnergistics2;
 import static com.falsepattern.rple.internal.mixin.TargetMod.ArchitectureCraft;
 import static com.falsepattern.rple.internal.mixin.TargetMod.ArsMagica2;
+import static com.falsepattern.rple.internal.mixin.TargetMod.BetterFoliage;
 import static com.falsepattern.rple.internal.mixin.TargetMod.CarpentersBlocks;
 import static com.falsepattern.rple.internal.mixin.TargetMod.Chisel;
 import static com.falsepattern.rple.internal.mixin.TargetMod.CodeChickenLib;
@@ -125,6 +126,10 @@ public enum Mixin implements IMixins {
     Compat_ArsMagica2(Phase.EARLY,
                      require(ArsMagica2),
                       client("am25.AMParticleMixin")),
+
+    Compat_BetterFoliage(Phase.LATE,
+                         require(BetterFoliage),
+                         client("betterfoliage.PixelFormatMixin")),
 
     Compat_CarpentersBlocks(Phase.LATE,
                             require(CarpentersBlocks),

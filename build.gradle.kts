@@ -128,6 +128,8 @@ dependencies {
     compileOnly("curse.maven:openblocks-228816:2386734")
     // Dynamic Surroundings 1.0.6.4
     compileOnly(deobfCurse("dynamic-surroundings-238891:2642381"))
+    // Better Foliage 2.0.17
+    compileOnly(deobfCurse("better-foliage-228529:2500869"))
 
     compileOnly("mirror:AM2.5:LTS-1.6.7-dev")
 }

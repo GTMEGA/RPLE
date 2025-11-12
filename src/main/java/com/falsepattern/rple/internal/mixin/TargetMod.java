@@ -46,6 +46,7 @@ public enum TargetMod implements ITargetMod {
     SwanSong("com.ventooth.swansong.SwanSong"),
     //regular mods
     ArchitectureCraft("gcewing.architecture.ArchitectureCraft"),
+    BetterFoliage("mods.betterfoliage.BetterFoliageMod"),
     CarpentersBlocks("com.carpentersblocks.CarpentersBlocks"),
     Chisel("team.chisel.Chisel"),
     CodeChickenLib("codechicken.lib.math.MathHelper"),
