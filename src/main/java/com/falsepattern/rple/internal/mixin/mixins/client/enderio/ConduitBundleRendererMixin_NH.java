@@ -26,26 +26,28 @@
 package com.falsepattern.rple.internal.mixin.mixins.client.enderio;
 
 import com.falsepattern.rple.internal.mixin.helper.EnderIOHelper;
-import com.falsepattern.rple.internal.mixin.hook.ColoredLightingHooks;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import crazypants.enderio.conduit.render.ConduitBundleRenderer;
 import lombok.val;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.world.World;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+@Pseudo
 @Mixin(ConduitBundleRenderer.class)
-public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRenderer implements
-        ISimpleBlockRenderingHandler {
+public abstract class ConduitBundleRendererMixin_NH implements ISimpleBlockRenderingHandler {
+    @Dynamic
     @ModifyConstant(method = "renderWorldBlock",
-                    constant = @Constant(floatValue = 1.572888E7F),
+                    constant = @Constant(intValue = (15 << 20 | 15 << 4)),
                     remap = false,
                     require = 1)
     @SideOnly(Side.CLIENT)
@@ -54,10 +56,11 @@ public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRender
         return constant;
     }
 
-    @Redirect(method = {"renderWorldBlock", "renderTileEntityAt"},
+    @Dynamic
+    @Redirect(method = "renderWorldBlock",
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/world/World;getLightBrightnessForSkyBlocks(IIII)I"),
-              require = 2)
+              require = 1)
     @SideOnly(Side.CLIENT)
     public int cacheTessellatorBrightness(World world, int posX, int posY, int posZ, int minBrightnessCookie) {
         val tessellatorBrightness = world.getLightBrightnessForSkyBlocks(posX, posY, posZ, minBrightnessCookie);
@@ -65,7 +68,7 @@ public abstract class ConduitBundleRendererMixin extends TileEntitySpecialRender
         return tessellatorBrightness;
     }
 
-
+    @Dynamic
     @Redirect(method = "renderConduits",
               at = @At(value = "INVOKE",
                        target = "Lnet/minecraft/client/renderer/Tessellator;setBrightness(I)V"),

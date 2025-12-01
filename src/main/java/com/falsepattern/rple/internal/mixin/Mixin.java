@@ -158,6 +158,10 @@ public enum Mixin implements IMixins {
                    require(EnderIO),
                    client("enderio.ConduitBundleRendererMixin",
                           "enderio.DefaultConduitRendererMixin")),
+    Compat_EnderIO_NH(Phase.LATE,
+                   require(EnderIO),
+                   client("enderio.ConduitBundleRendererMixin_NH",
+                          "enderio.DefaultConduitRendererMixin")),
 
     Compat_FairyLights(Phase.EARLY,
                        require(FairyLights),

@@ -29,7 +29,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public final class EnderIOHelper {
-    private static final ThreadLocal<Integer> CACHED_TESSELLATOR_BRIGHTNESS = new ThreadLocal<>();
+    private static final ThreadLocal<Integer> CACHED_TESSELLATOR_BRIGHTNESS = ThreadLocal.withInitial(() -> (15 << 20 | 15 << 4));
 
     public static void cacheTessellatorBrightness(int tessellatorBrightness) {
         CACHED_TESSELLATOR_BRIGHTNESS.set(tessellatorBrightness);
