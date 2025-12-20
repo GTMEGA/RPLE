@@ -47,6 +47,7 @@ import static com.falsepattern.rple.internal.mixin.TargetMod.ArchitectureCraft;
 import static com.falsepattern.rple.internal.mixin.TargetMod.ArsMagica2;
 import static com.falsepattern.rple.internal.mixin.TargetMod.BetterFoliage;
 import static com.falsepattern.rple.internal.mixin.TargetMod.CarpentersBlocks;
+import static com.falsepattern.rple.internal.mixin.TargetMod.CarpentersBlocksMEGA;
 import static com.falsepattern.rple.internal.mixin.TargetMod.Chisel;
 import static com.falsepattern.rple.internal.mixin.TargetMod.CodeChickenLib;
 import static com.falsepattern.rple.internal.mixin.TargetMod.Computronics;
@@ -132,9 +133,11 @@ public enum Mixin implements IMixins {
                          client("betterfoliage.PixelFormatMixin")),
 
     Compat_CarpentersBlocks(Phase.LATE,
-                            require(CarpentersBlocks),
-                            common("carpentersblocks.TEBaseMixin"),
+                            mods(require(CarpentersBlocks)),
                             client("carpentersblocks.LightingHelperMixin")),
+    Compat_CarpentersBlocksAvoidMEGA(Phase.LATE,
+                                     mods(require(CarpentersBlocks), avoid(CarpentersBlocksMEGA)),
+                                     common("carpentersblocks.TEBaseMixin")),
 
     Compat_Chisel(Phase.LATE,
                   require(Chisel),

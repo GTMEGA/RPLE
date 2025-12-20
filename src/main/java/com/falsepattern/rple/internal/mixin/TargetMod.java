@@ -48,6 +48,7 @@ public enum TargetMod implements ITargetMod {
     ArchitectureCraft("gcewing.architecture.ArchitectureCraft"),
     BetterFoliage("mods.betterfoliage.BetterFoliageMod"),
     CarpentersBlocks("com.carpentersblocks.CarpentersBlocks"),
+    CarpentersBlocksMEGA("com.carpentersblocks.CarpentersBlocks", b -> b.testModAnnotation(null, null, v -> v.contains("mega"))),
     Chisel("team.chisel.Chisel"),
     CodeChickenLib("codechicken.lib.math.MathHelper"),
     Computronics("pl.asie.computronics.Computronics"),
