@@ -67,14 +67,14 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.ventooth:swansong-mc1.7.10:1.2.1:dev")
+    compileOnly("com.ventooth:swansong-mc1.7.10:1.3.4:dev")
     compileOnly("org.joml:joml:1.10.8")
 
-    apiSplit("com.falsepattern:lumi-mc1.7.10:1.2.0")
-    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.9.1")
-    implementation("com.falsepattern:falsetweaks-mc1.7.10:4.3.1:dev")
+    apiSplit("com.falsepattern:lumi-mc1.7.10:1.2.1")
+    implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.11.0")
+    implementation("com.falsepattern:falsetweaks-mc1.7.10:4.4.1:dev")
 
-    val beddiumVersion = "1.0.0"
+    val beddiumVersion = "1.2.2"
     val beddiumVersionJ21 = "$beddiumVersion-j21"
     val beddiumVersionJ8 = "$beddiumVersion-j8"
     compileOnly("com.ventooth:beddium-mc1.7.10:$beddiumVersionJ8:dev")
@@ -83,7 +83,7 @@ dependencies {
     }
 
     // Keep in sync with FalseTweaks!
-    implementation("it.unimi.dsi:fastutil:8.5.16")
+    implementation("it.unimi.dsi:fastutil:8.5.18")
 
     compileOnly("makamys:neodymium-mc1.7.10:0.4.3-unofficial:dev")
 
