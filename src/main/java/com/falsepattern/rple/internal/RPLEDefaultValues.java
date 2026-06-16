@@ -215,6 +215,23 @@ public final class RPLEDefaultValues {
         registry.colorizeBlock("ExtraUtilities:color_redstoneLight:14").brightness(RED).apply();
         registry.colorizeBlock("ExtraUtilities:color_redstoneLight:15").brightness(BLACK).apply();
 
+        registry.colorizeBlock("ExtraUtilities:greenscreen:0").brightness(WHITE).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:1").brightness(ORANGE).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:2").brightness(MAGENTA).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:3").brightness(LIGHT_BLUE).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:4").brightness(YELLOW).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:5").brightness(LIME).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:6").brightness(PINK).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:7").brightness(GRAY).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:8").brightness(LIGHT_GRAY).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:9").brightness(CYAN).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:10").brightness(PURPLE).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:11").brightness(BLUE).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:12").brightness(BROWN).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:13").brightness(GREEN).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:14").brightness(RED).apply();
+        registry.colorizeBlock("ExtraUtilities:greenscreen:15").brightness(BLACK).apply();
+
         registry.colorizeBlock("ExtraUtilities:chandelier").brightness(0xFEB).apply();
         registry.colorizeBlock("ExtraUtilities:magnumTorch").brightness(0xFEB).apply();
 
