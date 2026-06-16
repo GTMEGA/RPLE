@@ -635,6 +635,40 @@ public final class RPLEDefaultValues {
         registry.colorizeBlock("hbm:tile.glass_polonium").translucency(RED).apply();
         registry.colorizeBlock("hbm:tile.glass_ash").translucency(BLACK).apply();
 
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:0").translucency(WHITE).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:1").translucency(ORANGE).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:2").translucency(MAGENTA).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:3").translucency(LIGHT_BLUE).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:4").translucency(YELLOW).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:5").translucency(LIME).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:6").translucency(PINK).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:7").translucency(GRAY).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:8").translucency(LIGHT_GRAY).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:9").translucency(CYAN).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:10").translucency(PURPLE).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:11").translucency(BLUE).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:12").translucency(BROWN).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:13").translucency(GREEN).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:14").translucency(RED).apply();
+        registry.colorizeBlock("TConstruct:GlassBlock.StainedClear:15").translucency(BLACK).apply();
+
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:0").translucency(WHITE).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:1").translucency(ORANGE).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:2").translucency(MAGENTA).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:3").translucency(LIGHT_BLUE).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:4").translucency(YELLOW).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:5").translucency(LIME).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:6").translucency(PINK).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:7").translucency(GRAY).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:8").translucency(LIGHT_GRAY).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:9").translucency(CYAN).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:10").translucency(PURPLE).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:11").translucency(BLUE).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:12").translucency(BROWN).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:13").translucency(GREEN).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:14").translucency(RED).apply();
+        registry.colorizeBlock("TConstruct:GlassPaneClearStained:15").translucency(BLACK).apply();
+
 
     }
 }
