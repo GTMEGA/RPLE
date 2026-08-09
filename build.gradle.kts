@@ -1,5 +1,5 @@
 plugins {
-    id("com.falsepattern.fpgradle-mc") version ("4.0.2")
+    id("com.falsepattern.fpgradle-mc") version "4.1.0"
 }
 
 group = "com.falsepattern"
@@ -35,6 +35,7 @@ minecraft_fp {
         }
         curseforge {
             projectId = "1050511"
+            side = Both
             dependencies {
                 required("fplib")
                 required("falsetweaks")
