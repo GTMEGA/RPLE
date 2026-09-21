@@ -73,7 +73,7 @@ dependencies {
 
     apiSplit("com.falsepattern:lumi-mc1.7.10:1.2.1")
     implementationSplit("com.falsepattern:falsepatternlib-mc1.7.10:1.11.0")
-    implementation("com.falsepattern:falsetweaks-mc1.7.10:4.4.1:dev")
+    implementation("com.falsepattern:falsetweaks-mc1.7.10:4.4.5:dev")
 
     val beddiumVersion = "1.2.2"
     val beddiumVersionJ21 = "$beddiumVersion-j21"

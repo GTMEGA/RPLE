@@ -159,7 +159,8 @@ public final class ClientProxy extends CommonProxy {
                 val levelHead = ColorDynamicLights.getLightLevel(stackHead);
                 var level = ServerColorHelper.max(levelMain, levelHead);
                 if (living instanceof EntityPlayer) {
-                    for (val offhand: OffhandMod.CURRENT) {
+                    val player = (EntityPlayer) living;
+                    for (val offhand:  OffhandMod.getCompatible(player)) {
                         val levelOffhand = ColorDynamicLights.getLightLevel(offhand.getOffhandItem((EntityPlayer) living));
                         level = ServerColorHelper.max(level, levelOffhand);
                     }
